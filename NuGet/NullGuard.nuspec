@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NullGuard.Fody</id>
+    <version>$version$</version>
+    <title>NullGuard.Fody</title>
+    <authors>Simon Cropp</authors>
+    <owners>Simon Cropp</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://github.com/SimonCropp/NullGuard</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Add null checks.</description>
+    <summary />
+    <language>en-AU</language>
+    <tags>Null Check, ILWeaving, Fody, Cecil</tags>
+  </metadata>
+</package>
