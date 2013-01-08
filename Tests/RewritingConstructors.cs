@@ -5,12 +5,10 @@ using NUnit.Framework;
 public class RewritingConstructors
 {
     Type sampleClassType;
-    Type classWithPrivateMethodType;
 
     public RewritingConstructors()
     {
         sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
-        classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
     }
 
     [Test]

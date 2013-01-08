@@ -43,7 +43,6 @@
     <Compile Include="ClassWithPrivateMethod.cs" />
     <Compile Include="InterfaceBadAttributes.cs" />
     <Compile Include="SampleClass.cs" />
-    <Compile Include="TargetClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">
