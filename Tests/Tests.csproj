@@ -58,8 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyWeaver.cs" />
+    <Compile Include="RewritingConstructors.cs" />
+    <Compile Include="RewritingProperties.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MockAssemblyResolver.cs" />
+    <Compile Include="RewritingMethods.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Verifier.cs" />
   </ItemGroup>
