@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassWithBadAttributes.cs" />
+    <Compile Include="ClassWithPrivateMethod.cs" />
     <Compile Include="InterfaceBadAttributes.cs" />
+    <Compile Include="SampleClass.cs" />
     <Compile Include="TargetClass.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
 ## This is an add-in for [Fody](https://github.com/SimonCropp/Fody/) 
 
-Injects some very basic method timing code.
-
 [Introduction to Fody](http://github.com/SimonCropp/Fody/wiki/SampleUsage)
 
 ## Nuget package http://nuget.org/packages/NullGuard.Fody 
@@ -20,7 +18,7 @@ Injects some very basic method timing code.
 
     public class MyClass
     {
-        public void MyMethod()
+        public void MyMethod(string param)
         {
             if (param == null)
             {

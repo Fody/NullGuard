@@ -40,6 +40,8 @@
   <ItemGroup>
     <Compile Include="AllowNullAttribute.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="NullGuardAttribute.cs" />
+    <Compile Include="ValidationFlags.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
