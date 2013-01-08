@@ -3,16 +3,20 @@ using System.IO;
 using System.Reflection;
 using Mono.Cecil;
 
-public class AssemblyWeaver
+public static class AssemblyWeaver
 {
-    public Assembly Assembly;
-    public AssemblyWeaver(string assemblyPath)
+    public static Assembly Assembly;
+
+    static AssemblyWeaver()
     {
+        var assemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+
 #if (!DEBUG)
         assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif
 
         var newAssembly = assemblyPath.Replace(".dll", "2.dll");
+
         File.Copy(assemblyPath, newAssembly, true);
 
         var moduleDefinition = ModuleDefinition.ReadModule(newAssembly);
@@ -29,10 +33,10 @@ public class AssemblyWeaver
         Assembly = Assembly.LoadFile(newAssembly);
     }
 
-    void LogError(string error)
+    private static void LogError(string error)
     {
         Errors.Add(error);
     }
 
-    public List<string> Errors = new List<string>();
+    public static List<string> Errors = new List<string>();
 }
