@@ -1,20 +1,16 @@
 ﻿using System;
-using System.IO;
 using NUnit.Framework;
 
 [TestFixture]
 public class RewritingConstructors
 {
-    private AssemblyWeaver assemblyWeaver;
     private Type sampleClassType;
     private Type classWithPrivateMethodType;
 
     public RewritingConstructors()
     {
-        var assemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
-        assemblyWeaver = new AssemblyWeaver(assemblyPath);
-        sampleClassType = assemblyWeaver.Assembly.GetType("SampleClass");
-        classWithPrivateMethodType = assemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
+        sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
+        classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
     }
 
     [Test]
