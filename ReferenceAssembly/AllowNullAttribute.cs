@@ -2,8 +2,7 @@ using System;
 
 namespace NullGuard
 {
-
-    [AttributeUsage(AttributeTargets.Parameter)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
     public class AllowNullAttribute : Attribute
     {
     }

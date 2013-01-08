@@ -6,7 +6,7 @@ using NUnit.Framework;
 [TestFixture]
 public class IntegrationTests
 {
-    AssemblyWeaver assemblyWeaver;
+    private AssemblyWeaver assemblyWeaver;
 
     public IntegrationTests()
     {
@@ -27,19 +27,19 @@ public class IntegrationTests
     public void MethodWithNullCheckOnParam()
     {
         var type = assemblyWeaver.Assembly.GetType("TargetClass");
-        var instance = (dynamic) Activator.CreateInstance(type);
+        var instance = (dynamic)Activator.CreateInstance(type);
         instance.MethodWithNullCheckOnParam("notNull");
-        Assert.Throws<ArgumentNullException>(() => instance.MethodWithNullCheckOnParam(null)) ;
+        Assert.Throws<ArgumentNullException>(() => instance.MethodWithNullCheckOnParam(null));
     }
 
     [Test]
     public void Constructor()
     {
         var type = assemblyWeaver.Assembly.GetType("TargetClass");
-        Activator.CreateInstance(type,"notNull");
-        
-        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, new object[] {null}));
-        var argumentNullException = (ArgumentNullException) targetInvocationException.InnerException;
+        Activator.CreateInstance(type, "notNull");
+
+        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, new object[] { null }));
+        var argumentNullException = (ArgumentNullException)targetInvocationException.InnerException;
         Assert.AreEqual("arg", argumentNullException.ParamName);
     }
 
@@ -47,7 +47,7 @@ public class IntegrationTests
     public void PropertyWithNullCheckOnSet()
     {
         var type = assemblyWeaver.Assembly.GetType("TargetClass");
-        var instance = (dynamic) Activator.CreateInstance(type);
+        var instance = (dynamic)Activator.CreateInstance(type);
         instance.PropertyWithNullCheckOnSet = "notNull";
         Assert.Throws<ArgumentNullException>(() => instance.PropertyWithNullCheckOnSet = null);
     }
@@ -56,7 +56,7 @@ public class IntegrationTests
     public void MethodWithNoNullCheckOnParam()
     {
         var type = assemblyWeaver.Assembly.GetType("TargetClass");
-        var instance = (dynamic) Activator.CreateInstance(type);
+        var instance = (dynamic)Activator.CreateInstance(type);
         instance.MethodWithNoNullCheckOnParam("notNull");
         instance.MethodWithNoNullCheckOnParam(null);
     }
@@ -71,11 +71,12 @@ public class IntegrationTests
     }
 
 #if(DEBUG)
+
     [Test]
     public void PeVerify()
     {
         Verifier.Verify(assemblyWeaver.Assembly.CodeBase.Remove(0, 8));
     }
-#endif
 
+#endif
 }

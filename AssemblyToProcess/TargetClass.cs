@@ -2,7 +2,6 @@
 
 public class TargetClass
 {
-
     public TargetClass()
     {
     }
@@ -22,5 +21,4 @@ public class TargetClass
     public string PropertyWithNullCheckOnSet { get; set; }
 
     public string PropertyWithNoNullCheckOnSet { get; [param: AllowNull] set; }
-
 }

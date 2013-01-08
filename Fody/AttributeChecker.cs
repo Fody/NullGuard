@@ -20,6 +20,17 @@ public static class AttributeChecker
         {
             customAttributes.Remove(attribute);
         }
+    }
 
+    public static void RemoveNullGuardAttribute(this ICustomAttributeProvider definition)
+    {
+        var customAttributes = definition.CustomAttributes;
+
+        var attribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "NullGuardAttribute");
+
+        if (attribute != null)
+        {
+            customAttributes.Remove(attribute);
+        }
     }
 }
