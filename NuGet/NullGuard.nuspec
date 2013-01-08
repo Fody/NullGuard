@@ -4,8 +4,8 @@
     <id>NullGuard.Fody</id>
     <version>$version$</version>
     <title>NullGuard.Fody</title>
-    <authors>Simon Cropp</authors>
-    <owners>Simon Cropp</owners>
+    <authors>Simon Cropp, Cameron MacFarland</authors>
+    <owners>Simon Cropp, Cameron MacFarland</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>http://github.com/SimonCropp/NullGuard</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
