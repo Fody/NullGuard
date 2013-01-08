@@ -29,14 +29,13 @@ public class PropertyProcessor
     {
         var validationFlags = ModuleWeaver.ValidationFlags;
 
-        if (Property.DeclaringType.IsCustomAttributeDefined<NullGuardAttribute>())
-        {
-            var attribute = Property.DeclaringType.GetCustomAttribute<NullGuardAttribute>();
+
+        var attribute = Property.DeclaringType.GetNullGuardAttribute();
             if (attribute != null)
             {
                 validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
             }
-        }
+        
 
         if (!validationFlags.HasFlag(ValidationFlags.Properties)) return;
 

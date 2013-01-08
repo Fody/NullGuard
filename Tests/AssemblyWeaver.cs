@@ -19,11 +19,13 @@ public static class AssemblyWeaver
 
         File.Copy(assemblyPath, newAssembly, true);
 
+        var assemblyResolver = new MockAssemblyResolver();
         var moduleDefinition = ModuleDefinition.ReadModule(newAssembly);
+        
         var weavingTask = new ModuleWeaver
             {
                 ModuleDefinition = moduleDefinition,
-                AssemblyResolver = new MockAssemblyResolver(),
+                AssemblyResolver = assemblyResolver,
                 LogError = LogError
             };
 

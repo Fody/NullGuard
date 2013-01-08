@@ -6,7 +6,8 @@ public class MockAssemblyResolver : IAssemblyResolver
 {
     public AssemblyDefinition Resolve(AssemblyNameReference name)
     {
-        throw new NotImplementedException();
+        return AssemblyDefinition.ReadAssembly(name.Name + ".dll");
+        
     }
 
     public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)

@@ -28,14 +28,13 @@ public class MethodProcessor
     {
         var validationFlags = ModuleWeaver.ValidationFlags;
 
-        if (Method.DeclaringType.IsCustomAttributeDefined<NullGuardAttribute>())
-        {
-            var attribute = Method.DeclaringType.GetCustomAttribute<NullGuardAttribute>();
+
+            var attribute = Method.DeclaringType.GetNullGuardAttribute();
             if (attribute != null)
             {
                 validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
             }
-        }
+        
 
         if ((!validationFlags.HasFlag(ValidationFlags.NonPublic) && !Method.IsPublic)
             || Method.IsProperty()

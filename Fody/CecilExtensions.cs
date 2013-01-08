@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using NullGuard;
 
 public static class CecilExtensions
 {
@@ -26,14 +24,10 @@ public static class CecilExtensions
         return type.Properties.Where(x => !x.GetMethod.IsAbstract && !x.SetMethod.IsAbstract);
     }
 
-    public static bool IsCustomAttributeDefined<T>(this ICustomAttributeProvider value) where T : Attribute
-    {
-        return value.CustomAttributes.Any(a => a.AttributeType.FullName == typeof(T).FullName);
-    }
 
-    public static CustomAttribute GetCustomAttribute<T>(this ICustomAttributeProvider value) where T : Attribute
+    public static CustomAttribute GetNullGuardAttribute(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == typeof(T).FullName);
+        return value.CustomAttributes.FirstOrDefault(a => a.AttributeType.Name == "NullGuardAttribute");
     }
 
     public static bool IsProperty(this MethodDefinition method)
@@ -43,7 +37,7 @@ public static class CecilExtensions
 
     public static bool AllowsNull(this ICustomAttributeProvider value)
     {
-        return value.IsCustomAttributeDefined<AllowNullAttribute>();
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "AllowNullAttribute");
     }
 
     public static bool MayNotBeNull(this ParameterDefinition arg)
