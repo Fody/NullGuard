@@ -7,9 +7,6 @@ namespace NullGuard
     {
         public NullGuardAttribute(ValidationFlags flags)
         {
-            Flags = flags;
         }
-
-        public ValidationFlags Flags { get; private set; }
     }
 }

@@ -33,13 +33,17 @@ public class PropertyProcessor
         {
             var attribute = Property.DeclaringType.GetCustomAttribute<NullGuardAttribute>();
             if (attribute != null)
+            {
                 validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            }
         }
 
         if (!validationFlags.HasFlag(ValidationFlags.Properties)) return;
 
         if (Property.AllowsNull())
+        {
             return;
+        }
 
         getBody = Property.GetMethod.Body;
         getBody.SimplifyMacros();

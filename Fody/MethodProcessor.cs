@@ -32,7 +32,9 @@ public class MethodProcessor
         {
             var attribute = Method.DeclaringType.GetCustomAttribute<NullGuardAttribute>();
             if (attribute != null)
+            {
                 validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            }
         }
 
         if ((!validationFlags.HasFlag(ValidationFlags.NonPublic) && !Method.IsPublic)
