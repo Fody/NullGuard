@@ -33,7 +33,7 @@ public static class AssemblyWeaver
         Assembly = Assembly.LoadFile(newAssembly);
     }
 
-    private static void LogError(string error)
+    static void LogError(string error)
     {
         Errors.Add(error);
     }

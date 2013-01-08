@@ -10,8 +10,8 @@ public class PropertyProcessor
 {
     public ModuleWeaver ModuleWeaver;
     public PropertyDefinition Property;
-    private MethodBody getBody;
-    private MethodBody setBody;
+    MethodBody getBody;
+    MethodBody setBody;
 
     public void Process()
     {
@@ -25,9 +25,9 @@ public class PropertyProcessor
         }
     }
 
-    private void InnerProcess()
+    void InnerProcess()
     {
-        var validationFlags = this.ModuleWeaver.ValidationFlags;
+        var validationFlags = ModuleWeaver.ValidationFlags;
 
         if (Property.DeclaringType.IsCustomAttributeDefined<NullGuardAttribute>())
         {
@@ -48,7 +48,7 @@ public class PropertyProcessor
             !Property.GetMethod.MethodReturnType.AllowsNull() &&
             !Property.PropertyType.IsValueType)
         {
-            InjectPropertyGetterGuard(validationFlags);
+            InjectPropertyGetterGuard();
         }
 
         getBody.InitLocals = true;
@@ -59,17 +59,15 @@ public class PropertyProcessor
 
         if (validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.SetMethod.IsPublic)
         {
-            InjectPropertySetterGuard(validationFlags);
+            InjectPropertySetterGuard();
         }
 
         setBody.InitLocals = true;
         setBody.OptimizeMacros();
     }
 
-    private void InjectPropertyGetterGuard(ValidationFlags validationFlags)
+    void InjectPropertyGetterGuard()
     {
-        var newInvalidOperationExceptionCtor = ModuleWeaver.ModuleDefinition.Import(typeof(InvalidOperationException).GetConstructor(new Type[] { typeof(string) }));
-
         var returnPoints = getBody.Instructions
             .Select((o, i) => new { o, i })
             .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -95,7 +93,7 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Property.Name)),
 
                 // Load the InvalidOperationException onto the stack
-                Instruction.Create(OpCodes.Newobj, newInvalidOperationExceptionCtor),
+                Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
@@ -103,10 +101,8 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertySetterGuard(ValidationFlags validationFlags)
+    void InjectPropertySetterGuard()
     {
-        var newArgumentNullExceptionCtor = ModuleWeaver.ModuleDefinition.Import(typeof(ArgumentNullException).GetConstructor(new Type[] { typeof(string), typeof(string) }));
-
         var parameter = Property.SetMethod.Parameters[0]; // The Value parameter
 
         if (parameter.MayNotBeNull())
@@ -128,7 +124,7 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", Property.Name)),
 
                 // Load the ArgumentNullException onto the stack
-                Instruction.Create(OpCodes.Newobj, newArgumentNullExceptionCtor),
+                Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionWithMessageConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)

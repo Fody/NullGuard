@@ -8,7 +8,9 @@ public class ClassWithPrivateMethod
         SomePrivateMethod(null);
     }
 
-    private void SomePrivateMethod(string x)
+// ReSharper disable UnusedParameter.Local
+    void SomePrivateMethod(string x)
+// ReSharper restore UnusedParameter.Local
     {
     }
 

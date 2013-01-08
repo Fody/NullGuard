@@ -10,7 +10,7 @@ public class MethodProcessor
 {
     public ModuleWeaver ModuleWeaver;
     public MethodDefinition Method;
-    private MethodBody body;
+    MethodBody body;
 
     public void Process()
     {
@@ -24,9 +24,9 @@ public class MethodProcessor
         }
     }
 
-    private void InnerProcess()
+    void InnerProcess()
     {
-        var validationFlags = this.ModuleWeaver.ValidationFlags;
+        var validationFlags = ModuleWeaver.ValidationFlags;
 
         if (Method.DeclaringType.IsCustomAttributeDefined<NullGuardAttribute>())
         {
@@ -53,23 +53,18 @@ public class MethodProcessor
             !Method.ReturnType.IsValueType &&
             Method.ReturnType.FullName != typeof(void).FullName)
         {
-            InjectMethodReturnGuard(validationFlags);
+            InjectMethodReturnGuard();
         }
 
         body.InitLocals = true;
         body.OptimizeMacros();
     }
 
-    private void InjectMethodArgumentGuards(ValidationFlags validationFlags)
+    void InjectMethodArgumentGuards(ValidationFlags validationFlags)
     {
-        var newArgumentNullExceptionCtor = ModuleWeaver.ModuleDefinition.Import(typeof(ArgumentNullException).GetConstructor(new Type[] { typeof(string) }));
-        var newInvalidOperationExceptionCtor = ModuleWeaver.ModuleDefinition.Import(typeof(InvalidOperationException).GetConstructor(new Type[] { typeof(string) }));
 
-        int i = Method.Parameters.Count;
         foreach (var parameter in Method.Parameters.Reverse())
         {
-            i--;
-
             if (parameter.MayNotBeNull())
             {
                 var entry = body.Instructions.First();
@@ -86,7 +81,7 @@ public class MethodProcessor
                     Instruction.Create(OpCodes.Ldstr, parameter.Name),
 
                     // Load the ArgumentNullException onto the stack
-                    Instruction.Create(OpCodes.Newobj, newArgumentNullExceptionCtor),
+                    Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionConstructor),
 
                     // Throw the top item of the stack
                     Instruction.Create(OpCodes.Throw)
@@ -120,7 +115,7 @@ public class MethodProcessor
                         Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)),
 
                         // Load the InvalidOperationException onto the stack
-                        Instruction.Create(OpCodes.Newobj, newInvalidOperationExceptionCtor),
+                        Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
 
                         // Throw the top item of the stack
                         Instruction.Create(OpCodes.Throw)
@@ -130,10 +125,8 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuard(ValidationFlags validationFlags)
+    void InjectMethodReturnGuard()
     {
-        var newInvalidOperationExceptionCtor = ModuleWeaver.ModuleDefinition.Import(typeof(InvalidOperationException).GetConstructor(new Type[] { typeof(string) }));
-
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
                 .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -159,7 +152,7 @@ public class MethodProcessor
                 Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
 
                 // Load the InvalidOperationException onto the stack
-                Instruction.Create(OpCodes.Newobj, newInvalidOperationExceptionCtor),
+                Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)

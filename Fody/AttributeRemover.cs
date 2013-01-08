@@ -1,6 +1,6 @@
 ﻿public partial class ModuleWeaver
 {
-    private void RemoveAttributes()
+    void RemoveAttributes()
     {
         ModuleDefinition.RemoveAllowNullAttribute();
         ModuleDefinition.Assembly.RemoveAllowNullAttribute();

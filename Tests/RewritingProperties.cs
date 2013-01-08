@@ -4,8 +4,8 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingProperties
 {
-    private Type sampleClassType;
-    private Type classWithPrivateMethodType;
+    Type sampleClassType;
+    Type classWithPrivateMethodType;
 
     public RewritingProperties()
     {
@@ -19,6 +19,7 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
         Assert.AreEqual("value", exception.ParamName);
+        Assert.AreEqual("Cannot set the value of property 'NonNullProperty' to null.\r\nParameter name: value", exception.Message);
     }
 
     [Test]
@@ -27,7 +28,9 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() =>
         {
+// ReSharper disable UnusedVariable
             var temp = sample.NonNullProperty;
+// ReSharper restore UnusedVariable
         });
     }
 
@@ -46,7 +49,9 @@ public class RewritingProperties
         sample.PropertyAllowsNullSetButDoesNotAllowNullGet = null;
         Assert.Throws<InvalidOperationException>(() =>
         {
+// ReSharper disable UnusedVariable
             var temp = sample.PropertyAllowsNullSetButDoesNotAllowNullGet;
+// ReSharper restore UnusedVariable
         });
     }
 

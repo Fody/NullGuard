@@ -2,7 +2,7 @@
 
 public partial class ModuleWeaver
 {
-    private void ProcessAssembly()
+    void ProcessAssembly()
     {
         foreach (var type in types)
         {
@@ -21,7 +21,7 @@ public partial class ModuleWeaver
         }
     }
 
-    private void ProcessMethod(MethodDefinition method)
+    void ProcessMethod(MethodDefinition method)
     {
         var methodProcessor = new MethodProcessor
             {
@@ -31,7 +31,7 @@ public partial class ModuleWeaver
         methodProcessor.Process();
     }
 
-    private void ProcessProperty(PropertyDefinition property)
+    void ProcessProperty(PropertyDefinition property)
     {
         var propertyProcessor = new PropertyProcessor
         {

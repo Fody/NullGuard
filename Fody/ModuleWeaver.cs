@@ -12,7 +12,7 @@ public partial class ModuleWeaver
     public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
-    private List<TypeDefinition> types;
+    List<TypeDefinition> types;
 
     public ModuleWeaver()
     {

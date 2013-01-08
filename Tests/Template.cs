@@ -15,6 +15,7 @@ public class Template
         var methods = moduleDefinition.GetType("Tempalate").Methods;
         var noWeaving = methods.First(x => x.Name == "NoWeaving").Body;
         var withWeaving = methods.First(x => x.Name == "WithWeaving").Body;
+        Debug.WriteLine(withWeaving);
         Debug.WriteLine(noWeaving);
     }
 

@@ -4,8 +4,8 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingMethods
 {
-    private Type sampleClassType;
-    private Type classWithPrivateMethodType;
+    Type sampleClassType;
+    Type classWithPrivateMethodType;
 
     public RewritingMethods()
     {

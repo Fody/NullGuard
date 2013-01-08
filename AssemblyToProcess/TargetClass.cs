@@ -1,4 +1,6 @@
-﻿using NullGuard;
+﻿
+// ReSharper disable UnusedParameter.Local
+using NullGuard;
 
 public class TargetClass
 {
@@ -22,3 +24,5 @@ public class TargetClass
 
     public string PropertyWithNoNullCheckOnSet { get; [param: AllowNull] set; }
 }
+
+// ReSharper restore UnusedParameter.Local
