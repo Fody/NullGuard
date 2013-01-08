@@ -156,7 +156,7 @@ public class MethodProcessor
                 Instruction.Create(OpCodes.Pop),
 
                 // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Method.Name)),
+                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
 
                 // Load the InvalidOperationException onto the stack
                 Instruction.Create(OpCodes.Newobj, newInvalidOperationExceptionCtor),
