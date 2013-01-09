@@ -6,11 +6,13 @@ public class RewritingMethods
 {
     Type sampleClassType;
     Type classWithPrivateMethodType;
+    Type specialClassType;
 
     public RewritingMethods()
     {
         sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
+        specialClassType = AssemblyWeaver.Assembly.GetType("SpecialClass");
     }
 
     [Test]
@@ -32,7 +34,7 @@ public class RewritingMethods
     public void RequiresNonNullMethodReturnValue()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
-        Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(returnNull: true));
+        Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
     }
 
     [Test]
@@ -62,5 +64,35 @@ public class RewritingMethods
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         Assert.Throws<ArgumentNullException>(() => sample.PublicWrapperOfPrivateMethod());
+    }
+
+    [Test]
+    public void ReturnGuardDoesNotInterfereWithIteratorMethod()
+    {
+        var sample = (dynamic)Activator.CreateInstance(specialClassType);
+        Assert.That(new int[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
+    }
+
+    [Test]
+    public void RequiresNonNullArgumentAsync()
+    {
+        var sample = (dynamic)Activator.CreateInstance(specialClassType);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
+        Assert.AreEqual("nonNullArg", exception.ParamName);
+    }
+
+    [Test]
+    public void AllowsNullWhenAttributeAppliedAsync()
+    {
+        var sample = (dynamic)Activator.CreateInstance(specialClassType);
+        sample.SomeMethodAsync("", null);
+    }
+
+    [Test]
+    [Ignore("Not sure how to guard for null in an async method.")]
+    public void RequiresNonNullMethodReturnValueAsync()
+    {
+        var sample = (dynamic)Activator.CreateInstance(specialClassType);
+        Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValueAsync(true));
     }
 }
