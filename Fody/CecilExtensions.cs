@@ -16,12 +16,12 @@ public static class CecilExtensions
 
     public static IEnumerable<PropertyDefinition> AbstractProperties(this TypeDefinition type)
     {
-        return type.Properties.Where(x => x.GetMethod.IsAbstract || x.SetMethod.IsAbstract);
+        return type.Properties.Where(x => (x.GetMethod != null && x.GetMethod.IsAbstract) || (x.SetMethod != null && x.SetMethod.IsAbstract));
     }
 
     public static IEnumerable<PropertyDefinition> ConcreteProperties(this TypeDefinition type)
     {
-        return type.Properties.Where(x => !x.GetMethod.IsAbstract && !x.SetMethod.IsAbstract);
+        return type.Properties.Where(x => (x.GetMethod == null || !x.GetMethod.IsAbstract) && (x.SetMethod == null || !x.SetMethod.IsAbstract));
     }
 
 
