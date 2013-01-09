@@ -6,7 +6,7 @@ public partial class ModuleWeaver
     {
         foreach (var type in types)
         {
-            if (type.ContainsAllowNullAttribute())
+            if (type.ContainsAllowNullAttribute() || type.IsCompilerGenerated())
             {
                 continue;
             }
