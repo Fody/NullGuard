@@ -12,7 +12,7 @@ public class SpecialClass
             yield return i;
         }
     }
-
+#if (DEBUG)
     public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
     {
         await Task.Run(() => Console.WriteLine(nonNullArg));
@@ -22,4 +22,5 @@ public class SpecialClass
     {
         return await Task.Run<string>(() => returnNull ? null : "");
     }
+#endif
 }

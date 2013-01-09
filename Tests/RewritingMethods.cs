@@ -72,7 +72,8 @@ public class RewritingMethods
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         Assert.That(new int[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
     }
-
+	
+#if (DEBUG)
     [Test]
     public void RequiresNonNullArgumentAsync()
     {
@@ -87,7 +88,7 @@ public class RewritingMethods
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         sample.SomeMethodAsync("", null);
     }
-
+#endif
     [Test]
     [Ignore("Not sure how to guard for null in an async method.")]
     public void RequiresNonNullMethodReturnValueAsync()
