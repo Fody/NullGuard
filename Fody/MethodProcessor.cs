@@ -28,13 +28,11 @@ public class MethodProcessor
     {
         var validationFlags = ModuleWeaver.ValidationFlags;
 
-
-            var attribute = Method.DeclaringType.GetNullGuardAttribute();
-            if (attribute != null)
-            {
-                validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
-            }
-        
+        var attribute = Method.DeclaringType.GetNullGuardAttribute();
+        if (attribute != null)
+        {
+            validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+        }
 
         if ((!validationFlags.HasFlag(ValidationFlags.NonPublic) && !Method.IsPublic)
             || Method.IsProperty()
@@ -49,7 +47,8 @@ public class MethodProcessor
             InjectMethodArgumentGuards(validationFlags);
         }
 
-        if (validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
+        if (!Method.IsAsyncStateMachine() &&
+            validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
             !Method.MethodReturnType.AllowsNull() &&
             !Method.ReturnType.IsValueType &&
             Method.ReturnType.FullName != typeof(void).FullName)
@@ -63,7 +62,6 @@ public class MethodProcessor
 
     void InjectMethodArgumentGuards(ValidationFlags validationFlags)
     {
-
         foreach (var parameter in Method.Parameters.Reverse())
         {
             if (parameter.MayNotBeNull())

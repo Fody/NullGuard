@@ -24,7 +24,6 @@ public static class CecilExtensions
         return type.Properties.Where(x => (x.GetMethod == null || !x.GetMethod.IsAbstract) && (x.SetMethod == null || !x.SetMethod.IsAbstract));
     }
 
-
     public static CustomAttribute GetNullGuardAttribute(this ICustomAttributeProvider value)
     {
         return value.CustomAttributes.FirstOrDefault(a => a.AttributeType.Name == "NullGuardAttribute");
@@ -43,5 +42,15 @@ public static class CecilExtensions
     public static bool MayNotBeNull(this ParameterDefinition arg)
     {
         return !arg.AllowsNull() && !arg.IsOptional && !arg.ParameterType.IsValueType && !arg.IsOut;
+    }
+
+    public static bool IsCompilerGenerated(this ICustomAttributeProvider value)
+    {
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute");
+    }
+
+    public static bool IsAsyncStateMachine(this ICustomAttributeProvider value)
+    {
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "AsyncStateMachineAttribute");
     }
 }
