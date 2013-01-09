@@ -44,29 +44,35 @@ public class PropertyProcessor
             return;
         }
 
-        getBody = Property.GetMethod.Body;
-        getBody.SimplifyMacros();
-
-        if ((validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.GetMethod.IsPublic) &&
-            !Property.GetMethod.MethodReturnType.AllowsNull() &&
-            !Property.PropertyType.IsValueType)
+        if (Property.GetMethod != null)
         {
-            InjectPropertyGetterGuard();
+            getBody = Property.GetMethod.Body;
+            getBody.SimplifyMacros();
+
+            if ((validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.GetMethod.IsPublic) &&
+                !Property.GetMethod.MethodReturnType.AllowsNull() &&
+                !Property.PropertyType.IsValueType)
+            {
+                InjectPropertyGetterGuard();
+            }
+
+            getBody.InitLocals = true;
+            getBody.OptimizeMacros();
         }
 
-        getBody.InitLocals = true;
-        getBody.OptimizeMacros();
-
-        setBody = Property.SetMethod.Body;
-        setBody.SimplifyMacros();
-
-        if (validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.SetMethod.IsPublic)
+        if (Property.SetMethod != null)
         {
-            InjectPropertySetterGuard();
-        }
+            setBody = Property.SetMethod.Body;
+            setBody.SimplifyMacros();
 
-        setBody.InitLocals = true;
-        setBody.OptimizeMacros();
+            if (validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.SetMethod.IsPublic)
+            {
+                InjectPropertySetterGuard();
+            }
+
+            setBody.InitLocals = true;
+            setBody.OptimizeMacros();
+        }
     }
 
     void InjectPropertyGetterGuard()
