@@ -70,7 +70,7 @@ public class RewritingMethods
     public void ReturnGuardDoesNotInterfereWithIteratorMethod()
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
-        Assert.That(new int[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
+        Assert.That(new[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
     }
 	
 #if (DEBUG)

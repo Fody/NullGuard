@@ -9,18 +9,17 @@ public static class AssemblyWeaver
 
     static AssemblyWeaver()
     {
-        var assemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+		BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
 
 #if (!DEBUG)
-        assemblyPath = assemblyPath.Replace("Debug", "Release");
+        BeforeAssemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif
+		AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
 
-        var newAssembly = assemblyPath.Replace(".dll", "2.dll");
-
-        File.Copy(assemblyPath, newAssembly, true);
+		File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
 
         var assemblyResolver = new MockAssemblyResolver();
-        var moduleDefinition = ModuleDefinition.ReadModule(newAssembly);
+		var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath);
         
         var weavingTask = new ModuleWeaver
             {
@@ -30,12 +29,15 @@ public static class AssemblyWeaver
             };
 
         weavingTask.Execute();
-        moduleDefinition.Write(newAssembly);
+		moduleDefinition.Write(AfterAssemblyPath);
 
-        Assembly = Assembly.LoadFile(newAssembly);
+		Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
 
-    static void LogError(string error)
+	public static string BeforeAssemblyPath;
+	public static string AfterAssemblyPath;
+
+	static void LogError(string error)
     {
         Errors.Add(error);
     }

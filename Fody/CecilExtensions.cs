@@ -9,9 +9,9 @@ public static class CecilExtensions
         return type.Methods.Where(x => x.IsAbstract);
     }
 
-    public static IEnumerable<MethodDefinition> ConcreteMethods(this TypeDefinition type)
+    public static IEnumerable<MethodDefinition> MethodsWithBody(this TypeDefinition type)
     {
-        return type.Methods.Where(x => !x.IsAbstract);
+        return type.Methods.Where(x => x.Body != null);
     }
 
     public static IEnumerable<PropertyDefinition> AbstractProperties(this TypeDefinition type)
@@ -41,7 +41,34 @@ public static class CecilExtensions
 
     public static bool MayNotBeNull(this ParameterDefinition arg)
     {
-        return !arg.AllowsNull() && !arg.IsOptional && !arg.ParameterType.IsValueType && !arg.IsOut;
+        return !arg.AllowsNull() && !arg.IsOptional && arg.ParameterType.IsRefType() && !arg.IsOut;
+    }
+    public static bool IsRefType(this TypeReference arg)
+    {
+		if (arg.IsValueType)
+		{
+			return false;
+		}
+	    var byReferenceType = arg as ByReferenceType;
+		if (byReferenceType != null && byReferenceType.ElementType.IsValueType)
+		{
+			return false;
+		}
+
+	    var pointerType = arg as PointerType;
+		if (pointerType != null && pointerType.ElementType.IsValueType)
+		{
+			return false;
+		}
+
+	    var genericParamType = arg as GenericParameter;
+		if (genericParamType != null)
+		{
+			return false;
+			//TODO: box if  genericParamType.Constraints.Any(constraint => constraint.IsRefType());
+		}
+	
+	    return true;
     }
 
     public static bool IsCompilerGenerated(this ICustomAttributeProvider value)

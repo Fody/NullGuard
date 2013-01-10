@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,11 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassWithBadAttributes.cs" />
-    <Compile Include="ClassWithPrivateMethod.cs" />
-    <Compile Include="InterfaceBadAttributes.cs" />
-    <Compile Include="SampleClass.cs" />
-    <Compile Include="SpecialClass.cs" />
+    <Compile Include="ClassWithBadAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassWithPrivateMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterfaceBadAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SampleClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SpecialClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnsafeClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">

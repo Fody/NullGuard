@@ -9,7 +9,7 @@ public class VerifyTest
     [Test]
     public void PeVerify()
     {
-        Verifier.Verify(AssemblyWeaver.Assembly.CodeBase.Remove(0, 8));
+        Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPath);
     }
 
 #endif

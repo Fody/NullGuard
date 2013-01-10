@@ -10,7 +10,7 @@ public partial class ModuleWeaver
             {
                 continue;
             }
-            foreach (var method in type.ConcreteMethods())
+            foreach (var method in type.MethodsWithBody())
             {
                 ProcessMethod(method);
             }

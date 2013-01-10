@@ -27,6 +27,10 @@ public class PropertyProcessor
 
     void InnerProcess()
     {
+		if (!Property.PropertyType.IsRefType())
+		{
+			return;
+		}
         var validationFlags = ModuleWeaver.ValidationFlags;
 
 
@@ -50,8 +54,8 @@ public class PropertyProcessor
             getBody.SimplifyMacros();
 
             if ((validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.GetMethod.IsPublic) &&
-                !Property.GetMethod.MethodReturnType.AllowsNull() &&
-                !Property.PropertyType.IsValueType)
+                !Property.GetMethod.MethodReturnType.AllowsNull()
+               )
             {
                 InjectPropertyGetterGuard();
             }

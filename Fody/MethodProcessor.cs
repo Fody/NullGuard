@@ -50,7 +50,7 @@ public class MethodProcessor
         if (!Method.IsAsyncStateMachine() &&
             validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
             !Method.MethodReturnType.AllowsNull() &&
-            !Method.ReturnType.IsValueType &&
+            Method.ReturnType.IsRefType() &&
             Method.ReturnType.FullName != typeof(void).FullName)
         {
             InjectMethodReturnGuard();
@@ -87,7 +87,7 @@ public class MethodProcessor
                     );
             }
 
-            if (validationFlags.HasFlag(ValidationFlags.OutValues) && parameter.IsOut && !parameter.ParameterType.IsValueType)
+            if (validationFlags.HasFlag(ValidationFlags.OutValues) && parameter.IsOut && parameter.ParameterType.IsRefType())
             {
                 var returnPoints = body.Instructions
                     .Select((o, ix) => new { o, ix })
