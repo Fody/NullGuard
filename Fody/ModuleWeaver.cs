@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mono.Cecil;
 using NullGuard;
 
@@ -24,7 +23,7 @@ public partial class ModuleWeaver
     public void Execute()
     {
         FindReferences();
-        types = ModuleDefinition.GetTypes().ToList();
+        types = new List<TypeDefinition>(ModuleDefinition.GetTypes());
         CheckForBadAttributes();
         ProcessAssembly();
         RemoveAttributes();

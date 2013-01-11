@@ -21,25 +21,23 @@ public class PropertyProcessor
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing '{0}'. Error: {1}", Property.FullName, exception.Message));
+            throw new WeavingException(string.Format("An error occurred processing property '{0}'", Property.FullName), exception);
         }
     }
 
     void InnerProcess()
     {
-		if (!Property.PropertyType.IsRefType())
-		{
-			return;
-		}
+        if (!Property.PropertyType.IsRefType())
+        {
+            return;
+        }
         var validationFlags = ModuleWeaver.ValidationFlags;
 
-
         var attribute = Property.DeclaringType.GetNullGuardAttribute();
-            if (attribute != null)
-            {
-                validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
-            }
-        
+        if (attribute != null)
+        {
+            validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+        }
 
         if (!validationFlags.HasFlag(ValidationFlags.Properties)) return;
 
@@ -48,7 +46,7 @@ public class PropertyProcessor
             return;
         }
 
-        if (Property.GetMethod != null)
+        if (Property.GetMethod != null && Property.GetMethod.Body != null)
         {
             getBody = Property.GetMethod.Body;
             getBody.SimplifyMacros();
@@ -64,7 +62,7 @@ public class PropertyProcessor
             getBody.OptimizeMacros();
         }
 
-        if (Property.SetMethod != null)
+        if (Property.SetMethod != null && Property.SetMethod.Body != null)
         {
             setBody = Property.SetMethod.Body;
             setBody.SimplifyMacros();
