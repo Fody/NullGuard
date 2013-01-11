@@ -12,7 +12,7 @@ public static class AssemblyWeaver
 		BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
 
 #if (!DEBUG)
-        BeforeAssemblyPath = assemblyPath.Replace("Debug", "Release");
+        BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
 #endif
 		AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
 
