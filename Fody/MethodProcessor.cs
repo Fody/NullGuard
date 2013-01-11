@@ -88,7 +88,10 @@ public class MethodProcessor
                     );
             }
 
-            if (validationFlags.HasFlag(ValidationFlags.OutValues) && parameter.IsOut && parameter.ParameterType.IsRefType())
+            if (validationFlags.HasFlag(ValidationFlags.OutValues) &&
+                parameter.IsOut &&
+                parameter.ParameterType.IsRefType() &&
+                !parameter.ParameterType.GetElementType().IsGenericParameter)
             {
                 var returnPoints = body.Instructions
                     .Select((o, ix) => new { o, ix })

@@ -81,6 +81,11 @@ public class SampleClass
         first = null;
         second = null;
     }
+
+    public void MethodWithGenericOut<T>(out T item)
+    {
+        item = default(T);
+    }
 }
 
 public abstract class MyAbstractClass
