@@ -43,32 +43,33 @@ public static class CecilExtensions
     {
         return !arg.AllowsNull() && !arg.IsOptional && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
+
     public static bool IsRefType(this TypeReference arg)
     {
-		if (arg.IsValueType)
-		{
-			return false;
-		}
-	    var byReferenceType = arg as ByReferenceType;
-		if (byReferenceType != null && byReferenceType.ElementType.IsValueType)
-		{
-			return false;
-		}
+        if (arg.IsValueType)
+        {
+            return false;
+        }
+        var byReferenceType = arg as ByReferenceType;
+        if (byReferenceType != null && byReferenceType.ElementType.IsValueType)
+        {
+            return false;
+        }
 
-	    var pointerType = arg as PointerType;
-		if (pointerType != null && pointerType.ElementType.IsValueType)
-		{
-			return false;
-		}
+        var pointerType = arg as PointerType;
+        if (pointerType != null && pointerType.ElementType.IsValueType)
+        {
+            return false;
+        }
 
-	    var genericParamType = arg as GenericParameter;
-		if (genericParamType != null)
-		{
-			return false;
-			//TODO: box if  genericParamType.Constraints.Any(constraint => constraint.IsRefType());
-		}
-	
-	    return true;
+        var genericParamType = arg as GenericParameter;
+        if (genericParamType != null)
+        {
+            return false;
+            //TODO: box if  genericParamType.Constraints.Any(constraint => constraint.IsRefType());
+        }
+
+        return true;
     }
 
     public static bool IsCompilerGenerated(this ICustomAttributeProvider value)
@@ -79,5 +80,11 @@ public static class CecilExtensions
     public static bool IsAsyncStateMachine(this ICustomAttributeProvider value)
     {
         return value.CustomAttributes.Any(a => a.AttributeType.Name == "AsyncStateMachineAttribute");
+    }
+
+    public static bool IsIteratorStateMachine(this ICustomAttributeProvider value)
+    {
+        // Only works on VB not C# but it's something.
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "IteratorStateMachineAttribute");
     }
 }

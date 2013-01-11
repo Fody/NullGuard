@@ -48,6 +48,7 @@ public class MethodProcessor
         }
 
         if (!Method.IsAsyncStateMachine() &&
+            !Method.IsIteratorStateMachine() &&
             validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
             !Method.MethodReturnType.AllowsNull() &&
             Method.ReturnType.IsRefType() &&
