@@ -20,7 +20,7 @@ public class MethodProcessor
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing '{0}'. Error: {1}", Method.FullName, exception.Message));
+            throw new WeavingException(string.Format("An error occurred processing method '{0}'.", Method.FullName), exception);
         }
     }
 
@@ -104,7 +104,7 @@ public class MethodProcessor
                         // Load the out parameter onto the stack
                         Instruction.Create(OpCodes.Ldarg, parameter),
 
-                        // Not really sure what this is for. *jazz hands*
+                        // Loads an object reference onto the stack
                         Instruction.Create(OpCodes.Ldind_Ref),
 
                         // Branch if value on stack is true, not null or non-zero
