@@ -17,6 +17,10 @@ public class LargeAssemblyTest
 			{
 				continue;
 			}
+			if (assemblyPath.EndsWith("2.dll"))
+			{
+				continue;
+			}
 			Debug.WriteLine("Verifying " + assemblyPath);
 			var newAssembly = assemblyPath.Replace(".dll", "2.dll");
 			File.Copy(assemblyPath, newAssembly, true);
