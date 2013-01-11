@@ -86,6 +86,12 @@ public class SampleClass
     {
         item = default(T);
     }
+
+    public object MethodWithOutAndReturn(out string prefix)
+    {
+        prefix = null;
+        return null;
+    }
 }
 
 public abstract class MyAbstractClass
