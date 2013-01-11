@@ -16,7 +16,7 @@ public class LargeAssemblyTest
     [TestCase("Lucene.Net.Contrib.Spatial.NTS")]
     //[TestCase("Lucene.Net")]
     //[TestCase("Mono.Cecil")]
-    //[TestCase("Mono.Cecil.Mdb")]
+    [TestCase("Mono.Cecil.Mdb")]
     [TestCase("Mono.Cecil.Pdb")]
     [TestCase("Mono.Cecil.Rocks")]
     [TestCase("NetTopologySuite")]

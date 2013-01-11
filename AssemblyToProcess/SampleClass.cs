@@ -80,12 +80,6 @@ public class SampleClass
     {
         first = null;
         second = null;
-
-        if (first == null)
-            throw new Exception("Foo");
-
-        if (second == null)
-            throw new Exception("Bar");
     }
 }
 

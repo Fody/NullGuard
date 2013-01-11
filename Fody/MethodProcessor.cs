@@ -62,6 +62,7 @@ public class MethodProcessor
 
     void InjectMethodArgumentGuards(ValidationFlags validationFlags)
     {
+        int offsetCount = 0;
         foreach (var parameter in Method.Parameters.Reverse())
         {
             if (parameter.MayNotBeNull())
@@ -92,7 +93,7 @@ public class MethodProcessor
                 var returnPoints = body.Instructions
                     .Select((o, ix) => new { o, ix })
                     .Where(a => a.o.OpCode == OpCodes.Ret)
-                    .Select(a => a.ix)
+                    .Select(a => a.ix - offsetCount * 6) // Offset by the number of instructions we inserted
                     .OrderByDescending(ix => ix);
 
                 foreach (var ret in returnPoints)
@@ -120,6 +121,8 @@ public class MethodProcessor
                         Instruction.Create(OpCodes.Throw)
                         );
                 }
+
+                offsetCount++;
             }
         }
     }
