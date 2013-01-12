@@ -1,6 +1,6 @@
-## This is an add-in for [Fody](https://github.com/SimonCropp/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
-[Introduction to Fody](http://github.com/SimonCropp/Fody/wiki/SampleUsage)
+[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 ## Nuget package http://nuget.org/packages/NullGuard.Fody 
 
@@ -122,11 +122,11 @@ The Visual Studio package is only to help you configure Fody for your projects. 
   * Select the project in Solution Explorer
   * Enable Fody for the project by using the top level menu 'Project > Fody > Enable'. Click OK. 
   
-  ![ProjectEnable.jpg](https://github.com/SimonCropp/Fody/wiki/ProjectEnable.jpg)
+  ![ProjectEnable.jpg](https://github.com/Fody/Fody/wiki/ProjectEnable.jpg)
 
 Notice a file `FodyWeavers.xml` has been added to the project
 
-  ![FodyWeaversInProject.jpg](https://github.com/SimonCropp/Fody/wiki/FodyWeaversInProject.jpg)
+  ![FodyWeaversInProject.jpg](https://github.com/Fody/Fody/wiki/FodyWeaversInProject.jpg)
 
 Which will contain
 
