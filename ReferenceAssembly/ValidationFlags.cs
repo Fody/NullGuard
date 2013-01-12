@@ -2,6 +2,9 @@ using System;
 
 namespace NullGuard
 {
+    /// <summary>
+    /// Used by <see cref="NullGuardAttribute"/> to taget specific categories of members.
+    /// </summary>
     [Flags]
     public enum ValidationFlags
     {
