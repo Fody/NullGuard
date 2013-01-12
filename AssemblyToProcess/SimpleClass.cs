@@ -93,7 +93,3 @@ public class SimpleClass
         return null;
     }
 }
-
-public abstract class MyAbstractClass
-{
-}

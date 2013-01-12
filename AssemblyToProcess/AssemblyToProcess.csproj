@@ -50,9 +50,12 @@
     <Compile Include="InterfaceBadAttributes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SimpleClass.cs">
+    <Compile Include="MyAbstractClass.cs" />
+    <Compile Include="Sample.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SimpleClass.cs" />
+    <Compile Include="SomeOtherClass.cs" />
     <Compile Include="SpecialClass.cs">
       <SubType>Code</SubType>
     </Compile>
