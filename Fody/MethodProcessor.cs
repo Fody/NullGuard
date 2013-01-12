@@ -20,7 +20,7 @@ public class MethodProcessor
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing '{0}'. Error: {1}", Method.FullName, exception.Message));
+            throw new WeavingException(string.Format("An error occurred processing method '{0}'.", Method.FullName), exception);
         }
     }
 
@@ -48,12 +48,9 @@ public class MethodProcessor
         }
 
         if (!Method.IsAsyncStateMachine() &&
-            validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-            !Method.MethodReturnType.AllowsNull() &&
-            Method.ReturnType.IsRefType() &&
-            Method.ReturnType.FullName != typeof(void).FullName)
+            !Method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard();
+            InjectMethodReturnGuard(validationFlags);
         }
 
         body.InitLocals = true;
@@ -86,45 +83,10 @@ public class MethodProcessor
                     Instruction.Create(OpCodes.Throw)
                     );
             }
-
-            if (validationFlags.HasFlag(ValidationFlags.OutValues) && parameter.IsOut && parameter.ParameterType.IsRefType())
-            {
-                var returnPoints = body.Instructions
-                    .Select((o, ix) => new { o, ix })
-                    .Where(a => a.o.OpCode == OpCodes.Ret)
-                    .Select(a => a.ix)
-                    .OrderByDescending(ix => ix);
-
-                foreach (var ret in returnPoints)
-                {
-                    var returnInstruction = body.Instructions[ret];
-
-                    body.Instructions.Insert(ret,
-
-                        // Load the out parameter onto the stack
-                        Instruction.Create(OpCodes.Ldarg, parameter),
-
-                        // Not really sure what this is for. *jazz hands*
-                        Instruction.Create(OpCodes.Ldind_Ref),
-
-                        // Branch if value on stack is true, not null or non-zero
-                        Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
-
-                        // Load the exception text onto the stack
-                        Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)),
-
-                        // Load the InvalidOperationException onto the stack
-                        Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
-
-                        // Throw the top item of the stack
-                        Instruction.Create(OpCodes.Throw)
-                        );
-                }
-            }
         }
     }
 
-    void InjectMethodReturnGuard()
+    void InjectMethodReturnGuard(ValidationFlags validationFlags)
     {
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
@@ -136,26 +98,68 @@ public class MethodProcessor
         {
             var returnInstruction = body.Instructions[ret];
 
-            body.Instructions.Insert(ret,
+            if (validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
+                !Method.MethodReturnType.AllowsNull() &&
+                Method.ReturnType.IsRefType() &&
+                Method.ReturnType.FullName != typeof(void).FullName)
+            {
+                body.Instructions.Insert(ret,
 
-                // Duplicate the stack (this should be the return value)
-                Instruction.Create(OpCodes.Dup),
+                    // Duplicate the stack (this should be the return value)
+                    Instruction.Create(OpCodes.Dup),
 
-                // Branch if value on stack is true, not null or non-zero
-                Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
+                    // Branch if value on stack is true, not null or non-zero
+                    Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
 
-                // Clean up the stack since we're about to throw up.
-                Instruction.Create(OpCodes.Pop),
+                    // Clean up the stack since we're about to throw up.
+                    Instruction.Create(OpCodes.Pop),
 
-                // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
+                    // Load the exception text onto the stack
+                    Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
 
-                // Load the InvalidOperationException onto the stack
-                Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
+                    // Load the InvalidOperationException onto the stack
+                    Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
 
-                // Throw the top item of the stack
-                Instruction.Create(OpCodes.Throw)
-                );
+                    // Throw the top item of the stack
+                    Instruction.Create(OpCodes.Throw)
+                    );
+            }
+
+            if (validationFlags.HasFlag(ValidationFlags.Arguments))
+            {
+                foreach (var parameter in Method.Parameters.Reverse())
+                {
+                    // This is no longer the return instruction location, but it is where we want to jump to.
+                    returnInstruction = body.Instructions[ret];
+
+                    if (validationFlags.HasFlag(ValidationFlags.OutValues) &&
+                        parameter.IsOut &&
+                        parameter.ParameterType.IsRefType() &&
+                        !parameter.ParameterType.GetElementType().IsGenericParameter)
+                    {
+                        body.Instructions.Insert(ret,
+
+                            // Load the out parameter onto the stack
+                            Instruction.Create(OpCodes.Ldarg, parameter),
+
+                            // Loads an object reference onto the stack
+                            Instruction.Create(OpCodes.Ldind_Ref),
+
+                            // Branch if value on stack is true, not null or non-zero
+                            Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
+
+                            // Load the exception text onto the stack
+                            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)),
+
+                            // Load the InvalidOperationException onto the stack
+                            Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
+
+                            // Throw the top item of the stack
+                            Instruction.Create(OpCodes.Throw)
+                            );
+                    }
+                }
+            }
         }
     }
 }
