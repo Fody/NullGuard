@@ -51,11 +51,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MyAbstractClass.cs" />
-    <Compile Include="Sample.cs">
+    <Compile Include="Sample\Sample.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sample\SampleOutput.cs" />
     <Compile Include="SimpleClass.cs" />
-    <Compile Include="SomeOtherClass.cs" />
+    <Compile Include="Sample\SomeOtherClass.cs" />
     <Compile Include="SpecialClass.cs">
       <SubType>Code</SubType>
     </Compile>
