@@ -9,7 +9,7 @@ public class RewritingProperties
 
     public RewritingProperties()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
+        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
     }
 

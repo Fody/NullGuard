@@ -10,7 +10,7 @@ public class RewritingMethods
 
     public RewritingMethods()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
+        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
         specialClassType = AssemblyWeaver.Assembly.GetType("SpecialClass");
     }

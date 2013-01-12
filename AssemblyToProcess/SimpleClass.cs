@@ -1,19 +1,19 @@
 using System;
 using NullGuard;
 
-public class SampleClass
+public class SimpleClass
 {
-    public SampleClass()
+    public SimpleClass()
     {
     }
 
     // Why would anyone place an out parameter on a ctor?! I don't know, but I'll support your idiocy.
-    public SampleClass(out string nonNullOutArg)
+    public SimpleClass(out string nonNullOutArg)
     {
         nonNullOutArg = null;
     }
 
-    public SampleClass(string nonNullArg, [AllowNull] string nullArg)
+    public SimpleClass(string nonNullArg, [AllowNull] string nullArg)
     {
         Console.WriteLine(nonNullArg + " " + nullArg);
     }

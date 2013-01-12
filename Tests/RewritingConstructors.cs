@@ -8,7 +8,7 @@ public class RewritingConstructors
 
     public RewritingConstructors()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SampleClass");
+        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
     }
 
     [Test]
