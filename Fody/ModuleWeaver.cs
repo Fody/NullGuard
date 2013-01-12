@@ -22,6 +22,14 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
+        var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
+
+        if (nullGuardAttribute == null)
+            nullGuardAttribute = ModuleDefinition.Assembly.GetNullGuardAttribute();
+
+        if (nullGuardAttribute != null)
+            ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
+
         FindReferences();
         types = new List<TypeDefinition>(ModuleDefinition.GetTypes());
         CheckForBadAttributes();

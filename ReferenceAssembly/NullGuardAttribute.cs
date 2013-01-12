@@ -5,7 +5,7 @@ namespace NullGuard
     /// <summary>
     /// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
     public class NullGuardAttribute : Attribute
     {
         /// <summary>
