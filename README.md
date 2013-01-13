@@ -136,7 +136,7 @@ Which will contain
 
 ### 4. Add the weaver nuget package
 
-Install a Fody add-in using NuGet. See [Using the package manager console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) for more info. For this example we will use [Virtuosity](https://github.com/SimonCropp/Virtuosity)
+Install the NullGuard package using NuGet. See [Using the package manager console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) for more info.
 
     Install-Package NullGuard.Fody
 
