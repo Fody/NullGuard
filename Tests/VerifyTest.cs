@@ -1,10 +1,11 @@
-﻿using NUnit.Framework;
+﻿
+#if(DEBUG)
+
+using NUnit.Framework;
 
 [TestFixture]
 public class VerifyTest
 {
-
-#if(DEBUG)
 
     [Test]
     public void PeVerify()
@@ -12,5 +13,5 @@ public class VerifyTest
         Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPath);
     }
 
-#endif
 }
+#endif
