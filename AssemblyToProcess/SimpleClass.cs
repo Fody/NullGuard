@@ -92,4 +92,20 @@ public class SimpleClass
         prefix = null;
         return null;
     }
+
+    public void MethodWithExistingArgumentGuard(string x)
+    {
+        if (String.IsNullOrEmpty(x))
+            throw new ArgumentException("x is null or empty.", "x");
+
+        Console.WriteLine(x);
+    }
+
+    public void MethodWithExistingArgumentNullGuard(string x)
+    {
+        if (String.IsNullOrEmpty(x))
+            throw new ArgumentNullException("x");
+
+        Console.WriteLine(x);
+    }
 }

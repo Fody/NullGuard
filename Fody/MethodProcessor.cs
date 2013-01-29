@@ -4,13 +4,14 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using Mono.Collections.Generic;
 using NullGuard;
 
 public class MethodProcessor
 {
     public ModuleWeaver ModuleWeaver;
     public MethodDefinition Method;
-    MethodBody body;
+    private MethodBody body;
 
     public void Process()
     {
@@ -24,7 +25,7 @@ public class MethodProcessor
         }
     }
 
-    void InnerProcess()
+    private void InnerProcess()
     {
         var validationFlags = ModuleWeaver.ValidationFlags;
 
@@ -57,36 +58,39 @@ public class MethodProcessor
         body.OptimizeMacros();
     }
 
-    void InjectMethodArgumentGuards(ValidationFlags validationFlags)
+    private void InjectMethodArgumentGuards(ValidationFlags validationFlags)
     {
         foreach (var parameter in Method.Parameters.Reverse())
         {
-            if (parameter.MayNotBeNull())
-            {
-                var entry = body.Instructions.First();
+            if (!parameter.MayNotBeNull())
+                continue;
 
-                body.Instructions.Prepend(
+            if (CheckForExistingGuard(body.Instructions, parameter))
+                continue;
 
-                    // Load the argument onto the stack
-                    Instruction.Create(OpCodes.Ldarg, parameter),
+            var entry = body.Instructions.First();
 
-                    // Branch if value on stack is true, not null or non-zero
-                    Instruction.Create(OpCodes.Brtrue_S, entry),
+            body.Instructions.Prepend(
 
-                    // Load the name of the argument onto the stack
-                    Instruction.Create(OpCodes.Ldstr, parameter.Name),
+                // Load the argument onto the stack
+                Instruction.Create(OpCodes.Ldarg, parameter),
 
-                    // Load the ArgumentNullException onto the stack
-                    Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionConstructor),
+                // Branch if value on stack is true, not null or non-zero
+                Instruction.Create(OpCodes.Brtrue_S, entry),
 
-                    // Throw the top item of the stack
-                    Instruction.Create(OpCodes.Throw)
-                    );
-            }
+                // Load the name of the argument onto the stack
+                Instruction.Create(OpCodes.Ldstr, parameter.Name),
+
+                // Load the ArgumentNullException onto the stack
+                Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionConstructor),
+
+                // Throw the top item of the stack
+                Instruction.Create(OpCodes.Throw)
+                );
         }
     }
 
-    void InjectMethodReturnGuard(ValidationFlags validationFlags)
+    private void InjectMethodReturnGuard(ValidationFlags validationFlags)
     {
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
@@ -161,5 +165,30 @@ public class MethodProcessor
                 }
             }
         }
+    }
+
+    private bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
+    {
+        for (int i = 1; i < instructions.Count - 1; i++)
+        {
+            if (instructions[i].OpCode == OpCodes.Newobj)
+            {
+                var newObjectMethodRef = instructions[i].Operand as MethodReference;
+
+                // Check the 2 most common guards
+                // throw new ArgumentNullException("x");
+                // throw new ArgumentException("some message", "x");
+
+                if (newObjectMethodRef != null &&
+                    (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionConstructor.FullName ||
+                    newObjectMethodRef.FullName == ModuleWeaver.ArgumentExceptionConstructor.FullName) &&
+                    instructions[i - 1].OpCode == OpCodes.Ldstr &&
+                    (string)(instructions[i - 1].Operand) == parameter.Name &&
+                    instructions[i + 1].OpCode == OpCodes.Throw)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
