@@ -36,7 +36,7 @@ public static class CecilExtensions
 
     public static bool AllowsNull(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == "AllowNullAttribute");
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "AllowNullAttribute" || a.AttributeType.Name == "CanBeNullAttribute");
     }
 
     public static bool MayNotBeNull(this ParameterDefinition arg)

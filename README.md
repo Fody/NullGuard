@@ -168,7 +168,7 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
 	    /// <summary>
 	    /// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
 	    /// </summary>
-	    [AttributeUsage(AttributeTargets.Class)]
+	    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
 	    public class NullGuardAttribute : Attribute
 	    {
 	        /// <summary>
