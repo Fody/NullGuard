@@ -108,4 +108,12 @@ public class SimpleClass
 
         Console.WriteLine(x);
     }
+
+    public void MethodWithExistingArgumentNullGuardWithMessage(string x)
+    {
+        if (String.IsNullOrEmpty(x))
+            throw new ArgumentNullException("x", "x is null or empty.");
+
+        Console.WriteLine(x);
+    }
 }

@@ -175,16 +175,20 @@ public class MethodProcessor
             {
                 var newObjectMethodRef = instructions[i].Operand as MethodReference;
 
-                // Check the 2 most common guards
-                // throw new ArgumentNullException("x");
-                // throw new ArgumentException("some message", "x");
+                if (newObjectMethodRef == null || instructions[i + 1].OpCode != OpCodes.Throw)
+                    continue;
 
-                if (newObjectMethodRef != null &&
-                    (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionConstructor.FullName ||
-                    newObjectMethodRef.FullName == ModuleWeaver.ArgumentExceptionConstructor.FullName) &&
+                // Checks for throw new ArgumentNullException("x");
+                if (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionConstructor.FullName &&
                     instructions[i - 1].OpCode == OpCodes.Ldstr &&
-                    (string)(instructions[i - 1].Operand) == parameter.Name &&
-                    instructions[i + 1].OpCode == OpCodes.Throw)
+                    (string)(instructions[i - 1].Operand) == parameter.Name)
+                    return true;
+
+                // Checks for throw new ArgumentNullException("x", "some message");
+                if (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionWithMessageConstructor.FullName &&
+                    i > 1 &&
+                    instructions[i - 2].OpCode == OpCodes.Ldstr &&
+                    (string)(instructions[i - 2].Operand) == parameter.Name)
                     return true;
             }
         }
