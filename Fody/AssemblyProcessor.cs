@@ -1,9 +1,14 @@
 ﻿using Mono.Cecil;
+using System.Linq;
 
 public partial class ModuleWeaver
 {
+    private bool isDebug;
+
     void ProcessAssembly()
     {
+        isDebug = DefineConstants.Any(c => c == "DEBUG");
+
         foreach (var type in types)
         {
             if (type.ContainsAllowNullAttribute() || type.IsCompilerGenerated())
@@ -27,6 +32,7 @@ public partial class ModuleWeaver
             {
                 ModuleWeaver = this,
                 Method = method,
+                IsDebug = isDebug,
             };
         methodProcessor.Process();
     }
@@ -37,6 +43,7 @@ public partial class ModuleWeaver
         {
             ModuleWeaver = this,
             Property = property,
+            IsDebug = isDebug,
         };
         propertyProcessor.Process();
     }

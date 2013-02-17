@@ -8,6 +8,8 @@ public partial class ModuleWeaver
     public MethodReference ArgumentNullExceptionWithMessageConstructor;
     public MethodReference InvalidOperationExceptionConstructor;
 
+    public MethodReference DebugAssertMethod;
+
     public void FindReferences()
     {
         var mscorlib = AssemblyResolver.Resolve("mscorlib");
@@ -36,5 +38,15 @@ public partial class ModuleWeaver
             x.IsConstructor &&
             x.Parameters.Count == 1 &&
             x.Parameters[0].ParameterType.Name == "String"));
+
+        var systemlib = AssemblyResolver.Resolve("System");
+        var systemlibTypes = systemlib.MainModule.Types;
+
+        var debug = systemlibTypes.First(x => x.Name == "Debug");
+        DebugAssertMethod = ModuleDefinition.Import(debug.Methods.First(x =>
+            x.IsStatic &&
+            x.Parameters.Count == 2 &&
+            x.Parameters[0].ParameterType.Name == "Boolean" &&
+            x.Parameters[1].ParameterType.Name == "String"));
     }
 }

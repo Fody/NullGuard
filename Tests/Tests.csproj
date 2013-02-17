@@ -83,7 +83,6 @@
     <Compile Include="RewritingProperties.cs" />
     <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="RewritingMethods.cs" />
-    <Compile Include="Template.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="VerifyTest.cs" />
   </ItemGroup>

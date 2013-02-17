@@ -18,9 +18,11 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullArgument()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethod(null, ""));
         Assert.AreEqual("nonNullArg", exception.ParamName);
+        Assert.AreEqual("Fail: nonNullArg is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -33,8 +35,10 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullMethodReturnValue()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
+        Assert.AreEqual("Fail: Return value of method 'MethodWithReturnValue' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -47,9 +51,11 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullOutValue()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         string value;
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithOutValue(out value));
+        Assert.AreEqual("Fail: Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -62,8 +68,10 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         Assert.Throws<ArgumentNullException>(() => sample.PublicWrapperOfPrivateMethod());
+        Assert.AreEqual("Fail: x is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -77,9 +85,11 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullArgumentAsync()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
         Assert.AreEqual("nonNullArg", exception.ParamName);
+        Assert.AreEqual("Fail: nonNullArg is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]

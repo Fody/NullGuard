@@ -23,10 +23,12 @@ public class RewritingConstructors
     [Test]
     public void RequiresNonNullOutArgument()
     {
+        AssemblyWeaver.TestListener.Reset();
         var args = new object[1];
         Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, args)),
             Throws.TargetInvocationException
                 .With.InnerException.TypeOf<InvalidOperationException>());
+        Assert.AreEqual("Fail: Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]

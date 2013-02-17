@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Mono.Cecil;
@@ -11,6 +12,7 @@ public class MethodProcessor
 {
     public ModuleWeaver ModuleWeaver;
     public MethodDefinition Method;
+    public bool IsDebug;
     private MethodBody body;
 
     public void Process()
@@ -60,6 +62,8 @@ public class MethodProcessor
 
     private void InjectMethodArgumentGuards(ValidationFlags validationFlags)
     {
+        var guardInstructions = new List<Instruction>();
+
         foreach (var parameter in Method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
@@ -70,10 +74,32 @@ public class MethodProcessor
 
             var entry = body.Instructions.First();
 
-            body.Instructions.Prepend(
+            guardInstructions.Clear();
 
+            if (IsDebug)
+            {
                 // Load the argument onto the stack
-                Instruction.Create(OpCodes.Ldarg, parameter),
+                guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
+
+                if (parameter.ParameterType.IsByReference)
+                {
+                    // Loads an object reference onto the stack
+                    guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                }
+
+                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(parameter.Name + " is null."));
+            }
+
+            // Load the argument onto the stack
+            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
+
+            if (parameter.ParameterType.IsByReference)
+            {
+                // Loads an object reference onto the stack
+                guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+            }
+
+            guardInstructions.AddRange(new Instruction[] {
 
                 // Branch if value on stack is true, not null or non-zero
                 Instruction.Create(OpCodes.Brtrue_S, entry),
@@ -86,12 +112,16 @@ public class MethodProcessor
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
-                );
+            });
+
+            body.Instructions.Prepend(guardInstructions);
         }
     }
 
     private void InjectMethodReturnGuard(ValidationFlags validationFlags)
     {
+        var guardInstructions = new List<Instruction>();
+
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
                 .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -107,7 +137,17 @@ public class MethodProcessor
                 Method.ReturnType.IsRefType() &&
                 Method.ReturnType.FullName != typeof(void).FullName)
             {
-                body.Instructions.Insert(ret,
+                guardInstructions.Clear();
+
+                if (IsDebug)
+                {
+                    // Duplicate the stack (this should be the return value)
+                    guardInstructions.Add(Instruction.Create(OpCodes.Dup));
+
+                    guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
+                }
+
+                guardInstructions.AddRange(new Instruction[] {
 
                     // Duplicate the stack (this should be the return value)
                     Instruction.Create(OpCodes.Dup),
@@ -126,7 +166,9 @@ public class MethodProcessor
 
                     // Throw the top item of the stack
                     Instruction.Create(OpCodes.Throw)
-                    );
+                });
+
+                body.Instructions.Insert(ret, guardInstructions);
             }
 
             if (validationFlags.HasFlag(ValidationFlags.Arguments))
@@ -141,7 +183,20 @@ public class MethodProcessor
                         parameter.ParameterType.IsRefType() &&
                         !parameter.ParameterType.GetElementType().IsGenericParameter)
                     {
-                        body.Instructions.Insert(ret,
+                        guardInstructions.Clear();
+
+                        if (IsDebug)
+                        {
+                            // Load the out parameter onto the stack
+                            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
+
+                            // Loads an object reference onto the stack
+                            guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+
+                            guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)));
+                        }
+
+                        guardInstructions.AddRange(new Instruction[] {
 
                             // Load the out parameter onto the stack
                             Instruction.Create(OpCodes.Ldarg, parameter),
@@ -160,7 +215,9 @@ public class MethodProcessor
 
                             // Throw the top item of the stack
                             Instruction.Create(OpCodes.Throw)
-                            );
+                        });
+
+                        body.Instructions.Insert(ret, guardInstructions);
                     }
                 }
             }

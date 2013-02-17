@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Mono.Cecil;
@@ -10,6 +11,7 @@ public class PropertyProcessor
 {
     public ModuleWeaver ModuleWeaver;
     public PropertyDefinition Property;
+    public bool IsDebug;
     MethodBody getBody;
     MethodBody setBody;
 
@@ -79,6 +81,8 @@ public class PropertyProcessor
 
     void InjectPropertyGetterGuard()
     {
+        var guardInstructions = new List<Instruction>();
+
         var returnPoints = getBody.Instructions
             .Select((o, i) => new { o, i })
             .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -89,7 +93,17 @@ public class PropertyProcessor
         {
             var returnInstruction = getBody.Instructions[ret];
 
-            getBody.Instructions.Insert(ret,
+            guardInstructions.Clear();
+
+            if (IsDebug)
+            {
+                // Duplicate the stack (this should be the return value)
+                guardInstructions.Add(Instruction.Create(OpCodes.Dup));
+
+                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Property.Name)));
+            }
+
+            guardInstructions.AddRange(new Instruction[] {
 
                 // Duplicate the stack (this should be the return value)
                 Instruction.Create(OpCodes.Dup),
@@ -108,19 +122,31 @@ public class PropertyProcessor
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
-                );
+            });
+
+            getBody.Instructions.Insert(ret, guardInstructions);
         }
     }
 
     void InjectPropertySetterGuard()
     {
+        var guardInstructions = new List<Instruction>();
+
         var parameter = Property.SetMethod.Parameters[0]; // The Value parameter
 
         if (parameter.MayNotBeNull())
         {
             var entry = setBody.Instructions.First();
 
-            setBody.Instructions.Prepend(
+            if (IsDebug)
+            {
+                // Load the argument onto the stack
+                guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
+
+                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", Property.Name)));
+            }
+
+            guardInstructions.AddRange(new Instruction[] {
 
                 // Load the argument onto the stack
                 Instruction.Create(OpCodes.Ldarg, parameter),
@@ -139,7 +165,9 @@ public class PropertyProcessor
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
-                );
+            });
+
+            setBody.Instructions.Prepend(guardInstructions);
         }
     }
 }
