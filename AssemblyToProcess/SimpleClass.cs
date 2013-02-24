@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using NullGuard;
 
 public class SimpleClass
@@ -47,7 +48,7 @@ public class SimpleClass
     {
     }
 
-    public void MethodWithGenericRef<T>(T returnNull) where T : MyAbstractClass
+    public void MethodWithGenericRef<T>(ref T returnNull) where T : MyAbstractClass
     {
     }
 

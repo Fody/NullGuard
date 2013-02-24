@@ -83,8 +83,22 @@ public class MethodProcessor
 
                 if (parameter.ParameterType.IsByReference)
                 {
-                    // Loads an object reference onto the stack
-                    guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                    var byref = (ByReferenceType)parameter.ParameterType;
+                    var genericParameter = byref.ElementType as GenericParameter;
+
+                    if (genericParameter == null)
+                    {
+                        // Loads an object reference onto the stack
+                        guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                    }
+                    else
+                    {
+                        // Loads an object reference onto the stack
+                        guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, genericParameter));
+
+                        // Box the type to an object
+                        guardInstructions.Add(Instruction.Create(OpCodes.Box, genericParameter));
+                    }
                 }
 
                 guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(parameter.Name + " is null."));
@@ -95,8 +109,22 @@ public class MethodProcessor
 
             if (parameter.ParameterType.IsByReference)
             {
-                // Loads an object reference onto the stack
-                guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                var byref = (ByReferenceType)parameter.ParameterType;
+                var genericParameter = byref.ElementType as GenericParameter;
+
+                if (genericParameter == null)
+                {
+                    // Loads an object reference onto the stack
+                    guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                }
+                else
+                {
+                    // Loads an object reference onto the stack
+                    guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, genericParameter));
+
+                    // Box the type to an object
+                    guardInstructions.Add(Instruction.Create(OpCodes.Box, genericParameter));
+                }
             }
 
             guardInstructions.AddRange(new Instruction[] {
