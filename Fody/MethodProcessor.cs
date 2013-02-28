@@ -78,54 +78,12 @@ public class MethodProcessor
 
             if (IsDebug)
             {
-                // Load the argument onto the stack
-                guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
-
-                if (parameter.ParameterType.IsByReference)
-                {
-                    var byref = (ByReferenceType)parameter.ParameterType;
-                    var genericParameter = byref.ElementType as GenericParameter;
-
-                    if (genericParameter == null)
-                    {
-                        // Loads an object reference onto the stack
-                        guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-                    }
-                    else
-                    {
-                        // Loads an object reference onto the stack
-                        guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, genericParameter));
-
-                        // Box the type to an object
-                        guardInstructions.Add(Instruction.Create(OpCodes.Box, genericParameter));
-                    }
-                }
+                LoadArgumentOntoStack(guardInstructions, parameter);
 
                 guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(parameter.Name + " is null."));
             }
 
-            // Load the argument onto the stack
-            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
-
-            if (parameter.ParameterType.IsByReference)
-            {
-                var byref = (ByReferenceType)parameter.ParameterType;
-                var genericParameter = byref.ElementType as GenericParameter;
-
-                if (genericParameter == null)
-                {
-                    // Loads an object reference onto the stack
-                    guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-                }
-                else
-                {
-                    // Loads an object reference onto the stack
-                    guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, genericParameter));
-
-                    // Box the type to an object
-                    guardInstructions.Add(Instruction.Create(OpCodes.Box, genericParameter));
-                }
-            }
+            LoadArgumentOntoStack(guardInstructions, parameter);
 
             guardInstructions.AddRange(new Instruction[] {
 
@@ -156,6 +114,8 @@ public class MethodProcessor
                 .Select(a => a.ix)
                 .OrderByDescending(ix => ix);
 
+        var isGenericReturn = Method.ReturnType.GetElementType().IsGenericParameter;
+
         foreach (var ret in returnPoints)
         {
             var returnInstruction = body.Instructions[ret];
@@ -169,16 +129,14 @@ public class MethodProcessor
 
                 if (IsDebug)
                 {
-                    // Duplicate the stack (this should be the return value)
-                    guardInstructions.Add(Instruction.Create(OpCodes.Dup));
+                    DuplicateReturnValue(guardInstructions, isGenericReturn);
 
                     guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
                 }
 
-                guardInstructions.AddRange(new Instruction[] {
+                DuplicateReturnValue(guardInstructions, isGenericReturn);
 
-                    // Duplicate the stack (this should be the return value)
-                    Instruction.Create(OpCodes.Dup),
+                guardInstructions.AddRange(new Instruction[] {
 
                     // Branch if value on stack is true, not null or non-zero
                     Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
@@ -208,29 +166,20 @@ public class MethodProcessor
 
                     if (validationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
-                        parameter.ParameterType.IsRefType() &&
-                        !parameter.ParameterType.GetElementType().IsGenericParameter)
+                        parameter.ParameterType.IsRefType())
                     {
                         guardInstructions.Clear();
 
                         if (IsDebug)
                         {
-                            // Load the out parameter onto the stack
-                            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
-
-                            // Loads an object reference onto the stack
-                            guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                            LoadArgumentOntoStack(guardInstructions, parameter);
 
                             guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)));
                         }
 
+                        LoadArgumentOntoStack(guardInstructions, parameter);
+
                         guardInstructions.AddRange(new Instruction[] {
-
-                            // Load the out parameter onto the stack
-                            Instruction.Create(OpCodes.Ldarg, parameter),
-
-                            // Loads an object reference onto the stack
-                            Instruction.Create(OpCodes.Ldind_Ref),
 
                             // Branch if value on stack is true, not null or non-zero
                             Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
@@ -279,5 +228,45 @@ public class MethodProcessor
         }
 
         return false;
+    }
+
+    private static void LoadArgumentOntoStack(List<Instruction> guardInstructions, ParameterDefinition parameter)
+    {
+        // Load the argument onto the stack
+        guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
+
+        var elementType = parameter.ParameterType.GetElementType();
+
+        if (parameter.ParameterType.IsByReference)
+        {
+            if (elementType.IsGenericParameter)
+            {
+                // Loads an object reference onto the stack
+                guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, elementType));
+
+                // Box the type to an object
+                guardInstructions.Add(Instruction.Create(OpCodes.Box, elementType));
+            }
+            else
+            {
+                // Loads an object reference onto the stack
+                guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+            }
+        }
+        else if (elementType.IsGenericParameter)
+        {
+            // Box the type to an object
+            guardInstructions.Add(Instruction.Create(OpCodes.Box, parameter.ParameterType));
+        }
+    }
+
+    private void DuplicateReturnValue(List<Instruction> guardInstructions, bool isGenericReturn)
+    {
+        // Duplicate the stack (this should be the return value)
+        guardInstructions.Add(Instruction.Create(OpCodes.Dup));
+
+        if (isGenericReturn)
+            // Generic parameters must be boxed before access
+            guardInstructions.Add(Instruction.Create(OpCodes.Box, Method.ReturnType));
     }
 }

@@ -42,6 +42,15 @@ public class RewritingMethods
     }
 
     [Test]
+    public void RequiresNonNullGenericMethodReturnValue()
+    {
+        AssemblyWeaver.TestListener.Reset();
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
+        Assert.AreEqual("Fail: Return value of method 'MethodWithGenericReturn' is null.", AssemblyWeaver.TestListener.Message);
+    }
+
+    [Test]
     public void AllowsNullReturnValueWhenAttributeApplied()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);

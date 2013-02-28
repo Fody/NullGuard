@@ -62,13 +62,6 @@ public static class CecilExtensions
             return false;
         }
 
-        var genericParamType = arg as GenericParameter;
-        if (genericParamType != null)
-        {
-            return false;
-            //TODO: box if  genericParamType.Constraints.Any(constraint => constraint.IsRefType());
-        }
-
         return true;
     }
 
