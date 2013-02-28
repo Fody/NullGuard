@@ -23,5 +23,13 @@ public class SpecialClass
 	{
 		return await Task.Run<string>(() => returnNull ? null : "");
 	}
+
+    [return: AllowNull]
+    public async Task<string> MethodAllowsNullReturnValueAsync()
+    {
+        await Task.Delay(100);
+
+        return null;
+    }
 #endif
 }

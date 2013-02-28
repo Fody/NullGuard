@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 [TestFixture]
@@ -107,12 +108,45 @@ public class RewritingMethods
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         sample.SomeMethodAsync("", null);
     }
-#endif
+
     [Test]
-    [Ignore("Not sure how to guard for null in an async method.")]
     public void RequiresNonNullMethodReturnValueAsync()
     {
+        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
-        Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValueAsync(true));
+
+        Exception ex = null;
+
+        ((Task<string>)sample.MethodWithReturnValueAsync(true))
+            .ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                    ex = t.Exception.Flatten().InnerException;
+            })
+            .Wait();
+
+        Assert.NotNull(ex);
+        Assert.IsInstanceOf<InvalidOperationException>(ex);
+        Assert.AreEqual("Return value of method 'MethodWithReturnValueAsync' is null.", ex.Message);
+        Assert.AreEqual("Fail: Return value of method 'MethodWithReturnValueAsync' is null.", AssemblyWeaver.TestListener.Message);
     }
+
+    [Test]
+    public void AllowsNullReturnValueWhenAttributeAppliedAsync()
+    {
+        var sample = (dynamic)Activator.CreateInstance(specialClassType);
+
+        Exception ex = null;
+        
+        ((Task<string>)sample.MethodAllowsNullReturnValueAsync())
+            .ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                    ex = t.Exception.Flatten().InnerException;
+            })
+            .Wait();
+
+        Assert.Null(ex);
+    }
+#endif
 }

@@ -80,4 +80,9 @@ public static class CecilExtensions
         // Only works on VB not C# but it's something.
         return value.CustomAttributes.Any(a => a.AttributeType.Name == "IteratorStateMachineAttribute");
     }
+
+    public static bool IsIAsyncStateMachine(this TypeDefinition typeDefinition)
+    {
+        return typeDefinition.Interfaces.Any(x => x.Name == "IAsyncStateMachine");
+    }
 }

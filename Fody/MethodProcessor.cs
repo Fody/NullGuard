@@ -56,6 +56,11 @@ public class MethodProcessor
             InjectMethodReturnGuard(validationFlags);
         }
 
+        if (Method.IsAsyncStateMachine())
+        {
+            InjectMethodReturnGuardAsync(validationFlags);
+        }
+
         body.InitLocals = true;
         body.OptimizeMacros();
     }
@@ -125,36 +130,7 @@ public class MethodProcessor
                 Method.ReturnType.IsRefType() &&
                 Method.ReturnType.FullName != typeof(void).FullName)
             {
-                guardInstructions.Clear();
-
-                if (IsDebug)
-                {
-                    DuplicateReturnValue(guardInstructions, isGenericReturn);
-
-                    guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
-                }
-
-                DuplicateReturnValue(guardInstructions, isGenericReturn);
-
-                guardInstructions.AddRange(new Instruction[] {
-
-                    // Branch if value on stack is true, not null or non-zero
-                    Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
-
-                    // Clean up the stack since we're about to throw up.
-                    Instruction.Create(OpCodes.Pop),
-
-                    // Load the exception text onto the stack
-                    Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
-
-                    // Load the InvalidOperationException onto the stack
-                    Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
-
-                    // Throw the top item of the stack
-                    Instruction.Create(OpCodes.Throw)
-                });
-
-                body.Instructions.Insert(ret, guardInstructions);
+                AddReturnNullGuard(body.Instructions, isGenericReturn, ret, Instruction.Create(OpCodes.Throw));
             }
 
             if (validationFlags.HasFlag(ValidationFlags.Arguments))
@@ -199,6 +175,93 @@ public class MethodProcessor
                 }
             }
         }
+    }
+
+    private void InjectMethodReturnGuardAsync(ValidationFlags validationFlags)
+    {
+        var returnType = Method.ReturnType;
+        if (Method.ReturnType.HasGenericParameters && Method.ReturnType.Name.StartsWith("Task"))
+            returnType = Method.ReturnType.GenericParameters[0];
+
+        if (validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
+            !Method.MethodReturnType.AllowsNull() &&
+            returnType.IsRefType() &&
+            returnType.FullName != typeof(void).FullName)
+        {
+            foreach (var local in Method.Body.Variables)
+            {
+                if (!local.VariableType.IsValueType ||
+                    !local.VariableType.Resolve().IsCompilerGenerated() ||
+                    !local.VariableType.Resolve().IsIAsyncStateMachine())
+                    continue;
+
+                var stateMachine = local.VariableType.Resolve();
+                var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
+
+                InjectMethodReturnGuardAsync(moveNext);
+            }
+        }
+    }
+
+    private void InjectMethodReturnGuardAsync(MethodDefinition method)
+    {
+        var guardInstructions = new List<Instruction>();
+
+        method.Body.SimplifyMacros();
+
+        var setExceptionMethod = (MethodReference)method.Body.Instructions
+            .First(x => x.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference))
+            .Operand;
+
+        var returnPoints = method.Body.Instructions
+                .Select((o, ix) => new { o, ix })
+                .Where(a => a.o.OpCode == OpCodes.Call && IsSetResultMethod(a.o.Operand as MethodReference))
+                .Select(a => a.ix)
+                .OrderByDescending(ix => ix);
+
+        foreach (var ret in returnPoints)
+        {
+            AddReturnNullGuard(method.Body.Instructions, false, ret,
+                Instruction.Create(OpCodes.Call, setExceptionMethod),
+                Instruction.Create(OpCodes.Ret));
+        }
+
+        method.Body.OptimizeMacros();
+    }
+
+    private void AddReturnNullGuard(Collection<Instruction> instructions, bool isGenericReturn, int ret, params Instruction[] finalInstructions)
+    {
+        var returnInstruction = instructions[ret];
+
+        var guardInstructions = new List<Instruction>();
+
+        if (IsDebug)
+        {
+            DuplicateReturnValue(guardInstructions, isGenericReturn);
+
+            guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
+        }
+
+        DuplicateReturnValue(guardInstructions, isGenericReturn);
+
+        guardInstructions.AddRange(new Instruction[] {
+                
+            // Branch if value on stack is true, not null or non-zero
+            Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
+                
+            // Clean up the stack since we're about to throw up.
+            Instruction.Create(OpCodes.Pop),
+                
+            // Load the exception text onto the stack
+            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
+                
+            // Load the InvalidOperationException onto the stack
+            Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor)
+        });
+
+        guardInstructions.AddRange(finalInstructions);
+
+        instructions.Insert(ret, guardInstructions);
     }
 
     private bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
@@ -268,5 +331,23 @@ public class MethodProcessor
         if (isGenericReturn)
             // Generic parameters must be boxed before access
             guardInstructions.Add(Instruction.Create(OpCodes.Box, Method.ReturnType));
+    }
+
+    public static bool IsSetResultMethod(MethodReference methodReference)
+    {
+        return
+            methodReference != null &&
+            methodReference.Name == "SetResult" &&
+            methodReference.Parameters.Count == 1 &&
+            methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
+    }
+
+    public static bool IsSetExceptionMethod(MethodReference methodReference)
+    {
+        return
+            methodReference != null &&
+            methodReference.Name == "SetException" &&
+            methodReference.Parameters.Count == 1 &&
+            methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
     }
 }
