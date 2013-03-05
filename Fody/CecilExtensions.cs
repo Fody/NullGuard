@@ -62,13 +62,6 @@ public static class CecilExtensions
             return false;
         }
 
-        var genericParamType = arg as GenericParameter;
-        if (genericParamType != null)
-        {
-            return false;
-            //TODO: box if  genericParamType.Constraints.Any(constraint => constraint.IsRefType());
-        }
-
         return true;
     }
 
@@ -86,5 +79,10 @@ public static class CecilExtensions
     {
         // Only works on VB not C# but it's something.
         return value.CustomAttributes.Any(a => a.AttributeType.Name == "IteratorStateMachineAttribute");
+    }
+
+    public static bool IsIAsyncStateMachine(this TypeDefinition typeDefinition)
+    {
+        return typeDefinition.Interfaces.Any(x => x.Name == "IAsyncStateMachine");
     }
 }

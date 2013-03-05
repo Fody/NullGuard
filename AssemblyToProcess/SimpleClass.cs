@@ -48,7 +48,7 @@ public class SimpleClass
     {
     }
 
-    public void MethodWithGenericRef<T>(ref T returnNull) where T : MyAbstractClass
+    public void MethodWithGenericRef<T>(ref T returnNull)
     {
     }
 
@@ -86,6 +86,11 @@ public class SimpleClass
     public void MethodWithGenericOut<T>(out T item)
     {
         item = default(T);
+    }
+
+    public T MethodWithGenericReturn<T>(bool returnNull)
+    {
+        return returnNull ? default(T) : Activator.CreateInstance<T>();
     }
 
     public object MethodWithOutAndReturn(out string prefix)
