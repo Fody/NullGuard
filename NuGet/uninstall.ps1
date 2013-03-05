@@ -1,23 +1,32 @@
 ﻿param($installPath, $toolsPath, $package, $project)
 
-$addinName = "NullGuard"
 
-$fodyWeaversPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "FodyWeavers.xml")
-
-if (!(Test-Path ($fodyWeaversPath)))
+function Update-FodyConfig($addinName, $project)
 {
-	exit
-}	
+	$fodyWeaversPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "FodyWeavers.xml")
 
-$xml = [xml](get-content $fodyWeaversPath)
+	if (!(Test-Path ($fodyWeaversPath)))
+	{
+		return
+	}
 
-$weavers = $xml["Weavers"]
-$node = $xml.Weavers[$addinName]
+	$env:FodyLastProjectPath = $project.FullName
+	$env:FodyLastWeaverName = $addinName
+	$env:FodyLastXmlContents = [IO.File]::ReadAllText($fodyWeaversPath)
+	
+	$xml = [xml](get-content $fodyWeaversPath)
 
-if ($node -ne $null)
-{
-    $weavers.RemoveChild($node)
+	$weavers = $xml["Weavers"]
+	$node = $weavers.SelectSingleNode($addinName)
+
+	if ($node)
+	{
+		$weavers.RemoveChild($node)
+	}
+
+	$xml.Save($fodyWeaversPath)
 }
 
-$xml.Save($fodyWeaversPath)
 
+
+Update-FodyConfig $package.Id.Replace(".Fody", "") $project
