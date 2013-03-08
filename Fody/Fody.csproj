@@ -66,6 +66,7 @@
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>
+    <Compile Include="InstructionPatterns.cs" />
     <Compile Include="ModuleWeaver.BadAttributeChecker.cs" />
     <Compile Include="ModuleWeaver.AttributeRemover.cs" />
     <Compile Include="ModuleWeaver.AssemblyProcessor.cs" />

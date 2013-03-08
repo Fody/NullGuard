@@ -10,66 +10,80 @@ using NullGuard;
 
 public class MethodProcessor
 {
-    public ModuleWeaver ModuleWeaver;
-    public MethodDefinition Method;
-    public bool IsDebug;
-    private MethodBody body;
+    private readonly bool isDebug;
+    private readonly ValidationFlags validationFlags;
 
-    public void Process()
+    public MethodProcessor(ValidationFlags validationFlags, bool isDebug)
+    {
+        this.validationFlags = validationFlags;
+        this.isDebug = isDebug;
+    }
+
+    public void Process(MethodDefinition method)
     {
         try
         {
-            InnerProcess();
+            InnerProcess(method);
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing method '{0}'.", Method.FullName), exception);
+            throw new WeavingException(string.Format("An error occurred processing method '{0}'.", method.FullName), exception);
         }
     }
 
-    private void InnerProcess()
+    private void InnerProcess(MethodDefinition method)
     {
-        var validationFlags = ModuleWeaver.ValidationFlags;
+        var localValidationFlags = validationFlags;
 
-        var attribute = Method.DeclaringType.GetNullGuardAttribute();
+        var attribute = method.DeclaringType.GetNullGuardAttribute();
         if (attribute != null)
         {
-            validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!validationFlags.HasFlag(ValidationFlags.NonPublic) && !Method.IsPublic)
-            || Method.IsProperty()
+        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && !method.IsPublic)
+            || method.IsProperty()
             )
             return;
 
-        body = Method.Body;
+        var body = method.Body;
         body.SimplifyMacros();
 
-        if (validationFlags.HasFlag(ValidationFlags.Arguments))
+        if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
         {
-            InjectMethodArgumentGuards(validationFlags);
+            InjectMethodArgumentGuards(method, body);
         }
 
-        if (!Method.IsAsyncStateMachine() &&
-            !Method.IsIteratorStateMachine())
+        if (!method.IsAsyncStateMachine() &&
+            !method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard(validationFlags);
+            InjectMethodReturnGuard(localValidationFlags, method, body);
         }
 
-        if (Method.IsAsyncStateMachine())
+        if (method.IsAsyncStateMachine())
         {
-            InjectMethodReturnGuardAsync(validationFlags);
+            var returnType = method.ReturnType;
+            if (method.ReturnType.HasGenericParameters && method.ReturnType.Name.StartsWith("Task"))
+                returnType = method.ReturnType.GenericParameters[0];
+
+            if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
+                !method.MethodReturnType.AllowsNull() &&
+                returnType.IsRefType() &&
+                returnType.FullName != typeof(void).FullName)
+            {
+                InjectMethodReturnGuardAsync(body, method.Name);
+            }
         }
 
         body.InitLocals = true;
         body.OptimizeMacros();
     }
 
-    private void InjectMethodArgumentGuards(ValidationFlags validationFlags)
+    private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body)
     {
         var guardInstructions = new List<Instruction>();
 
-        foreach (var parameter in Method.Parameters.Reverse())
+        foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
                 continue;
@@ -81,14 +95,14 @@ public class MethodProcessor
 
             guardInstructions.Clear();
 
-            if (IsDebug)
+            if (isDebug)
             {
-                LoadArgumentOntoStack(guardInstructions, parameter);
+                InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(parameter.Name + " is null."));
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, parameter.Name + " is null.");
             }
 
-            LoadArgumentOntoStack(guardInstructions, parameter);
+            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
             guardInstructions.AddRange(new Instruction[] {
                 // Branch if value on stack is true, not null or non-zero
@@ -108,7 +122,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuard(ValidationFlags validationFlags)
+    private void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -118,41 +132,39 @@ public class MethodProcessor
                 .Select(a => a.ix)
                 .OrderByDescending(ix => ix);
 
-        var isGenericReturn = Method.ReturnType.GetElementType().IsGenericParameter;
-
         foreach (var ret in returnPoints)
         {
             var returnInstruction = body.Instructions[ret];
 
-            if (validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !Method.MethodReturnType.AllowsNull() &&
-                Method.ReturnType.IsRefType() &&
-                Method.ReturnType.FullName != typeof(void).FullName)
+            if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
+                !method.MethodReturnType.AllowsNull() &&
+                method.ReturnType.IsRefType() &&
+                method.ReturnType.FullName != typeof(void).FullName)
             {
-                AddReturnNullGuard(body.Instructions, isGenericReturn, ret, Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(body.Instructions, ret, method.ReturnType, method.Name, Instruction.Create(OpCodes.Throw));
             }
 
-            if (validationFlags.HasFlag(ValidationFlags.Arguments))
+            if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
             {
-                foreach (var parameter in Method.Parameters.Reverse())
+                foreach (var parameter in method.Parameters.Reverse())
                 {
                     // This is no longer the return instruction location, but it is where we want to jump to.
                     returnInstruction = body.Instructions[ret];
 
-                    if (validationFlags.HasFlag(ValidationFlags.OutValues) &&
+                    if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
                         parameter.ParameterType.IsRefType())
                     {
                         guardInstructions.Clear();
 
-                        if (IsDebug)
+                        if (isDebug)
                         {
-                            LoadArgumentOntoStack(guardInstructions, parameter);
+                            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                            guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)));
+                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name));
                         }
 
-                        LoadArgumentOntoStack(guardInstructions, parameter);
+                        InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
                         guardInstructions.AddRange(new Instruction[] {
                             // Branch if value on stack is true, not null or non-zero
@@ -175,36 +187,24 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsync(ValidationFlags validationFlags)
+    private void InjectMethodReturnGuardAsync(MethodBody body, string methodName)
     {
-        var returnType = Method.ReturnType;
-        if (Method.ReturnType.HasGenericParameters && Method.ReturnType.Name.StartsWith("Task"))
-            returnType = Method.ReturnType.GenericParameters[0];
-
-        if (validationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-            !Method.MethodReturnType.AllowsNull() &&
-            returnType.IsRefType() &&
-            returnType.FullName != typeof(void).FullName)
+        foreach (var local in body.Variables)
         {
-            foreach (var local in Method.Body.Variables)
-            {
-                if (!local.VariableType.IsValueType ||
-                    !local.VariableType.Resolve().IsCompilerGenerated() ||
-                    !local.VariableType.Resolve().IsIAsyncStateMachine())
-                    continue;
+            if (!local.VariableType.IsValueType ||
+                !local.VariableType.Resolve().IsCompilerGenerated() ||
+                !local.VariableType.Resolve().IsIAsyncStateMachine())
+                continue;
 
-                var stateMachine = local.VariableType.Resolve();
-                var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
+            var stateMachine = local.VariableType.Resolve();
+            var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
 
-                InjectMethodReturnGuardAsync(moveNext);
-            }
+            InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, methodName);
         }
     }
 
-    private void InjectMethodReturnGuardAsync(MethodDefinition method)
+    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string parentMethodName)
     {
-        var guardInstructions = new List<Instruction>();
-
         method.Body.SimplifyMacros();
 
         var setExceptionMethod = (MethodReference)method.Body.Instructions
@@ -219,7 +219,7 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            AddReturnNullGuard(method.Body.Instructions, false, ret,
+            AddReturnNullGuard(method.Body.Instructions, ret, method.ReturnType, parentMethodName,
                 Instruction.Create(OpCodes.Call, setExceptionMethod),
                 Instruction.Create(OpCodes.Ret));
         }
@@ -227,20 +227,20 @@ public class MethodProcessor
         method.Body.OptimizeMacros();
     }
 
-    private void AddReturnNullGuard(Collection<Instruction> instructions, bool isGenericReturn, int ret, params Instruction[] finalInstructions)
+    private void AddReturnNullGuard(Collection<Instruction> instructions, int ret, TypeReference returnType, string methodName, params Instruction[] finalInstructions)
     {
         var returnInstruction = instructions[ret];
 
         var guardInstructions = new List<Instruction>();
 
-        if (IsDebug)
+        if (isDebug)
         {
-            DuplicateReturnValue(guardInstructions, isGenericReturn, Method.ReturnType);
+            InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 
-            guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName));
         }
 
-        DuplicateReturnValue(guardInstructions, isGenericReturn, Method.ReturnType);
+        InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 
         guardInstructions.AddRange(new Instruction[] {
             // Branch if value on stack is true, not null or non-zero
@@ -250,7 +250,7 @@ public class MethodProcessor
             Instruction.Create(OpCodes.Pop),
 
             // Load the exception text onto the stack
-            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
+            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName)),
 
             // Load the InvalidOperationException onto the stack
             Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor)
@@ -261,7 +261,7 @@ public class MethodProcessor
         instructions.Insert(ret, guardInstructions);
     }
 
-    private bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
+    private static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
     {
         for (int i = 1; i < instructions.Count - 1; i++)
         {
@@ -290,49 +290,7 @@ public class MethodProcessor
         return false;
     }
 
-    private static void LoadArgumentOntoStack(List<Instruction> guardInstructions, ParameterDefinition parameter)
-    {
-        // Load the argument onto the stack
-        guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
-
-        var elementType = parameter.ParameterType.GetElementType();
-
-        if (parameter.ParameterType.IsByReference)
-        {
-            if (elementType.IsGenericParameter)
-            {
-                // Loads an object reference onto the stack
-                guardInstructions.Add(Instruction.Create(OpCodes.Ldobj, elementType));
-
-                // Box the type to an object
-                guardInstructions.Add(Instruction.Create(OpCodes.Box, elementType));
-            }
-            else
-            {
-                // Loads an object reference onto the stack
-                guardInstructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-            }
-        }
-        else if (elementType.IsGenericParameter)
-        {
-            // Box the type to an object
-            guardInstructions.Add(Instruction.Create(OpCodes.Box, parameter.ParameterType));
-        }
-    }
-
-    private static void DuplicateReturnValue(List<Instruction> guardInstructions, bool isGenericReturn, TypeReference methodReturnType)
-    {
-        // Duplicate the stack (this should be the return value)
-        guardInstructions.Add(Instruction.Create(OpCodes.Dup));
-
-        if (isGenericReturn)
-        {
-            // Generic parameters must be boxed before access
-            guardInstructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
-        }
-    }
-
-    public static bool IsSetResultMethod(MethodReference methodReference)
+    private static bool IsSetResultMethod(MethodReference methodReference)
     {
         return
             methodReference != null &&
@@ -341,7 +299,7 @@ public class MethodProcessor
             methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
     }
 
-    public static bool IsSetExceptionMethod(MethodReference methodReference)
+    private static bool IsSetExceptionMethod(MethodReference methodReference)
     {
         return
             methodReference != null &&

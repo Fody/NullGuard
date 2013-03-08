@@ -5,9 +5,9 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingMethods
 {
-    Type sampleClassType;
-    Type classWithPrivateMethodType;
-    Type specialClassType;
+    private Type sampleClassType;
+    private Type classWithPrivateMethodType;
+    private Type specialClassType;
 
     public RewritingMethods()
     {
@@ -90,8 +90,9 @@ public class RewritingMethods
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         Assert.That(new[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
     }
-	
+
 #if (DEBUG)
+
     [Test]
     public void RequiresNonNullArgumentAsync()
     {
@@ -137,7 +138,7 @@ public class RewritingMethods
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
 
         Exception ex = null;
-        
+
         ((Task<string>)sample.MethodAllowsNullReturnValueAsync())
             .ContinueWith(t =>
             {
@@ -148,5 +149,6 @@ public class RewritingMethods
 
         Assert.Null(ex);
     }
+
 #endif
 }

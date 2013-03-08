@@ -9,69 +9,69 @@ using NullGuard;
 
 public class PropertyProcessor
 {
-    public ModuleWeaver ModuleWeaver;
-    public PropertyDefinition Property;
-    public bool IsDebug;
-    private MethodBody getBody;
-    private MethodBody setBody;
+    private readonly bool isDebug;
+    private readonly ValidationFlags validationFlags;
 
-    public void Process()
+    public PropertyProcessor(ValidationFlags validationFlags, bool isDebug)
+    {
+        this.validationFlags = validationFlags;
+        this.isDebug = isDebug;
+    }
+
+    public void Process(PropertyDefinition property)
     {
         try
         {
-            InnerProcess();
+            InnerProcess(property);
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing property '{0}'", Property.FullName), exception);
+            throw new WeavingException(string.Format("An error occurred processing property '{0}'", property.FullName), exception);
         }
     }
 
-    private void InnerProcess()
+    private void InnerProcess(PropertyDefinition property)
     {
-        if (!Property.PropertyType.IsRefType())
-        {
-            return;
-        }
-        var validationFlags = ModuleWeaver.ValidationFlags;
+        var localValidationFlags = validationFlags;
 
-        var attribute = Property.DeclaringType.GetNullGuardAttribute();
+        if (!property.PropertyType.IsRefType())
+            return;
+
+        var attribute = property.DeclaringType.GetNullGuardAttribute();
         if (attribute != null)
         {
-            validationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if (!validationFlags.HasFlag(ValidationFlags.Properties)) return;
+        if (!localValidationFlags.HasFlag(ValidationFlags.Properties)) return;
 
-        if (Property.AllowsNull())
-        {
+        if (property.AllowsNull())
             return;
-        }
 
-        if (Property.GetMethod != null && Property.GetMethod.Body != null)
+        if (property.GetMethod != null && property.GetMethod.Body != null)
         {
-            getBody = Property.GetMethod.Body;
+            var getBody = property.GetMethod.Body;
             getBody.SimplifyMacros();
 
-            if ((validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.GetMethod.IsPublic) &&
-                !Property.GetMethod.MethodReturnType.AllowsNull()
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.GetMethod.IsPublic) &&
+                !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard();
+                InjectPropertyGetterGuard(getBody, property.Name);
             }
 
             getBody.InitLocals = true;
             getBody.OptimizeMacros();
         }
 
-        if (Property.SetMethod != null && Property.SetMethod.Body != null)
+        if (property.SetMethod != null && property.SetMethod.Body != null)
         {
-            setBody = Property.SetMethod.Body;
+            var setBody = property.SetMethod.Body;
             setBody.SimplifyMacros();
 
-            if (validationFlags.HasFlag(ValidationFlags.NonPublic) || Property.SetMethod.IsPublic)
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublic)
             {
-                InjectPropertySetterGuard();
+                InjectPropertySetterGuard(setBody, property.Name, property.SetMethod.Parameters[0]);
             }
 
             setBody.InitLocals = true;
@@ -79,7 +79,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard()
+    private void InjectPropertyGetterGuard(MethodBody getBody, string propertyName)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -95,12 +95,12 @@ public class PropertyProcessor
 
             guardInstructions.Clear();
 
-            if (IsDebug)
+            if (isDebug)
             {
                 // Duplicate the stack (this should be the return value)
                 guardInstructions.Add(Instruction.Create(OpCodes.Dup));
 
-                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Property.Name)));
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName));
             }
 
             guardInstructions.AddRange(new Instruction[] {
@@ -114,7 +114,7 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Pop),
 
                 // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Property.Name)),
+                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName)),
 
                 // Load the InvalidOperationException onto the stack
                 Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor),
@@ -127,36 +127,35 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertySetterGuard()
+    private void InjectPropertySetterGuard(MethodBody setBody, string propertyName, ParameterDefinition valueParameter)
     {
+        if (!valueParameter.MayNotBeNull())
+            return;
+
         var guardInstructions = new List<Instruction>();
 
-        var parameter = Property.SetMethod.Parameters[0]; // The Value parameter
+        var entry = setBody.Instructions.First();
 
-        if (parameter.MayNotBeNull())
+        if (isDebug)
         {
-            var entry = setBody.Instructions.First();
+            // Load the argument onto the stack
+            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, valueParameter));
 
-            if (IsDebug)
-            {
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName));
+        }
+
+        guardInstructions.AddRange(new Instruction[] {
                 // Load the argument onto the stack
-                guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
-
-                guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", Property.Name)));
-            }
-
-            guardInstructions.AddRange(new Instruction[] {
-                // Load the argument onto the stack
-                Instruction.Create(OpCodes.Ldarg, parameter),
+                Instruction.Create(OpCodes.Ldarg, valueParameter),
 
                 // Branch if value on stack is true, not null or non-zero
                 Instruction.Create(OpCodes.Brtrue_S, entry),
 
                 // Load the name of the argument onto the stack
-                Instruction.Create(OpCodes.Ldstr, parameter.Name),
+                Instruction.Create(OpCodes.Ldstr, valueParameter.Name),
 
                 // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", Property.Name)),
+                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName)),
 
                 // Load the ArgumentNullException onto the stack
                 Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionWithMessageConstructor),
@@ -165,7 +164,6 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Throw)
             });
 
-            setBody.Instructions.Prepend(guardInstructions);
-        }
+        setBody.Instructions.Prepend(guardInstructions);
     }
 }

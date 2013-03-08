@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using NullGuard;
 
 public partial class ModuleWeaver
@@ -39,28 +38,5 @@ public partial class ModuleWeaver
         ProcessAssembly();
         RemoveAttributes();
         RemoveReference();
-    }
-
-    public Instruction[] CallDebugAssertInstructions(string message)
-    {
-        return new Instruction[] {
-            // Load null onto the stack
-            Instruction.Create(OpCodes.Ldnull),
-
-            // Compare the top 2 items on the stack, and put the result back on the stack
-            Instruction.Create(OpCodes.Ceq),
-
-            // Loads constant int32 0 onto the stack
-            Instruction.Create(OpCodes.Ldc_I4_0),
-
-            // Compare the top 2 items on the stack, and put the result back on the stack
-            Instruction.Create(OpCodes.Ceq),
-
-            // Load assert message onto the stack
-            Instruction.Create(OpCodes.Ldstr, message),
-
-            // Call Debug.Assert
-            Instruction.Create(OpCodes.Call, ReferenceFinder.DebugAssertMethod)
-        };
     }
 }
