@@ -39,6 +39,37 @@ public static class CecilExtensions
         return value.CustomAttributes.Any(a => a.AttributeType.Name == "AllowNullAttribute" || a.AttributeType.Name == "CanBeNullAttribute");
     }
 
+    public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
+    {
+        var customAttributes = definition.CustomAttributes;
+
+        return customAttributes.Any(x => x.AttributeType.Name == "AllowNullAttribute");
+    }
+
+    public static void RemoveAllowNullAttribute(this ICustomAttributeProvider definition)
+    {
+        var customAttributes = definition.CustomAttributes;
+
+        var attribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "AllowNullAttribute");
+
+        if (attribute != null)
+        {
+            customAttributes.Remove(attribute);
+        }
+    }
+
+    public static void RemoveNullGuardAttribute(this ICustomAttributeProvider definition)
+    {
+        var customAttributes = definition.CustomAttributes;
+
+        var attribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "NullGuardAttribute");
+
+        if (attribute != null)
+        {
+            customAttributes.Remove(attribute);
+        }
+    }
+
     public static bool MayNotBeNull(this ParameterDefinition arg)
     {
         return !arg.AllowsNull() && !arg.IsOptional && arg.ParameterType.IsRefType() && !arg.IsOut;

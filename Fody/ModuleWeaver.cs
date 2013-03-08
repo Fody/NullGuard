@@ -13,7 +13,7 @@ public partial class ModuleWeaver
     public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
-    List<TypeDefinition> types;
+    private List<TypeDefinition> types;
 
     public ModuleWeaver()
     {
@@ -33,7 +33,7 @@ public partial class ModuleWeaver
         if (nullGuardAttribute != null)
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
 
-        FindReferences();
+        ReferenceFinder.FindReferences(AssemblyResolver, ModuleDefinition);
         types = new List<TypeDefinition>(ModuleDefinition.GetTypes());
         CheckForBadAttributes();
         ProcessAssembly();
@@ -43,15 +43,14 @@ public partial class ModuleWeaver
 
     public Instruction[] CallDebugAssertInstructions(string message)
     {
-        return new Instruction[] { 
-
+        return new Instruction[] {
             // Load null onto the stack
             Instruction.Create(OpCodes.Ldnull),
 
             // Compare the top 2 items on the stack, and put the result back on the stack
             Instruction.Create(OpCodes.Ceq),
 
-            // Loads constant int32 0 onto the stack 
+            // Loads constant int32 0 onto the stack
             Instruction.Create(OpCodes.Ldc_I4_0),
 
             // Compare the top 2 items on the stack, and put the result back on the stack
@@ -61,7 +60,7 @@ public partial class ModuleWeaver
             Instruction.Create(OpCodes.Ldstr, message),
 
             // Call Debug.Assert
-            Instruction.Create(OpCodes.Call, DebugAssertMethod)
+            Instruction.Create(OpCodes.Call, ReferenceFinder.DebugAssertMethod)
         };
     }
 }

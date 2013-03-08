@@ -22,7 +22,8 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -65,17 +66,16 @@
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>
-    <Compile Include="AttributeChecker.cs" />
-    <Compile Include="BadAttributeChecker.cs" />
-    <Compile Include="AttributeRemover.cs" />
-    <Compile Include="AssemblyProcessor.cs" />
+    <Compile Include="ModuleWeaver.BadAttributeChecker.cs" />
+    <Compile Include="ModuleWeaver.AttributeRemover.cs" />
+    <Compile Include="ModuleWeaver.AssemblyProcessor.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="InstructionListExtensions.cs" />
     <Compile Include="MethodProcessor.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="PropertyProcessor.cs" />
-    <Compile Include="ReferenceCleaner.cs" />
+    <Compile Include="ModuleWeaver.ReferenceCleaner.cs" />
     <Compile Include="ReferenceFinder.cs" />
     <Compile Include="WeavingException.cs" />
   </ItemGroup>

@@ -12,8 +12,8 @@ public class PropertyProcessor
     public ModuleWeaver ModuleWeaver;
     public PropertyDefinition Property;
     public bool IsDebug;
-    MethodBody getBody;
-    MethodBody setBody;
+    private MethodBody getBody;
+    private MethodBody setBody;
 
     public void Process()
     {
@@ -27,7 +27,7 @@ public class PropertyProcessor
         }
     }
 
-    void InnerProcess()
+    private void InnerProcess()
     {
         if (!Property.PropertyType.IsRefType())
         {
@@ -79,7 +79,7 @@ public class PropertyProcessor
         }
     }
 
-    void InjectPropertyGetterGuard()
+    private void InjectPropertyGetterGuard()
     {
         var guardInstructions = new List<Instruction>();
 
@@ -104,7 +104,6 @@ public class PropertyProcessor
             }
 
             guardInstructions.AddRange(new Instruction[] {
-
                 // Duplicate the stack (this should be the return value)
                 Instruction.Create(OpCodes.Dup),
 
@@ -118,7 +117,7 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", Property.Name)),
 
                 // Load the InvalidOperationException onto the stack
-                Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
+                Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
@@ -128,7 +127,7 @@ public class PropertyProcessor
         }
     }
 
-    void InjectPropertySetterGuard()
+    private void InjectPropertySetterGuard()
     {
         var guardInstructions = new List<Instruction>();
 
@@ -147,7 +146,6 @@ public class PropertyProcessor
             }
 
             guardInstructions.AddRange(new Instruction[] {
-
                 // Load the argument onto the stack
                 Instruction.Create(OpCodes.Ldarg, parameter),
 
@@ -161,7 +159,7 @@ public class PropertyProcessor
                 Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", Property.Name)),
 
                 // Load the ArgumentNullException onto the stack
-                Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionWithMessageConstructor),
+                Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionWithMessageConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)

@@ -91,7 +91,6 @@ public class MethodProcessor
             LoadArgumentOntoStack(guardInstructions, parameter);
 
             guardInstructions.AddRange(new Instruction[] {
-
                 // Branch if value on stack is true, not null or non-zero
                 Instruction.Create(OpCodes.Brtrue_S, entry),
 
@@ -99,7 +98,7 @@ public class MethodProcessor
                 Instruction.Create(OpCodes.Ldstr, parameter.Name),
 
                 // Load the ArgumentNullException onto the stack
-                Instruction.Create(OpCodes.Newobj, ModuleWeaver.ArgumentNullExceptionConstructor),
+                Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionConstructor),
 
                 // Throw the top item of the stack
                 Instruction.Create(OpCodes.Throw)
@@ -156,7 +155,6 @@ public class MethodProcessor
                         LoadArgumentOntoStack(guardInstructions, parameter);
 
                         guardInstructions.AddRange(new Instruction[] {
-
                             // Branch if value on stack is true, not null or non-zero
                             Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
 
@@ -164,7 +162,7 @@ public class MethodProcessor
                             Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)),
 
                             // Load the InvalidOperationException onto the stack
-                            Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor),
+                            Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor),
 
                             // Throw the top item of the stack
                             Instruction.Create(OpCodes.Throw)
@@ -237,26 +235,25 @@ public class MethodProcessor
 
         if (IsDebug)
         {
-            DuplicateReturnValue(guardInstructions, isGenericReturn);
+            DuplicateReturnValue(guardInstructions, isGenericReturn, Method.ReturnType);
 
             guardInstructions.AddRange(ModuleWeaver.CallDebugAssertInstructions(String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)));
         }
 
-        DuplicateReturnValue(guardInstructions, isGenericReturn);
+        DuplicateReturnValue(guardInstructions, isGenericReturn, Method.ReturnType);
 
         guardInstructions.AddRange(new Instruction[] {
-                
             // Branch if value on stack is true, not null or non-zero
             Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
-                
+
             // Clean up the stack since we're about to throw up.
             Instruction.Create(OpCodes.Pop),
-                
+
             // Load the exception text onto the stack
             Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", Method.Name)),
-                
+
             // Load the InvalidOperationException onto the stack
-            Instruction.Create(OpCodes.Newobj, ModuleWeaver.InvalidOperationExceptionConstructor)
+            Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor)
         });
 
         guardInstructions.AddRange(finalInstructions);
@@ -276,13 +273,13 @@ public class MethodProcessor
                     continue;
 
                 // Checks for throw new ArgumentNullException("x");
-                if (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionConstructor.FullName &&
+                if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionConstructor.FullName &&
                     instructions[i - 1].OpCode == OpCodes.Ldstr &&
                     (string)(instructions[i - 1].Operand) == parameter.Name)
                     return true;
 
                 // Checks for throw new ArgumentNullException("x", "some message");
-                if (newObjectMethodRef.FullName == ModuleWeaver.ArgumentNullExceptionWithMessageConstructor.FullName &&
+                if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionWithMessageConstructor.FullName &&
                     i > 1 &&
                     instructions[i - 2].OpCode == OpCodes.Ldstr &&
                     (string)(instructions[i - 2].Operand) == parameter.Name)
@@ -323,14 +320,16 @@ public class MethodProcessor
         }
     }
 
-    private void DuplicateReturnValue(List<Instruction> guardInstructions, bool isGenericReturn)
+    private static void DuplicateReturnValue(List<Instruction> guardInstructions, bool isGenericReturn, TypeReference methodReturnType)
     {
         // Duplicate the stack (this should be the return value)
         guardInstructions.Add(Instruction.Create(OpCodes.Dup));
 
         if (isGenericReturn)
+        {
             // Generic parameters must be boxed before access
-            guardInstructions.Add(Instruction.Create(OpCodes.Box, Method.ReturnType));
+            guardInstructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
+        }
     }
 
     public static bool IsSetResultMethod(MethodReference methodReference)
