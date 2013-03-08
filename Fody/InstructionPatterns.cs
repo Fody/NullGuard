@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 public static class InstructionPatterns
 {
-    public static void CallDebugAssertInstructions(IList<Instruction> instructions, string message)
+    public static void CallDebugAssertInstructions(List<Instruction> instructions, string message)
     {
         // Load null onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldnull));
@@ -25,19 +26,19 @@ public static class InstructionPatterns
         instructions.Add(Instruction.Create(OpCodes.Call, ReferenceFinder.DebugAssertMethod));
     }
 
-    public static void DuplicateReturnValue(IList<Instruction> instructions, TypeReference methodReturnType)
+    public static void DuplicateReturnValue(List<Instruction> instructions, TypeReference methodReturnType)
     {
         // Duplicate the stack (this should be the return value)
         instructions.Add(Instruction.Create(OpCodes.Dup));
 
-        if (methodReturnType.GetElementType().IsGenericParameter)
+        if (methodReturnType != null && methodReturnType.GetElementType().IsGenericParameter)
         {
             // Generic parameters must be boxed before access
             instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
         }
     }
 
-    public static void LoadArgumentOntoStack(IList<Instruction> instructions, ParameterDefinition parameter)
+    public static void LoadArgumentOntoStack(List<Instruction> instructions, ParameterDefinition parameter)
     {
         // Load the argument onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
@@ -65,5 +66,43 @@ public static class InstructionPatterns
             // Box the type to an object
             instructions.Add(Instruction.Create(OpCodes.Box, parameter.ParameterType));
         }
+    }
+
+    public static void LoadArgumentNullException(List<Instruction> instructions, string valueName)
+    {
+        // Load the name of the argument onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Ldstr, valueName));
+
+        // Load the ArgumentNullException onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionConstructor));
+    }
+
+    public static void LoadArgumentNullException(List<Instruction> instructions, string valueName, string errorString)
+    {
+        // Load the name of the argument onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Ldstr, valueName));
+
+        // Load the exception text onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
+
+        // Load the ArgumentNullException onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionWithMessageConstructor));
+    }
+
+    public static void LoadInvalidOperationException(List<Instruction> instructions, string errorString)
+    {
+        // Load the exception text onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
+
+        // Load the InvalidOperationException onto the stack
+        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor));
+    }
+
+    public static void IfNull(List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
+    {
+        // Branch if value on stack is true, not null or non-zero
+        instructions.Add(Instruction.Create(OpCodes.Brtrue_S, returnInstruction));
+
+        trueBlock(instructions);
     }
 }

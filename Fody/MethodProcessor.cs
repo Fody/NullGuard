@@ -104,18 +104,12 @@ public class MethodProcessor
 
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-            guardInstructions.AddRange(new Instruction[] {
-                // Branch if value on stack is true, not null or non-zero
-                Instruction.Create(OpCodes.Brtrue_S, entry),
+            InstructionPatterns.IfNull(guardInstructions, entry, i =>
+            {
+                InstructionPatterns.LoadArgumentNullException(i, parameter.Name);
 
-                // Load the name of the argument onto the stack
-                Instruction.Create(OpCodes.Ldstr, parameter.Name),
-
-                // Load the ArgumentNullException onto the stack
-                Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionConstructor),
-
-                // Throw the top item of the stack
-                Instruction.Create(OpCodes.Throw)
+                // Throw the top item off the stack
+                i.Add(Instruction.Create(OpCodes.Throw));
             });
 
             body.Instructions.Prepend(guardInstructions);
@@ -166,18 +160,12 @@ public class MethodProcessor
 
                         InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                        guardInstructions.AddRange(new Instruction[] {
-                            // Branch if value on stack is true, not null or non-zero
-                            Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
+                        InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+                        {
+                            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name));
 
-                            // Load the exception text onto the stack
-                            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name)),
-
-                            // Load the InvalidOperationException onto the stack
-                            Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor),
-
-                            // Throw the top item of the stack
-                            Instruction.Create(OpCodes.Throw)
+                            // Throw the top item off the stack
+                            i.Add(Instruction.Create(OpCodes.Throw));
                         });
 
                         body.Instructions.Insert(ret, guardInstructions);
@@ -242,21 +230,15 @@ public class MethodProcessor
 
         InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 
-        guardInstructions.AddRange(new Instruction[] {
-            // Branch if value on stack is true, not null or non-zero
-            Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
-
+        InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+        {
             // Clean up the stack since we're about to throw up.
-            Instruction.Create(OpCodes.Pop),
+            i.Add(Instruction.Create(OpCodes.Pop));
 
-            // Load the exception text onto the stack
-            Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName)),
+            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName));
 
-            // Load the InvalidOperationException onto the stack
-            Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor)
+            i.AddRange(finalInstructions);
         });
-
-        guardInstructions.AddRange(finalInstructions);
 
         instructions.Insert(ret, guardInstructions);
     }

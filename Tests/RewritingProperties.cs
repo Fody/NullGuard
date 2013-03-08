@@ -4,12 +4,14 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingProperties
 {
-    Type sampleClassType;
-    Type classWithPrivateMethodType;
+    private Type sampleClassType;
+    private Type genericClassType;
+    private Type classWithPrivateMethodType;
 
     public RewritingProperties()
     {
         sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
+        genericClassType = AssemblyWeaver.Assembly.GetType("GenericClass`1").MakeGenericType(new Type[] { typeof(string) });
         classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
     }
 
@@ -31,9 +33,23 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() =>
         {
-// ReSharper disable UnusedVariable
+            // ReSharper disable UnusedVariable
             var temp = sample.NonNullProperty;
-// ReSharper restore UnusedVariable
+            // ReSharper restore UnusedVariable
+        });
+        Assert.AreEqual("Fail: Return value of property 'NonNullProperty' is null.", AssemblyWeaver.TestListener.Message);
+    }
+
+    [Test]
+    public void GenericPropertyGetterRequiresNonNullReturnValue()
+    {
+        AssemblyWeaver.TestListener.Reset();
+        var sample = (dynamic)Activator.CreateInstance(genericClassType);
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            // ReSharper disable UnusedVariable
+            var temp = sample.NonNullProperty;
+            // ReSharper restore UnusedVariable
         });
         Assert.AreEqual("Fail: Return value of property 'NonNullProperty' is null.", AssemblyWeaver.TestListener.Message);
     }
@@ -56,9 +72,9 @@ public class RewritingProperties
         sample.PropertyAllowsNullSetButDoesNotAllowNullGet = null;
         Assert.Throws<InvalidOperationException>(() =>
         {
-// ReSharper disable UnusedVariable
+            // ReSharper disable UnusedVariable
             var temp = sample.PropertyAllowsNullSetButDoesNotAllowNullGet;
-// ReSharper restore UnusedVariable
+            // ReSharper restore UnusedVariable
         });
         Assert.AreEqual("Fail: Return value of property 'PropertyAllowsNullSetButDoesNotAllowNullGet' is null.", AssemblyWeaver.TestListener.Message);
     }

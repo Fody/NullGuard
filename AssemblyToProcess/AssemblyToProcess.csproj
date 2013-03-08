@@ -47,6 +47,7 @@
     <Compile Include="ClassWithPrivateMethod.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GenericClass.cs" />
     <Compile Include="InterfaceBadAttributes.cs">
       <SubType>Code</SubType>
     </Compile>

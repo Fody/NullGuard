@@ -57,7 +57,7 @@ public class PropertyProcessor
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard(getBody, property.Name);
+                InjectPropertyGetterGuard(getBody, property.PropertyType, property.Name);
             }
 
             getBody.InitLocals = true;
@@ -71,7 +71,7 @@ public class PropertyProcessor
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublic)
             {
-                InjectPropertySetterGuard(setBody, property.Name, property.SetMethod.Parameters[0]);
+                InjectPropertySetterGuard(setBody, property.PropertyType, property.Name, property.SetMethod.Parameters[0]);
             }
 
             setBody.InitLocals = true;
@@ -79,7 +79,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard(MethodBody getBody, string propertyName)
+    private void InjectPropertyGetterGuard(MethodBody getBody, TypeReference propertyType, string propertyName)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -97,37 +97,29 @@ public class PropertyProcessor
 
             if (isDebug)
             {
-                // Duplicate the stack (this should be the return value)
-                guardInstructions.Add(Instruction.Create(OpCodes.Dup));
+                InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
 
                 InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName));
             }
 
-            guardInstructions.AddRange(new Instruction[] {
-                // Duplicate the stack (this should be the return value)
-                Instruction.Create(OpCodes.Dup),
+            InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
 
-                // Branch if value on stack is true, not null or non-zero
-                Instruction.Create(OpCodes.Brtrue_S, returnInstruction),
-
+            InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+            {
                 // Clean up the stack since we're about to throw up.
-                Instruction.Create(OpCodes.Pop),
+                i.Add(Instruction.Create(OpCodes.Pop));
 
-                // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName)),
+                InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName));
 
-                // Load the InvalidOperationException onto the stack
-                Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor),
-
-                // Throw the top item of the stack
-                Instruction.Create(OpCodes.Throw)
+                // Throw the top item off the stack
+                i.Add(Instruction.Create(OpCodes.Throw));
             });
 
             getBody.Instructions.Insert(ret, guardInstructions);
         }
     }
 
-    private void InjectPropertySetterGuard(MethodBody setBody, string propertyName, ParameterDefinition valueParameter)
+    private void InjectPropertySetterGuard(MethodBody setBody, TypeReference propertyType, string propertyName, ParameterDefinition valueParameter)
     {
         if (!valueParameter.MayNotBeNull())
             return;
@@ -138,31 +130,20 @@ public class PropertyProcessor
 
         if (isDebug)
         {
-            // Load the argument onto the stack
-            guardInstructions.Add(Instruction.Create(OpCodes.Ldarg, valueParameter));
+            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
             InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName));
         }
 
-        guardInstructions.AddRange(new Instruction[] {
-                // Load the argument onto the stack
-                Instruction.Create(OpCodes.Ldarg, valueParameter),
+        InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-                // Branch if value on stack is true, not null or non-zero
-                Instruction.Create(OpCodes.Brtrue_S, entry),
+        InstructionPatterns.IfNull(guardInstructions, entry, i =>
+        {
+            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName));
 
-                // Load the name of the argument onto the stack
-                Instruction.Create(OpCodes.Ldstr, valueParameter.Name),
-
-                // Load the exception text onto the stack
-                Instruction.Create(OpCodes.Ldstr, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName)),
-
-                // Load the ArgumentNullException onto the stack
-                Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionWithMessageConstructor),
-
-                // Throw the top item of the stack
-                Instruction.Create(OpCodes.Throw)
-            });
+            // Throw the top item off the stack
+            i.Add(Instruction.Create(OpCodes.Throw));
+        });
 
         setBody.Instructions.Prepend(guardInstructions);
     }
