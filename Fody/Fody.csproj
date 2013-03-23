@@ -80,6 +80,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(ProjectPath)\..\..\Tools\Fody\Fody.targets" />
   <Import Project="$(SolutionDir)Tools\Pepita\PepitaGet.targets" />
+  <Import Project="..\packages\Fody.1.13.0.0\Fody.targets" Condition="Exists('..\packages\Fody.1.13.0.0\Fody.targets')" />
 </Project>
