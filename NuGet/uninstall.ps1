@@ -3,28 +3,28 @@
 
 function Update-FodyConfig($addinName, $project)
 {
-	$fodyWeaversPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "FodyWeavers.xml")
+    $fodyWeaversPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "FodyWeavers.xml")
 
-	if (!(Test-Path ($fodyWeaversPath)))
-	{
-		return
-	}
+    if (!(Test-Path ($fodyWeaversPath)))
+    {
+        return
+    }   	
 
 	$env:FodyLastProjectPath = $project.FullName
 	$env:FodyLastWeaverName = $addinName
 	$env:FodyLastXmlContents = [IO.File]::ReadAllText($fodyWeaversPath)
 	
-	$xml = [xml](get-content $fodyWeaversPath)
+    $xml = [xml](get-content $fodyWeaversPath)
 
-	$weavers = $xml["Weavers"]
-	$node = $weavers.SelectSingleNode($addinName)
+    $weavers = $xml["Weavers"]
+    $node = $weavers.SelectSingleNode($addinName)
 
-	if ($node)
-	{
-		$weavers.RemoveChild($node)
-	}
+    if ($node)
+    {
+        $weavers.RemoveChild($node)
+    }
 
-	$xml.Save($fodyWeaversPath)
+    $xml.Save($fodyWeaversPath)
 }
 
 
