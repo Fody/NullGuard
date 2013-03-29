@@ -2,7 +2,13 @@
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
-## Nuget package http://nuget.org/packages/NullGuard.Fody 
+## Nuget 
+
+Nuget package http://nuget.org/packages/NullGuard.Fody 
+
+To Install from the Nuget Package Manager Console 
+    
+    PM> Install-Package NullGuard.Fody
 
 ### Your Code
 

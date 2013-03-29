@@ -60,7 +60,7 @@ public static class AssemblyWeaver
                 ModuleDefinition = moduleDefinition,
                 AssemblyResolver = assemblyResolver,
                 LogError = LogError,
-                DefineConstants = new string[] { "DEBUG" } // Always testing the debug weaver
+                DefineConstants = new[] { "DEBUG" } // Always testing the debug weaver
             };
 
         weavingTask.Execute();
