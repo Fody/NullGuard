@@ -204,3 +204,7 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
 	        All = AllPublic | NonPublic
 	    }
 	}
+
+## Icon
+
+Icon courtesy of [The Noun Project](http://thenounproject.com)
