@@ -13,7 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="install.ps1" />
-    <None Include="NullGuard.nuspec" />
+    <None Include="NullGuard.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="uninstall.ps1" />
   </ItemGroup>
   <Target Name="Clean">
