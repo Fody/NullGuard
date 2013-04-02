@@ -30,6 +30,12 @@ To Install from the Nuget Package Manager Console
             return SomeOtherClass.SomeMethod();
         }
 
+        [return: AllowNull]
+        public string MethodAllowsNullReturnValue()
+        {
+            return null;
+        }
+
         // Null checking works for automatic properties too.
         public string SomeProperty { get; set; }
 
@@ -66,6 +72,11 @@ To Install from the Nuget Package Manager Console
             }
         }
     
+        public string MethodAllowsNullReturnValue()
+        {
+            return null;
+        }
+
         string someProperty;
         public string SomeProperty
         {
