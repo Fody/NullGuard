@@ -9,6 +9,9 @@ using NullGuard;
 
 public class PropertyProcessor
 {
+    private const string STR_ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
+    private const string STR_CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
+
     private readonly bool isDebug;
     private readonly ValidationFlags validationFlags;
 
@@ -99,7 +102,7 @@ public class PropertyProcessor
             {
                 InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName));
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, propertyName));
             }
 
             InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
@@ -109,7 +112,7 @@ public class PropertyProcessor
                 // Clean up the stack since we're about to throw up.
                 i.Add(Instruction.Create(OpCodes.Pop));
 
-                InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Return value of property '{0}' is null.", propertyName));
+                InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, propertyName));
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -132,14 +135,14 @@ public class PropertyProcessor
         {
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName));
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, propertyName));
         }
 
         InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
         InstructionPatterns.IfNull(guardInstructions, entry, i =>
         {
-            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, String.Format(CultureInfo.InvariantCulture, "Cannot set the value of property '{0}' to null.", propertyName));
+            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, propertyName));
 
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));

@@ -10,6 +10,10 @@ using NullGuard;
 
 public class MethodProcessor
 {
+    private const string STR_OutParameterIsNull = "[NullGuard] Out parameter '{0}' is null.";
+    private const string STR_ReturnValueOfMethodIsNull = "[NullGuard] Return value of method '{0}' is null.";
+    private const string STR_IsNull = "[NullGuard] {0} is null.";
+
     private readonly bool isDebug;
     private readonly ValidationFlags validationFlags;
 
@@ -99,14 +103,14 @@ public class MethodProcessor
             {
                 InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, parameter.Name + " is null.");
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name));
             }
 
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
             InstructionPatterns.IfNull(guardInstructions, entry, i =>
             {
-                InstructionPatterns.LoadArgumentNullException(i, parameter.Name);
+                InstructionPatterns.LoadArgumentNullException(i, parameter.Name, String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name));
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -155,14 +159,14 @@ public class MethodProcessor
                         {
                             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name));
+                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name));
                         }
 
                         InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
                         InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
                         {
-                            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Out parameter '{0}' is null.", parameter.Name));
+                            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name));
 
                             // Throw the top item off the stack
                             i.Add(Instruction.Create(OpCodes.Throw));
@@ -225,7 +229,7 @@ public class MethodProcessor
         {
             InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName));
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, methodName));
         }
 
         InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
@@ -235,7 +239,7 @@ public class MethodProcessor
             // Clean up the stack since we're about to throw up.
             i.Add(Instruction.Create(OpCodes.Pop));
 
-            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, "Return value of method '{0}' is null.", methodName));
+            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, methodName));
 
             i.AddRange(finalInstructions);
         });

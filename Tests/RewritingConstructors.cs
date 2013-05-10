@@ -28,7 +28,7 @@ public class RewritingConstructors
         Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, args)),
             Throws.TargetInvocationException
                 .With.InnerException.TypeOf<InvalidOperationException>());
-        Assert.AreEqual("Fail: Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]

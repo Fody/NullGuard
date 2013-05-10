@@ -68,15 +68,6 @@ public static class InstructionPatterns
         }
     }
 
-    public static void LoadArgumentNullException(List<Instruction> instructions, string valueName)
-    {
-        // Load the name of the argument onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Ldstr, valueName));
-
-        // Load the ArgumentNullException onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionConstructor));
-    }
-
     public static void LoadArgumentNullException(List<Instruction> instructions, string valueName, string errorString)
     {
         // Load the name of the argument onto the stack
