@@ -216,6 +216,12 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
 	    }
 	}
 
+## Contributors
+
+  * [Cameron MacFarland](https://github.com/distantcam)
+  * [Simon Cropp](https://github.com/simoncropp)
+  * [Tim Murphy](https://github.com/TimMurphy)
+
 ## Icon
 
 Icon courtesy of [The Noun Project](http://thenounproject.com)
