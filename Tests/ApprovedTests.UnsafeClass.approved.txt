@@ -1,0 +1,67 @@
+﻿
+//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+
+
+// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
+
+
+
+.class public auto ansi beforefieldinit UnsafeClass
+       extends [mscorlib]System.Object
+{
+  .field private int32* '<NullProperty>k__BackingField'
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+  .method public hidebysig instance int32* 
+          MethodWithAmp(int32* 'instance') cil managed
+  {
+    // Code size       3 (0x3)
+    .maxstack  1
+    .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+    .line 6,6 : 3,24 'AssemblyToProcess\\UnsafeClass.cs'
+    IL_0000:  ldc.i4.0
+    IL_0001:  conv.u
+    IL_0002:  ret
+  } // end of method UnsafeClass::MethodWithAmp
+
+  .method public hidebysig specialname instance int32* 
+          get_NullProperty() cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       7 (0x7)
+    .maxstack  8
+    IL_0000:  ldarg.0
+    IL_0001:  ldfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
+    IL_0006:  ret
+  } // end of method UnsafeClass::get_NullProperty
+
+  .method public hidebysig specialname instance void 
+          set_NullProperty(int32* 'value') cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       8 (0x8)
+    .maxstack  8
+    IL_0000:  ldarg.0
+    IL_0001:  ldarg.1
+    IL_0002:  stfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
+    IL_0007:  ret
+  } // end of method UnsafeClass::set_NullProperty
+
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } // end of method UnsafeClass::.ctor
+
+  .property instance int32* NullProperty()
+  {
+    .get instance int32* UnsafeClass::get_NullProperty()
+    .set instance void UnsafeClass::set_NullProperty(int32*)
+  } // end of property UnsafeClass::NullProperty
+} // end of class UnsafeClass
+
+// *********** DISASSEMBLY COMPLETE ***********************

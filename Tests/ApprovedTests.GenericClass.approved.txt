@@ -1,0 +1,120 @@
+﻿
+//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+
+
+// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
+
+
+
+// Metadata version: v4.0.30319
+.assembly extern mscorlib
+{
+  .publickeytoken = (B7 7A 5C 56 19 34 E0 89 )                         // .z\V.4..
+  .ver 4:0:0:0
+}
+.assembly extern System
+{
+  .publickeytoken = (B7 7A 5C 56 19 34 E0 89 )                         // .z\V.4..
+  .ver 4:0:0:0
+}
+.assembly AssemblyToProcess
+{
+  .custom instance void [mscorlib]System.Runtime.Versioning.TargetFrameworkAttribute::.ctor(string) = ( 01 00 1A 2E 4E 45 54 46 72 61 6D 65 77 6F 72 6B   // ....NETFramework
+                                                                                                        2C 56 65 72 73 69 6F 6E 3D 76 34 2E 35 01 00 54   // ,Version=v4.5..T
+                                                                                                        0E 14 46 72 61 6D 65 77 6F 72 6B 44 69 73 70 6C   // ..FrameworkDispl
+                                                                                                        61 79 4E 61 6D 65 12 2E 4E 45 54 20 46 72 61 6D   // ayName..NET Fram
+                                                                                                        65 77 6F 72 6B 20 34 2E 35 )                      // ework 4.5
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.RuntimeCompatibilityAttribute::.ctor() = ( 01 00 01 00 54 02 16 57 72 61 70 4E 6F 6E 45 78   // ....T..WrapNonEx
+                                                                                                             63 65 70 74 69 6F 6E 54 68 72 6F 77 73 01 )       // ceptionThrows.
+
+  // --- The following custom attribute is added automatically, do not uncomment -------
+  //  .custom instance void [mscorlib]System.Diagnostics.DebuggableAttribute::.ctor(valuetype [mscorlib]System.Diagnostics.DebuggableAttribute/DebuggingModes) = ( 01 00 03 00 00 00 00 00 ) 
+
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilationRelaxationsAttribute::.ctor(int32) = ( 01 00 08 00 00 00 00 00 ) 
+  .permissionset reqmin
+             = {class 'System.Security.Permissions.SecurityPermissionAttribute, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' = {property bool 'SkipVerification' = bool(true)}}
+  .hash algorithm 0x00008004
+  .ver 0:0:0:0
+}
+.module AssemblyToProcess.dll
+// MVID: {D24FD6E2-E715-4701-AEFD-C2A0FC6DF1A1}
+.custom instance void [mscorlib]System.Security.UnverifiableCodeAttribute::.ctor() = ( 01 00 00 00 ) 
+.imagebase 0x00400000
+.file alignment 0x00000200
+.stackreserve 0x00100000
+.subsystem 0x0003       // WINDOWS_CUI
+.corflags 0x00000001    //  ILONLY
+
+
+// =============== CLASS MEMBERS DECLARATION ===================
+
+
+// =============================================================
+
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string ClassWithPrivateMethod::get_SomeProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void ClassWithPrivateMethod::set_SomeProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<CountTo>d__0') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<>c__DisplayClass5') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance !0 GenericClass`1::get_NonNullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<SomeMethodAsync>d__7') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void GenericClass`1::set_NonNullProperty(!0)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<>c__DisplayClassb') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<MethodWithReturnValueAsync>d__d') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10') instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string Sample::get_SomeProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void Sample::set_SomeProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string Sample::get_NullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void Sample::set_NullProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string Sample::get_NullPropertyOnSet()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void Sample::set_NullPropertyOnSet(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string SampleOutput::get_NullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SampleOutput::set_NullProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (UNKNOWN_OWNER) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string SimpleClass::get_NonNullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SimpleClass::set_NonNullProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string SimpleClass::get_NullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SimpleClass::set_NullProperty(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string SimpleClass::get_PropertyAllowsNullGetButDoesNotAllowNullSet()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SimpleClass::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance string SimpleClass::get_PropertyAllowsNullSetButDoesNotAllowNullGet()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SimpleClass::set_PropertyAllowsNullSetButDoesNotAllowNullGet(string)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance valuetype [mscorlib]System.Nullable`1<int32> SimpleClass::get_NonNullNullableProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SimpleClass::set_NonNullNullableProperty(valuetype [mscorlib]System.Nullable`1<int32>)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task SpecialClass::SomeMethodAsync(string,string)) instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 22 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // .."SpecialClass+
+                                                                                                                                                                                                                                              3C 53 6F 6D 65 4D 65 74 68 6F 64 41 73 79 6E 63   // <SomeMethodAsync
+                                                                                                                                                                                                                                              3E 64 5F 5F 37 00 00 )                            // >d__7..
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task SpecialClass::SomeMethodAsync(string,string)) instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task`1<string> SpecialClass::MethodWithReturnValueAsync(bool)) instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task`1<string> SpecialClass::MethodWithReturnValueAsync(bool)) instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 2D 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // ..-SpecialClass+
+                                                                                                                                                                                                                                                          3C 4D 65 74 68 6F 64 57 69 74 68 52 65 74 75 72   // <MethodWithRetur
+                                                                                                                                                                                                                                                          6E 56 61 6C 75 65 41 73 79 6E 63 3E 64 5F 5F 64   // nValueAsync>d__d
+                                                                                                                                                                                                                                                          00 00 ) 
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task`1<string> SpecialClass::MethodAllowsNullReturnValueAsync()) instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 34 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // ..4SpecialClass+
+                                                                                                                                                                                                                                                            3C 4D 65 74 68 6F 64 41 6C 6C 6F 77 73 4E 75 6C   // <MethodAllowsNul
+                                                                                                                                                                                                                                                            6C 52 65 74 75 72 6E 56 61 6C 75 65 41 73 79 6E   // lReturnValueAsyn
+                                                                                                                                                                                                                                                            63 3E 64 5F 5F 31 30 00 00 )                      // c>d__10..
+.custom (method instance class [mscorlib]System.Threading.Tasks.Task`1<string> SpecialClass::MethodAllowsNullReturnValueAsync()) instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance class [mscorlib]System.Collections.Generic.IEnumerator`1<int32> SpecialClass/'<CountTo>d__0'::'System.Collections.Generic.IEnumerable<System.Int32>.GetEnumerator'()) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance class [mscorlib]System.Collections.IEnumerator SpecialClass/'<CountTo>d__0'::System.Collections.IEnumerable.GetEnumerator()) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance int32 SpecialClass/'<CountTo>d__0'::'System.Collections.Generic.IEnumerator<System.Int32>.get_Current'()) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SpecialClass/'<CountTo>d__0'::System.Collections.IEnumerator.Reset()) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance object SpecialClass/'<CountTo>d__0'::System.Collections.IEnumerator.get_Current()) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SpecialClass/'<CountTo>d__0'::.ctor(int32)) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SpecialClass/'<SomeMethodAsync>d__7'::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SpecialClass/'<MethodWithReturnValueAsync>d__d'::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)) instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance int32* UnsafeClass::get_NullProperty()) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+.custom (method instance void UnsafeClass::set_NullProperty(int32*)) instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+// *********** DISASSEMBLY COMPLETE ***********************

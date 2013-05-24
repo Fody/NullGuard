@@ -41,6 +41,12 @@
     <Reference Include="Akavache.Interfaces">
       <HintPath>..\packages\akavache.interfaces.3.0.0.20130513-alpha\lib\net45\Akavache.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="ApprovalTests">
+      <HintPath>..\packages\ApprovalTests.2.2\lib\ApprovalTests.dll</HintPath>
+    </Reference>
+    <Reference Include="ApprovalUtilities">
+      <HintPath>..\packages\ApprovalTests.2.2\lib\ApprovalUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil">
@@ -105,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyWeaver.cs" />
+    <Compile Include="ApprovedTests.cs" />
     <Compile Include="ErrorsTests.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
     <Compile Include="RewritingConstructors.cs" />

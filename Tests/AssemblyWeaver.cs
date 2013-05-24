@@ -43,34 +43,48 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-		BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
+        beforePdbPath = beforePdbPath.Replace("Debug", "Release");
 #endif
-		AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
+        AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
+        var afterPdbPath = beforePdbPath.Replace(".pdb", "2.pdb");
 
-		File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
+        File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
+        if (File.Exists(beforePdbPath))
+            File.Copy(beforePdbPath, afterPdbPath, true);
 
         var assemblyResolver = new MockAssemblyResolver();
-		var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath);
-        
+        var readerParameters = new ReaderParameters();
+        var writerParameters = new WriterParameters();
+
+        if (File.Exists(afterPdbPath))
+        {
+            readerParameters.ReadSymbols = true;
+            writerParameters.WriteSymbols = true;
+        }
+
+        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, readerParameters);
+
         var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogError = LogError,
-                DefineConstants = new[] { "DEBUG" } // Always testing the debug weaver
-            };
+        {
+            ModuleDefinition = moduleDefinition,
+            AssemblyResolver = assemblyResolver,
+            LogError = LogError,
+            DefineConstants = new[] { "DEBUG" } // Always testing the debug weaver
+        };
 
         weavingTask.Execute();
-		moduleDefinition.Write(AfterAssemblyPath);
+        moduleDefinition.Write(AfterAssemblyPath, writerParameters);
 
-		Assembly = Assembly.LoadFile(AfterAssemblyPath);
+        Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
 
-	public static string BeforeAssemblyPath;
-	public static string AfterAssemblyPath;
+    public static string BeforeAssemblyPath;
+    public static string AfterAssemblyPath;
 
 	static void LogError(string error)
     {

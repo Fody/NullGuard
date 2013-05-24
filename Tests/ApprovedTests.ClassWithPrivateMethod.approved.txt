@@ -1,0 +1,95 @@
+﻿
+//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+
+
+// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
+
+
+
+.class public auto ansi beforefieldinit ClassWithPrivateMethod
+       extends [mscorlib]System.Object
+{
+  .field private string '<SomeProperty>k__BackingField'
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+  .method public hidebysig instance void 
+          PublicWrapperOfPrivateMethod() cil managed
+  {
+    // Code size       8 (0x8)
+    .maxstack  2
+    .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+    .line 8,8 : 9,33 'AssemblyToProcess\\ClassWithPrivateMethod.cs'
+    IL_0000:  ldarg.0
+    IL_0001:  ldnull
+    IL_0002:  call       instance void ClassWithPrivateMethod::SomePrivateMethod(string)
+    .line 9,9 : 5,6 ''
+    IL_0007:  ret
+  } // end of method ClassWithPrivateMethod::PublicWrapperOfPrivateMethod
+
+  .method private hidebysig instance void 
+          SomePrivateMethod(string x) cil managed
+  {
+    // Code size       37 (0x25)
+    .maxstack  2
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  ceq
+    IL_0004:  ldc.i4.0
+    IL_0005:  ceq
+    IL_0007:  ldstr      "[NullGuard] x is null."
+    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0011:  ldarg.1
+    IL_0012:  brtrue.s   IL_0024
+
+    IL_0014:  ldstr      "x"
+    IL_0019:  ldstr      "[NullGuard] x is null."
+    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0023:  throw
+
+    .line 15,15 : 5,6 ''
+    IL_0024:  ret
+  } // end of method ClassWithPrivateMethod::SomePrivateMethod
+
+  .method public hidebysig specialname instance string 
+          get_SomeProperty() cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       7 (0x7)
+    .maxstack  8
+    IL_0000:  ldarg.0
+    IL_0001:  ldfld      string ClassWithPrivateMethod::'<SomeProperty>k__BackingField'
+    IL_0006:  ret
+  } // end of method ClassWithPrivateMethod::get_SomeProperty
+
+  .method public hidebysig specialname instance void 
+          set_SomeProperty(string 'value') cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       8 (0x8)
+    .maxstack  8
+    IL_0000:  ldarg.0
+    IL_0001:  ldarg.1
+    IL_0002:  stfld      string ClassWithPrivateMethod::'<SomeProperty>k__BackingField'
+    IL_0007:  ret
+  } // end of method ClassWithPrivateMethod::set_SomeProperty
+
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } // end of method ClassWithPrivateMethod::.ctor
+
+  .property instance string SomeProperty()
+  {
+    .get instance string ClassWithPrivateMethod::get_SomeProperty()
+    .set instance void ClassWithPrivateMethod::set_SomeProperty(string)
+  } // end of property ClassWithPrivateMethod::SomeProperty
+} // end of class ClassWithPrivateMethod
+
+// *********** DISASSEMBLY COMPLETE ***********************
