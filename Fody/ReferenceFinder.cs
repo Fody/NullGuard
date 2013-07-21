@@ -43,7 +43,7 @@ public static class ReferenceFinder
         var systemlibTypes = systemlib.MainModule.Types;
 
         var debug = systemlibTypes.First(x => x.Name == "Debug");
-        DebugAssertMethod = moduleDefinition.Import(debug.Methods.First(x =>
+        DebugAssertMethod = moduleDefinition.Import(debug.Methods.FirstOrDefault(x =>
             x.IsStatic &&
             x.Parameters.Count == 2 &&
             x.Parameters[0].ParameterType.Name == "Boolean" &&

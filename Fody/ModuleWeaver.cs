@@ -63,7 +63,7 @@ public class ModuleWeaver
 
     private void ProcessAssembly(List<TypeDefinition> types)
     {
-        var isDebug = DefineConstants.Any(c => c == "DEBUG");
+        var isDebug = DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
 
         var methodProcessor = new MethodProcessor(ValidationFlags, isDebug);
         var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);
