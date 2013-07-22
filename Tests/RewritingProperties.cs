@@ -11,7 +11,7 @@ public class RewritingProperties
     public RewritingProperties()
     {
         sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        genericClassType = AssemblyWeaver.Assembly.GetType("GenericClass`1").MakeGenericType(new Type[] { typeof(string) });
+        genericClassType = AssemblyWeaver.Assembly.GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
         classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
     }
 

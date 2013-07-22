@@ -7,7 +7,7 @@ public static class InstructionListExtensions
 {
     public static void Prepend(this Collection<Instruction> collection, IEnumerable<Instruction> instructions)
     {
-        int index = 0;
+        var index = 0;
         foreach (var instruction in instructions)
         {
             collection.Insert(index, instruction);

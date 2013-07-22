@@ -1,6 +1,5 @@
 using System.Linq;
 using Mono.Cecil;
-using Mono.Collections.Generic;
 
 public static class ReferenceFinder
 {

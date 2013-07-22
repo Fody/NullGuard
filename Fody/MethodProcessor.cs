@@ -249,7 +249,7 @@ public class MethodProcessor
 
     private static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
     {
-        for (int i = 1; i < instructions.Count - 1; i++)
+        for (var i = 1; i < instructions.Count - 1; i++)
         {
             if (instructions[i].OpCode == OpCodes.Newobj)
             {
