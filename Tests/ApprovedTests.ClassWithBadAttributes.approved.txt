@@ -1,45 +1,30 @@
-﻿
-//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
-
-
-
-.class public abstract auto ansi beforefieldinit ClassWithBadAttributes
+﻿.class public abstract auto ansi beforefieldinit ClassWithBadAttributes
        extends [mscorlib]System.Object
 {
   .method public hidebysig newslot abstract virtual 
           instance void  MethodWithNoNullCheckOnParam(string arg) cil managed
   {
   } // end of method ClassWithBadAttributes::MethodWithNoNullCheckOnParam
-
   .method public hidebysig newslot specialname abstract virtual 
           instance string  get_PropertyWithNoNullCheckOnSet() cil managed
   {
   } // end of method ClassWithBadAttributes::get_PropertyWithNoNullCheckOnSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance void  set_PropertyWithNoNullCheckOnSet(string 'value') cil managed
   {
   } // end of method ClassWithBadAttributes::set_PropertyWithNoNullCheckOnSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance string  get_PropertyAllowsNullGetButDoesNotAllowNullSet() cil managed
   {
   } // end of method ClassWithBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance void  set_PropertyAllowsNullGetButDoesNotAllowNullSet(string 'value') cil managed
   {
   } // end of method ClassWithBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet
-
   .method public hidebysig newslot abstract virtual 
           instance string  MethodAllowsNullReturnValue() cil managed
   {
   } // end of method ClassWithBadAttributes::MethodAllowsNullReturnValue
-
   .method family hidebysig specialname rtspecialname 
           instance void  .ctor() cil managed
   {
@@ -49,17 +34,14 @@
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
     IL_0006:  ret
   } // end of method ClassWithBadAttributes::.ctor
-
   .property instance string PropertyWithNoNullCheckOnSet()
   {
-    .get instance string ClassWithBadAttributes::get_PropertyWithNoNullCheckOnSet()
     .set instance void ClassWithBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
+    .get instance string ClassWithBadAttributes::get_PropertyWithNoNullCheckOnSet()
   } // end of property ClassWithBadAttributes::PropertyWithNoNullCheckOnSet
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .get instance string ClassWithBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
     .set instance void ClassWithBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
+    .get instance string ClassWithBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
   } // end of property ClassWithBadAttributes::PropertyAllowsNullGetButDoesNotAllowNullSet
 } // end of class ClassWithBadAttributes
-
-// *********** DISASSEMBLY COMPLETE ***********************

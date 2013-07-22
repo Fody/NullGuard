@@ -1,44 +1,29 @@
-﻿
-//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
-
-
-
-.class interface private abstract auto ansi InterfaceBadAttributes
+﻿.class interface private abstract auto ansi InterfaceBadAttributes
 {
   .method public hidebysig newslot abstract virtual 
           instance void  MethodWithNoNullCheckOnParam(string arg) cil managed
   {
   } // end of method InterfaceBadAttributes::MethodWithNoNullCheckOnParam
-
   .method public hidebysig newslot specialname abstract virtual 
           instance string  get_PropertyWithNoNullCheckOnSet() cil managed
   {
   } // end of method InterfaceBadAttributes::get_PropertyWithNoNullCheckOnSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance void  set_PropertyWithNoNullCheckOnSet(string 'value') cil managed
   {
   } // end of method InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance string  get_PropertyAllowsNullGetButDoesNotAllowNullSet() cil managed
   {
   } // end of method InterfaceBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet
-
   .method public hidebysig newslot specialname abstract virtual 
           instance void  set_PropertyAllowsNullGetButDoesNotAllowNullSet(string 'value') cil managed
   {
   } // end of method InterfaceBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet
-
   .method public hidebysig newslot abstract virtual 
           instance string  MethodAllowsNullReturnValue() cil managed
   {
   } // end of method InterfaceBadAttributes::MethodAllowsNullReturnValue
-
   .property instance string PropertyWithNoNullCheckOnSet()
   {
     .set instance void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
@@ -46,9 +31,7 @@
   } // end of property InterfaceBadAttributes::PropertyWithNoNullCheckOnSet
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .get instance string InterfaceBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
     .set instance void InterfaceBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
+    .get instance string InterfaceBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
   } // end of property InterfaceBadAttributes::PropertyAllowsNullGetButDoesNotAllowNullSet
 } // end of class InterfaceBadAttributes
-
-// *********** DISASSEMBLY COMPLETE ***********************

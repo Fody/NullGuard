@@ -1,13 +1,4 @@
-﻿
-//  Microsoft (R) .NET Framework IL Disassembler.  Version 4.0.30319.1
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-// warning : THIS IS A PARTIAL DISASSEMBLY, NOT SUITABLE FOR RE-ASSEMBLING
-
-
-
-.class public auto ansi beforefieldinit ClassWithPrivateMethod
+﻿.class public auto ansi beforefieldinit ClassWithPrivateMethod
        extends [mscorlib]System.Object
 {
   .field private string '<SomeProperty>k__BackingField'
@@ -25,7 +16,6 @@
     .line 9,9 : 5,6 ''
     IL_0007:  ret
   } // end of method ClassWithPrivateMethod::PublicWrapperOfPrivateMethod
-
   .method private hidebysig instance void 
           SomePrivateMethod(string x) cil managed
   {
@@ -41,17 +31,14 @@
                                                                        string)
     IL_0011:  ldarg.1
     IL_0012:  brtrue.s   IL_0024
-
     IL_0014:  ldstr      "x"
     IL_0019:  ldstr      "[NullGuard] x is null."
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-
     .line 15,15 : 5,6 ''
     IL_0024:  ret
   } // end of method ClassWithPrivateMethod::SomePrivateMethod
-
   .method public hidebysig specialname instance string 
           get_SomeProperty() cil managed
   {
@@ -62,7 +49,6 @@
     IL_0001:  ldfld      string ClassWithPrivateMethod::'<SomeProperty>k__BackingField'
     IL_0006:  ret
   } // end of method ClassWithPrivateMethod::get_SomeProperty
-
   .method public hidebysig specialname instance void 
           set_SomeProperty(string 'value') cil managed
   {
@@ -74,7 +60,6 @@
     IL_0002:  stfld      string ClassWithPrivateMethod::'<SomeProperty>k__BackingField'
     IL_0007:  ret
   } // end of method ClassWithPrivateMethod::set_SomeProperty
-
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor() cil managed
   {
@@ -84,12 +69,9 @@
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
     IL_0006:  ret
   } // end of method ClassWithPrivateMethod::.ctor
-
   .property instance string SomeProperty()
   {
-    .get instance string ClassWithPrivateMethod::get_SomeProperty()
     .set instance void ClassWithPrivateMethod::set_SomeProperty(string)
+    .get instance string ClassWithPrivateMethod::get_SomeProperty()
   } // end of property ClassWithPrivateMethod::SomeProperty
 } // end of class ClassWithPrivateMethod
-
-// *********** DISASSEMBLY COMPLETE ***********************

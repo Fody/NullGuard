@@ -1,5 +1,6 @@
 using System.Linq;
 using Mono.Cecil;
+using Mono.Collections.Generic;
 
 public static class ReferenceFinder
 {
@@ -12,17 +13,24 @@ public static class ReferenceFinder
 
     public static void FindReferences(IAssemblyResolver assemblyResolver, ModuleDefinition moduleDefinition)
     {
-        var mscorlib = assemblyResolver.Resolve("mscorlib");
-        var mscorlibTypes = mscorlib.MainModule.Types;
+        var baseLib = assemblyResolver.Resolve("mscorlib");
+        var baseLibTypes = baseLib.MainModule.Types;
 
-        var argumentException = mscorlibTypes.First(x => x.Name == "ArgumentException");
+        var winrt = !baseLibTypes.Any(type => type.Name == "Object");
+        if (winrt)
+        {
+            baseLib = assemblyResolver.Resolve("System.Runtime");
+            baseLibTypes = baseLib.MainModule.Types;
+        }
+
+        var argumentException = baseLibTypes.First(x => x.Name == "ArgumentException");
         ArgumentExceptionConstructor = moduleDefinition.Import(argumentException.Methods.First(x =>
             x.IsConstructor &&
             x.Parameters.Count == 2 &&
             x.Parameters[0].ParameterType.Name == "String" &&
             x.Parameters[1].ParameterType.Name == "String"));
 
-        var argumentNullException = mscorlibTypes.First(x => x.Name == "ArgumentNullException");
+        var argumentNullException = baseLibTypes.First(x => x.Name == "ArgumentNullException");
         ArgumentNullExceptionConstructor = moduleDefinition.Import(argumentNullException.Methods.First(x =>
             x.IsConstructor &&
             x.Parameters.Count == 1 &&
@@ -33,17 +41,17 @@ public static class ReferenceFinder
             x.Parameters[0].ParameterType.Name == "String" &&
             x.Parameters[1].ParameterType.Name == "String"));
 
-        var invalidOperationException = mscorlibTypes.First(x => x.Name == "InvalidOperationException");
+        var invalidOperationException = baseLibTypes.First(x => x.Name == "InvalidOperationException");
         InvalidOperationExceptionConstructor = moduleDefinition.Import(invalidOperationException.Methods.First(x =>
             x.IsConstructor &&
             x.Parameters.Count == 1 &&
             x.Parameters[0].ParameterType.Name == "String"));
 
-        var systemlib = assemblyResolver.Resolve("System");
-        var systemlibTypes = systemlib.MainModule.Types;
+        var debugLib = !winrt ? assemblyResolver.Resolve("System") : assemblyResolver.Resolve("System.Diagnostics.Debug");
+        var debugLibTypes = debugLib.MainModule.Types;
 
-        var debug = systemlibTypes.First(x => x.Name == "Debug");
-        DebugAssertMethod = moduleDefinition.Import(debug.Methods.FirstOrDefault(x =>
+        var debug = debugLibTypes.First(x => x.Name == "Debug");
+        DebugAssertMethod = moduleDefinition.Import(debug.Methods.First(x =>
             x.IsStatic &&
             x.Parameters.Count == 2 &&
             x.Parameters[0].ParameterType.Name == "Boolean" &&
