@@ -96,9 +96,9 @@ public static class CecilExtensions
         return true;
     }
 
-    public static bool IsCompilerGenerated(this ICustomAttributeProvider value)
+    public static bool IsGeneratedCode(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute");
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute");
     }
 
     public static bool IsAsyncStateMachine(this ICustomAttributeProvider value)

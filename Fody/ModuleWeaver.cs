@@ -70,7 +70,7 @@ public class ModuleWeaver
 
         foreach (var type in types)
         {
-            if (type.ContainsAllowNullAttribute() || type.IsCompilerGenerated())
+            if (type.ContainsAllowNullAttribute() || type.IsGeneratedCode())
                 continue;
 
             foreach (var method in type.MethodsWithBody())

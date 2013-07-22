@@ -27,6 +27,10 @@ public class MethodProcessor
     {
         try
         {
+            if (method.IsGeneratedCode())
+            {
+                return;
+            }
             InnerProcess(method);
         }
         catch (Exception exception)
@@ -184,7 +188,7 @@ public class MethodProcessor
         foreach (var local in body.Variables)
         {
             if (!local.VariableType.IsValueType ||
-                !local.VariableType.Resolve().IsCompilerGenerated() ||
+                !local.VariableType.Resolve().IsGeneratedCode() ||
                 !local.VariableType.Resolve().IsIAsyncStateMachine())
                 continue;
 

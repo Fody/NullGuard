@@ -25,6 +25,10 @@ public class PropertyProcessor
     {
         try
         {
+            if (property.IsGeneratedCode())
+            {
+                return;
+            }
             InnerProcess(property);
         }
         catch (Exception exception)
