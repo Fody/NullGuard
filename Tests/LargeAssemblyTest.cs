@@ -9,7 +9,7 @@ public class LargeAssemblyTest
 {
     [Test]
     [Ignore]
-    public void ProcesAllAssemblies()
+    public void ProcessAllAssemblies()
     {
         foreach (var assemblyPath in Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll"))
         {
