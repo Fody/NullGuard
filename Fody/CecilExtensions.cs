@@ -4,6 +4,14 @@ using Mono.Cecil;
 
 public static class CecilExtensions
 {
+
+
+    public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
+    {
+        return (type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
+                || (type.BaseType != null && type.BaseType.Resolve().HasInterface(interfaceFullName)));
+    }
+
     public static IEnumerable<MethodDefinition> AbstractMethods(this TypeDefinition type)
     {
         return type.Methods.Where(x => x.IsAbstract);

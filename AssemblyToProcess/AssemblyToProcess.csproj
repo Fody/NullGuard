@@ -51,6 +51,7 @@
     <Compile Include="InterfaceBadAttributes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IXamlMetadataProvider.cs" />
     <Compile Include="Sample\Sample.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -63,6 +64,7 @@
     <Compile Include="UnsafeClass.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="XamlMetadataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">

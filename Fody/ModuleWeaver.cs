@@ -70,7 +70,7 @@ public class ModuleWeaver
 
         foreach (var type in types)
         {
-            if (type.ContainsAllowNullAttribute() || type.IsGeneratedCode())
+            if (type.IsInterface || type.ContainsAllowNullAttribute() || type.IsGeneratedCode() || type.HasInterface("Windows.UI.Xaml.Markup.IXamlMetadataProvider"))
                 continue;
 
             foreach (var method in type.MethodsWithBody())

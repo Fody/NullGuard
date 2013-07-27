@@ -1,5 +1,5 @@
 ﻿#if(DEBUG)
-
+using Microsoft.Build.Utilities;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using ApprovalTests;
 using ApprovalTests.Reporters;
-using Microsoft.Build.Utilities;
 using NUnit.Framework;
 
 [TestFixture]
-[UseReporter(typeof(DiffReporter))]
+[UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
 public class ApprovedTests
 {
     [Test]
@@ -42,6 +41,12 @@ public class ApprovedTests
     public void SimpleClass()
     {
         Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+    }
+
+    [Test]
+    public void SkipIXamlMetadataProvider()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
     }
 
     [Test]
