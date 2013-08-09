@@ -51,6 +51,21 @@
     </Reference>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\Lib\Cecil\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -69,31 +84,30 @@
     </Reference>
     <Reference Include="NServiceBus, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NServiceBus.Interfaces.4.0.0.1\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.Interfaces.4.0.2\lib\net40\NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NServiceBus.4.0.0.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\packages\NServiceBus.4.0.2\lib\net40\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Database.2.0.2380\lib\net40\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions-4.5">
+      <HintPath>..\packages\RavenDB.Database.2.5.2666\lib\net45\Raven.Abstractions-4.5.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Database.2.0.2380\lib\net40\Raven.Database.dll</HintPath>
+    <Reference Include="Raven.Database-4.5">
+      <HintPath>..\packages\RavenDB.Database.2.5.2666\lib\net45\Raven.Database-4.5.dll</HintPath>
     </Reference>
-    <Reference Include="ReactiveUI, Version=5.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ReactiveUI, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\reactiveui-core.5.0.2\lib\Portable-Net45+WinRT45+WP8\ReactiveUI.dll</HintPath>
+      <HintPath>..\packages\reactiveui-core.5.1.0\lib\Portable-Net45+WinRT45+WP8\ReactiveUI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Net" />
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\Net45\System.Reactive.Core.dll</HintPath>
@@ -106,6 +120,10 @@
     </Reference>
     <Reference Include="System.Reactive.PlatformServices">
       <HintPath>..\packages\Rx-PlatformServices.2.1.30214.0\lib\Net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
