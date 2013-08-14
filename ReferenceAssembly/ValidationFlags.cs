@@ -39,6 +39,11 @@ namespace NullGuard
         NonPublic = 16,
 
         /// <summary>
+        /// Process arguments, out arguments and return values of a method.
+        /// </summary>
+        Methods = Arguments | OutValues | ReturnValues,
+
+        /// <summary>
         /// Process properties and arguments of public methods.
         /// </summary>
         AllPublicArguments = Properties | Arguments,
@@ -46,7 +51,7 @@ namespace NullGuard
         /// <summary>
         /// Process public properties, and arguments, out arguments and return values of public methods.
         /// </summary>
-        AllPublic = AllPublicArguments | OutValues | ReturnValues,
+        AllPublic = Properties | Methods,
 
         /// <summary>
         /// Process all properties, and arguments, out arguments and return values of all methods.
