@@ -49,7 +49,7 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && !method.IsPublic)
+        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic))
             || method.IsProperty()
             )
             return;
@@ -79,7 +79,7 @@ public class MethodProcessor
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
-                InjectMethodReturnGuardAsync(body, method.Name);
+                InjectMethodReturnGuardAsync(body, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName));
             }
         }
 
@@ -143,7 +143,7 @@ public class MethodProcessor
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName)
             {
-                AddReturnNullGuard(body.Instructions, ret, method.ReturnType, method.Name, Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(body.Instructions, ret, method.ReturnType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -183,7 +183,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsync(MethodBody body, string methodName)
+    private void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage)
     {
         foreach (var local in body.Variables)
         {
@@ -195,11 +195,11 @@ public class MethodProcessor
             var stateMachine = local.VariableType.Resolve();
             var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
 
-            InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, methodName);
+            InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, errorMessage);
         }
     }
 
-    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string parentMethodName)
+    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string errorMessage)
     {
         method.Body.SimplifyMacros();
 
@@ -215,7 +215,7 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            AddReturnNullGuard(method.Body.Instructions, ret, method.ReturnType, parentMethodName,
+            AddReturnNullGuard(method.Body.Instructions, ret, method.ReturnType, errorMessage,
                 Instruction.Create(OpCodes.Call, setExceptionMethod),
                 Instruction.Create(OpCodes.Ret));
         }
@@ -223,7 +223,7 @@ public class MethodProcessor
         method.Body.OptimizeMacros();
     }
 
-    private void AddReturnNullGuard(Collection<Instruction> instructions, int ret, TypeReference returnType, string methodName, params Instruction[] finalInstructions)
+    private void AddReturnNullGuard(Collection<Instruction> instructions, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
         var returnInstruction = instructions[ret];
 
@@ -233,7 +233,7 @@ public class MethodProcessor
         {
             InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, methodName));
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
         }
 
         InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
@@ -243,7 +243,7 @@ public class MethodProcessor
             // Clean up the stack since we're about to throw up.
             i.Add(Instruction.Create(OpCodes.Pop));
 
-            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, methodName));
+            InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
 
             i.AddRange(finalInstructions);
         });

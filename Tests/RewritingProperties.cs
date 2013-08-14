@@ -22,8 +22,8 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
         Assert.AreEqual("value", exception.ParamName);
-        Assert.AreEqual("[NullGuard] Cannot set the value of property 'NonNullProperty' to null.\r\nParameter name: value", exception.Message);
-        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'NonNullProperty' to null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("[NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.\r\nParameter name: value", exception.Message);
+        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'NonNullProperty' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'NonNullProperty' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'NonNullProperty' to null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -79,7 +79,7 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'PropertyAllowsNullSetButDoesNotAllowNullGet' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]

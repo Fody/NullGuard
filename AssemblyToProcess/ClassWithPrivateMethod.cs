@@ -1,6 +1,6 @@
 using NullGuard;
 
-[NullGuard(ValidationFlags.NonPublic | ValidationFlags.Methods | ValidationFlags.Arguments)]
+[NullGuard(ValidationFlags.NonPublic | ValidationFlags.Arguments)]
 public class ClassWithPrivateMethod
 {
     public void PublicWrapperOfPrivateMethod()
@@ -8,9 +8,9 @@ public class ClassWithPrivateMethod
         SomePrivateMethod(null);
     }
 
-// ReSharper disable UnusedParameter.Local
-    void SomePrivateMethod(string x)
-// ReSharper restore UnusedParameter.Local
+    // ReSharper disable UnusedParameter.Local
+    private void SomePrivateMethod(string x)
+    // ReSharper restore UnusedParameter.Local
     {
     }
 

@@ -60,11 +60,11 @@ public class PropertyProcessor
             var getBody = property.GetMethod.Body;
             getBody.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.GetMethod.IsPublic) &&
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublic)) &&
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard(getBody, property.PropertyType, property.Name);
+                InjectPropertyGetterGuard(getBody, property.PropertyType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName));
             }
 
             getBody.InitLocals = true;
@@ -76,9 +76,9 @@ public class PropertyProcessor
             var setBody = property.SetMethod.Body;
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublic)
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublic))
             {
-                InjectPropertySetterGuard(setBody, property.PropertyType, property.Name, property.SetMethod.Parameters[0]);
+                InjectPropertySetterGuard(setBody, property.SetMethod.Parameters[0], String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
             }
 
             setBody.InitLocals = true;
@@ -86,7 +86,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard(MethodBody getBody, TypeReference propertyType, string propertyName)
+    private void InjectPropertyGetterGuard(MethodBody getBody, TypeReference propertyType, string errorMessage)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -106,7 +106,7 @@ public class PropertyProcessor
             {
                 InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, propertyName));
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
             InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
@@ -116,7 +116,7 @@ public class PropertyProcessor
                 // Clean up the stack since we're about to throw up.
                 i.Add(Instruction.Create(OpCodes.Pop));
 
-                InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, propertyName));
+                InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -126,7 +126,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertySetterGuard(MethodBody setBody, TypeReference propertyType, string propertyName, ParameterDefinition valueParameter)
+    private void InjectPropertySetterGuard(MethodBody setBody, ParameterDefinition valueParameter, string errorMessage)
     {
         if (!valueParameter.MayNotBeNull())
             return;
@@ -139,14 +139,14 @@ public class PropertyProcessor
         {
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, propertyName));
+            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
         }
 
         InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 
         InstructionPatterns.IfNull(guardInstructions, entry, i =>
         {
-            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, propertyName));
+            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, errorMessage);
 
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));

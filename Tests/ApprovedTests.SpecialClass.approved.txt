@@ -479,15 +479,17 @@
       IL_00cc:  ceq
       IL_00ce:  ldc.i4.0
       IL_00cf:  ceq
-      IL_00d1:  ldstr      "[NullGuard] Return value of method 'MethodWithRetu"
-      + "rnValueAsync' is null."
+      IL_00d1:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
+      + "ng.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync"
+      + "(System.Boolean)' is null."
       IL_00d6:  call       void [System]System.Diagnostics.Debug::Assert(bool,
                                                                          string)
       IL_00db:  dup
       IL_00dc:  brtrue.s   IL_00ef
       IL_00de:  pop
-      IL_00df:  ldstr      "[NullGuard] Return value of method 'MethodWithRetu"
-      + "rnValueAsync' is null."
+      IL_00df:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
+      + "ng.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync"
+      + "(System.Boolean)' is null."
       IL_00e4:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
       IL_00e9:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
       IL_00ee:  ret
@@ -643,15 +645,17 @@
     IL_0019:  ceq
     IL_001b:  ldc.i4.0
     IL_001c:  ceq
-    IL_001e:  ldstr      "[NullGuard] Return value of method 'CountTo' is nu"
-    + "ll."
+    IL_001e:  ldstr      "[NullGuard] Return value of method 'System.Collect"
+    + "ions.Generic.IEnumerable`1<System.Int32> SpecialClass::CountTo(System.I"
+    + "nt32)' is null."
     IL_0023:  call       void [System]System.Diagnostics.Debug::Assert(bool,
                                                                        string)
     IL_0028:  dup
     IL_0029:  brtrue.s   IL_0037
     IL_002b:  pop
-    IL_002c:  ldstr      "[NullGuard] Return value of method 'CountTo' is nu"
-    + "ll."
+    IL_002c:  ldstr      "[NullGuard] Return value of method 'System.Collect"
+    + "ions.Generic.IEnumerable`1<System.Int32> SpecialClass::CountTo(System.I"
+    + "nt32)' is null."
     IL_0031:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0036:  throw
     IL_0037:  ret

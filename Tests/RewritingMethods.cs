@@ -39,7 +39,7 @@ public class RewritingMethods
         AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        Assert.AreEqual("Fail: [NullGuard] Return value of method 'MethodWithReturnValue' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of method 'System.String SimpleClass::MethodWithReturnValue(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class RewritingMethods
         AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
-        Assert.AreEqual("Fail: [NullGuard] Return value of method 'MethodWithGenericReturn' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of method 'T SimpleClass::MethodWithGenericReturn(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -128,8 +128,8 @@ public class RewritingMethods
 
         Assert.NotNull(ex);
         Assert.IsInstanceOf<InvalidOperationException>(ex);
-        Assert.AreEqual("[NullGuard] Return value of method 'MethodWithReturnValueAsync' is null.", ex.Message);
-        Assert.AreEqual("Fail: [NullGuard] Return value of method 'MethodWithReturnValueAsync' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.AreEqual("[NullGuard] Return value of method 'System.Threading.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync(System.Boolean)' is null.", ex.Message);
+        Assert.AreEqual("Fail: [NullGuard] Return value of method 'System.Threading.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
