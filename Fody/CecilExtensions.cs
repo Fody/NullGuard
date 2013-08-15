@@ -4,8 +4,6 @@ using Mono.Cecil;
 
 public static class CecilExtensions
 {
-
-
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
         return (type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
@@ -54,25 +52,13 @@ public static class CecilExtensions
         return customAttributes.Any(x => x.AttributeType.Name == "AllowNullAttribute");
     }
 
-    public static void RemoveAllowNullAttribute(this ICustomAttributeProvider definition)
+    public static void RemoveAllNullGuardAttributes(this ICustomAttributeProvider definition)
     {
         var customAttributes = definition.CustomAttributes;
 
-        var attribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "AllowNullAttribute");
+        var attributes = customAttributes.Where(x => x.AttributeType.Namespace == "NullGuard").ToArray();
 
-        if (attribute != null)
-        {
-            customAttributes.Remove(attribute);
-        }
-    }
-
-    public static void RemoveNullGuardAttribute(this ICustomAttributeProvider definition)
-    {
-        var customAttributes = definition.CustomAttributes;
-
-        var attribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "NullGuardAttribute");
-
-        if (attribute != null)
+        foreach (var attribute in attributes)
         {
             customAttributes.Remove(attribute);
         }

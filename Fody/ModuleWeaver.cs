@@ -83,25 +83,25 @@ public class ModuleWeaver
 
     private void RemoveAttributes(List<TypeDefinition> types)
     {
-        ModuleDefinition.RemoveAllowNullAttribute();
-        ModuleDefinition.Assembly.RemoveAllowNullAttribute();
+        ModuleDefinition.Assembly.RemoveAllNullGuardAttributes();
+        ModuleDefinition.RemoveAllNullGuardAttributes();
         foreach (var typeDefinition in types)
         {
-            typeDefinition.RemoveNullGuardAttribute();
+            typeDefinition.RemoveAllNullGuardAttributes();
 
             foreach (var method in typeDefinition.Methods)
             {
-                method.MethodReturnType.RemoveAllowNullAttribute();
+                method.MethodReturnType.RemoveAllNullGuardAttributes();
 
                 foreach (var parameter in method.Parameters)
                 {
-                    parameter.RemoveAllowNullAttribute();
+                    parameter.RemoveAllNullGuardAttributes();
                 }
             }
 
             foreach (var property in typeDefinition.Properties)
             {
-                property.RemoveAllowNullAttribute();
+                property.RemoveAllNullGuardAttributes();
             }
         }
     }
