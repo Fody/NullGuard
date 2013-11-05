@@ -7,7 +7,7 @@ using NullGuard;
 public class ModuleWeaver
 {
     public ValidationFlags ValidationFlags { get; set; }
-    public string[] DefineConstants { get; set; }
+    public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
@@ -18,7 +18,7 @@ public class ModuleWeaver
         LogInfo = s => { };
         LogError = s => { };
         ValidationFlags = ValidationFlags.AllPublic;
-        DefineConstants = new string[0];
+        DefineConstants = new List<string>();
     }
 
     public void Execute()

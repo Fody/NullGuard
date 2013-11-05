@@ -74,7 +74,7 @@ public static class AssemblyWeaver
             ModuleDefinition = moduleDefinition,
             AssemblyResolver = assemblyResolver,
             LogError = LogError,
-            DefineConstants = new[] { "DEBUG" } // Always testing the debug weaver
+            DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
         };
 
         weavingTask.Execute();
@@ -86,7 +86,7 @@ public static class AssemblyWeaver
     public static string BeforeAssemblyPath;
     public static string AfterAssemblyPath;
 
-	static void LogError(string error)
+    private static void LogError(string error)
     {
         Errors.Add(error);
     }
