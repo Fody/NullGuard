@@ -120,54 +120,54 @@ To Install from the Nuget Package Manager Console
             }
         }
     }
-	
+    
 ## Attributes
 
 Where and how injection occurs can be controlled via attributes. The NullGuard.Fody nuget ships with an assembly containing these attributes.
 
-	namespace NullGuard
-	{
-	    /// <summary>
-	    /// Prevents the injection of null checking.
-	    /// </summary>
-	    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
-	    public class AllowNullAttribute : Attribute
-	    {
-	    }
-	    
-	    /// <summary>
-	    /// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
-	    /// </summary>
-	    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
-	    public class NullGuardAttribute : Attribute
-	    {
-	        /// <summary>
-	        /// Initializes a new instance of the <see cref="NullGuardAttribute"/> with a <see cref="ValidationFlags"/>.
-	        /// </summary>
-	        /// <param name="flags">The <see cref="ValidationFlags"/> to use for the target this attribute is being applied to.</param>
-	        public NullGuardAttribute(ValidationFlags flags)
-	        {
-	        }
-	    }
-	    
-	    /// <summary>
-	    /// Used by <see cref="NullGuardAttribute"/> to taget specific categories of members.
-	    /// </summary>
-	    [Flags]
-	    public enum ValidationFlags
-	    {
-	        None = 0,
-	        Properties = 1,
-	        Methods = 2,
-	        Arguments = 4,
-	        OutValues = 8,
-	        ReturnValues = 16,
-	        NonPublic = 32,
-	        AllPublicArguments = Properties | Methods | Arguments,
-	        AllPublic = AllPublicArguments | OutValues | ReturnValues,
-	        All = AllPublic | NonPublic
-	    }
-	}
+    namespace NullGuard
+    {
+        /// <summary>
+        /// Prevents the injection of null checking.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
+        public class AllowNullAttribute : Attribute
+        {
+        }
+        
+        /// <summary>
+        /// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
+        public class NullGuardAttribute : Attribute
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="NullGuardAttribute"/> with a <see cref="ValidationFlags"/>.
+            /// </summary>
+            /// <param name="flags">The <see cref="ValidationFlags"/> to use for the target this attribute is being applied to.</param>
+            public NullGuardAttribute(ValidationFlags flags)
+            {
+            }
+        }
+        
+        /// <summary>
+        /// Used by <see cref="NullGuardAttribute"/> to taget specific categories of members.
+        /// </summary>
+        [Flags]
+        public enum ValidationFlags
+        {
+            None = 0,
+            Properties = 1,
+            Arguments = 2,
+            OutValues = 4,
+            ReturnValues = 8,
+            NonPublic = 16,
+            Methods = Arguments | OutValues | ReturnValues,
+            AllPublicArguments = Properties | Arguments,
+            AllPublic = Properties | Methods,
+            All = AllPublic | NonPublic
+        }
+    }
 
 ## Contributors
 
