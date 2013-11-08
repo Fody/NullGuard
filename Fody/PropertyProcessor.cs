@@ -14,10 +14,12 @@ public class PropertyProcessor
 
     private readonly bool isDebug;
     private readonly ValidationFlags validationFlags;
+    private readonly bool useDebugAssertion;
 
-    public PropertyProcessor(ValidationFlags validationFlags, bool isDebug)
+    public PropertyProcessor(ValidationFlags validationFlags, bool useDebugAssertion, bool isDebug)
     {
         this.validationFlags = validationFlags;
+        this.useDebugAssertion = useDebugAssertion;
         this.isDebug = isDebug;
     }
 
@@ -102,7 +104,7 @@ public class PropertyProcessor
 
             guardInstructions.Clear();
 
-            if (isDebug)
+            if (isDebug && useDebugAssertion)
             {
                 InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
 
@@ -135,7 +137,7 @@ public class PropertyProcessor
 
         var entry = setBody.Instructions.First();
 
-        if (isDebug)
+        if (isDebug && useDebugAssertion)
         {
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
 

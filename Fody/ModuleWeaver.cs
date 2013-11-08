@@ -7,6 +7,7 @@ using NullGuard;
 public class ModuleWeaver
 {
     public ValidationFlags ValidationFlags { get; set; }
+    public bool UseDebugAssertion { get; set; }
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogError { get; set; }
@@ -29,7 +30,15 @@ public class ModuleWeaver
             nullGuardAttribute = ModuleDefinition.Assembly.GetNullGuardAttribute();
 
         if (nullGuardAttribute != null)
+        {
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
+            var outputOptionProperties = nullGuardAttribute.Properties.Where(n=>n.Name == "UseDebugAssertion").ToArray();
+            if (outputOptionProperties.Any())
+            {
+                var outputOptionProperty = outputOptionProperties.First();
+                UseDebugAssertion = (bool) outputOptionProperty.Argument.Value;
+            }
+        }
 
         ReferenceFinder.FindReferences(AssemblyResolver, ModuleDefinition);
         var types = new List<TypeDefinition>(ModuleDefinition.GetTypes());
@@ -65,8 +74,8 @@ public class ModuleWeaver
     {
         var isDebug = DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
 
-        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug);
-        var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);
+        var methodProcessor = new MethodProcessor(ValidationFlags, UseDebugAssertion, isDebug);
+        var propertyProcessor = new PropertyProcessor(ValidationFlags, UseDebugAssertion, isDebug);
 
         foreach (var type in types)
         {
