@@ -75,3 +75,6 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+CommonAssemblyInfo.cs.ide
+NullGuard.sln.ide/graph
+ReferenceAssembly/ValidationFlags.cs.ide

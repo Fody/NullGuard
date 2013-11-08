@@ -16,10 +16,12 @@ public class MethodProcessor
 
     private readonly bool isDebug;
     private readonly ValidationFlags validationFlags;
+    private readonly bool useDebugAssertion;
 
-    public MethodProcessor(ValidationFlags validationFlags, bool isDebug)
+    public MethodProcessor(ValidationFlags validationFlags, bool useDebugAssertion, bool isDebug)
     {
         this.validationFlags = validationFlags;
+        this.useDebugAssertion = useDebugAssertion;
         this.isDebug = isDebug;
     }
 
@@ -229,7 +231,7 @@ public class MethodProcessor
 
         var guardInstructions = new List<Instruction>();
 
-        if (isDebug)
+        if (isDebug && useDebugAssertion)
         {
             InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
 

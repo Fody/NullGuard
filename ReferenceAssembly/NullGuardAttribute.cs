@@ -14,6 +14,12 @@ namespace NullGuard
         /// <param name="flags">The <see cref="ValidationFlags"/> to use for the target this attribute is being applied to.</param>
         public NullGuardAttribute(ValidationFlags flags)
         {
+            UseDebugAssertion = false;
         }
+
+        /// <summary>
+        /// Specifiest the behaviour of NullGuard
+        /// </summary>
+        public bool UseDebugAssertion { get; set; }
     }
 }
