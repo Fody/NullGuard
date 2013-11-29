@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
 using Mono.Cecil;
 
 public static class AssemblyWeaver
@@ -34,6 +35,7 @@ public static class AssemblyWeaver
     }
 
     public static Assembly Assembly;
+    public static Assembly Assembly2;
     public static TestTraceListener TestListener;
 
     static AssemblyWeaver()
@@ -53,11 +55,47 @@ public static class AssemblyWeaver
         AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
         var afterPdbPath = beforePdbPath.Replace(".pdb", "2.pdb");
 
-        File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
+        AfterAssembly2Path = BeforeAssemblyPath.Replace(".dll", "3.dll");
+        var afterPdb2Path = beforePdbPath.Replace(".pdb", "3.pdb");
+
+        Assembly = WeaveAssembly(AfterAssemblyPath, beforePdbPath, afterPdbPath, moduleDefinition =>
+        {
+            var assemblyResolver = new MockAssemblyResolver();
+
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver,
+                LogError = LogError,
+                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+            };
+
+            weavingTask.Execute();
+        });
+
+        Assembly2 = WeaveAssembly(AfterAssembly2Path, beforePdbPath, afterPdb2Path, moduleDefinition =>
+        {
+            var assemblyResolver = new MockAssemblyResolver();
+
+            var weavingTask = new ModuleWeaver
+            {
+                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false)),
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver,
+                LogError = LogError,
+                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+            };
+
+            weavingTask.Execute();
+        });
+    }
+
+    private static Assembly WeaveAssembly(string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
+    {
+        File.Copy(BeforeAssemblyPath, afterAssemblyPath, true);
         if (File.Exists(beforePdbPath))
             File.Copy(beforePdbPath, afterPdbPath, true);
 
-        var assemblyResolver = new MockAssemblyResolver();
         var readerParameters = new ReaderParameters();
         var writerParameters = new WriterParameters();
 
@@ -67,24 +105,18 @@ public static class AssemblyWeaver
             writerParameters.WriteSymbols = true;
         }
 
-        var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, readerParameters);
+        var moduleDefinition = ModuleDefinition.ReadModule(afterAssemblyPath, readerParameters);
 
-        var weavingTask = new ModuleWeaver
-        {
-            ModuleDefinition = moduleDefinition,
-            AssemblyResolver = assemblyResolver,
-            LogError = LogError,
-            DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-        };
+        weaveAction(moduleDefinition);
 
-        weavingTask.Execute();
-        moduleDefinition.Write(AfterAssemblyPath, writerParameters);
+        moduleDefinition.Write(afterAssemblyPath, writerParameters);
 
-        Assembly = Assembly.LoadFile(AfterAssemblyPath);
+        return Assembly.LoadFile(afterAssemblyPath);
     }
 
     public static string BeforeAssemblyPath;
     public static string AfterAssemblyPath;
+    public static string AfterAssembly2Path;
 
     private static void LogError(string error)
     {

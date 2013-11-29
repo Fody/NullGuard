@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Mono.Cecil;
 using NullGuard;
 
 public class ModuleWeaver
 {
+    public XElement Config { get; set; }
     public ValidationFlags ValidationFlags { get; set; }
+    public bool IncludeDebugAssert = true;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogError { get; set; }
@@ -23,6 +26,8 @@ public class ModuleWeaver
 
     public void Execute()
     {
+        ReadConfig();
+
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
         if (nullGuardAttribute == null)
@@ -38,6 +43,28 @@ public class ModuleWeaver
         ProcessAssembly(types);
         RemoveAttributes(types);
         RemoveReference();
+    }
+
+    private void ReadConfig()
+    {
+        if (Config == null)
+        {
+            return;
+        }
+
+        ReadIncludeDebugAssert();
+    }
+
+    private void ReadIncludeDebugAssert()
+    {
+        var includeDebugAssertAttribute = Config.Attribute("IncludeDebugAssert");
+        if (includeDebugAssertAttribute != null)
+        {
+            if (!bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
+            {
+                throw new Exception(string.Format("Could not parse 'IncludeDebugAssert' from '{0}'.", includeDebugAssertAttribute.Value));
+            }
+        }
     }
 
     private void CheckForBadAttributes(List<TypeDefinition> types)
@@ -63,7 +90,7 @@ public class ModuleWeaver
 
     private void ProcessAssembly(List<TypeDefinition> types)
     {
-        var isDebug = DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
+        var isDebug = IncludeDebugAssert && DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
 
         var methodProcessor = new MethodProcessor(ValidationFlags, isDebug);
         var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);

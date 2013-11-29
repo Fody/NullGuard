@@ -1,5 +1,5 @@
 ﻿#if(DEBUG)
-using Microsoft.Build.Utilities;
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.Build.Utilities;
 using NUnit.Framework;
 
 [TestFixture]
@@ -26,9 +27,21 @@ public class ApprovedTests
     }
 
     [Test]
+    public void ClassWithPrivateMethodNoAssert()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "ClassWithPrivateMethod"));
+    }
+
+    [Test]
     public void GenericClass()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+    }
+
+    [Test]
+    public void GenericClassNoAssert()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "GenericClass`1"));
     }
 
     [Test]
@@ -44,6 +57,12 @@ public class ApprovedTests
     }
 
     [Test]
+    public void SimpleClassNoAssert()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "SimpleClass"));
+    }
+
+    [Test]
     public void SkipIXamlMetadataProvider()
     {
         Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
@@ -53,6 +72,12 @@ public class ApprovedTests
     public void SpecialClass()
     {
         Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+    }
+
+    [Test]
+    public void SpecialClassNoAssert()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "SpecialClass"));
     }
 
     [Test]
