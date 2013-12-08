@@ -169,6 +169,20 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
         }
     }
 
+## Configuration
+
+For Release builds NullGuard will weave code that throws ArgumentNullException. For Debug builds NullGuard weaves Debug.Assert. 
+If you want ArgumentNullException to be thrown for Debug builds then update FodyWeavers.xml to include:
+
+    <NullGuard IncludeDebugAssert="false" />
+
+An complete example of FodyWeavers.xml looks like this:
+
+    <?xml version="1.0" encoding="utf-8" ?>
+    <Weavers>
+        <NullGuard IncludeDebugAssert="false" />
+    </Weavers>
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
