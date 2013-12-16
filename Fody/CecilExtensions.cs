@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 public static class CecilExtensions
 {
@@ -109,5 +110,28 @@ public static class CecilExtensions
     public static bool IsIAsyncStateMachine(this TypeDefinition typeDefinition)
     {
         return typeDefinition.Interfaces.Any(x => x.Name == "IAsyncStateMachine");
+    }
+
+    public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
+    {
+        if (seqPoint == null)
+            return;
+
+        HideLineFromDebugger(i, seqPoint.Document);
+    }
+
+    public static void HideLineFromDebugger(this Instruction i, Document doc)
+    {
+        if (doc == null)
+            return;
+
+        // This tells the debugger to ignore and step through
+        // all the following instructions to the next instruction
+        // with a valid SequencePoint. That way IL can be hidden from
+        // the Debugger. See
+        // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
+        i.SequencePoint = new SequencePoint(doc);
+        i.SequencePoint.StartLine = 0xfeefee;
+        i.SequencePoint.EndLine = 0xfeefee;
     }
 }

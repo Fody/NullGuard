@@ -21,6 +21,7 @@
   {
     // Code size       37 (0x25)
     .maxstack  2
+    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq

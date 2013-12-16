@@ -21,6 +21,7 @@
   {
     // Code size       20 (0x14)
     .maxstack  2
+    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0013
     IL_0003:  ldstr      "x"

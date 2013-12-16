@@ -55,17 +55,20 @@ public class MethodProcessor
             return;
 
         var body = method.Body;
+
+        var sequencePoint = body.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+
         body.SimplifyMacros();
 
         if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
         {
-            InjectMethodArgumentGuards(method, body);
+            InjectMethodArgumentGuards(method, body, sequencePoint);
         }
 
         if (!method.IsAsyncStateMachine() &&
             !method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard(localValidationFlags, method, body);
+            InjectMethodReturnGuard(localValidationFlags, method, body, sequencePoint);
         }
 
         if (method.IsAsyncStateMachine())
@@ -87,7 +90,7 @@ public class MethodProcessor
         body.OptimizeMacros();
     }
 
-    private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body)
+    private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -120,11 +123,13 @@ public class MethodProcessor
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
+            guardInstructions[0].HideLineFromDebugger(seqPoint);
+
             body.Instructions.Prepend(guardInstructions);
         }
     }
 
-    private void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body)
+    private void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -143,7 +148,7 @@ public class MethodProcessor
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName)
             {
-                AddReturnNullGuard(body.Instructions, ret, method.ReturnType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -175,6 +180,8 @@ public class MethodProcessor
                             // Throw the top item off the stack
                             i.Add(Instruction.Create(OpCodes.Throw));
                         });
+
+                        guardInstructions[0].HideLineFromDebugger(seqPoint);
 
                         body.Instructions.Insert(ret, guardInstructions);
                     }
@@ -215,15 +222,13 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            AddReturnNullGuard(method.Body.Instructions, ret, method.ReturnType, errorMessage,
-                Instruction.Create(OpCodes.Call, setExceptionMethod),
-                Instruction.Create(OpCodes.Ret));
+            AddReturnNullGuard(method.Body.Instructions, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
         }
 
         method.Body.OptimizeMacros();
     }
 
-    private void AddReturnNullGuard(Collection<Instruction> instructions, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
+    private void AddReturnNullGuard(Collection<Instruction> instructions, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
         var returnInstruction = instructions[ret];
 
@@ -247,6 +252,8 @@ public class MethodProcessor
 
             i.AddRange(finalInstructions);
         });
+
+        guardInstructions[0].HideLineFromDebugger(seqPoint);
 
         instructions.Insert(ret, guardInstructions);
     }

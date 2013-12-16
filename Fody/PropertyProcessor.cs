@@ -58,13 +58,16 @@ public class PropertyProcessor
         if (property.GetMethod != null && property.GetMethod.Body != null)
         {
             var getBody = property.GetMethod.Body;
+
+            var sequencePoint = getBody.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+
             getBody.SimplifyMacros();
 
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublic)) &&
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard(getBody, property.PropertyType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName));
+                InjectPropertyGetterGuard(getBody, sequencePoint, property.PropertyType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName));
             }
 
             getBody.InitLocals = true;
@@ -74,11 +77,14 @@ public class PropertyProcessor
         if (property.SetMethod != null && property.SetMethod.Body != null)
         {
             var setBody = property.SetMethod.Body;
+
+            var sequencePoint = setBody.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+
             setBody.SimplifyMacros();
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublic))
             {
-                InjectPropertySetterGuard(setBody, property.SetMethod.Parameters[0], String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
+                InjectPropertySetterGuard(setBody, sequencePoint, property.SetMethod.Parameters[0], String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
             }
 
             setBody.InitLocals = true;
@@ -86,7 +92,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard(MethodBody getBody, TypeReference propertyType, string errorMessage)
+    private void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, TypeReference propertyType, string errorMessage)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -122,11 +128,13 @@ public class PropertyProcessor
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
+            guardInstructions[0].HideLineFromDebugger(seqPoint);
+
             getBody.Instructions.Insert(ret, guardInstructions);
         }
     }
 
-    private void InjectPropertySetterGuard(MethodBody setBody, ParameterDefinition valueParameter, string errorMessage)
+    private void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, ParameterDefinition valueParameter, string errorMessage)
     {
         if (!valueParameter.MayNotBeNull())
             return;
@@ -151,6 +159,8 @@ public class PropertyProcessor
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));
         });
+
+        guardInstructions[0].HideLineFromDebugger(seqPoint);
 
         setBody.Instructions.Prepend(guardInstructions);
     }
