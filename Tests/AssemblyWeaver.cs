@@ -79,7 +79,7 @@ public static class AssemblyWeaver
 
             var weavingTask = new ModuleWeaver
             {
-                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false)),
+                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$")),
                 ModuleDefinition = moduleDefinition,
                 AssemblyResolver = assemblyResolver,
                 LogError = LogError,

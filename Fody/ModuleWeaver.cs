@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Mono.Cecil;
 using NullGuard;
@@ -15,6 +16,7 @@ public class ModuleWeaver
     public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
+    public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
     {
@@ -37,12 +39,27 @@ public class ModuleWeaver
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
 
         ReferenceFinder.FindReferences(AssemblyResolver, ModuleDefinition);
-        var types = new List<TypeDefinition>(ModuleDefinition.GetTypes());
+        var types = GetTypesToProcess();
 
         CheckForBadAttributes(types);
         ProcessAssembly(types);
         RemoveAttributes(types);
         RemoveReference();
+    }
+
+    private List<TypeDefinition> GetTypesToProcess()
+    {
+        var allTypes = new List<TypeDefinition>(ModuleDefinition.GetTypes());
+        List<TypeDefinition> types;
+        if (ExcludeRegex != null)
+        {
+            types = allTypes.Where(x => !ExcludeRegex.IsMatch(x.FullName)).ToList();
+        }
+        else
+        {
+            types = allTypes;
+        }
+        return types;
     }
 
     private void ReadConfig()
@@ -53,6 +70,7 @@ public class ModuleWeaver
         }
 
         ReadIncludeDebugAssert();
+        ReadExcludeRegex();
     }
 
     private void ReadIncludeDebugAssert()
@@ -63,6 +81,19 @@ public class ModuleWeaver
             if (!bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
             {
                 throw new Exception(string.Format("Could not parse 'IncludeDebugAssert' from '{0}'.", includeDebugAssertAttribute.Value));
+            }
+        }
+    }
+
+    private void ReadExcludeRegex()
+    {
+        var attribute = Config.Attribute("ExcludeRegex");
+        if(attribute != null)
+        {
+            var regex = attribute.Value;
+            if(!string.IsNullOrWhiteSpace(regex))
+            { 
+                ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant); 
             }
         }
     }
