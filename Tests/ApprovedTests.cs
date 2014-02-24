@@ -86,6 +86,12 @@ public class ApprovedTests
         Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
     }
 
+    [Test]
+    public void ErrorsList()
+    {
+        Approvals.VerifyAll(AssemblyWeaver.Errors.OrderBy(e => e), "Errors: ");
+    }
+
     private static string Decompile(string assemblyPath, string identifier = "")
     {
         var exePath = GetPathToILDasm();

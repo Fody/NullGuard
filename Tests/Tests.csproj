@@ -130,7 +130,6 @@
   <ItemGroup>
     <Compile Include="AssemblyWeaver.cs" />
     <Compile Include="ApprovedTests.cs" />
-    <Compile Include="ErrorsTests.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
     <Compile Include="RewritingConstructors.cs" />
     <Compile Include="RewritingProperties.cs" />

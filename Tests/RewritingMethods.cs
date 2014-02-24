@@ -150,5 +150,12 @@ public class RewritingMethods
         Assert.Null(ex);
     }
 
+    [Test]
+    public void NoAwaitWillCompile()
+    {
+        var instance = (dynamic)Activator.CreateInstance(specialClassType);
+        Assert.AreEqual(42, instance.NoAwaitCode().Result);
+    }
+
 #endif
 }

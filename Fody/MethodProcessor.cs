@@ -74,8 +74,9 @@ public class MethodProcessor
         if (method.IsAsyncStateMachine())
         {
             var returnType = method.ReturnType;
-            if (method.ReturnType.HasGenericParameters && method.ReturnType.Name.StartsWith("Task"))
-                returnType = method.ReturnType.GenericParameters[0];
+            var genericReturnType = method.ReturnType as GenericInstanceType;
+            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
+                returnType = genericReturnType.GenericArguments[0];
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 !method.MethodReturnType.AllowsNull() &&

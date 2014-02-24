@@ -5,24 +5,25 @@ using NullGuard;
 
 public class SpecialClass
 {
-	public IEnumerable<int> CountTo(int end)
-	{
-		for (var i = 0; i < end; i++)
-		{
-			yield return i;
-		}
-	}
+    public IEnumerable<int> CountTo(int end)
+    {
+        for (var i = 0; i < end; i++)
+        {
+            yield return i;
+        }
+    }
 
 #if (DEBUG)
-	public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
-	{
-		await Task.Run(() => Console.WriteLine(nonNullArg));
-	}
 
-	public async Task<string> MethodWithReturnValueAsync(bool returnNull)
-	{
-		return await Task.Run<string>(() => returnNull ? null : "");
-	}
+    public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
+    {
+        await Task.Run(() => Console.WriteLine(nonNullArg));
+    }
+
+    public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+    {
+        return await Task.Run<string>(() => returnNull ? null : "");
+    }
 
     [return: AllowNull]
     public async Task<string> MethodAllowsNullReturnValueAsync()
@@ -31,5 +32,14 @@ public class SpecialClass
 
         return null;
     }
+
+#pragma warning disable 1998
+
+    public async Task<int> NoAwaitCode()
+    {
+        return 42;
+    }
+
+#pragma warning restore 1998
 #endif
 }
