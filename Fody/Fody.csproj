@@ -48,6 +48,10 @@
     </None>
     <None Include="NugetAssets\uninstall.ps1" />
     <None Include="packages.config" />
+    <Reference Include="Anotar.Custom">
+      <HintPath>..\packages\Anotar.Custom.Fody.2.7.4.0\Lib\portable-net4+sl4+wp7+windows8\Anotar.Custom.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Cecil\Mono.Cecil.dll</HintPath>
@@ -74,6 +78,7 @@
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>
+    <Compile Include="Logging.cs" />
     <Compile Include="InstructionPatterns.cs" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="InstructionListExtensions.cs" />

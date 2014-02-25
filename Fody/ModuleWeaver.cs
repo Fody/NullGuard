@@ -12,6 +12,7 @@ public class ModuleWeaver
     public bool IncludeDebugAssert = true;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
+    public Action<string> LogWarn { get; set; }
     public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
@@ -19,6 +20,7 @@ public class ModuleWeaver
     public ModuleWeaver()
     {
         LogInfo = s => { };
+        LogWarn = s => { };
         LogError = s => { };
         ValidationFlags = ValidationFlags.AllPublic;
         DefineConstants = new List<string>();
@@ -26,6 +28,10 @@ public class ModuleWeaver
 
     public void Execute()
     {
+        LoggerFactory.LogInfo = LogInfo;
+        LoggerFactory.LogWarn = LogWarn;
+        LoggerFactory.LogError = LogError;
+
         ReadConfig();
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
@@ -62,7 +68,7 @@ public class ModuleWeaver
         {
             if (!bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
             {
-                throw new Exception(string.Format("Could not parse 'IncludeDebugAssert' from '{0}'.", includeDebugAssertAttribute.Value));
+                throw new WeavingException(string.Format("Could not parse 'IncludeDebugAssert' from '{0}'.", includeDebugAssertAttribute.Value));
             }
         }
     }

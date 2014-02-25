@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -33,7 +34,7 @@ public class PropertyProcessor
         }
         catch (Exception exception)
         {
-            throw new WeavingException(string.Format("An error occurred processing property '{0}'", property.FullName), exception);
+            LogTo.Error(exception, "An error occurred processing property '{0}'.", property.FullName);
         }
     }
 
