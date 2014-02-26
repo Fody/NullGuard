@@ -87,6 +87,18 @@ public class ApprovedTests
     }
 
     [Test]
+    public void InfosList()
+    {
+        Approvals.VerifyAll(AssemblyWeaver.Infos.OrderBy(e => e), "Infos: ");
+    }
+
+    [Test]
+    public void WarnsList()
+    {
+        Approvals.VerifyAll(AssemblyWeaver.Warns.OrderBy(e => e), "Warns: ");
+    }
+
+    [Test]
     public void ErrorsList()
     {
         Approvals.VerifyAll(AssemblyWeaver.Errors.OrderBy(e => e), "Errors: ");

@@ -84,7 +84,7 @@ public class MethodProcessor
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
-                InjectMethodReturnGuardAsync(body, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName));
+                InjectMethodReturnGuardAsync(body, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), method.FullName);
             }
         }
 
@@ -192,7 +192,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage)
+    private void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage, string methodName)
     {
         foreach (var local in body.Variables)
         {
@@ -204,17 +204,26 @@ public class MethodProcessor
             var stateMachine = local.VariableType.Resolve();
             var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
 
-            InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, errorMessage);
+            InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, errorMessage, methodName);
         }
     }
 
-    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string errorMessage)
+    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string errorMessage, string methodName)
     {
         method.Body.SimplifyMacros();
 
-        var setExceptionMethod = (MethodReference)method.Body.Instructions
-            .First(x => x.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference))
-            .Operand;
+        var setExceptionInstruction = method.Body.Instructions
+            .FirstOrDefault(x => x.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference));
+
+        if (setExceptionInstruction == null)
+        {
+            // Mono's broken compiler doen't add a SetException call if there's no await.
+            // Bail out since we're not about to rewrite the whole method to fix this. :/
+            LogTo.Warning("Cannot add guards to {0} as the method contains no await keyword.", methodName);
+            return;
+        }
+
+        var setExceptionMethod = (MethodReference)setExceptionInstruction.Operand;
 
         var returnPoints = method.Body.Instructions
                 .Select((o, ix) => new { o, ix })
