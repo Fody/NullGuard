@@ -51,7 +51,7 @@ public static class AssemblyWeaver
         BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
         MonoBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll");
-        var monoBeforeMdbPath = BeforeAssemblyPath + ".mdb";
+        var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
