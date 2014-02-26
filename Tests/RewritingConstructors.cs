@@ -4,11 +4,11 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingConstructors
 {
-    Type sampleClassType;
+    private Type sampleClassType;
 
     public RewritingConstructors()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
+        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
     }
 
     [Test]

@@ -7,7 +7,6 @@ public class MockAssemblyResolver : IAssemblyResolver
     public AssemblyDefinition Resolve(AssemblyNameReference name)
     {
         return AssemblyDefinition.ReadAssembly(name.Name + ".dll");
-        
     }
 
     public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
@@ -25,9 +24,8 @@ public class MockAssemblyResolver : IAssemblyResolver
         else
         {
             var codeBase = typeof(string).Assembly.CodeBase.Replace("file:///", "");
-            return AssemblyDefinition.ReadAssembly(codeBase);   
+            return AssemblyDefinition.ReadAssembly(codeBase);
         }
-
     }
 
     public AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)

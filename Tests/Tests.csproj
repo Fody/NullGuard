@@ -128,14 +128,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyWeaver.cs" />
     <Compile Include="ApprovedTests.cs" />
+    <Compile Include="Helpers\AssemblyWeaver.cs" />
+    <Compile Include="Helpers\Decompiler.cs" />
+    <Compile Include="Helpers\MockAssemblyResolver.cs" />
+    <Compile Include="Helpers\Verifier.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
     <Compile Include="RewritingConstructors.cs" />
     <Compile Include="RewritingProperties.cs" />
-    <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="RewritingMethods.cs" />
-    <Compile Include="Verifier.cs" />
     <Compile Include="VerifyTest.cs" />
   </ItemGroup>
   <ItemGroup>

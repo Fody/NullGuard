@@ -17,73 +17,73 @@ public class ApprovedTests
     [Test]
     public void ClassWithBadAttributes()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "ClassWithBadAttributes"));
     }
 
     [Test]
     public void ClassWithPrivateMethod()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "ClassWithPrivateMethod"));
     }
 
     [Test]
     public void ClassWithPrivateMethodNoAssert()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "ClassWithPrivateMethod"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "ClassWithPrivateMethod"));
     }
 
     [Test]
     public void GenericClass()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "GenericClass`1"));
     }
 
     [Test]
     public void GenericClassNoAssert()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "GenericClass`1"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "GenericClass`1"));
     }
 
     [Test]
     public void InterfaceBadAttributes()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "InterfaceBadAttributes"));
     }
 
     [Test]
     public void SimpleClass()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SimpleClass"));
     }
 
     [Test]
     public void SimpleClassNoAssert()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "SimpleClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "SimpleClass"));
     }
 
     [Test]
     public void SkipIXamlMetadataProvider()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "XamlMetadataProvider"));
     }
 
     [Test]
     public void SpecialClass()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SpecialClass"));
     }
 
     [Test]
     public void SpecialClassNoAssert()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssembly2Path, "SpecialClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "SpecialClass"));
     }
 
     [Test]
     public void UnsafeClass()
     {
-        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "UnsafeClass"));
     }
 
     [Test]

@@ -10,9 +10,9 @@ public class RewritingProperties
 
     public RewritingProperties()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        genericClassType = AssemblyWeaver.Assembly.GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
-        classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
+        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
+        genericClassType = AssemblyWeaver.Assemblies[0].GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
+        classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
     }
 
     [Test]

@@ -11,9 +11,9 @@ public class RewritingMethods
 
     public RewritingMethods()
     {
-        sampleClassType = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        classWithPrivateMethodType = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
-        specialClassType = AssemblyWeaver.Assembly.GetType("SpecialClass");
+        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
+        classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
+        specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
     }
 
     [Test]
