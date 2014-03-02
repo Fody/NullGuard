@@ -183,6 +183,10 @@ An complete example of FodyWeavers.xml looks like this:
         <NullGuard IncludeDebugAssert="false" />
     </Weavers>
 
+You can also use RegEx to specify the name of a class to exclude from NullGuard.
+
+    <NullGuard ExcludeRegex="^ClassToExclude$" />
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
