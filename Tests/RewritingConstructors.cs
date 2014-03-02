@@ -5,10 +5,12 @@ using NUnit.Framework;
 public class RewritingConstructors
 {
     private Type sampleClassType;
+    Type classToExcludeType;
 
     public RewritingConstructors()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
+        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
     }
 
     [Test]
@@ -35,5 +37,11 @@ public class RewritingConstructors
     public void AllowsNullWhenAttributeApplied()
     {
         Activator.CreateInstance(sampleClassType, "", null);
+    }
+
+    [Test]
+    public void AllowsNullWhenClassMatchExcludeRegex()
+    {
+        Activator.CreateInstance(this.classToExcludeType, new object[]{ null });
     }
 }

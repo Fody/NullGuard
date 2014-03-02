@@ -8,12 +8,14 @@ public class RewritingMethods
     private Type sampleClassType;
     private Type classWithPrivateMethodType;
     private Type specialClassType;
+    private Type classToExcludeType;
 
     public RewritingMethods()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
         specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
+        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
     }
 
     [Test]
@@ -158,4 +160,11 @@ public class RewritingMethods
     }
 
 #endif
+
+    [Test]
+    public void AllowsNullWhenClassMatchExcludeRegex()
+    {
+        var ClassToExclude = (dynamic) Activator.CreateInstance(classToExcludeType, "");
+        ClassToExclude.Test(null);
+    }
 }

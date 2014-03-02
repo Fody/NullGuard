@@ -7,12 +7,14 @@ public class RewritingProperties
     private Type sampleClassType;
     private Type genericClassType;
     private Type classWithPrivateMethodType;
+    private Type classToExcludeType;
 
     public RewritingProperties()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         genericClassType = AssemblyWeaver.Assemblies[0].GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
+        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
     }
 
     [Test]
@@ -94,5 +96,13 @@ public class RewritingProperties
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         sample.SomeProperty = null;
+    }
+
+    [Test]
+    public void AllowsNullWhenClassMatchExcludeRegex()
+    {
+        var classToExclude = (dynamic) Activator.CreateInstance(classToExcludeType, "");
+        classToExclude.Property = null;
+        string result = classToExclude.Property;
     }
 }
