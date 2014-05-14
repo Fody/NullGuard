@@ -86,6 +86,10 @@ public class SimpleClass
     {
     }
 
+    public void MethodWithOptionalParameterWithNonNullDefaultValue(string optional = "default")
+    {
+    }
+
     public void MethodWithGenericOut<T>(out T item)
     {
         item = default(T);

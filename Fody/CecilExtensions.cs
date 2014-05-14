@@ -67,7 +67,12 @@ public static class CecilExtensions
 
     public static bool MayNotBeNull(this ParameterDefinition arg)
     {
-        return !arg.AllowsNull() && !arg.IsOptional && arg.ParameterType.IsRefType() && !arg.IsOut;
+        return !arg.AllowsNull() && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
+    }
+
+    private static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)
+    {
+        return arg.IsOptional && arg.Constant == null;
     }
 
     public static bool IsRefType(this TypeReference arg)
