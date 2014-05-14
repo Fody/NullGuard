@@ -778,11 +778,11 @@
   .method public hidebysig instance class [mscorlib]System.Threading.Tasks.Task`1<string> 
           MethodWithReturnValueAsync(bool returnNull) cil managed
   {
-    .custom instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
     .custom instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 2D 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // ..-SpecialClass+
                                                                                                                                        3C 4D 65 74 68 6F 64 57 69 74 68 52 65 74 75 72   // <MethodWithRetur
                                                                                                                                        6E 56 61 6C 75 65 41 73 79 6E 63 3E 64 5F 5F 64   // nValueAsync>d__d
                                                                                                                                        00 00 ) 
+    .custom instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       66 (0x42)
     .maxstack  2
     .locals init (valuetype SpecialClass/'<MethodWithReturnValueAsync>d__d' V_0,
@@ -845,10 +845,10 @@
   .method public hidebysig instance class [mscorlib]System.Threading.Tasks.Task`1<int32> 
           NoAwaitCode() cil managed
   {
+    .custom instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
     .custom instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 1F 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // ...SpecialClass+
                                                                                                                                        3C 4E 6F 41 77 61 69 74 43 6F 64 65 3E 64 5F 5F   // <NoAwaitCode>d__
                                                                                                                                        31 33 00 00 )                                     // 13..
-    .custom instance void [mscorlib]System.Diagnostics.DebuggerStepThroughAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       58 (0x3a)
     .maxstack  2
     .locals init (valuetype SpecialClass/'<NoAwaitCode>d__13' V_0,
