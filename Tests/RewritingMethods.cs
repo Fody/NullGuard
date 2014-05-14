@@ -95,6 +95,13 @@ public class RewritingMethods
     }
 
     [Test]
+    public void DoesNotRequireNonNullForOptionalParameterWithNonNullDefaultValueButAllowNullAttribute()
+    {
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        sample.MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(optional: null);
+    }
+
+    [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
         AssemblyWeaver.TestListener.Reset();

@@ -90,6 +90,10 @@ public class SimpleClass
     {
     }
 
+    public void MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute([AllowNull] string optional = "default")
+    {
+    }
+
     public void MethodWithGenericOut<T>(out T item)
     {
         item = default(T);
