@@ -573,11 +573,20 @@
     IL_0048:  ret
   } // end of method SimpleClass::MethodWithTwoOuts
   .method public hidebysig instance void 
+          MethodWithOptionalParameter([opt] string optional) cil managed
+  {
+    .param [1] = nullref
+    // Code size       1 (0x1)
+    .maxstack  0
+    .line 87,87 : 5,6 ''
+    IL_0000:  ret
+  } // end of method SimpleClass::MethodWithOptionalParameter
+  .method public hidebysig instance void 
           MethodWithGenericOut<T>([out] !!T& item) cil managed
   {
     // Code size       59 (0x3b)
     .maxstack  2
-    .line 87,87 : 9,27 ''
+    .line 91,91 : 9,27 ''
     IL_0000:  ldarg.1
     IL_0001:  initobj    !!T
     .line 16707566,16707566 : 0,0 ''
@@ -598,7 +607,7 @@
     IL_002f:  ldstr      "[NullGuard] Out parameter 'item' is null."
     IL_0034:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0039:  throw
-    .line 88,88 : 5,6 ''
+    .line 92,92 : 5,6 ''
     IL_003a:  ret
   } // end of method SimpleClass::MethodWithGenericOut
   .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
@@ -606,7 +615,7 @@
     // Code size       103 (0x67)
     .maxstack  3
     .locals init ([0] !!T CS$0$0000)
-    .line 92,92 : 9,72 ''
+    .line 96,96 : 9,72 ''
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0033
     IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()
@@ -659,11 +668,11 @@
   {
     // Code size       70 (0x46)
     .maxstack  3
-    .line 97,97 : 9,23 ''
+    .line 101,101 : 9,23 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 98,98 : 9,21 ''
+    .line 102,102 : 9,21 ''
     IL_0003:  ldnull
     .line 16707566,16707566 : 0,0 ''
     IL_0004:  ldarg.1
@@ -721,20 +730,20 @@
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-    .line 103,103 : 9,37 ''
+    .line 107,107 : 9,37 ''
     IL_0024:  ldarg.1
     IL_0025:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_002a:  brfalse.s  IL_003c
-    .line 104,104 : 13,69 ''
+    .line 108,108 : 13,69 ''
     IL_002c:  ldstr      "x is null or empty."
     IL_0031:  ldstr      "x"
     IL_0036:  newobj     instance void [mscorlib]System.ArgumentException::.ctor(string,
                                                                                  string)
     IL_003b:  throw
-    .line 106,106 : 9,30 ''
+    .line 110,110 : 9,30 ''
     IL_003c:  ldarg.1
     IL_003d:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 107,107 : 5,6 ''
+    .line 111,111 : 5,6 ''
     IL_0042:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentGuard
   .method public hidebysig instance void 
@@ -742,18 +751,18 @@
   {
     // Code size       26 (0x1a)
     .maxstack  1
-    .line 111,111 : 9,37 ''
+    .line 115,115 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0013
-    .line 112,112 : 13,50 ''
+    .line 116,116 : 13,50 ''
     IL_0008:  ldstr      "x"
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
     IL_0012:  throw
-    .line 114,114 : 9,30 ''
+    .line 118,118 : 9,30 ''
     IL_0013:  ldarg.1
     IL_0014:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 115,115 : 5,6 ''
+    .line 119,119 : 5,6 ''
     IL_0019:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentNullGuard
   .method public hidebysig instance void 
@@ -761,20 +770,20 @@
   {
     // Code size       31 (0x1f)
     .maxstack  2
-    .line 119,119 : 9,37 ''
+    .line 123,123 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0018
-    .line 120,120 : 13,73 ''
+    .line 124,124 : 13,73 ''
     IL_0008:  ldstr      "x"
     IL_000d:  ldstr      "x is null or empty."
     IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0017:  throw
-    .line 122,122 : 9,30 ''
+    .line 126,126 : 9,30 ''
     IL_0018:  ldarg.1
     IL_0019:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 123,123 : 5,6 ''
+    .line 127,127 : 5,6 ''
     IL_001e:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentNullGuardWithMessage
   .property instance string NonNullProperty()
