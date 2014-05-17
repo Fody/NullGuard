@@ -82,6 +82,18 @@ public class SimpleClass
         second = null;
     }
 
+    public void MethodWithOptionalParameter(string optional = null)
+    {
+    }
+
+    public void MethodWithOptionalParameterWithNonNullDefaultValue(string optional = "default")
+    {
+    }
+
+    public void MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute([AllowNull] string optional = "default")
+    {
+    }
+
     public void MethodWithGenericOut<T>(out T item)
     {
         item = default(T);

@@ -78,6 +78,30 @@ public class RewritingMethods
     }
 
     [Test]
+    public void DoesNotRequireNonNullForOptionalParameter()
+    {
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        sample.MethodWithOptionalParameter(optional: null);
+    }
+
+    [Test]
+    public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
+    {
+        AssemblyWeaver.TestListener.Reset();
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null));
+        Assert.AreEqual("optional", exception.ParamName);
+        Assert.AreEqual("Fail: [NullGuard] optional is null.", AssemblyWeaver.TestListener.Message);
+    }
+
+    [Test]
+    public void DoesNotRequireNonNullForOptionalParameterWithNonNullDefaultValueButAllowNullAttribute()
+    {
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        sample.MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(optional: null);
+    }
+
+    [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
         AssemblyWeaver.TestListener.Reset();
