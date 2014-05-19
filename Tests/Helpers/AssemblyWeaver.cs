@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil;
-using Mono.Collections.Generic;
 
 public static class AssemblyWeaver
 {
@@ -148,32 +146,9 @@ public static class AssemblyWeaver
 
         weaveAction(moduleDefinition);
 
-        // This is necessary because we assert the order of method custom attributes (e.g. asserted IL code in ApprovedTests) although
-        // the order of custom attributes is not specified (see http://stackoverflow.com/questions/480007). Mono Cecil preserves the order.
-        foreach (var type in moduleDefinition.GetTypes())
-            ReorderMethodCustomAttributes(type);
-
         moduleDefinition.Write(afterAssemblyPath, writerParameters);
 
         return Assembly.LoadFile(afterAssemblyPath);
-    }
-
-    private static void ReorderMethodCustomAttributes(TypeDefinition type)
-    {
-        foreach (var methodDefinition in type.Methods)
-            ReorderCustomAttributes(methodDefinition.CustomAttributes);
-    }
-
-    private static void ReorderCustomAttributes(Collection<CustomAttribute> customAttributes)
-    {
-        if (customAttributes.Count > 1)
-        {
-            var sortedAttributes = customAttributes.OrderBy(x => x.AttributeType.FullName).ToList();
-
-            customAttributes.Clear();
-            foreach (var customAttribute in sortedAttributes)
-                customAttributes.Add(customAttribute);
-        }
     }
 
     private static void LogInfo(string error)
