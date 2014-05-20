@@ -135,6 +135,7 @@
     <Compile Include="Helpers\Verifier.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
     <Compile Include="RewritingConstructors.cs" />
+    <Compile Include="RewritingIndexers.cs" />
     <Compile Include="RewritingProperties.cs" />
     <Compile Include="RewritingMethods.cs" />
     <Compile Include="VerifyTest.cs" />

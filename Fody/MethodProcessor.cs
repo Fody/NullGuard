@@ -50,9 +50,7 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic))
-            || method.IsProperty()
-            )
+        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic)))
             return;
 
         var body = method.Body;
@@ -99,6 +97,9 @@ public class MethodProcessor
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
+                continue;
+
+            if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
                 continue;
 
             if (CheckForExistingGuard(body.Instructions, parameter))
@@ -148,7 +149,8 @@ public class MethodProcessor
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 !method.MethodReturnType.AllowsNull() &&
                 method.ReturnType.IsRefType() &&
-                method.ReturnType.FullName != typeof(void).FullName)
+                method.ReturnType.FullName != typeof(void).FullName &&
+                !method.IsGetter)
             {
                 AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), Instruction.Create(OpCodes.Throw));
             }
