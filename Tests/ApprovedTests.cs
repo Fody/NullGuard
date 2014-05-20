@@ -45,6 +45,12 @@ public class ApprovedTests
     }
 
     [Test]
+    public void Indexers()
+    {
+        Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "Indexers"));
+    }
+
+    [Test]
     public void InterfaceBadAttributes()
     {
         Approvals.Verify(Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "InterfaceBadAttributes"));
