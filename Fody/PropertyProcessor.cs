@@ -85,7 +85,7 @@ public class PropertyProcessor
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublic))
             {
-                InjectPropertySetterGuard(setBody, sequencePoint, property.SetMethod.Parameters[0], String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
+                InjectPropertySetterGuard(setBody, sequencePoint, property.SetMethod.GetPropertySetterValueParameter(), String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
             }
 
             setBody.InitLocals = true;
