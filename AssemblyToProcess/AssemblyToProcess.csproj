@@ -59,6 +59,7 @@
     <Compile Include="Sample\SampleOutput.cs" />
     <Compile Include="SimpleClass.cs" />
     <Compile Include="Sample\SomeOtherClass.cs" />
+    <Compile Include="Indexers.cs" />
     <Compile Include="SpecialClass.cs">
       <SubType>Code</SubType>
     </Compile>

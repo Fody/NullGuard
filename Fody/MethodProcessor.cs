@@ -50,9 +50,7 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic))
-            || method.IsProperty()
-            )
+        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic)))
             return;
 
         var body = method.Body;
@@ -101,10 +99,14 @@ public class MethodProcessor
             if (!parameter.MayNotBeNull())
                 continue;
 
+            if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
+                continue;
+
             if (CheckForExistingGuard(body.Instructions, parameter))
                 continue;
 
             var entry = body.Instructions.First();
+            var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name);
 
             guardInstructions.Clear();
 
@@ -112,14 +114,14 @@ public class MethodProcessor
             {
                 InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name));
+                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
             InstructionPatterns.IfNull(guardInstructions, entry, i =>
             {
-                InstructionPatterns.LoadArgumentNullException(i, parameter.Name, String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name));
+                InstructionPatterns.LoadArgumentNullException(i, parameter.Name, errorMessage);
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -143,14 +145,14 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            var returnInstruction = body.Instructions[ret];
-
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 !method.MethodReturnType.AllowsNull() &&
                 method.ReturnType.IsRefType() &&
-                method.ReturnType.FullName != typeof(void).FullName)
+                method.ReturnType.FullName != typeof(void).FullName &&
+                !method.IsGetter)
             {
-                AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), Instruction.Create(OpCodes.Throw));
+                var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName);
+                AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -158,26 +160,28 @@ public class MethodProcessor
                 foreach (var parameter in method.Parameters.Reverse())
                 {
                     // This is no longer the return instruction location, but it is where we want to jump to.
-                    returnInstruction = body.Instructions[ret];
+                    var returnInstruction = body.Instructions[ret];
 
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
                         parameter.ParameterType.IsRefType())
                     {
+                        var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name);
+
                         guardInstructions.Clear();
 
                         if (isDebug)
                         {
                             InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
-                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name));
+                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
                         }
 
                         InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
 
                         InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
                         {
-                            InstructionPatterns.LoadInvalidOperationException(i, String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name));
+                            InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
 
                             // Throw the top item off the stack
                             i.Add(Instruction.Create(OpCodes.Throw));

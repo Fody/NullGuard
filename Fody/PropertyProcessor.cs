@@ -68,7 +68,7 @@ public class PropertyProcessor
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard(getBody, sequencePoint, property.PropertyType, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName));
+                InjectPropertyGetterGuard(getBody, sequencePoint, property);
             }
 
             getBody.InitLocals = true;
@@ -85,7 +85,7 @@ public class PropertyProcessor
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublic))
             {
-                InjectPropertySetterGuard(setBody, sequencePoint, property.SetMethod.Parameters[0], String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName));
+                InjectPropertySetterGuard(setBody, sequencePoint, property);
             }
 
             setBody.InitLocals = true;
@@ -93,7 +93,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, TypeReference propertyType, string errorMessage)
+    private void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, PropertyReference property)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -106,17 +106,18 @@ public class PropertyProcessor
         foreach (var ret in returnPoints)
         {
             var returnInstruction = getBody.Instructions[ret];
+            var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName);
 
             guardInstructions.Clear();
 
             if (isDebug)
             {
-                InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
+                InstructionPatterns.DuplicateReturnValue(guardInstructions, property.PropertyType);
 
                 InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
-            InstructionPatterns.DuplicateReturnValue(guardInstructions, propertyType);
+            InstructionPatterns.DuplicateReturnValue(guardInstructions, property.PropertyType);
 
             InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
             {
@@ -135,13 +136,15 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, ParameterDefinition valueParameter, string errorMessage)
+    private void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, PropertyDefinition property)
     {
+        var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
+
         if (!valueParameter.MayNotBeNull())
             return;
 
         var guardInstructions = new List<Instruction>();
-
+        var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName);
         var entry = setBody.Instructions.First();
 
         if (isDebug)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -36,9 +37,11 @@ public static class CecilExtensions
         return value.CustomAttributes.FirstOrDefault(a => a.AttributeType.Name == "NullGuardAttribute");
     }
 
-    public static bool IsProperty(this MethodDefinition method)
+    public static ParameterDefinition GetPropertySetterValueParameter(this MethodDefinition method)
     {
-        return method.IsSpecialName && (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"));
+        Debug.Assert (method.IsSetter);
+        // The last parameter of a property setter "value" parameter (see ECMA-335 (2012) I.8.11.3, CLS rule 27):
+        return method.Parameters.Last();
     }
 
     public static bool AllowsNull(this ICustomAttributeProvider value)

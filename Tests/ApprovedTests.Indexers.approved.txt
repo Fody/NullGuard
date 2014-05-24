@@ -1,0 +1,252 @@
+﻿.class public auto ansi beforefieldinit Indexers
+       extends [mscorlib]System.Object
+{
+  .class auto ansi nested public beforefieldinit NonNullable
+         extends [mscorlib]System.Object
+  {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
+    .method public hidebysig specialname 
+            instance string  get_Item(string nonNullParam1,
+                                      string nonNullParam2) cil managed
+    {
+      // Code size       110 (0x6e)
+      .maxstack  3
+      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+      .line 16707566,16707566 : 0,0 'AssemblyToProcess\\Indexers.cs'
+      IL_0000:  ldarg.1
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] nonNullParam1 is null."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.1
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "nonNullParam1"
+      IL_0019:  ldstr      "[NullGuard] nonNullParam1 is null."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      .line 16707566,16707566 : 0,0 ''
+      IL_0024:  ldarg.2
+      IL_0025:  ldnull
+      IL_0026:  ceq
+      IL_0028:  ldc.i4.0
+      IL_0029:  ceq
+      IL_002b:  ldstr      "[NullGuard] nonNullParam2 is null."
+      IL_0030:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0035:  ldarg.2
+      IL_0036:  brtrue.s   IL_0048
+      IL_0038:  ldstr      "nonNullParam2"
+      IL_003d:  ldstr      "[NullGuard] nonNullParam2 is null."
+      IL_0042:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0047:  throw
+      .line 11,11 : 19,56 ''
+      IL_0048:  ldstr      "return value of NonNullable"
+      .line 16707566,16707566 : 0,0 ''
+      IL_004d:  dup
+      IL_004e:  ldnull
+      IL_004f:  ceq
+      IL_0051:  ldc.i4.0
+      IL_0052:  ceq
+      IL_0054:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g Indexers/NonNullable::Item(System.String,System.String)' is null."
+      IL_0059:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_005e:  dup
+      IL_005f:  brtrue.s   IL_006d
+      IL_0061:  pop
+      IL_0062:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g Indexers/NonNullable::Item(System.String,System.String)' is null."
+      IL_0067:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+      IL_006c:  throw
+      IL_006d:  ret
+    } // end of method NonNullable::get_Item
+    .method public hidebysig specialname 
+            instance void  set_Item(string nonNullParam1,
+                                    string nonNullParam2,
+                                    string 'value') cil managed
+    {
+      // Code size       109 (0x6d)
+      .maxstack  2
+      .line 16707566,16707566 : 0,0 ''
+      IL_0000:  ldarg.3
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String Indexers/NonNullable::Item(System.String,System.String)' to n"
+      + "ull."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.3
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "value"
+      IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String Indexers/NonNullable::Item(System.String,System.String)' to n"
+      + "ull."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      .line 16707566,16707566 : 0,0 ''
+      IL_0024:  ldarg.1
+      IL_0025:  ldnull
+      IL_0026:  ceq
+      IL_0028:  ldc.i4.0
+      IL_0029:  ceq
+      IL_002b:  ldstr      "[NullGuard] nonNullParam1 is null."
+      IL_0030:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0035:  ldarg.1
+      IL_0036:  brtrue.s   IL_0048
+      IL_0038:  ldstr      "nonNullParam1"
+      IL_003d:  ldstr      "[NullGuard] nonNullParam1 is null."
+      IL_0042:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0047:  throw
+      .line 16707566,16707566 : 0,0 ''
+      IL_0048:  ldarg.2
+      IL_0049:  ldnull
+      IL_004a:  ceq
+      IL_004c:  ldc.i4.0
+      IL_004d:  ceq
+      IL_004f:  ldstr      "[NullGuard] nonNullParam2 is null."
+      IL_0054:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0059:  ldarg.2
+      IL_005a:  brtrue.s   IL_006c
+      IL_005c:  ldstr      "nonNullParam2"
+      IL_0061:  ldstr      "[NullGuard] nonNullParam2 is null."
+      IL_0066:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_006b:  throw
+      .line 12,12 : 19,20 ''
+      IL_006c:  ret
+    } // end of method NonNullable::set_Item
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method NonNullable::.ctor
+    .property instance string Item(string,
+                                   string)
+    {
+      .set instance void Indexers/NonNullable::set_Item(string,
+                                                        string,
+                                                        string)
+      .get instance string Indexers/NonNullable::get_Item(string,
+                                                          string)
+    } // end of property NonNullable::Item
+  } // end of class NonNullable
+  .class auto ansi nested public beforefieldinit PassThroughGetterReturnValue
+         extends [mscorlib]System.Object
+  {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
+    .method public hidebysig specialname 
+            instance string  get_Item(string returnValue) cil managed
+    {
+      // Code size       34 (0x22)
+      .maxstack  3
+      .line 21,21 : 19,38 ''
+      IL_0000:  ldarg.1
+      .line 16707566,16707566 : 0,0 ''
+      IL_0001:  dup
+      IL_0002:  ldnull
+      IL_0003:  ceq
+      IL_0005:  ldc.i4.0
+      IL_0006:  ceq
+      IL_0008:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g Indexers/PassThroughGetterReturnValue::Item(System.String)' is null."
+      IL_000d:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0012:  dup
+      IL_0013:  brtrue.s   IL_0021
+      IL_0015:  pop
+      IL_0016:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g Indexers/PassThroughGetterReturnValue::Item(System.String)' is null."
+      IL_001b:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+      IL_0020:  throw
+      IL_0021:  ret
+    } // end of method PassThroughGetterReturnValue::get_Item
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method PassThroughGetterReturnValue::.ctor
+    .property instance string Item(string)
+    {
+      .get instance string Indexers/PassThroughGetterReturnValue::get_Item(string)
+    } // end of property PassThroughGetterReturnValue::Item
+  } // end of class PassThroughGetterReturnValue
+  .class auto ansi nested public beforefieldinit AllowedNulls
+         extends [mscorlib]System.Object
+  {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
+    .method public hidebysig specialname 
+            instance string  get_Item(string allowNull,
+                                      valuetype [mscorlib]System.Nullable`1<int32> nullableInt,
+                                      [opt] string optional) cil managed
+    {
+      .param [3] = nullref
+      // Code size       2 (0x2)
+      .maxstack  1
+      .line 31,31 : 19,31 ''
+      IL_0000:  ldnull
+      IL_0001:  ret
+    } // end of method AllowedNulls::get_Item
+    .method public hidebysig specialname 
+            instance void  set_Item(string allowNull,
+                                    valuetype [mscorlib]System.Nullable`1<int32> nullableInt,
+                                    [opt] string optional,
+                                    string 'value') cil managed
+    {
+      .param [3] = nullref
+      // Code size       1 (0x1)
+      .maxstack  0
+      .line 32,32 : 19,20 ''
+      IL_0000:  ret
+    } // end of method AllowedNulls::set_Item
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method AllowedNulls::.ctor
+    .property instance string Item(string,
+                                   valuetype [mscorlib]System.Nullable`1<int32>,
+                                   string)
+    {
+      .set instance void Indexers/AllowedNulls::set_Item(string,
+                                                         valuetype [mscorlib]System.Nullable`1<int32>,
+                                                         string,
+                                                         string)
+      .get instance string Indexers/AllowedNulls::get_Item(string,
+                                                           valuetype [mscorlib]System.Nullable`1<int32>,
+                                                           string)
+    } // end of property AllowedNulls::Item
+  } // end of class AllowedNulls
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } // end of method Indexers::.ctor
+} // end of class Indexers
