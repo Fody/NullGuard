@@ -40,11 +40,9 @@
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="NugetAssets\install.ps1" />
     <None Include="NugetAssets\NullGuard.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NugetAssets\uninstall.ps1" />
     <None Include="packages.config" />
     <Reference Include="Anotar.Custom">
       <HintPath>..\packages\Anotar.Custom.Fody.2.7.4.0\Lib\portable-net4+sl4+wp7+windows8\Anotar.Custom.dll</HintPath>

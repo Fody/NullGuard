@@ -39,7 +39,7 @@ public static class CecilExtensions
 
     public static ParameterDefinition GetPropertySetterValueParameter(this MethodDefinition method)
     {
-        Debug.Assert (method.IsSetter);
+        Debug.Assert(method.IsSetter);
         // The last parameter of a property setter "value" parameter (see ECMA-335 (2012) I.8.11.3, CLS rule 27):
         return method.Parameters.Last();
     }
@@ -141,5 +141,10 @@ public static class CecilExtensions
         i.SequencePoint = new SequencePoint(doc);
         i.SequencePoint.StartLine = 0xfeefee;
         i.SequencePoint.EndLine = 0xfeefee;
+    }
+
+    public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
+    {
+        return arg.IsPublic || arg.IsNestedPublic;
     }
 }
