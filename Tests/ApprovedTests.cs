@@ -123,10 +123,19 @@ public class ApprovedTests
 
             process.WaitForExit(10000);
 
-            return string.Join(Environment.NewLine, Regex.Split(process.StandardOutput.ReadToEnd(), Environment.NewLine)
+            string ilText = string.Join(Environment.NewLine, Regex.Split(process.StandardOutput.ReadToEnd(), Environment.NewLine)
                     .Where(l => !l.StartsWith("// ") && !string.IsNullOrEmpty(l))
                     .Select(l => l.Replace(projectFolder, ""))
                     .ToList());
+
+            // Sort the custom attributes in the generated IL code because the order of custom attributes is not specified (see 
+            // http://stackoverflow.com/questions/480007) and not stable.
+            ilText = Regex.Replace(
+                    ilText,
+                    @"(?<CustomInstance>\.custom instance void.*= *\([^)]+\)(?<SpaceOrComment>\s*|\s*//.*\s*)){2,}",
+                    match => string.Join("", match.Groups["CustomInstance"].Captures.Cast<Capture>().Select(x => x.Value).OrderBy(x => x.Trim())));
+
+            return ilText;
         }
     }
 
