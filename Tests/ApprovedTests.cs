@@ -134,12 +134,18 @@ public class ApprovedTests
                     .Select(l => l.Replace(projectFolder, ""))
                     .ToList());
 
-            // Sort the custom attributes in the generated IL code because the order of custom attributes is not specified (see 
+            // Sort the custom attributes in the generated IL code because the order of custom attributes is not specified (see
             // http://stackoverflow.com/questions/480007) and not stable.
             ilText = Regex.Replace(
                     ilText,
-                    @"(?<CustomInstance>\.custom instance void.*= *\([^)]+\)(?<SpaceOrComment>\s*|\s*//.*\s*)){2,}",
+                    @"(?<CustomInstance>[\t ]*\.custom instance void.*=[^)]+\).*((\r\n)|\n){1}){2,}",
                     match => string.Join("", match.Groups["CustomInstance"].Captures.Cast<Capture>().Select(x => x.Value).OrderBy(x => x.Trim())));
+
+            // Getters and setters seem to be swapping order sometimes
+            ilText = Regex.Replace(
+                ilText,
+                @"(?<getset>[\t ]*\.[gs]et instance [^)]+\).*((\r\n)|\n){1}){2}",
+                match => string.Join("", match.Groups["getset"].Captures.Cast<Capture>().Select(x => x.Value).OrderBy(x => x.Trim())));
 
             return ilText;
         }

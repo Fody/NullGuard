@@ -36,12 +36,12 @@
   } // end of method ClassWithBadAttributes::.ctor
   .property instance string PropertyWithNoNullCheckOnSet()
   {
-    .set instance void ClassWithBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
     .get instance string ClassWithBadAttributes::get_PropertyWithNoNullCheckOnSet()
+    .set instance void ClassWithBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
   } // end of property ClassWithBadAttributes::PropertyWithNoNullCheckOnSet
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .set instance void ClassWithBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
     .get instance string ClassWithBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
+    .set instance void ClassWithBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
   } // end of property ClassWithBadAttributes::PropertyAllowsNullGetButDoesNotAllowNullSet
 } // end of class ClassWithBadAttributes

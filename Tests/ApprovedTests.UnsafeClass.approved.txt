@@ -46,7 +46,7 @@
   } // end of method UnsafeClass::.ctor
   .property instance int32* NullProperty()
   {
-    .set instance void UnsafeClass::set_NullProperty(int32*)
     .get instance int32* UnsafeClass::get_NullProperty()
+    .set instance void UnsafeClass::set_NullProperty(int32*)
   } // end of property UnsafeClass::NullProperty
 } // end of class UnsafeClass

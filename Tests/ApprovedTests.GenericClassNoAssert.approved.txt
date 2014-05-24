@@ -52,7 +52,7 @@
   } // end of method GenericClass`1::.ctor
   .property instance !T NonNullProperty()
   {
-    .set instance void GenericClass`1::set_NonNullProperty(!T)
     .get instance !T GenericClass`1::get_NonNullProperty()
+    .set instance void GenericClass`1::set_NonNullProperty(!T)
   } // end of property GenericClass`1::NonNullProperty
 } // end of class GenericClass`1

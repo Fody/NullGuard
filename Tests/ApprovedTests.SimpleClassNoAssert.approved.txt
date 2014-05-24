@@ -605,28 +605,28 @@
   } // end of method SimpleClass::MethodWithExistingArgumentNullGuardWithMessage
   .property instance string NonNullProperty()
   {
-    .set instance void SimpleClass::set_NonNullProperty(string)
     .get instance string SimpleClass::get_NonNullProperty()
+    .set instance void SimpleClass::set_NonNullProperty(string)
   } // end of property SimpleClass::NonNullProperty
   .property instance string NullProperty()
   {
-    .set instance void SimpleClass::set_NullProperty(string)
     .get instance string SimpleClass::get_NullProperty()
+    .set instance void SimpleClass::set_NullProperty(string)
   } // end of property SimpleClass::NullProperty
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .set instance void SimpleClass::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
     .get instance string SimpleClass::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
+    .set instance void SimpleClass::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
   } // end of property SimpleClass::PropertyAllowsNullGetButDoesNotAllowNullSet
   .property instance string PropertyAllowsNullSetButDoesNotAllowNullGet()
   {
-    .set instance void SimpleClass::set_PropertyAllowsNullSetButDoesNotAllowNullGet(string)
     .get instance string SimpleClass::get_PropertyAllowsNullSetButDoesNotAllowNullGet()
+    .set instance void SimpleClass::set_PropertyAllowsNullSetButDoesNotAllowNullGet(string)
   } // end of property SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet
   .property instance valuetype [mscorlib]System.Nullable`1<int32>
           NonNullNullableProperty()
   {
-    .set instance void SimpleClass::set_NonNullNullableProperty(valuetype [mscorlib]System.Nullable`1<int32>)
     .get instance valuetype [mscorlib]System.Nullable`1<int32> SimpleClass::get_NonNullNullableProperty()
+    .set instance void SimpleClass::set_NonNullNullableProperty(valuetype [mscorlib]System.Nullable`1<int32>)
   } // end of property SimpleClass::NonNullNullableProperty
 } // end of class SimpleClass

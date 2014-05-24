@@ -139,11 +139,11 @@
     .property instance string Item(string,
                                    string)
     {
+      .get instance string Indexers/NonNullable::get_Item(string,
+                                                          string)
       .set instance void Indexers/NonNullable::set_Item(string,
                                                         string,
                                                         string)
-      .get instance string Indexers/NonNullable::get_Item(string,
-                                                          string)
     } // end of property NonNullable::Item
   } // end of class NonNullable
   .class auto ansi nested public beforefieldinit PassThroughGetterReturnValue
@@ -231,13 +231,13 @@
                                    valuetype [mscorlib]System.Nullable`1<int32>,
                                    string)
     {
+      .get instance string Indexers/AllowedNulls::get_Item(string,
+                                                           valuetype [mscorlib]System.Nullable`1<int32>,
+                                                           string)
       .set instance void Indexers/AllowedNulls::set_Item(string,
                                                          valuetype [mscorlib]System.Nullable`1<int32>,
                                                          string,
                                                          string)
-      .get instance string Indexers/AllowedNulls::get_Item(string,
-                                                           valuetype [mscorlib]System.Nullable`1<int32>,
-                                                           string)
     } // end of property AllowedNulls::Item
   } // end of class AllowedNulls
   .method public hidebysig specialname rtspecialname 

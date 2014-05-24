@@ -64,7 +64,7 @@
   } // end of method ClassWithPrivateMethod::.ctor
   .property instance string SomeProperty()
   {
-    .set instance void ClassWithPrivateMethod::set_SomeProperty(string)
     .get instance string ClassWithPrivateMethod::get_SomeProperty()
+    .set instance void ClassWithPrivateMethod::set_SomeProperty(string)
   } // end of property ClassWithPrivateMethod::SomeProperty
 } // end of class ClassWithPrivateMethod

@@ -26,12 +26,12 @@
   } // end of method InterfaceBadAttributes::MethodAllowsNullReturnValue
   .property instance string PropertyWithNoNullCheckOnSet()
   {
-    .set instance void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
     .get instance string InterfaceBadAttributes::get_PropertyWithNoNullCheckOnSet()
+    .set instance void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(string)
   } // end of property InterfaceBadAttributes::PropertyWithNoNullCheckOnSet
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .set instance void InterfaceBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
     .get instance string InterfaceBadAttributes::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
+    .set instance void InterfaceBadAttributes::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
   } // end of property InterfaceBadAttributes::PropertyAllowsNullGetButDoesNotAllowNullSet
 } // end of class InterfaceBadAttributes
