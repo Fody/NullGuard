@@ -9,18 +9,20 @@ public class RewritingProperties
     private Type classWithPrivateMethodType;
     private Type classToExcludeType;
 
-    public RewritingProperties()
+    [SetUp]
+    public void SetUp()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         genericClassType = AssemblyWeaver.Assemblies[0].GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
+
+        AssemblyWeaver.TestListener.Reset();
     }
 
     [Test]
     public void PropertySetterRequiresNonNullArgument()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
         Assert.AreEqual("value", exception.ParamName);
@@ -31,7 +33,6 @@ public class RewritingProperties
     [Test]
     public void PropertyGetterRequiresNonNullReturnValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() =>
         {
@@ -46,7 +47,6 @@ public class RewritingProperties
     [Test]
     public void GenericPropertyGetterRequiresNonNullReturnValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(genericClassType);
         Assert.Throws<InvalidOperationException>(() =>
         {
@@ -61,7 +61,6 @@ public class RewritingProperties
     [Test]
     public void PropertyAllowsNullGetButNotSet()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
@@ -71,7 +70,6 @@ public class RewritingProperties
     [Test]
     public void PropertyAllowsNullSetButNotGet()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.PropertyAllowsNullSetButDoesNotAllowNullGet = null;
         Assert.Throws<InvalidOperationException>(() =>

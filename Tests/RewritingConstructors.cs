@@ -7,10 +7,13 @@ public class RewritingConstructors
     private Type sampleClassType;
     Type classToExcludeType;
 
-    public RewritingConstructors()
+    [SetUp]
+    public void SetUp()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
+
+        AssemblyWeaver.TestListener.Reset();
     }
 
     [Test]
@@ -25,7 +28,6 @@ public class RewritingConstructors
     [Test]
     public void RequiresNonNullOutArgument()
     {
-        AssemblyWeaver.TestListener.Reset();
         var args = new object[1];
         Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, args)),
             Throws.TargetInvocationException
