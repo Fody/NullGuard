@@ -44,7 +44,8 @@
     <Compile Include="ClassWithBadAttributes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ClassWithExplicitInterface.cs" />
+    <Compile Include="InterfaceImplementations.cs" />
+    <Compile Include="NestedClasses.cs" />
     <Compile Include="ClassWithPrivateMethod.cs">
       <SubType>Code</SubType>
     </Compile>

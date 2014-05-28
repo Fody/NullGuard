@@ -134,6 +134,7 @@
     <Compile Include="Helpers\MockAssemblyResolver.cs" />
     <Compile Include="Helpers\Verifier.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
+    <Compile Include="Helpers\Reflection.cs" />
     <Compile Include="RewritingConstructors.cs" />
     <Compile Include="RewritingIndexers.cs" />
     <Compile Include="RewritingProperties.cs" />

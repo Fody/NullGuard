@@ -338,27 +338,15 @@
     .line 63,63 : 5,6 ''
     IL_0012:  ret
   } // end of method SimpleClass::MethodWithOutValue
-  .method public hidebysig instance void 
-          PublicWrapperOfPrivateMethod() cil managed
-  {
-    // Code size       8 (0x8)
-    .maxstack  2
-    .line 67,67 : 9,33 ''
-    IL_0000:  ldarg.0
-    IL_0001:  ldnull
-    IL_0002:  call       instance void SimpleClass::SomePrivateMethod(string)
-    .line 68,68 : 5,6 ''
-    IL_0007:  ret
-  } // end of method SimpleClass::PublicWrapperOfPrivateMethod
   .method private hidebysig instance void 
           SomePrivateMethod(string x) cil managed
   {
     // Code size       7 (0x7)
     .maxstack  8
-    .line 72,72 : 9,30 ''
+    .line 67,67 : 9,30 ''
     IL_0000:  ldarg.1
     IL_0001:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 73,73 : 5,6 ''
+    .line 68,68 : 5,6 ''
     IL_0006:  ret
   } // end of method SimpleClass::SomePrivateMethod
   .method public hidebysig instance void 
@@ -385,7 +373,7 @@
     IL_0022:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0027:  throw
-    .line 77,77 : 5,6 ''
+    .line 72,72 : 5,6 ''
     IL_0028:  ret
   } // end of method SimpleClass::MethodWithTwoRefs
   .method public hidebysig instance void 
@@ -394,11 +382,11 @@
   {
     // Code size       37 (0x25)
     .maxstack  2
-    .line 81,81 : 9,22 ''
+    .line 76,76 : 9,22 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 82,82 : 9,23 ''
+    .line 77,77 : 9,23 ''
     IL_0003:  ldarg.2
     IL_0004:  ldnull
     IL_0005:  stind.ref
@@ -416,7 +404,7 @@
     IL_0019:  ldstr      "[NullGuard] Out parameter 'second' is null."
     IL_001e:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0023:  throw
-    .line 83,83 : 5,6 ''
+    .line 78,78 : 5,6 ''
     IL_0024:  ret
   } // end of method SimpleClass::MethodWithTwoOuts
   .method public hidebysig instance void 
@@ -425,7 +413,7 @@
     .param [1] = nullref
     // Code size       1 (0x1)
     .maxstack  0
-    .line 87,87 : 5,6 ''
+    .line 82,82 : 5,6 ''
     IL_0000:  ret
   } // end of method SimpleClass::MethodWithOptionalParameter
   .method public hidebysig instance void 
@@ -442,7 +430,7 @@
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0012:  throw
-    .line 91,91 : 5,6 ''
+    .line 86,86 : 5,6 ''
     IL_0013:  ret
   } // end of method SimpleClass::MethodWithOptionalParameterWithNonNullDefaultValue
   .method public hidebysig instance void 
@@ -451,7 +439,7 @@
     .param [1] = "default"
     // Code size       1 (0x1)
     .maxstack  0
-    .line 95,95 : 5,6 ''
+    .line 90,90 : 5,6 ''
     IL_0000:  ret
   } // end of method SimpleClass::MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute
   .method public hidebysig instance void 
@@ -459,7 +447,7 @@
   {
     // Code size       32 (0x20)
     .maxstack  1
-    .line 99,99 : 9,27 ''
+    .line 94,94 : 9,27 ''
     IL_0000:  ldarg.1
     IL_0001:  initobj    !!T
     .line 16707566,16707566 : 0,0 ''
@@ -470,7 +458,7 @@
     IL_0014:  ldstr      "[NullGuard] Out parameter 'item' is null."
     IL_0019:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_001e:  throw
-    .line 100,100 : 5,6 ''
+    .line 95,95 : 5,6 ''
     IL_001f:  ret
   } // end of method SimpleClass::MethodWithGenericOut
   .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
@@ -478,7 +466,7 @@
     // Code size       59 (0x3b)
     .maxstack  2
     .locals init ([0] !!T CS$0$0000)
-    .line 104,104 : 9,72 ''
+    .line 99,99 : 9,72 ''
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_001d
     IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()
@@ -511,11 +499,11 @@
   {
     // Code size       35 (0x23)
     .maxstack  2
-    .line 109,109 : 9,23 ''
+    .line 104,104 : 9,23 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 110,110 : 9,21 ''
+    .line 105,105 : 9,21 ''
     IL_0003:  ldnull
     .line 16707566,16707566 : 0,0 ''
     IL_0004:  ldarg.1
@@ -547,20 +535,20 @@
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0012:  throw
-    .line 115,115 : 9,37 ''
+    .line 110,110 : 9,37 ''
     IL_0013:  ldarg.1
     IL_0014:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0019:  brfalse.s  IL_002b
-    .line 116,116 : 13,69 ''
+    .line 111,111 : 13,69 ''
     IL_001b:  ldstr      "x is null or empty."
     IL_0020:  ldstr      "x"
     IL_0025:  newobj     instance void [mscorlib]System.ArgumentException::.ctor(string,
                                                                                  string)
     IL_002a:  throw
-    .line 118,118 : 9,30 ''
+    .line 113,113 : 9,30 ''
     IL_002b:  ldarg.1
     IL_002c:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 119,119 : 5,6 ''
+    .line 114,114 : 5,6 ''
     IL_0031:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentGuard
   .method public hidebysig instance void 
@@ -568,18 +556,18 @@
   {
     // Code size       26 (0x1a)
     .maxstack  1
-    .line 123,123 : 9,37 ''
+    .line 118,118 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0013
-    .line 124,124 : 13,50 ''
+    .line 119,119 : 13,50 ''
     IL_0008:  ldstr      "x"
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
     IL_0012:  throw
-    .line 126,126 : 9,30 ''
+    .line 121,121 : 9,30 ''
     IL_0013:  ldarg.1
     IL_0014:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 127,127 : 5,6 ''
+    .line 122,122 : 5,6 ''
     IL_0019:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentNullGuard
   .method public hidebysig instance void 
@@ -587,20 +575,20 @@
   {
     // Code size       31 (0x1f)
     .maxstack  2
-    .line 131,131 : 9,37 ''
+    .line 126,126 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0018
-    .line 132,132 : 13,73 ''
+    .line 127,127 : 13,73 ''
     IL_0008:  ldstr      "x"
     IL_000d:  ldstr      "x is null or empty."
     IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0017:  throw
-    .line 134,134 : 9,30 ''
+    .line 129,129 : 9,30 ''
     IL_0018:  ldarg.1
     IL_0019:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 135,135 : 5,6 ''
+    .line 130,130 : 5,6 ''
     IL_001e:  ret
   } // end of method SimpleClass::MethodWithExistingArgumentNullGuardWithMessage
   .property instance string NonNullProperty()
