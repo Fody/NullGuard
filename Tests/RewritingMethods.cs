@@ -11,13 +11,16 @@ public class RewritingMethods
     private Type classToExcludeType;
     private Type classWithExplicitInterfaceType;
 
-    public RewritingMethods()
+    [SetUp]
+    public void SetUp()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
         specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
         classWithExplicitInterfaceType = AssemblyWeaver.Assemblies[0].GetType("ClassWithExplicitInterface");
+
+        AssemblyWeaver.TestListener.Reset();
     }
 
     [Test]
@@ -33,7 +36,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullArgument()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethod(null, ""));
         Assert.AreEqual("nonNullArg", exception.ParamName);
@@ -50,7 +52,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullMethodReturnValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
         Assert.AreEqual("Fail: [NullGuard] Return value of method 'System.String SimpleClass::MethodWithReturnValue(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
@@ -59,7 +60,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullGenericMethodReturnValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
         Assert.AreEqual("Fail: [NullGuard] Return value of method 'T SimpleClass::MethodWithGenericReturn(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
@@ -75,7 +75,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullOutValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         string value;
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithOutValue(out value));
@@ -99,7 +98,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null));
         Assert.AreEqual("optional", exception.ParamName);
@@ -116,7 +114,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         Assert.Throws<ArgumentNullException>(() => sample.PublicWrapperOfPrivateMethod());
         Assert.AreEqual("Fail: [NullGuard] x is null.", AssemblyWeaver.TestListener.Message);
@@ -134,7 +131,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullArgumentAsync()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
         Assert.AreEqual("nonNullArg", exception.ParamName);
@@ -151,7 +147,6 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullMethodReturnValueAsync()
     {
-        AssemblyWeaver.TestListener.Reset();
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
 
         Exception ex = null;
