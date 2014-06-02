@@ -130,7 +130,6 @@
   <ItemGroup>
     <Compile Include="ApprovedTests.cs" />
     <Compile Include="Helpers\AssemblyWeaver.cs" />
-    <Compile Include="Helpers\Decompiler.cs" />
     <Compile Include="Helpers\MockAssemblyResolver.cs" />
     <Compile Include="Helpers\Verifier.cs" />
     <Compile Include="LargeAssemblyTest.cs" />
