@@ -64,9 +64,8 @@ public class PropertyProcessor
 
             getBody.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublic)) &&
-                !property.GetMethod.MethodReturnType.AllowsNull()
-               )
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.GetMethod.IsPublicOrExplicitInterfaceImplementation()) &&
+                !property.GetMethod.MethodReturnType.AllowsNull())
             {
                 InjectPropertyGetterGuard(getBody, sequencePoint, property);
             }
@@ -83,7 +82,7 @@ public class PropertyProcessor
 
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublic))
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublicOrExplicitInterfaceImplementation())
             {
                 InjectPropertySetterGuard(setBody, sequencePoint, property);
             }

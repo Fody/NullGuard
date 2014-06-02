@@ -37,6 +37,16 @@ public static class CecilExtensions
         return value.CustomAttributes.FirstOrDefault(a => a.AttributeType.Name == "NullGuardAttribute");
     }
 
+    public static bool IsPublicOrExplicitInterfaceImplementation(this MethodDefinition method)
+    {
+        return method.IsPublic || method.IsExplicitInterfaceImplementation();
+    }
+
+    private static bool IsExplicitInterfaceImplementation(this MethodDefinition method)
+    {
+        return method.Overrides.Any(x => x.DeclaringType.Resolve().IsInterface);
+    }
+
     public static ParameterDefinition GetPropertySetterValueParameter(this MethodDefinition method)
     {
         Debug.Assert (method.IsSetter);

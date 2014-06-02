@@ -3,7 +3,6 @@ using NullGuard;
 
 public class Indexers
 {
-    [NullGuard(ValidationFlags.All)] // This can be removed as soon as issue #37 is resolved
     public class NonNullable
     {
         public string this[string nonNullParam1, string nonNullParam2]
@@ -13,7 +12,6 @@ public class Indexers
         }
     }
 
-    [NullGuard(ValidationFlags.All)] // This can be removed as soon as issue #37 is resolved
     public class PassThroughGetterReturnValue
     {
         public string this[[AllowNull] string returnValue]
@@ -22,7 +20,6 @@ public class Indexers
         }
     }
 
-    [NullGuard(ValidationFlags.All)] // This can be removed as soon as issue #37 is resolved
     public class AllowedNulls
     {
         [AllowNull]
