@@ -9,6 +9,7 @@ public class RewritingMethods
     private Type classWithPrivateMethodType;
     private Type specialClassType;
     private Type classToExcludeType;
+    private Type classWithExplicitInterfaceType;
 
     public RewritingMethods()
     {
@@ -16,6 +17,17 @@ public class RewritingMethods
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
         specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
+        classWithExplicitInterfaceType = AssemblyWeaver.Assemblies[0].GetType("ClassWithExplicitInterface");
+    }
+
+    [Test]
+    public void RequiresNonNullArgumentForExplicitInterface()
+    {
+        AssemblyWeaver.TestListener.Reset();
+        var sample = (IComparable<string>)Activator.CreateInstance(classWithExplicitInterfaceType);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
+        Assert.AreEqual("other", exception.ParamName);
+        Assert.AreEqual("Fail: [NullGuard] other is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -188,7 +200,7 @@ public class RewritingMethods
     [Test]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
-        var ClassToExclude = (dynamic) Activator.CreateInstance(classToExcludeType, "");
+        var ClassToExclude = (dynamic)Activator.CreateInstance(classToExcludeType, "");
         ClassToExclude.Test(null);
     }
 }

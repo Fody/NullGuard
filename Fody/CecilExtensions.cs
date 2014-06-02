@@ -147,4 +147,11 @@ public static class CecilExtensions
     {
         return arg.IsPublic || arg.IsNestedPublic;
     }
+
+    public static bool IsExplicitInterfaceMethod(this MethodDefinition method)
+    {
+        return method.IsPrivate &&
+            method.HasOverrides &&
+            method.Overrides.Any(o => o.DeclaringType.Resolve().IsInterface);
+    }
 }
