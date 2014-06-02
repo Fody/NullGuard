@@ -143,15 +143,13 @@ public static class CecilExtensions
         i.SequencePoint.EndLine = 0xfeefee;
     }
 
-    public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
+    public static bool IsPublicOrExplicitInterfaceImplementation(this MethodDefinition method)
     {
-        return arg.IsPublic || arg.IsNestedPublic;
+        return method.IsPublic || method.IsExplicitInterfaceImplementation();
     }
 
-    public static bool IsExplicitInterfaceMethod(this MethodDefinition method)
+    private static bool IsExplicitInterfaceImplementation(this MethodDefinition method)
     {
-        return method.IsPrivate &&
-            method.HasOverrides &&
-            method.Overrides.Any(o => o.DeclaringType.Resolve().IsInterface);
+        return method.Overrides.Any(x => x.DeclaringType.Resolve().IsInterface);
     }
 }
