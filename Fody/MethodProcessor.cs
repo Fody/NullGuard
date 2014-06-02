@@ -50,7 +50,7 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!method.IsPublic || !method.DeclaringType.IsPublic)))
+        if (!localValidationFlags.HasFlag (ValidationFlags.NonPublic) && !method.IsPublicOrExplicitInterfaceImplementation())
             return;
 
         var body = method.Body;
