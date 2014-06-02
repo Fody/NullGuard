@@ -50,44 +50,44 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if (!localValidationFlags.HasFlag (ValidationFlags.NonPublic) && !method.IsPublicOrExplicitInterfaceImplementation())
-            return;
-
-        var body = method.Body;
-
-        var sequencePoint = body.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
-
-        body.SimplifyMacros();
-
-        if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
+        if (localValidationFlags.HasFlag (ValidationFlags.NonPublic) || method.IsPublicOrExplicitInterfaceImplementation())
         {
-            InjectMethodArgumentGuards(method, body, sequencePoint);
-        }
+            var body = method.Body;
 
-        if (!method.IsAsyncStateMachine() &&
-            !method.IsIteratorStateMachine())
-        {
-            InjectMethodReturnGuard(localValidationFlags, method, body, sequencePoint);
-        }
+            var sequencePoint = body.Instructions.Select (i => i.SequencePoint).FirstOrDefault();
 
-        if (method.IsAsyncStateMachine())
-        {
-            var returnType = method.ReturnType;
-            var genericReturnType = method.ReturnType as GenericInstanceType;
-            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
-                returnType = genericReturnType.GenericArguments[0];
+            body.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.MethodReturnType.AllowsNull() &&
-                returnType.IsRefType() &&
-                returnType.FullName != typeof(void).FullName)
+            if (localValidationFlags.HasFlag (ValidationFlags.Arguments))
             {
-                InjectMethodReturnGuardAsync(body, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), method.FullName);
+                InjectMethodArgumentGuards (method, body, sequencePoint);
             }
-        }
 
-        body.InitLocals = true;
-        body.OptimizeMacros();
+            if (!method.IsAsyncStateMachine() &&
+                !method.IsIteratorStateMachine())
+            {
+                InjectMethodReturnGuard (localValidationFlags, method, body, sequencePoint);
+            }
+
+            if (method.IsAsyncStateMachine())
+            {
+                var returnType = method.ReturnType;
+                var genericReturnType = method.ReturnType as GenericInstanceType;
+                if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith ("Task"))
+                    returnType = genericReturnType.GenericArguments[0];
+
+                if (localValidationFlags.HasFlag (ValidationFlags.ReturnValues) &&
+                    !method.MethodReturnType.AllowsNull() &&
+                    returnType.IsRefType() &&
+                    returnType.FullName != typeof (void).FullName)
+                {
+                    InjectMethodReturnGuardAsync(body, method.FullName);
+                }
+            }
+
+            body.InitLocals = true;
+            body.OptimizeMacros();
+        }
     }
 
     private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
@@ -196,8 +196,10 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage, string methodName)
+    private void InjectMethodReturnGuardAsync(MethodBody body, string methodName)
     {
+        var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, methodName);
+
         foreach (var local in body.Variables)
         {
             if (!local.VariableType.IsValueType ||
