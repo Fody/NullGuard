@@ -1,0 +1,243 @@
+﻿.class public auto ansi beforefieldinit InterfaceImplementations
+       extends [mscorlib]System.Object
+{
+  .class interface abstract auto ansi nested public ISomeInterface
+  {
+    .method public hidebysig newslot specialname abstract virtual 
+            instance string  get_NonNullProperty() cil managed
+    {
+    } // end of method ISomeInterface::get_NonNullProperty
+    .method public hidebysig newslot specialname abstract virtual 
+            instance void  set_NonNullProperty(string 'value') cil managed
+    {
+    } // end of method ISomeInterface::set_NonNullProperty
+    .method public hidebysig newslot abstract virtual 
+            instance void  SomeInterfaceMethod(string notNull) cil managed
+    {
+    } // end of method ISomeInterface::SomeInterfaceMethod
+    .property instance string NonNullProperty()
+    {
+      .get instance string InterfaceImplementations/ISomeInterface::get_NonNullProperty()
+      .set instance void InterfaceImplementations/ISomeInterface::set_NonNullProperty(string)
+    } // end of property ISomeInterface::NonNullProperty
+  } // end of class ISomeInterface
+  .class auto ansi nested private beforefieldinit ExplicitImplementation
+         extends [mscorlib]System.Object
+         implements InterfaceImplementations/ISomeInterface
+  {
+    .field private string '<InterfaceImplementations.ISomeInterface.NonNullProperty>k__BackingField'
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    .method private hidebysig newslot specialname virtual final 
+            instance string  InterfaceImplementations.ISomeInterface.get_NonNullProperty() cil managed
+    {
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      .override InterfaceImplementations/ISomeInterface::get_NonNullProperty
+      // Code size       39 (0x27)
+      .maxstack  3
+      IL_0000:  ldarg.0
+      IL_0001:  ldfld      string InterfaceImplementations/ExplicitImplementation::'<InterfaceImplementations.ISomeInterface.NonNullProperty>k__BackingField'
+      IL_0006:  dup
+      IL_0007:  ldnull
+      IL_0008:  ceq
+      IL_000a:  ldc.i4.0
+      IL_000b:  ceq
+      IL_000d:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g InterfaceImplementations/ExplicitImplementation::InterfaceImplementat"
+      + "ions.ISomeInterface.NonNullProperty()' is null."
+      IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0017:  dup
+      IL_0018:  brtrue.s   IL_0026
+      IL_001a:  pop
+      IL_001b:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g InterfaceImplementations/ExplicitImplementation::InterfaceImplementat"
+      + "ions.ISomeInterface.NonNullProperty()' is null."
+      IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+      IL_0025:  throw
+      IL_0026:  ret
+    } // end of method ExplicitImplementation::InterfaceImplementations.ISomeInterface.get_NonNullProperty
+    .method private hidebysig newslot specialname virtual final 
+            instance void  InterfaceImplementations.ISomeInterface.set_NonNullProperty(string 'value') cil managed
+    {
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      .override InterfaceImplementations/ISomeInterface::set_NonNullProperty
+      // Code size       44 (0x2c)
+      .maxstack  2
+      IL_0000:  ldarg.1
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String InterfaceImplementations/ExplicitImplementation::InterfaceImp"
+      + "lementations.ISomeInterface.NonNullProperty()' to null."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.1
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "value"
+      IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String InterfaceImplementations/ExplicitImplementation::InterfaceImp"
+      + "lementations.ISomeInterface.NonNullProperty()' to null."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      IL_0024:  ldarg.0
+      IL_0025:  ldarg.1
+      IL_0026:  stfld      string InterfaceImplementations/ExplicitImplementation::'<InterfaceImplementations.ISomeInterface.NonNullProperty>k__BackingField'
+      IL_002b:  ret
+    } // end of method ExplicitImplementation::InterfaceImplementations.ISomeInterface.set_NonNullProperty
+    .method private hidebysig newslot virtual final 
+            instance void  InterfaceImplementations.ISomeInterface.SomeInterfaceMethod(string notNull) cil managed
+    {
+      .override InterfaceImplementations/ISomeInterface::SomeInterfaceMethod
+      // Code size       37 (0x25)
+      .maxstack  2
+      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+      .line 16707566,16707566 : 0,0 'AssemblyToProcess\\InterfaceImplementations.cs'
+      IL_0000:  ldarg.1
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] notNull is null."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.1
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "notNull"
+      IL_0019:  ldstr      "[NullGuard] notNull is null."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      .line 19,19 : 9,10 ''
+      IL_0024:  ret
+    } // end of method ExplicitImplementation::InterfaceImplementations.ISomeInterface.SomeInterfaceMethod
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method ExplicitImplementation::.ctor
+    .property instance string InterfaceImplementations.ISomeInterface.NonNullProperty()
+    {
+      .get instance string InterfaceImplementations/ExplicitImplementation::InterfaceImplementations.ISomeInterface.get_NonNullProperty()
+      .set instance void InterfaceImplementations/ExplicitImplementation::InterfaceImplementations.ISomeInterface.set_NonNullProperty(string)
+    } // end of property ExplicitImplementation::InterfaceImplementations.ISomeInterface.NonNullProperty
+  } // end of class ExplicitImplementation
+  .class auto ansi nested private beforefieldinit ImplicitImplementation
+         extends [mscorlib]System.Object
+         implements InterfaceImplementations/ISomeInterface
+  {
+    .field private string '<NonNullProperty>k__BackingField'
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    .method public hidebysig newslot specialname virtual final 
+            instance string  get_NonNullProperty() cil managed
+    {
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      // Code size       39 (0x27)
+      .maxstack  3
+      IL_0000:  ldarg.0
+      IL_0001:  ldfld      string InterfaceImplementations/ImplicitImplementation::'<NonNullProperty>k__BackingField'
+      IL_0006:  dup
+      IL_0007:  ldnull
+      IL_0008:  ceq
+      IL_000a:  ldc.i4.0
+      IL_000b:  ceq
+      IL_000d:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g InterfaceImplementations/ImplicitImplementation::NonNullProperty()' i"
+      + "s null."
+      IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0017:  dup
+      IL_0018:  brtrue.s   IL_0026
+      IL_001a:  pop
+      IL_001b:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+      + "g InterfaceImplementations/ImplicitImplementation::NonNullProperty()' i"
+      + "s null."
+      IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+      IL_0025:  throw
+      IL_0026:  ret
+    } // end of method ImplicitImplementation::get_NonNullProperty
+    .method public hidebysig newslot specialname virtual final 
+            instance void  set_NonNullProperty(string 'value') cil managed
+    {
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      // Code size       44 (0x2c)
+      .maxstack  2
+      IL_0000:  ldarg.1
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String InterfaceImplementations/ImplicitImplementation::NonNullPrope"
+      + "rty()' to null."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.1
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "value"
+      IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+      + "em.String InterfaceImplementations/ImplicitImplementation::NonNullPrope"
+      + "rty()' to null."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      IL_0024:  ldarg.0
+      IL_0025:  ldarg.1
+      IL_0026:  stfld      string InterfaceImplementations/ImplicitImplementation::'<NonNullProperty>k__BackingField'
+      IL_002b:  ret
+    } // end of method ImplicitImplementation::set_NonNullProperty
+    .method public hidebysig newslot virtual final 
+            instance void  SomeInterfaceMethod(string notNull) cil managed
+    {
+      // Code size       37 (0x25)
+      .maxstack  2
+      .line 16707566,16707566 : 0,0 ''
+      IL_0000:  ldarg.1
+      IL_0001:  ldnull
+      IL_0002:  ceq
+      IL_0004:  ldc.i4.0
+      IL_0005:  ceq
+      IL_0007:  ldstr      "[NullGuard] notNull is null."
+      IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_0011:  ldarg.1
+      IL_0012:  brtrue.s   IL_0024
+      IL_0014:  ldstr      "notNull"
+      IL_0019:  ldstr      "[NullGuard] notNull is null."
+      IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0023:  throw
+      .line 29,29 : 9,10 ''
+      IL_0024:  ret
+    } // end of method ImplicitImplementation::SomeInterfaceMethod
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method ImplicitImplementation::.ctor
+    .property instance string NonNullProperty()
+    {
+      .get instance string InterfaceImplementations/ImplicitImplementation::get_NonNullProperty()
+      .set instance void InterfaceImplementations/ImplicitImplementation::set_NonNullProperty(string)
+    } // end of property ImplicitImplementation::NonNullProperty
+  } // end of class ImplicitImplementation
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } // end of method InterfaceImplementations::.ctor
+} // end of class InterfaceImplementations
