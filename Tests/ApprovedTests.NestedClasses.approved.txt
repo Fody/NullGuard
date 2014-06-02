@@ -1,0 +1,201 @@
+﻿.class public auto ansi beforefieldinit NestedClasses
+       extends [mscorlib]System.Object
+{
+  .class auto ansi nested public beforefieldinit OuterNestedClass
+         extends [mscorlib]System.Object
+  {
+    .class auto ansi nested public beforefieldinit InnerNestedClass
+           extends [mscorlib]System.Object
+    {
+      .field private string '<NonNullProperty>k__BackingField'
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      .field private string '<AllowNullProperty>k__BackingField'
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      .field private string '<InternalProperty>k__BackingField'
+      .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+      .method public hidebysig specialname 
+              instance string  get_NonNullProperty() cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       39 (0x27)
+        .maxstack  3
+        IL_0000:  ldarg.0
+        IL_0001:  ldfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<NonNullProperty>k__BackingField'
+        IL_0006:  dup
+        IL_0007:  ldnull
+        IL_0008:  ceq
+        IL_000a:  ldc.i4.0
+        IL_000b:  ceq
+        IL_000d:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+        + "g NestedClasses/OuterNestedClass/InnerNestedClass::NonNullProperty()' i"
+        + "s null."
+        IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                           string)
+        IL_0017:  dup
+        IL_0018:  brtrue.s   IL_0026
+        IL_001a:  pop
+        IL_001b:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+        + "g NestedClasses/OuterNestedClass/InnerNestedClass::NonNullProperty()' i"
+        + "s null."
+        IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+        IL_0025:  throw
+        IL_0026:  ret
+      } // end of method InnerNestedClass::get_NonNullProperty
+      .method public hidebysig specialname 
+              instance void  set_NonNullProperty(string 'value') cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       44 (0x2c)
+        .maxstack  2
+        IL_0000:  ldarg.1
+        IL_0001:  ldnull
+        IL_0002:  ceq
+        IL_0004:  ldc.i4.0
+        IL_0005:  ceq
+        IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+        + "em.String NestedClasses/OuterNestedClass/InnerNestedClass::NonNullPrope"
+        + "rty()' to null."
+        IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                           string)
+        IL_0011:  ldarg.1
+        IL_0012:  brtrue.s   IL_0024
+        IL_0014:  ldstr      "value"
+        IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+        + "em.String NestedClasses/OuterNestedClass/InnerNestedClass::NonNullPrope"
+        + "rty()' to null."
+        IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                         string)
+        IL_0023:  throw
+        IL_0024:  ldarg.0
+        IL_0025:  ldarg.1
+        IL_0026:  stfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<NonNullProperty>k__BackingField'
+        IL_002b:  ret
+      } // end of method InnerNestedClass::set_NonNullProperty
+      .method public hidebysig specialname 
+              instance string  get_AllowNullProperty() cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       7 (0x7)
+        .maxstack  8
+        IL_0000:  ldarg.0
+        IL_0001:  ldfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<AllowNullProperty>k__BackingField'
+        IL_0006:  ret
+      } // end of method InnerNestedClass::get_AllowNullProperty
+      .method public hidebysig specialname 
+              instance void  set_AllowNullProperty(string 'value') cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       8 (0x8)
+        .maxstack  8
+        IL_0000:  ldarg.0
+        IL_0001:  ldarg.1
+        IL_0002:  stfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<AllowNullProperty>k__BackingField'
+        IL_0007:  ret
+      } // end of method InnerNestedClass::set_AllowNullProperty
+      .method assembly hidebysig specialname 
+              instance string  get_InternalProperty() cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       7 (0x7)
+        .maxstack  1
+        IL_0000:  ldarg.0
+        IL_0001:  ldfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<InternalProperty>k__BackingField'
+        IL_0006:  ret
+      } // end of method InnerNestedClass::get_InternalProperty
+      .method assembly hidebysig specialname 
+              instance void  set_InternalProperty(string 'value') cil managed
+      {
+        .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+        // Code size       8 (0x8)
+        .maxstack  2
+        IL_0000:  ldarg.0
+        IL_0001:  ldarg.1
+        IL_0002:  stfld      string NestedClasses/OuterNestedClass/InnerNestedClass::'<InternalProperty>k__BackingField'
+        IL_0007:  ret
+      } // end of method InnerNestedClass::set_InternalProperty
+      .method public hidebysig instance void 
+              SomeMethod(string notNull) cil managed
+      {
+        // Code size       37 (0x25)
+        .maxstack  2
+        .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+        .line 16707566,16707566 : 0,0 'AssemblyToProcess\\NestedClasses.cs'
+        IL_0000:  ldarg.1
+        IL_0001:  ldnull
+        IL_0002:  ceq
+        IL_0004:  ldc.i4.0
+        IL_0005:  ceq
+        IL_0007:  ldstr      "[NullGuard] notNull is null."
+        IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                           string)
+        IL_0011:  ldarg.1
+        IL_0012:  brtrue.s   IL_0024
+        IL_0014:  ldstr      "notNull"
+        IL_0019:  ldstr      "[NullGuard] notNull is null."
+        IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                         string)
+        IL_0023:  throw
+        .line 19,19 : 13,14 ''
+        IL_0024:  ret
+      } // end of method InnerNestedClass::SomeMethod
+      .method public hidebysig instance void 
+              AllowNullArgMethod(string allowNull) cil managed
+      {
+        // Code size       1 (0x1)
+        .maxstack  0
+        .line 23,23 : 13,14 ''
+        IL_0000:  ret
+      } // end of method InnerNestedClass::AllowNullArgMethod
+      .method assembly hidebysig instance void 
+              SomeInternalMethod(string x) cil managed
+      {
+        // Code size       1 (0x1)
+        .maxstack  8
+        .line 27,27 : 13,14 ''
+        IL_0000:  ret
+      } // end of method InnerNestedClass::SomeInternalMethod
+      .method public hidebysig specialname rtspecialname 
+              instance void  .ctor() cil managed
+      {
+        // Code size       7 (0x7)
+        .maxstack  1
+        IL_0000:  ldarg.0
+        IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+        IL_0006:  ret
+      } // end of method InnerNestedClass::.ctor
+      .property instance string NonNullProperty()
+      {
+        .get instance string NestedClasses/OuterNestedClass/InnerNestedClass::get_NonNullProperty()
+        .set instance void NestedClasses/OuterNestedClass/InnerNestedClass::set_NonNullProperty(string)
+      } // end of property InnerNestedClass::NonNullProperty
+      .property instance string AllowNullProperty()
+      {
+        .get instance string NestedClasses/OuterNestedClass/InnerNestedClass::get_AllowNullProperty()
+        .set instance void NestedClasses/OuterNestedClass/InnerNestedClass::set_AllowNullProperty(string)
+      } // end of property InnerNestedClass::AllowNullProperty
+      .property instance string InternalProperty()
+      {
+        .get instance string NestedClasses/OuterNestedClass/InnerNestedClass::get_InternalProperty()
+        .set instance void NestedClasses/OuterNestedClass/InnerNestedClass::set_InternalProperty(string)
+      } // end of property InnerNestedClass::InternalProperty
+    } // end of class InnerNestedClass
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  1
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method OuterNestedClass::.ctor
+  } // end of class OuterNestedClass
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } // end of method NestedClasses::.ctor
+} // end of class NestedClasses
