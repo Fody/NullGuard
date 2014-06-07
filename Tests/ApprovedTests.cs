@@ -52,6 +52,18 @@ public class ApprovedTests
     }
 
     [Test]
+    public void InterfaceImplementations()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "InterfaceImplementations"));
+    }
+
+    [Test]
+    public void NestedClasses()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "NestedClasses"));
+    }
+
+    [Test]
     public void SimpleClass()
     {
         Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SimpleClass"));

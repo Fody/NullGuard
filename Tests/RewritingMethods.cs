@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -8,8 +9,9 @@ public class RewritingMethods
     private Type sampleClassType;
     private Type classWithPrivateMethodType;
     private Type specialClassType;
+    private Type nestedClassesType;
+    private Type interfaceImplementationsType;
     private Type classToExcludeType;
-    private Type classWithExplicitInterfaceType;
 
     [SetUp]
     public void SetUp()
@@ -17,20 +19,11 @@ public class RewritingMethods
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
         specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
+        nestedClassesType = AssemblyWeaver.Assemblies[0].GetType("NestedClasses");
+        interfaceImplementationsType = AssemblyWeaver.Assemblies[0].GetType("InterfaceImplementations");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
-        classWithExplicitInterfaceType = AssemblyWeaver.Assemblies[0].GetType("ClassWithExplicitInterface");
 
         AssemblyWeaver.TestListener.Reset();
-    }
-
-    [Test]
-    public void RequiresNonNullArgumentForExplicitInterface()
-    {
-        AssemblyWeaver.TestListener.Reset();
-        var sample = (IComparable<string>)Activator.CreateInstance(classWithExplicitInterfaceType);
-        var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
-        Assert.AreEqual("other", exception.ParamName);
-        Assert.AreEqual("Fail: [NullGuard] other is null.", AssemblyWeaver.TestListener.Message);
     }
 
     [Test]
@@ -84,8 +77,8 @@ public class RewritingMethods
     [Test]
     public void DoesNotRequireNonNullForNonPublicMethod()
     {
-        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
-        sample.PublicWrapperOfPrivateMethod();
+        var sample = Activator.CreateInstance(sampleClassType);
+        sampleClassType.InvokeNonPublicMethod(sample, "SomePrivateMethod", new object[] { null });
     }
 
     [Test]
@@ -114,8 +107,10 @@ public class RewritingMethods
     [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
-        var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
-        Assert.Throws<ArgumentNullException>(() => sample.PublicWrapperOfPrivateMethod());
+        var sample = Activator.CreateInstance(classWithPrivateMethodType);
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => classWithPrivateMethodType.InvokeNonPublicMethod(sample, "SomePrivateMethod", new object[] { null }));
+        Assert.AreEqual("x", exception.ParamName);
         Assert.AreEqual("Fail: [NullGuard] x is null.", AssemblyWeaver.TestListener.Message);
     }
 
@@ -191,6 +186,51 @@ public class RewritingMethods
     }
 
 #endif
+
+    [Test]
+    public void NotNullMethodInNestedClass()
+    {
+        var nestedType = nestedClassesType.GetNestedType("OuterNestedClass").GetNestedType("InnerNestedClass");
+        var instance = (dynamic)Activator.CreateInstance(nestedType);
+        var exception = Assert.Throws<ArgumentNullException>(() => instance.SomeMethod(null));
+        Assert.AreEqual("notNull", exception.ParamName);
+    }
+
+    [Test]
+    public void AllowNullMethodInNestedClass()
+    {
+        var nestedType = nestedClassesType.GetNestedType("OuterNestedClass").GetNestedType("InnerNestedClass");
+        var instance = (dynamic)Activator.CreateInstance(nestedType);
+        instance.AllowNullArgMethod(null);
+    }
+
+    [Test]
+    public void InternalMethodInNestedClass()
+    {
+        var nestedType = nestedClassesType.GetNestedType("OuterNestedClass").GetNestedType("InnerNestedClass");
+        var instance = Activator.CreateInstance(nestedType);
+        nestedType.InvokeNonPublicMethod(instance, "SomeInternalMethod", new object[] { null });
+    }
+
+    [Test]
+    public void NotNullMethodInExplicitInterfaceImplementation()
+    {
+        var nestedType = interfaceImplementationsType.GetNestedType("ExplicitImplementation", BindingFlags.NonPublic);
+        var instance = Activator.CreateInstance(nestedType);
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => nestedType.GetInterface("ISomeInterface").InvokePublicMethod(instance, "SomeInterfaceMethod", new object[] { null }));
+        Assert.AreEqual("notNull", exception.ParamName);
+    }
+
+    [Test]
+    public void NotNullMethodInImplicitInterfaceImplementation()
+    {
+        var nestedType = interfaceImplementationsType.GetNestedType("ImplicitImplementation", BindingFlags.NonPublic);
+        var instance = Activator.CreateInstance(nestedType);
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => nestedType.GetInterface("ISomeInterface").InvokePublicMethod(instance, "SomeInterfaceMethod", new object[] { null }));
+        Assert.AreEqual("notNull", exception.ParamName);
+    }
 
     [Test]
     public void AllowsNullWhenClassMatchExcludeRegex()
