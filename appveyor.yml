@@ -1,0 +1,9 @@
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+platform: AnyCPU
+configuration: Release
+
+before_build:
+  - nuget restore

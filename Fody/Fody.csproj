@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>3ae666d0</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>dd1762f6</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,7 +46,7 @@
     </None>
     <None Include="packages.config" />
     <Reference Include="Anotar.Custom">
-      <HintPath>..\packages\Anotar.Custom.Fody.2.7.4.0\Lib\portable-net4+sl4+wp7+windows8\Anotar.Custom.dll</HintPath>
+      <HintPath>..\packages\Anotar.Custom.Fody.2.10.2\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\Anotar.Custom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
@@ -102,13 +102,13 @@
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)NullGuard.Fody.dll" />
   </Target>
-  <Import Project="..\packages\Fody.1.21.0\build\Fody.targets" Condition="Exists('..\packages\Fody.1.21.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.1.21.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.21.0\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.1.24.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.24.0\build\Fody.targets'))" />
   </Target>
   <Import Project="..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.20.0.0\build\PepitaPackage.targets')" />
+  <Import Project="..\packages\Fody.1.24.0\build\Fody.targets" Condition="Exists('..\packages\Fody.1.24.0\build\Fody.targets')" />
 </Project>
