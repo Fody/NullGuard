@@ -145,7 +145,7 @@ public static class CecilExtensions
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
     {
-        return arg.IsPublic || arg.IsNestedPublic;
+        return arg.IsPublic || (arg.IsNestedPublic && arg.DeclaringType.IsPublicOrNestedPublic());
     }
 
     public static bool IsExplicitInterfaceMethod(this MethodDefinition method)

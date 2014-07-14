@@ -82,6 +82,12 @@ public class ApprovedTests
     }
 
     [Test]
+    public void PublicNestedInsideNonPublic()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "NonPublicWithNested"));
+    }
+
+    [Test]
     public void UnsafeClass()
     {
         Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "UnsafeClass"));

@@ -54,6 +54,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IXamlMetadataProvider.cs" />
+    <Compile Include="NonPublicWithNested.cs" />
     <Compile Include="Sample\Sample.cs">
       <SubType>Code</SubType>
     </Compile>
