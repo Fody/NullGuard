@@ -151,7 +151,7 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
         }
         
         /// <summary>
-        /// Used by <see cref="NullGuardAttribute"/> to taget specific categories of members.
+        /// Used by <see cref="NullGuardAttribute"/> to target specific categories of members.
         /// </summary>
         [Flags]
         public enum ValidationFlags
