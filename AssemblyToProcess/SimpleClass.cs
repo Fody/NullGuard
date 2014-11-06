@@ -57,6 +57,12 @@ public class SimpleClass
         return null;
     }
 
+    [CanBeNull]
+    public string MethodWithCanBeNullResult()
+    {
+        return null;
+    }
+
     public void MethodWithOutValue(out string nonNullOutArg)
     {
         nonNullOutArg = null;

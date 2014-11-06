@@ -78,7 +78,7 @@ public class MethodProcessor
                 returnType = genericReturnType.GenericArguments[0];
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.MethodReturnType.AllowsNull() &&
+                !method.AllowsNullReturnValue() &&
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
@@ -146,7 +146,7 @@ public class MethodProcessor
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.MethodReturnType.AllowsNull() &&
+                !method.AllowsNullReturnValue() &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)

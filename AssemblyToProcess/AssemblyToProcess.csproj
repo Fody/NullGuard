@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReSharperAnnotations.cs" />
     <Compile Include="ClassWithBadAttributes.cs">
       <SubType>Code</SubType>
     </Compile>
