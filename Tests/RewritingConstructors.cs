@@ -44,6 +44,6 @@ public class RewritingConstructors
     [Test]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
-        Activator.CreateInstance(this.classToExcludeType, new object[]{ null });
+        Activator.CreateInstance(classToExcludeType, new object[]{ null });
     }
 }
