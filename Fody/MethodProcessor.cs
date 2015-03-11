@@ -164,7 +164,8 @@ public class MethodProcessor
 
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
-                        parameter.ParameterType.IsRefType())
+                        parameter.ParameterType.IsRefType() &&
+                        !parameter.AllowsNull())
                     {
                         var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name);
 

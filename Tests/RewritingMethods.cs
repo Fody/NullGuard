@@ -82,6 +82,14 @@ public class RewritingMethods
     }
 
     [Test]
+    public void AllowsNullOutValue()
+    {
+        var sample = (dynamic)Activator.CreateInstance(sampleClassType);
+        string value;
+        sample.MethodWithAllowedNullOutValue(out value);
+    }
+
+    [Test]
     public void DoesNotRequireNonNullForNonPublicMethod()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);

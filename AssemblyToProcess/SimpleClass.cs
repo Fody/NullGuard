@@ -62,6 +62,11 @@ public class SimpleClass
         nonNullOutArg = null;
     }
 
+    public void MethodWithAllowedNullOutValue([AllowNull]out string nonNullOutArg)
+    {
+        nonNullOutArg = null;
+    }
+
     public void PublicWrapperOfPrivateMethod()
     {
         SomePrivateMethod(null);

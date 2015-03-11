@@ -684,7 +684,7 @@
   {
     // Code size       39 (0x27)
     .maxstack  2
-    .locals init (class SpecialClass/'<CountTo>d__0' V_0)
+    .locals init ([0] class SpecialClass/'<CountTo>d__0' )
     IL_0000:  ldc.i4.s   -2
     IL_0002:  newobj     instance void SpecialClass/'<CountTo>d__0'::.ctor(int32)
     IL_0007:  stloc.0
@@ -715,8 +715,8 @@
                                                                                                                                        3E 64 5F 5F 37 00 00 )                            // >d__7..
     // Code size       85 (0x55)
     .maxstack  2
-    .locals init (valuetype SpecialClass/'<SomeMethodAsync>d__7' V_0,
-             valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder V_1)
+    .locals init ([0] valuetype SpecialClass/'<SomeMethodAsync>d__7' ,
+             [1] valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder V_1)
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0013
     IL_0003:  ldstr      "nonNullArg"
@@ -724,25 +724,25 @@
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0012:  throw
-    IL_0013:  ldloca.s   V_0
+    IL_0013:  ldloca.s   
     IL_0015:  ldarg.0
     IL_0016:  stfld      class SpecialClass SpecialClass/'<SomeMethodAsync>d__7'::'<>4__this'
-    IL_001b:  ldloca.s   V_0
+    IL_001b:  ldloca.s   
     IL_001d:  ldarg.1
     IL_001e:  stfld      string SpecialClass/'<SomeMethodAsync>d__7'::nonNullArg
-    IL_0023:  ldloca.s   V_0
+    IL_0023:  ldloca.s   
     IL_0025:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Create()
     IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__7'::'<>t__builder'
-    IL_002f:  ldloca.s   V_0
+    IL_002f:  ldloca.s   
     IL_0031:  ldc.i4.m1
     IL_0032:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__7'::'<>1__state'
-    IL_0037:  ldloca.s   V_0
+    IL_0037:  ldloca.s   
     IL_0039:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__7'::'<>t__builder'
     IL_003e:  stloc.1
     IL_003f:  ldloca.s   V_1
-    IL_0041:  ldloca.s   V_0
+    IL_0041:  ldloca.s   
     IL_0043:  call       instance void [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Start<valuetype SpecialClass/'<SomeMethodAsync>d__7'>(!!0&)
-    IL_0048:  ldloca.s   V_0
+    IL_0048:  ldloca.s   
     IL_004a:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__7'::'<>t__builder'
     IL_004f:  call       instance class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::get_Task()
     IL_0054:  ret
@@ -757,27 +757,27 @@
                                                                                                                                        00 00 ) 
     // Code size       66 (0x42)
     .maxstack  2
-    .locals init (valuetype SpecialClass/'<MethodWithReturnValueAsync>d__d' V_0,
-             valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
-    IL_0000:  ldloca.s   V_0
+    .locals init ([0] valuetype SpecialClass/'<MethodWithReturnValueAsync>d__d' ,
+             [1] valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
+    IL_0000:  ldloca.s   
     IL_0002:  ldarg.0
     IL_0003:  stfld      class SpecialClass SpecialClass/'<MethodWithReturnValueAsync>d__d'::'<>4__this'
-    IL_0008:  ldloca.s   V_0
+    IL_0008:  ldloca.s   
     IL_000a:  ldarg.1
     IL_000b:  stfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__d'::returnNull
-    IL_0010:  ldloca.s   V_0
+    IL_0010:  ldloca.s   
     IL_0012:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
     IL_0017:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__d'::'<>t__builder'
-    IL_001c:  ldloca.s   V_0
+    IL_001c:  ldloca.s   
     IL_001e:  ldc.i4.m1
     IL_001f:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__d'::'<>1__state'
-    IL_0024:  ldloca.s   V_0
+    IL_0024:  ldloca.s   
     IL_0026:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__d'::'<>t__builder'
     IL_002b:  stloc.1
     IL_002c:  ldloca.s   V_1
-    IL_002e:  ldloca.s   V_0
+    IL_002e:  ldloca.s   
     IL_0030:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<valuetype SpecialClass/'<MethodWithReturnValueAsync>d__d'>(!!0&)
-    IL_0035:  ldloca.s   V_0
+    IL_0035:  ldloca.s   
     IL_0037:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__d'::'<>t__builder'
     IL_003c:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
     IL_0041:  ret
@@ -792,24 +792,24 @@
                                                                                                                                        63 3E 64 5F 5F 31 30 00 00 )                      // c>d__10..
     // Code size       58 (0x3a)
     .maxstack  2
-    .locals init (valuetype SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10' V_0,
-             valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
-    IL_0000:  ldloca.s   V_0
+    .locals init ([0] valuetype SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10' ,
+             [1] valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
+    IL_0000:  ldloca.s   
     IL_0002:  ldarg.0
     IL_0003:  stfld      class SpecialClass SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::'<>4__this'
-    IL_0008:  ldloca.s   V_0
+    IL_0008:  ldloca.s   
     IL_000a:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
     IL_000f:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::'<>t__builder'
-    IL_0014:  ldloca.s   V_0
+    IL_0014:  ldloca.s   
     IL_0016:  ldc.i4.m1
     IL_0017:  stfld      int32 SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::'<>1__state'
-    IL_001c:  ldloca.s   V_0
+    IL_001c:  ldloca.s   
     IL_001e:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::'<>t__builder'
     IL_0023:  stloc.1
     IL_0024:  ldloca.s   V_1
-    IL_0026:  ldloca.s   V_0
+    IL_0026:  ldloca.s   
     IL_0028:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<valuetype SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'>(!!0&)
-    IL_002d:  ldloca.s   V_0
+    IL_002d:  ldloca.s   
     IL_002f:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__10'::'<>t__builder'
     IL_0034:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
     IL_0039:  ret
@@ -823,24 +823,24 @@
                                                                                                                                        31 33 00 00 )                                     // 13..
     // Code size       58 (0x3a)
     .maxstack  2
-    .locals init (valuetype SpecialClass/'<NoAwaitCode>d__13' V_0,
-             valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> V_1)
-    IL_0000:  ldloca.s   V_0
+    .locals init ([0] valuetype SpecialClass/'<NoAwaitCode>d__13' ,
+             [1] valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> V_1)
+    IL_0000:  ldloca.s   
     IL_0002:  ldarg.0
     IL_0003:  stfld      class SpecialClass SpecialClass/'<NoAwaitCode>d__13'::'<>4__this'
-    IL_0008:  ldloca.s   V_0
+    IL_0008:  ldloca.s   
     IL_000a:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Create()
     IL_000f:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__13'::'<>t__builder'
-    IL_0014:  ldloca.s   V_0
+    IL_0014:  ldloca.s   
     IL_0016:  ldc.i4.m1
     IL_0017:  stfld      int32 SpecialClass/'<NoAwaitCode>d__13'::'<>1__state'
-    IL_001c:  ldloca.s   V_0
+    IL_001c:  ldloca.s   
     IL_001e:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__13'::'<>t__builder'
     IL_0023:  stloc.1
     IL_0024:  ldloca.s   V_1
-    IL_0026:  ldloca.s   V_0
+    IL_0026:  ldloca.s   
     IL_0028:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Start<valuetype SpecialClass/'<NoAwaitCode>d__13'>(!!0&)
-    IL_002d:  ldloca.s   V_0
+    IL_002d:  ldloca.s   
     IL_002f:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__13'::'<>t__builder'
     IL_0034:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::get_Task()
     IL_0039:  ret
