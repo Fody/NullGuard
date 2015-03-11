@@ -2,11 +2,13 @@
 
 using System.Linq;
 using ApprovalTests;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using NUnit.Framework;
 
 [TestFixture]
 [UseReporter(typeof(DiffReporter), typeof(ClipboardReporter))]
+[UseApprovalSubdirectory("approvals")]
 public class ApprovedTests
 {
     [Test]
