@@ -6,6 +6,9 @@ using Mono.Cecil.Cil;
 
 public static class CecilExtensions
 {
+    private const string AllowNullAttributeTypeName = "AllowNullAttribute";
+    private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
+
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
         return (type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
@@ -46,14 +49,21 @@ public static class CecilExtensions
 
     public static bool AllowsNull(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == "AllowNullAttribute" || a.AttributeType.Name == "CanBeNullAttribute");
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
+    }
+
+    public static bool AllowsNullReturnValue (this MethodDefinition methodDefinition)
+    {
+        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+               // ReSharper uses a *method* attribute for CanBeNull for the return value
+               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
     {
         var customAttributes = definition.CustomAttributes;
 
-        return customAttributes.Any(x => x.AttributeType.Name == "AllowNullAttribute");
+        return customAttributes.Any(x => x.AttributeType.Name == AllowNullAttributeTypeName);
     }
 
     public static void RemoveAllNullGuardAttributes(this ICustomAttributeProvider definition)
