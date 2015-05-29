@@ -51,17 +51,17 @@
   {
     // Code size       43 (0x2b)
     .maxstack  3
-    .line 16707566,16707566 : 0,0 ''
-    IL_0000:  ldarg.1
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "nonNullArg"
-    IL_0008:  ldstr      "[NullGuard] nonNullArg is null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
     .line 16,16 : 5,70 ''
-    IL_0013:  ldarg.0
-    IL_0014:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    .line 16707566,16707566 : 0,0 ''
+    IL_0006:  ldarg.1
+    IL_0007:  brtrue.s   IL_0019
+    IL_0009:  ldstr      "nonNullArg"
+    IL_000e:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_0013:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0018:  throw
     .line 18,18 : 9,55 ''
     IL_0019:  ldarg.1
     IL_001a:  ldstr      " "

@@ -94,6 +94,16 @@ public class MethodProcessor
     {
         var guardInstructions = new List<Instruction>();
 
+        var entry = body.Instructions.First();
+
+        if (method.IsConstructor)
+        {
+            var call = method.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Call);
+            if (call != null && ((MethodReference)call.Operand).Resolve().IsConstructor)
+                entry = call.Next;
+        }
+
+        int index = body.Instructions.IndexOf(entry);
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
@@ -105,7 +115,7 @@ public class MethodProcessor
             if (CheckForExistingGuard(body.Instructions, parameter))
                 continue;
 
-            var entry = body.Instructions.First();
+            entry = body.Instructions[index];
             var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name);
 
             guardInstructions.Clear();
@@ -128,8 +138,7 @@ public class MethodProcessor
             });
 
             guardInstructions[0].HideLineFromDebugger(seqPoint);
-
-            body.Instructions.Prepend(guardInstructions);
+            body.Instructions.Insert(index, guardInstructions);
         }
     }
 

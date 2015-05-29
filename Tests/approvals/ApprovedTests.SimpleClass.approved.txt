@@ -60,25 +60,25 @@
   {
     // Code size       60 (0x3c)
     .maxstack  3
-    .line 16707566,16707566 : 0,0 ''
-    IL_0000:  ldarg.1
-    IL_0001:  ldnull
-    IL_0002:  ceq
-    IL_0004:  ldc.i4.0
-    IL_0005:  ceq
-    IL_0007:  ldstr      "[NullGuard] nonNullArg is null."
-    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
-                                                                       string)
-    IL_0011:  ldarg.1
-    IL_0012:  brtrue.s   IL_0024
-    IL_0014:  ldstr      "nonNullArg"
-    IL_0019:  ldstr      "[NullGuard] nonNullArg is null."
-    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0023:  throw
     .line 16,16 : 5,70 ''
-    IL_0024:  ldarg.0
-    IL_0025:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    .line 16707566,16707566 : 0,0 ''
+    IL_0006:  ldarg.1
+    IL_0007:  ldnull
+    IL_0008:  ceq
+    IL_000a:  ldc.i4.0
+    IL_000b:  ceq
+    IL_000d:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0017:  ldarg.1
+    IL_0018:  brtrue.s   IL_002a
+    IL_001a:  ldstr      "nonNullArg"
+    IL_001f:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_0024:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0029:  throw
     .line 18,18 : 9,55 ''
     IL_002a:  ldarg.1
     IL_002b:  ldstr      " "
