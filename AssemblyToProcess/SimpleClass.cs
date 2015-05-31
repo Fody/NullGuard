@@ -18,6 +18,10 @@ public class SimpleClass
         Console.WriteLine(nonNullArg + " " + nullArg);
     }
 
+    public SimpleClass(SimpleClass sc, string notUsed, string used) : this (sc.NullProperty, used)
+    {
+    }
+
     public void SomeMethod(string nonNullArg, [AllowNull] string nullArg)
     {
         Console.WriteLine(nonNullArg);

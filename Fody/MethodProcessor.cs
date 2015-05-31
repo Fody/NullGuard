@@ -93,17 +93,25 @@ public class MethodProcessor
     private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
+        var usedArgs = new List<ParameterDefinition>();
 
         var entry = body.Instructions.First();
+        var startIndex = body.Instructions.IndexOf(entry);
 
         if (method.IsConstructor)
         {
             var call = method.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Call);
             if (call != null && ((MethodReference)call.Operand).Resolve().IsConstructor)
+            {
                 entry = call.Next;
+                usedArgs = method.Body.Instructions.TakeWhile(i => i != entry)
+                    .Where(i => method.Parameters.Contains(i.Operand))
+                    .Select(i => i.Operand as ParameterDefinition).ToList();
+            }
         }
 
-        int index = body.Instructions.IndexOf(entry);
+        // this might be the same as the startIndex if this is not a constructor (or a special ctor)
+        var ctorIndex = body.Instructions.IndexOf(entry);
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
@@ -115,6 +123,8 @@ public class MethodProcessor
             if (CheckForExistingGuard(body.Instructions, parameter))
                 continue;
 
+            // if the arg is used in the base/this call, insert null checks before that call
+            var index = usedArgs.Contains(parameter) ? startIndex : ctorIndex;
             entry = body.Instructions[index];
             var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name);
 
@@ -139,6 +149,10 @@ public class MethodProcessor
 
             guardInstructions[0].HideLineFromDebugger(seqPoint);
             body.Instructions.Insert(index, guardInstructions);
+            // if this is a ctor and instructions were inserted before the base/this call,
+            // bump its position
+            if (index < ctorIndex)
+                ctorIndex += guardInstructions.Count;
         }
     }
 
