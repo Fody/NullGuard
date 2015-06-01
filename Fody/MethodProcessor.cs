@@ -109,7 +109,7 @@ public class MethodProcessor
                 usedArgs = argsInstructions
                             .Where(i => method.Parameters.Contains(i.Operand) &&
                                         argsInstructions.SkipWhile(op => op != i).Skip(1)
-                                                        .Any(op => (op.OpCode == OpCodes.Call && op != call) || op.OpCode == OpCodes.Callvirt))
+                                                        .Any(op => (op.OpCode == OpCodes.Call && op != call) || op.OpCode == OpCodes.Callvirt || op.OpCode == OpCodes.Ldfld))
                             .Select(i => i.Operand as ParameterDefinition).ToList();
 
             }

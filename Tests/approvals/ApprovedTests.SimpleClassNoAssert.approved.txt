@@ -75,6 +75,80 @@
   } // end of method SimpleClass::.ctor
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor(class SimpleClass sc,
+                               class SimpleClass sc1) cil managed
+  {
+    // Code size       52 (0x34)
+    .maxstack  3
+    .line 16707566,16707566 : 0,0 ''
+    IL_0000:  ldarg.1
+    IL_0001:  brtrue.s   IL_0013
+    IL_0003:  ldstr      "sc"
+    IL_0008:  ldstr      "[NullGuard] sc is null."
+    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0012:  throw
+    .line 23,23 : 59,80 ''
+    IL_0013:  ldarg.0
+    IL_0014:  ldarg.1
+    IL_0015:  ldfld      string SimpleClass::Field1
+    IL_001a:  ldnull
+    IL_001b:  call       instance void SimpleClass::.ctor(string,
+                                                          string)
+    .line 16707566,16707566 : 0,0 ''
+    IL_0020:  ldarg.2
+    IL_0021:  brtrue.s   IL_0033
+    IL_0023:  ldstr      "sc1"
+    IL_0028:  ldstr      "[NullGuard] sc1 is null."
+    IL_002d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0032:  throw
+    .line 25,25 : 5,6 ''
+    IL_0033:  ret
+  } // end of method SimpleClass::.ctor
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor(class SimpleClass sc,
+                               class SimpleClass sc1,
+                               class SimpleClass sc2) cil managed
+  {
+    // Code size       76 (0x4c)
+    .maxstack  3
+    .line 16707566,16707566 : 0,0 ''
+    IL_0000:  ldarg.1
+    IL_0001:  brtrue.s   IL_0013
+    IL_0003:  ldstr      "sc"
+    IL_0008:  ldstr      "[NullGuard] sc is null."
+    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0012:  throw
+    .line 16707566,16707566 : 0,0 ''
+    IL_0013:  ldarg.3
+    IL_0014:  brtrue.s   IL_0026
+    IL_0016:  ldstr      "sc2"
+    IL_001b:  ldstr      "[NullGuard] sc2 is null."
+    IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0025:  throw
+    .line 27,27 : 76,109 ''
+    IL_0026:  ldarg.0
+    IL_0027:  ldarg.1
+    IL_0028:  ldfld      string SimpleClass::Field1
+    IL_002d:  ldarg.3
+    IL_002e:  callvirt   instance string SimpleClass::get_NullProperty()
+    IL_0033:  call       instance void SimpleClass::.ctor(string,
+                                                          string)
+    .line 16707566,16707566 : 0,0 ''
+    IL_0038:  ldarg.2
+    IL_0039:  brtrue.s   IL_004b
+    IL_003b:  ldstr      "sc1"
+    IL_0040:  ldstr      "[NullGuard] sc1 is null."
+    IL_0045:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_004a:  throw
+    .line 29,29 : 5,6 ''
+    IL_004b:  ret
+  } // end of method SimpleClass::.ctor
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor(class SimpleClass sc,
                                string notUsed,
                                string used) cil managed
   {

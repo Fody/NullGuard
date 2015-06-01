@@ -3,6 +3,8 @@ using NullGuard;
 
 public class SimpleClass
 {
+    public string Field1;
+
     public SimpleClass()
     {
     }
@@ -16,6 +18,14 @@ public class SimpleClass
     public SimpleClass(string nonNullArg, [AllowNull] string nullArg)
     {
         Console.WriteLine(nonNullArg + " " + nullArg);
+    }
+
+    public SimpleClass(SimpleClass sc, SimpleClass sc1) : this(sc.Field1, null)
+    {
+    }
+
+    public SimpleClass(SimpleClass sc, SimpleClass sc1, SimpleClass sc2) : this(sc.Field1, sc2.NullProperty)
+    {
     }
 
     public SimpleClass(SimpleClass sc, string notUsed, string used) : this (sc.NullProperty, used)
