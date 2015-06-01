@@ -93,7 +93,30 @@ public class MethodProcessor
     private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
+        var usedArgs = new List<ParameterDefinition>();
 
+        var entry = body.Instructions.First();
+        var startIndex = body.Instructions.IndexOf(entry);
+
+        if (method.IsConstructor)
+        {
+            var call = method.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Call && ((MethodReference)i.Operand).Resolve().IsConstructor);
+            if (call != null)
+            {
+                entry = call.Next;
+                var argsInstructions = method.Body.Instructions.TakeWhile(i => i != entry).ToList();
+                // find all args that are accessed in base/this calls
+                usedArgs = argsInstructions
+                            .Where(i => method.Parameters.Contains(i.Operand) &&
+                                        argsInstructions.SkipWhile(op => op != i).Skip(1)
+                                                        .Any(op => (op.OpCode == OpCodes.Call && op != call) || op.OpCode == OpCodes.Callvirt || op.OpCode == OpCodes.Ldfld))
+                            .Select(i => i.Operand as ParameterDefinition).ToList();
+
+            }
+        }
+
+        // this might be the same as the startIndex if this is not a constructor (or a special ctor)
+        var ctorIndex = body.Instructions.IndexOf(entry);
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
@@ -105,7 +128,9 @@ public class MethodProcessor
             if (CheckForExistingGuard(body.Instructions, parameter))
                 continue;
 
-            var entry = body.Instructions.First();
+            // if the arg is used in the base/this call, insert null checks before that call
+            var index = usedArgs.Contains(parameter) ? startIndex : ctorIndex;
+            entry = body.Instructions[index];
             var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name);
 
             guardInstructions.Clear();
@@ -128,8 +153,11 @@ public class MethodProcessor
             });
 
             guardInstructions[0].HideLineFromDebugger(seqPoint);
-
-            body.Instructions.Prepend(guardInstructions);
+            body.Instructions.Insert(index, guardInstructions);
+            // if this is a ctor and instructions were inserted before the base/this call,
+            // bump its position
+            if (index < ctorIndex)
+                ctorIndex += guardInstructions.Count;
         }
     }
 
