@@ -88,31 +88,76 @@
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0012:  throw
-    .line 16707566,16707566 : 0,0 ''
-    IL_0013:  ldarg.3
-    IL_0014:  brtrue.s   IL_0026
-    IL_0016:  ldstr      "used"
-    IL_001b:  ldstr      "[NullGuard] used is null."
-    IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0025:  throw
     .line 21,21 : 71,99 ''
-    IL_0026:  ldarg.0
-    IL_0027:  ldarg.1
-    IL_0028:  callvirt   instance string SimpleClass::get_NullProperty()
-    IL_002d:  ldarg.3
-    IL_002e:  call       instance void SimpleClass::.ctor(string,
+    IL_0013:  ldarg.0
+    IL_0014:  ldarg.1
+    IL_0015:  callvirt   instance string SimpleClass::get_NullProperty()
+    IL_001a:  ldarg.3
+    IL_001b:  call       instance void SimpleClass::.ctor(string,
                                                           string)
     .line 16707566,16707566 : 0,0 ''
-    IL_0033:  ldarg.2
+    IL_0020:  ldarg.2
+    IL_0021:  brtrue.s   IL_0033
+    IL_0023:  ldstr      "notUsed"
+    IL_0028:  ldstr      "[NullGuard] notUsed is null."
+    IL_002d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0032:  throw
+    .line 16707566,16707566 : 0,0 ''
+    IL_0033:  ldarg.3
     IL_0034:  brtrue.s   IL_0046
-    IL_0036:  ldstr      "notUsed"
-    IL_003b:  ldstr      "[NullGuard] notUsed is null."
+    IL_0036:  ldstr      "used"
+    IL_003b:  ldstr      "[NullGuard] used is null."
     IL_0040:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0045:  throw
     .line 23,23 : 5,6 ''
     IL_0046:  ret
+  } // end of method SimpleClass::.ctor
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor(string astr,
+                               string str2,
+                               string str3) cil managed
+  {
+    // Code size       79 (0x4f)
+    .maxstack  3
+    .locals init ([0] int32 )
+    .line 16707566,16707566 : 0,0 ''
+    IL_0000:  ldarg.1
+    IL_0001:  brtrue.s   IL_0013
+    IL_0003:  ldstr      "astr"
+    IL_0008:  ldstr      "[NullGuard] astr is null."
+    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0012:  throw
+    .line 25,25 : 65,103 ''
+    IL_0013:  ldarg.0
+    IL_0014:  ldarg.1
+    IL_0015:  call       int32 [mscorlib]System.Int32::Parse(string)
+    IL_001a:  stloc.0
+    IL_001b:  ldloca.s   
+    IL_001d:  call       instance string [mscorlib]System.Int32::ToString()
+    IL_0022:  ldnull
+    IL_0023:  call       instance void SimpleClass::.ctor(string,
+                                                          string)
+    .line 16707566,16707566 : 0,0 ''
+    IL_0028:  ldarg.2
+    IL_0029:  brtrue.s   IL_003b
+    IL_002b:  ldstr      "str2"
+    IL_0030:  ldstr      "[NullGuard] str2 is null."
+    IL_0035:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_003a:  throw
+    .line 16707566,16707566 : 0,0 ''
+    IL_003b:  ldarg.3
+    IL_003c:  brtrue.s   IL_004e
+    IL_003e:  ldstr      "str3"
+    IL_0043:  ldstr      "[NullGuard] str3 is null."
+    IL_0048:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_004d:  throw
+    .line 27,27 : 5,6 ''
+    IL_004e:  ret
   } // end of method SimpleClass::.ctor
   .method public hidebysig instance void 
           SomeMethod(string nonNullArg,

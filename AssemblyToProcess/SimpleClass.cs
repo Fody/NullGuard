@@ -22,6 +22,10 @@ public class SimpleClass
     {
     }
 
+    public SimpleClass(string astr, string str2, string str3) : this(int.Parse(astr).ToString(), null)
+    {
+    }
+
     public void SomeMethod(string nonNullArg, [AllowNull] string nullArg)
     {
         Console.WriteLine(nonNullArg);

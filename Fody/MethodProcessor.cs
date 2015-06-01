@@ -100,13 +100,18 @@ public class MethodProcessor
 
         if (method.IsConstructor)
         {
-            var call = method.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Call);
-            if (call != null && ((MethodReference)call.Operand).Resolve().IsConstructor)
+            var call = method.Body.Instructions.FirstOrDefault(i => i.OpCode == OpCodes.Call && ((MethodReference)i.Operand).Resolve().IsConstructor);
+            if (call != null)
             {
                 entry = call.Next;
-                usedArgs = method.Body.Instructions.TakeWhile(i => i != entry)
-                    .Where(i => method.Parameters.Contains(i.Operand))
-                    .Select(i => i.Operand as ParameterDefinition).ToList();
+                var argsInstructions = method.Body.Instructions.TakeWhile(i => i != entry).ToList();
+                // find all args that are accessed in base/this calls
+                usedArgs = argsInstructions
+                            .Where(i => method.Parameters.Contains(i.Operand) &&
+                                        argsInstructions.SkipWhile(op => op != i).Skip(1)
+                                                        .Any(op => (op.OpCode == OpCodes.Call && op != call) || op.OpCode == OpCodes.Callvirt))
+                            .Select(i => i.Operand as ParameterDefinition).ToList();
+
             }
         }
 
