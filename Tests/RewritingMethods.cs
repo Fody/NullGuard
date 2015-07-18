@@ -1,15 +1,17 @@
 using System;
+#if (DEBUG)
 using System.Threading.Tasks;
+#endif
 using NUnit.Framework;
 
 [TestFixture]
 public class RewritingMethods
 {
-    private Type sampleClassType;
-    private Type classWithPrivateMethodType;
-    private Type specialClassType;
-    private Type classToExcludeType;
-    private Type classWithExplicitInterfaceType;
+    Type sampleClassType;
+    Type classWithPrivateMethodType;
+    Type specialClassType;
+    Type classToExcludeType;
+    Type classWithExplicitInterfaceType;
 
     [SetUp]
     public void SetUp()

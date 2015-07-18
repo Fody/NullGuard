@@ -10,11 +10,11 @@ using NullGuard;
 
 public class PropertyProcessor
 {
-    private const string STR_ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
-    private const string STR_CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
+    const string ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
+    const string CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
 
-    private readonly bool isDebug;
-    private readonly ValidationFlags validationFlags;
+    bool isDebug;
+    ValidationFlags validationFlags;
 
     public PropertyProcessor(ValidationFlags validationFlags, bool isDebug)
     {
@@ -38,7 +38,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InnerProcess(PropertyDefinition property)
+    void InnerProcess(PropertyDefinition property)
     {
         var localValidationFlags = validationFlags;
 
@@ -93,7 +93,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, PropertyReference property)
+    void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, PropertyReference property)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -106,7 +106,7 @@ public class PropertyProcessor
         foreach (var ret in returnPoints)
         {
             var returnInstruction = getBody.Instructions[ret];
-            var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfPropertyIsNull, property.FullName);
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfPropertyIsNull, property.FullName);
 
             guardInstructions.Clear();
 
@@ -136,7 +136,7 @@ public class PropertyProcessor
         }
     }
 
-    private void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, PropertyDefinition property)
+    void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, PropertyDefinition property)
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
@@ -144,7 +144,7 @@ public class PropertyProcessor
             return;
 
         var guardInstructions = new List<Instruction>();
-        var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_CannotSetTheValueOfPropertyToNull, property.FullName);
+        var errorMessage = string.Format(CultureInfo.InvariantCulture, CannotSetTheValueOfPropertyToNull, property.FullName);
         var entry = setBody.Instructions.First();
 
         if (isDebug)

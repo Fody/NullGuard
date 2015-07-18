@@ -59,7 +59,7 @@ public class Logger
 
     public bool IsErrorEnabled { get { return LoggerFactory.LogError != null; } }
 
-    private string ExceptionToString(Exception exception)
+    string ExceptionToString(Exception exception)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(exception.GetType().FullName + ":");

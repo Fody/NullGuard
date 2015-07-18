@@ -125,7 +125,7 @@ public static class AssemblyWeaver
         });
     }
 
-    private static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
+    static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
     {
         if (File.Exists(afterAssemblyPath))
             File.Delete(afterAssemblyPath);
@@ -151,17 +151,17 @@ public static class AssemblyWeaver
         return Assembly.LoadFile(afterAssemblyPath);
     }
 
-    private static void LogInfo(string error)
+    static void LogInfo(string error)
     {
         Infos.Add(error);
     }
 
-    private static void LogWarn(string error)
+    static void LogWarn(string error)
     {
         Warns.Add(error);
     }
 
-    private static void LogError(string error)
+    static void LogError(string error)
     {
         Errors.Add(error);
     }

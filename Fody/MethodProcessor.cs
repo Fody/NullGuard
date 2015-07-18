@@ -11,12 +11,12 @@ using NullGuard;
 
 public class MethodProcessor
 {
-    private const string STR_OutParameterIsNull = "[NullGuard] Out parameter '{0}' is null.";
-    private const string STR_ReturnValueOfMethodIsNull = "[NullGuard] Return value of method '{0}' is null.";
-    private const string STR_IsNull = "[NullGuard] {0} is null.";
+    const string OutParameterIsNull = "[NullGuard] Out parameter '{0}' is null.";
+    const string ReturnValueOfMethodIsNull = "[NullGuard] Return value of method '{0}' is null.";
+    const string IsNull = "[NullGuard] {0} is null.";
 
-    private readonly bool isDebug;
-    private readonly ValidationFlags validationFlags;
+    bool isDebug;
+    ValidationFlags validationFlags;
 
     public MethodProcessor(ValidationFlags validationFlags, bool isDebug)
     {
@@ -40,7 +40,7 @@ public class MethodProcessor
         }
     }
 
-    private void InnerProcess(MethodDefinition method)
+    void InnerProcess(MethodDefinition method)
     {
         var localValidationFlags = validationFlags;
 
@@ -82,7 +82,7 @@ public class MethodProcessor
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
-                InjectMethodReturnGuardAsync(body, String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName), method.FullName);
+                InjectMethodReturnGuardAsync(body, string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName), method.FullName);
             }
         }
 
@@ -90,7 +90,7 @@ public class MethodProcessor
         body.OptimizeMacros();
     }
 
-    private void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -106,7 +106,7 @@ public class MethodProcessor
                 continue;
 
             var entry = body.Instructions.First();
-            var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_IsNull, parameter.Name);
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, IsNull, parameter.Name);
 
             guardInstructions.Clear();
 
@@ -133,7 +133,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -151,7 +151,7 @@ public class MethodProcessor
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)
             {
-                var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_ReturnValueOfMethodIsNull, method.FullName);
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName);
                 AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
@@ -167,7 +167,7 @@ public class MethodProcessor
                         parameter.ParameterType.IsRefType() &&
                         !parameter.AllowsNull())
                     {
-                        var errorMessage = String.Format(CultureInfo.InvariantCulture, STR_OutParameterIsNull, parameter.Name);
+                        var errorMessage = string.Format(CultureInfo.InvariantCulture, OutParameterIsNull, parameter.Name);
 
                         guardInstructions.Clear();
 
@@ -197,7 +197,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage, string methodName)
+    void InjectMethodReturnGuardAsync(MethodBody body, string errorMessage, string methodName)
     {
         foreach (var local in body.Variables)
         {
@@ -213,7 +213,7 @@ public class MethodProcessor
         }
     }
 
-    private void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string errorMessage, string methodName)
+    void InjectMethodReturnGuardAsyncIntoMoveNext(MethodDefinition method, string errorMessage, string methodName)
     {
         method.Body.SimplifyMacros();
 
@@ -244,7 +244,7 @@ public class MethodProcessor
         method.Body.OptimizeMacros();
     }
 
-    private void AddReturnNullGuard(Collection<Instruction> instructions, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
+    void AddReturnNullGuard(Collection<Instruction> instructions, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
         var returnInstruction = instructions[ret];
 
@@ -274,7 +274,7 @@ public class MethodProcessor
         instructions.Insert(ret, guardInstructions);
     }
 
-    private static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
+    static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
     {
         for (var i = 1; i < instructions.Count - 1; i++)
         {
@@ -303,7 +303,7 @@ public class MethodProcessor
         return false;
     }
 
-    private static bool IsSetResultMethod(MethodReference methodReference)
+    static bool IsSetResultMethod(MethodReference methodReference)
     {
         return
             methodReference != null &&
@@ -312,7 +312,7 @@ public class MethodProcessor
             methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
     }
 
-    private static bool IsSetExceptionMethod(MethodReference methodReference)
+    static bool IsSetExceptionMethod(MethodReference methodReference)
     {
         return
             methodReference != null &&

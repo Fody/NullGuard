@@ -6,8 +6,8 @@ using Mono.Cecil.Cil;
 
 public static class CecilExtensions
 {
-    private const string AllowNullAttributeTypeName = "AllowNullAttribute";
-    private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
+    const string AllowNullAttributeTypeName = "AllowNullAttribute";
+    const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
@@ -83,7 +83,7 @@ public static class CecilExtensions
         return !arg.AllowsNull() && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
 
-    private static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)
+    static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)
     {
         return arg.IsOptional && arg.Constant == null;
     }

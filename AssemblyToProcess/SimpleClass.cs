@@ -78,7 +78,7 @@ public class SimpleClass
         SomePrivateMethod(null);
     }
 
-    private void SomePrivateMethod(string x)
+    void SomePrivateMethod(string x)
     {
         Console.WriteLine(x);
     }
@@ -123,7 +123,7 @@ public class SimpleClass
 
     public void MethodWithExistingArgumentGuard(string x)
     {
-        if (String.IsNullOrEmpty(x))
+        if (string.IsNullOrEmpty(x))
             throw new ArgumentException("x is null or empty.", "x");
 
         Console.WriteLine(x);
@@ -131,7 +131,7 @@ public class SimpleClass
 
     public void MethodWithExistingArgumentNullGuard(string x)
     {
-        if (String.IsNullOrEmpty(x))
+        if (string.IsNullOrEmpty(x))
             throw new ArgumentNullException("x");
 
         Console.WriteLine(x);
@@ -139,7 +139,7 @@ public class SimpleClass
 
     public void MethodWithExistingArgumentNullGuardWithMessage(string x)
     {
-        if (String.IsNullOrEmpty(x))
+        if (string.IsNullOrEmpty(x))
             throw new ArgumentNullException("x", "x is null or empty.");
 
         Console.WriteLine(x);

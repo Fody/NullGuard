@@ -4,7 +4,7 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingIndexers
 {
-    private Type indexersClassType;
+    Type indexersClassType;
 
     [SetUp]
     public void SetUp()
@@ -107,7 +107,7 @@ public class RewritingIndexers
     }
 
     // ReSharper disable once UnusedParameter.Local
-    private void IgnoreValue(object value)
+    void IgnoreValue(object value)
     {
     }
 }

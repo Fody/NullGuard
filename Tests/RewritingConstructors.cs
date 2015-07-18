@@ -4,7 +4,7 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingConstructors
 {
-    private Type sampleClassType;
+    Type sampleClassType;
     Type classToExcludeType;
 
     [SetUp]

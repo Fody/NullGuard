@@ -4,10 +4,10 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingProperties
 {
-    private Type sampleClassType;
-    private Type genericClassType;
-    private Type classWithPrivateMethodType;
-    private Type classToExcludeType;
+    Type sampleClassType;
+    Type genericClassType;
+    Type classWithPrivateMethodType;
+    Type classToExcludeType;
 
     [SetUp]
     public void SetUp()

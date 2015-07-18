@@ -53,7 +53,7 @@ public class ModuleWeaver
         RemoveReference();
     }
 
-    private List<TypeDefinition> GetTypesToProcess()
+    List<TypeDefinition> GetTypesToProcess()
     {
         var allTypes = new List<TypeDefinition>(ModuleDefinition.GetTypes());
         List<TypeDefinition> types;
@@ -68,7 +68,7 @@ public class ModuleWeaver
         return types;
     }
 
-    private void ReadConfig()
+    void ReadConfig()
     {
         if (Config == null)
         {
@@ -79,7 +79,7 @@ public class ModuleWeaver
         ReadExcludeRegex();
     }
 
-    private void ReadIncludeDebugAssert()
+    void ReadIncludeDebugAssert()
     {
         var includeDebugAssertAttribute = Config.Attribute("IncludeDebugAssert");
         if (includeDebugAssertAttribute != null)
@@ -91,7 +91,7 @@ public class ModuleWeaver
         }
     }
 
-    private void ReadExcludeRegex()
+    void ReadExcludeRegex()
     {
         var attribute = Config.Attribute("ExcludeRegex");
         if(attribute != null)
@@ -104,7 +104,7 @@ public class ModuleWeaver
         }
     }
 
-    private void CheckForBadAttributes(List<TypeDefinition> types)
+    void CheckForBadAttributes(List<TypeDefinition> types)
     {
         foreach (var typeDefinition in types)
         {
@@ -125,7 +125,7 @@ public class ModuleWeaver
         }
     }
 
-    private void ProcessAssembly(List<TypeDefinition> types)
+    void ProcessAssembly(List<TypeDefinition> types)
     {
         var isDebug = IncludeDebugAssert && DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
 
@@ -145,7 +145,7 @@ public class ModuleWeaver
         }
     }
 
-    private void RemoveAttributes(List<TypeDefinition> types)
+    void RemoveAttributes(List<TypeDefinition> types)
     {
         ModuleDefinition.Assembly.RemoveAllNullGuardAttributes();
         ModuleDefinition.RemoveAllNullGuardAttributes();
@@ -170,7 +170,7 @@ public class ModuleWeaver
         }
     }
 
-    private void RemoveReference()
+    void RemoveReference()
     {
         var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "NullGuard");
         if (referenceToRemove == null)

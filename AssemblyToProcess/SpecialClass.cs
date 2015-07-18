@@ -1,7 +1,9 @@
-using System;
 using System.Collections.Generic;
+#if (DEBUG)
+using System;
 using System.Threading.Tasks;
 using NullGuard;
+#endif
 
 public class SpecialClass
 {

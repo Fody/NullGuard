@@ -28,7 +28,7 @@ public static class Verifier
         return process.StandardOutput.ReadToEnd().Trim().Replace(assemblyPath2, "");
     }
 
-    private static string GetPathToPEVerify()
+    static string GetPathToPEVerify()
     {
         var path = Path.Combine(ToolLocationHelper.GetPathToDotNetFrameworkSdk(TargetDotNetFrameworkVersion.Version40), @"bin\NETFX 4.0 Tools\peverify.exe");
         if (!File.Exists(path))
@@ -38,7 +38,7 @@ public static class Verifier
         return path;
     }
 
-    private static string TrimLineNumbers(string foo)
+    static string TrimLineNumbers(string foo)
     {
         return Regex.Replace(foo, @"0x.*]", "");
     }
