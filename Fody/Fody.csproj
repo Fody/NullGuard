@@ -48,7 +48,7 @@
       <SubType>Designer</SubType>
     </None>
     <Reference Include="Anotar.Custom">
-      <HintPath>..\packages\Anotar.Custom.Fody.2.16.0.1\Lib\Anotar.Custom.dll</HintPath>
+      <HintPath>..\packages\Anotar.Custom.Fody.2.18.0\Lib\Anotar.Custom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
