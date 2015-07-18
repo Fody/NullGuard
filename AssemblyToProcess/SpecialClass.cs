@@ -22,7 +22,7 @@ public class SpecialClass
 
     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
     {
-        return await Task.Run<string>(() => returnNull ? null : "");
+        return await Task.Run(() => returnNull ? null : "");
     }
 
     [return: AllowNull]

@@ -357,7 +357,7 @@
     {
       // Code size       16 (0x10)
       .maxstack  8
-      .line 25,25 : 45,67 ''
+      .line 25,25 : 37,59 ''
       IL_0000:  ldarg.0
       IL_0001:  ldfld      bool SpecialClass/'<>c__DisplayClassb'::returnNull
       IL_0006:  brtrue.s   IL_000e
@@ -410,7 +410,7 @@
         IL_001e:  ldarg.0
         IL_001f:  ldfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__d'::returnNull
         IL_0024:  stfld      bool SpecialClass/'<>c__DisplayClassb'::returnNull
-        .line 25,25 : 9,69 ''
+        .line 25,25 : 9,61 ''
         IL_0029:  ldarg.0
         IL_002a:  ldfld      class SpecialClass/'<>c__DisplayClassb' SpecialClass/'<MethodWithReturnValueAsync>d__d'::'CS$<>8__localsc'
         IL_002f:  ldftn      instance string SpecialClass/'<>c__DisplayClassb'::'<MethodWithReturnValueAsync>b__a'()

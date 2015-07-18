@@ -88,7 +88,7 @@ public class Logger
             if (exception.TargetSite != null)
             {
                 stringBuilder.AppendLine("TargetSite:");
-                stringBuilder.AppendLine("   " + exception.TargetSite.ToString());
+                stringBuilder.AppendLine("   " + exception.TargetSite);
             }
 
             exception = exception.InnerException;

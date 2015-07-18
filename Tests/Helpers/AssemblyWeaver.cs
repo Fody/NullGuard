@@ -60,12 +60,12 @@ public static class AssemblyWeaver
         monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
 #endif
 
-        AfterAssemblyPaths = new string[] {
+        AfterAssemblyPaths = new [] {
             BeforeAssemblyPath.Replace(".dll", "2.dll"),
             BeforeAssemblyPath.Replace(".dll", "3.dll"),
             MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
         };
-        AfterAssemblySymbolPaths = new string[] {
+        AfterAssemblySymbolPaths = new [] {
             beforePdbPath.Replace(".pdb", "2.pdb"),
             beforePdbPath.Replace(".pdb", "3.pdb"),
             monoBeforeMdbPath.Replace(".mdb", "2.mdb")

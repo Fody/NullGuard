@@ -27,7 +27,7 @@ public static class Decompiler
 
             process.WaitForExit(10000);
 
-            string ilText = string.Join(Environment.NewLine, Regex.Split(process.StandardOutput.ReadToEnd(), Environment.NewLine)
+            var ilText = string.Join(Environment.NewLine, Regex.Split(process.StandardOutput.ReadToEnd(), Environment.NewLine)
                     .Where(l => !l.StartsWith("// ") && !string.IsNullOrEmpty(l))
                     .Select(l => l.Replace(projectFolder, ""))
                     .ToList());
