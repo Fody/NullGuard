@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -43,7 +45,7 @@
   <ItemGroup>
     <None Include="NugetAssets\dotnet.targets" />
     <None Include="NugetAssets\install.ps" />
-    <None Include="NugetAssets\NullGuard.nuspec">
+    <None Include="NugetAssets\NullGuard.Fody.nuspec">
       <SubType>Designer</SubType>
     </None>
     <None Include="NugetAssets\uninstall.ps" />
@@ -98,7 +100,7 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\NullGuard.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\NullGuard.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\uninstall.ps1" />
     <Copy SourceFiles="$(OutputPath)NullGuard.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
