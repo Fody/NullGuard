@@ -4,7 +4,6 @@
   .class auto ansi nested public beforefieldinit NonNullable
          extends [mscorlib]System.Object
   {
-    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string nonNullParam1,
                                       string nonNullParam2) cil managed
@@ -12,7 +11,6 @@
       // Code size       110 (0x6e)
       .maxstack  3
       .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
-      .line 16707566,16707566 : 0,0 'AssemblyToProcess\\Indexers.cs'
       IL_0000:  ldarg.1
       IL_0001:  ldnull
       IL_0002:  ceq
@@ -28,7 +26,6 @@
       IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0023:  throw
-      .line 16707566,16707566 : 0,0 ''
       IL_0024:  ldarg.2
       IL_0025:  ldnull
       IL_0026:  ceq
@@ -44,9 +41,7 @@
       IL_0042:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0047:  throw
-      .line 9,9 : 19,56 ''
       IL_0048:  ldstr      "return value of NonNullable"
-      .line 16707566,16707566 : 0,0 ''
       IL_004d:  dup
       IL_004e:  ldnull
       IL_004f:  ceq
@@ -72,7 +67,6 @@
     {
       // Code size       109 (0x6d)
       .maxstack  2
-      .line 16707566,16707566 : 0,0 ''
       IL_0000:  ldarg.3
       IL_0001:  ldnull
       IL_0002:  ceq
@@ -92,7 +86,6 @@
       IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0023:  throw
-      .line 16707566,16707566 : 0,0 ''
       IL_0024:  ldarg.1
       IL_0025:  ldnull
       IL_0026:  ceq
@@ -108,7 +101,6 @@
       IL_0042:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0047:  throw
-      .line 16707566,16707566 : 0,0 ''
       IL_0048:  ldarg.2
       IL_0049:  ldnull
       IL_004a:  ceq
@@ -124,7 +116,6 @@
       IL_0066:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_006b:  throw
-      .line 10,10 : 19,20 ''
       IL_006c:  ret
     } // end of method NonNullable::set_Item
     .method public hidebysig specialname rtspecialname 
@@ -145,19 +136,16 @@
                                                         string,
                                                         string)
     } // end of property NonNullable::Item
-  } // end of class NonNullable
+  } 
   .class auto ansi nested public beforefieldinit PassThroughGetterReturnValue
          extends [mscorlib]System.Object
   {
-    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string returnValue) cil managed
     {
       // Code size       34 (0x22)
       .maxstack  3
-      .line 18,18 : 19,38 ''
       IL_0000:  ldarg.1
-      .line 16707566,16707566 : 0,0 ''
       IL_0001:  dup
       IL_0002:  ldnull
       IL_0003:  ceq
@@ -189,11 +177,10 @@
     {
       .get instance string Indexers/PassThroughGetterReturnValue::get_Item(string)
     } // end of property PassThroughGetterReturnValue::Item
-  } // end of class PassThroughGetterReturnValue
+  } 
   .class auto ansi nested public beforefieldinit AllowedNulls
          extends [mscorlib]System.Object
   {
-    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string allowNull,
                                       valuetype [mscorlib]System.Nullable`1<int32> nullableInt,
@@ -202,7 +189,6 @@
       .param [3] = nullref
       // Code size       2 (0x2)
       .maxstack  1
-      .line 27,27 : 19,31 ''
       IL_0000:  ldnull
       IL_0001:  ret
     } // end of method AllowedNulls::get_Item
@@ -215,7 +201,6 @@
       .param [3] = nullref
       // Code size       1 (0x1)
       .maxstack  0
-      .line 28,28 : 19,20 ''
       IL_0000:  ret
     } // end of method AllowedNulls::set_Item
     .method public hidebysig specialname rtspecialname 
@@ -239,7 +224,7 @@
                                                          string,
                                                          string)
     } // end of property AllowedNulls::Item
-  } // end of class AllowedNulls
+  } 
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor() cil managed
   {
@@ -248,5 +233,5 @@
     IL_0000:  ldarg.0
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
     IL_0006:  ret
-  } // end of method Indexers::.ctor
-} // end of class Indexers
+  } 
+}

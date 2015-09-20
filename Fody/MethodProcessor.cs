@@ -74,8 +74,10 @@ public class MethodProcessor
         {
             var returnType = method.ReturnType;
             var genericReturnType = method.ReturnType as GenericInstanceType;
-            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
-                returnType = genericReturnType.GenericArguments[0];
+	        if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
+	        {
+		        returnType = genericReturnType.GenericArguments[0];
+	        }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 !method.AllowsNullReturnValue() &&
@@ -201,12 +203,14 @@ public class MethodProcessor
     {
         foreach (var local in body.Variables)
         {
-            if (!local.VariableType.Resolve().IsGeneratedCode() ||
-                !local.VariableType.Resolve().IsIAsyncStateMachine())
-                continue;
+            var resolve = local.VariableType.Resolve();
+            if (!resolve.IsGeneratedCode() ||
+	            !resolve.IsIAsyncStateMachine())
+	        {
+		        continue;
+	        }
 
-            var stateMachine = local.VariableType.Resolve();
-            var moveNext = stateMachine.Methods.First(x => x.Name == "MoveNext");
+            var moveNext = resolve.Methods.First(x => x.Name == "MoveNext");
 
             InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, errorMessage, methodName);
         }

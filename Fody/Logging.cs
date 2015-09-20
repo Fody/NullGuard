@@ -29,9 +29,9 @@ public class Logger
             LoggerFactory.LogInfo(string.Format(format, args) + Environment.NewLine + ExceptionToString(exception));
     }
 
-    public bool IsInformationEnabled { get { return LoggerFactory.LogInfo != null; } }
+    public bool IsInformationEnabled => LoggerFactory.LogInfo != null;
 
-    public void Warning(string format, params object[] args)
+	public void Warning(string format, params object[] args)
     {
         if (IsWarningEnabled)
             LoggerFactory.LogWarn(string.Format(format, args));
@@ -43,9 +43,9 @@ public class Logger
             LoggerFactory.LogWarn(string.Format(format, args) + Environment.NewLine + ExceptionToString(exception));
     }
 
-    public bool IsWarningEnabled { get { return LoggerFactory.LogWarn != null; } }
+    public bool IsWarningEnabled => LoggerFactory.LogWarn != null;
 
-    public void Error(string format, params object[] args)
+	public void Error(string format, params object[] args)
     {
         if (IsErrorEnabled)
             LoggerFactory.LogError(string.Format(format, args));
@@ -57,9 +57,9 @@ public class Logger
             LoggerFactory.LogError(string.Format(format, args) + Environment.NewLine + ExceptionToString(exception));
     }
 
-    public bool IsErrorEnabled { get { return LoggerFactory.LogError != null; } }
+    public bool IsErrorEnabled => LoggerFactory.LogError != null;
 
-    string ExceptionToString(Exception exception)
+	string ExceptionToString(Exception exception)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(exception.GetType().FullName + ":");

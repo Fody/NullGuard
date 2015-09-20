@@ -1,4 +1,5 @@
 using System;
+#pragma warning disable 1584,1711,1572,1581,1580
 
 namespace NullGuard
 {

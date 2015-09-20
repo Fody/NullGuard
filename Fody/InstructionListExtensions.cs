@@ -5,7 +5,7 @@ using Mono.Collections.Generic;
 
 public static class InstructionListExtensions
 {
-    public static void Prepend(this Collection<Instruction> collection, IEnumerable<Instruction> instructions)
+    public static void Prepend(this Collection<Instruction> collection, ICollection<Instruction> instructions)
     {
         var index = 0;
         foreach (var instruction in instructions)
@@ -15,7 +15,7 @@ public static class InstructionListExtensions
         }
     }
 
-    public static int Insert(this Collection<Instruction> collection, int index, IEnumerable<Instruction> instructions)
+    public static int Insert(this Collection<Instruction> collection, int index, ICollection<Instruction> instructions)
     {
         foreach (var instruction in instructions.Reverse())
         {

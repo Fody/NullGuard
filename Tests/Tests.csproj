@@ -111,5 +111,24 @@
       <Name>Fody</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="approvals\ApprovedTests.ClassWithBadAttributes.approved.txt" />
+    <Content Include="approvals\ApprovedTests.ClassWithPrivateMethod.approved.txt" />
+    <Content Include="approvals\ApprovedTests.ClassWithPrivateMethodNoAssert.approved.txt" />
+    <Content Include="approvals\ApprovedTests.ErrorsList.approved.txt" />
+    <Content Include="approvals\ApprovedTests.GenericClass.approved.txt" />
+    <Content Include="approvals\ApprovedTests.GenericClassNoAssert.approved.txt" />
+    <Content Include="approvals\ApprovedTests.Indexers.approved.txt" />
+    <Content Include="approvals\ApprovedTests.InfosList.approved.txt" />
+    <Content Include="approvals\ApprovedTests.InterfaceBadAttributes.approved.txt" />
+    <Content Include="approvals\ApprovedTests.PublicNestedInsideNonPublic.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SimpleClass.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SimpleClassNoAssert.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SkipIXamlMetadataProvider.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SpecialClass.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SpecialClassNoAssert.approved.txt" />
+    <Content Include="approvals\ApprovedTests.UnsafeClass.approved.txt" />
+    <Content Include="approvals\ApprovedTests.WarnsList.approved.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

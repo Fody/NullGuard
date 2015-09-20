@@ -25,11 +25,6 @@ public static class CecilExtensions
         return type.Methods.Where(x => x.Body != null);
     }
 
-    public static IEnumerable<PropertyDefinition> AbstractProperties(this TypeDefinition type)
-    {
-        return type.Properties.Where(x => (x.GetMethod != null && x.GetMethod.IsAbstract) || (x.SetMethod != null && x.SetMethod.IsAbstract));
-    }
-
     public static IEnumerable<PropertyDefinition> ConcreteProperties(this TypeDefinition type)
     {
         return type.Properties.Where(x => (x.GetMethod == null || !x.GetMethod.IsAbstract) && (x.SetMethod == null || !x.SetMethod.IsAbstract));
@@ -148,9 +143,11 @@ public static class CecilExtensions
         // with a valid SequencePoint. That way IL can be hidden from
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-        i.SequencePoint = new SequencePoint(doc);
-        i.SequencePoint.StartLine = 0xfeefee;
-        i.SequencePoint.EndLine = 0xfeefee;
+	    i.SequencePoint = new SequencePoint(doc)
+	    {
+		    StartLine = 0xfeefee,
+		    EndLine = 0xfeefee
+	    };
     }
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)

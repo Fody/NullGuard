@@ -2,40 +2,30 @@
        extends [mscorlib]System.Object
 {
   .field private string '<NonNullProperty>k__BackingField'
-  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .field private string '<NullProperty>k__BackingField'
-  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .field private string '<PropertyAllowsNullGetButDoesNotAllowNullSet>k__BackingField'
-  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .field private string '<PropertyAllowsNullSetButDoesNotAllowNullGet>k__BackingField'
-  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .field private valuetype [mscorlib]System.Nullable`1<int32> '<NonNullNullableProperty>k__BackingField'
-  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor() cil managed
   {
     // Code size       7 (0x7)
     .maxstack  1
     .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
-    .line 6,6 : 5,25 'AssemblyToProcess\\SimpleClass.cs'
     IL_0000:  ldarg.0
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-    .line 8,8 : 5,6 ''
     IL_0006:  ret
-  } // end of method SimpleClass::.ctor
+  } 
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor([out] string& nonNullOutArg) cil managed
   {
     // Code size       43 (0x2b)
     .maxstack  2
-    .line 11,11 : 5,49 ''
     IL_0000:  ldarg.0
     IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-    .line 13,13 : 9,30 ''
     IL_0006:  ldarg.1
     IL_0007:  ldnull
     IL_0008:  stind.ref
-    .line 16707566,16707566 : 0,0 ''
     IL_0009:  ldarg.1
     IL_000a:  ldind.ref
     IL_000b:  ldnull
@@ -51,16 +41,14 @@
     IL_001f:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
     IL_0024:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0029:  throw
-    .line 14,14 : 5,6 ''
     IL_002a:  ret
-  } // end of method SimpleClass::.ctor
+  } 
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor(string nonNullArg,
                                string nullArg) cil managed
   {
     // Code size       60 (0x3c)
     .maxstack  3
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq
@@ -76,10 +64,8 @@
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-    .line 16,16 : 5,70 ''
     IL_0024:  ldarg.0
     IL_0025:  call       instance void [mscorlib]System.Object::.ctor()
-    .line 18,18 : 9,55 ''
     IL_002a:  ldarg.1
     IL_002b:  ldstr      " "
     IL_0030:  ldarg.2
@@ -87,16 +73,14 @@
                                                                 string,
                                                                 string)
     IL_0036:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 19,19 : 5,6 ''
     IL_003b:  ret
-  } // end of method SimpleClass::.ctor
+  } 
   .method public hidebysig instance void 
           SomeMethod(string nonNullArg,
                      string nullArg) cil managed
   {
     // Code size       43 (0x2b)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq
@@ -112,16 +96,13 @@
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-    .line 23,23 : 9,39 ''
     IL_0024:  ldarg.1
     IL_0025:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 24,24 : 5,6 ''
     IL_002a:  ret
-  } // end of method SimpleClass::SomeMethod
+  } 
   .method public hidebysig specialname instance string 
           get_NonNullProperty() cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       39 (0x27)
     .maxstack  3
     IL_0000:  ldarg.0
@@ -143,11 +124,10 @@
     IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0025:  throw
     IL_0026:  ret
-  } // end of method SimpleClass::get_NonNullProperty
+  } 
   .method public hidebysig specialname instance void 
           set_NonNullProperty(string 'value') cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       44 (0x2c)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -171,42 +151,38 @@
     IL_0025:  ldarg.1
     IL_0026:  stfld      string SimpleClass::'<NonNullProperty>k__BackingField'
     IL_002b:  ret
-  } // end of method SimpleClass::set_NonNullProperty
+  } 
   .method public hidebysig specialname instance string 
           get_NullProperty() cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       7 (0x7)
     .maxstack  8
     IL_0000:  ldarg.0
     IL_0001:  ldfld      string SimpleClass::'<NullProperty>k__BackingField'
     IL_0006:  ret
-  } // end of method SimpleClass::get_NullProperty
+  } 
   .method public hidebysig specialname instance void 
           set_NullProperty(string 'value') cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       8 (0x8)
     .maxstack  8
     IL_0000:  ldarg.0
     IL_0001:  ldarg.1
     IL_0002:  stfld      string SimpleClass::'<NullProperty>k__BackingField'
     IL_0007:  ret
-  } // end of method SimpleClass::set_NullProperty
+  } 
   .method public hidebysig specialname instance string 
           get_PropertyAllowsNullGetButDoesNotAllowNullSet() cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       7 (0x7)
     .maxstack  1
     IL_0000:  ldarg.0
     IL_0001:  ldfld      string SimpleClass::'<PropertyAllowsNullGetButDoesNotAllowNullSet>k__BackingField'
     IL_0006:  ret
-  } // end of method SimpleClass::get_PropertyAllowsNullGetButDoesNotAllowNullSet
+  } 
   .method public hidebysig specialname instance void 
           set_PropertyAllowsNullGetButDoesNotAllowNullSet(string 'value') cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       44 (0x2c)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -232,11 +208,10 @@
     IL_0025:  ldarg.1
     IL_0026:  stfld      string SimpleClass::'<PropertyAllowsNullGetButDoesNotAllowNullSet>k__BackingField'
     IL_002b:  ret
-  } // end of method SimpleClass::set_PropertyAllowsNullGetButDoesNotAllowNullSet
+  } 
   .method public hidebysig specialname instance string 
           get_PropertyAllowsNullSetButDoesNotAllowNullGet() cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       39 (0x27)
     .maxstack  3
     IL_0000:  ldarg.0
@@ -258,49 +233,44 @@
     IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0025:  throw
     IL_0026:  ret
-  } // end of method SimpleClass::get_PropertyAllowsNullSetButDoesNotAllowNullGet
+  } 
   .method public hidebysig specialname instance void 
           set_PropertyAllowsNullSetButDoesNotAllowNullGet(string 'value') cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       8 (0x8)
     .maxstack  2
     IL_0000:  ldarg.0
     IL_0001:  ldarg.1
     IL_0002:  stfld      string SimpleClass::'<PropertyAllowsNullSetButDoesNotAllowNullGet>k__BackingField'
     IL_0007:  ret
-  } // end of method SimpleClass::set_PropertyAllowsNullSetButDoesNotAllowNullGet
+  } 
   .method public hidebysig specialname instance valuetype [mscorlib]System.Nullable`1<int32> 
           get_NonNullNullableProperty() cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       7 (0x7)
     .maxstack  8
     IL_0000:  ldarg.0
     IL_0001:  ldfld      valuetype [mscorlib]System.Nullable`1<int32> SimpleClass::'<NonNullNullableProperty>k__BackingField'
     IL_0006:  ret
-  } // end of method SimpleClass::get_NonNullNullableProperty
+  } 
   .method public hidebysig specialname instance void 
           set_NonNullNullableProperty(valuetype [mscorlib]System.Nullable`1<int32> 'value') cil managed
   {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       8 (0x8)
     .maxstack  8
     IL_0000:  ldarg.0
     IL_0001:  ldarg.1
     IL_0002:  stfld      valuetype [mscorlib]System.Nullable`1<int32> SimpleClass::'<NonNullNullableProperty>k__BackingField'
     IL_0007:  ret
-  } // end of method SimpleClass::set_NonNullNullableProperty
+  } 
   .method public hidebysig instance string 
           MethodWithReturnValue(bool returnNull) cil managed
   {
     // Code size       75 (0x4b)
     .maxstack  3
-    .line 39,39 : 9,39 ''
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0029
     IL_0003:  ldstr      ""
-    .line 16707566,16707566 : 0,0 ''
     IL_0008:  dup
     IL_0009:  ldnull
     IL_000a:  ceq
@@ -319,7 +289,6 @@
     IL_0027:  throw
     IL_0028:  ret
     IL_0029:  ldnull
-    .line 16707566,16707566 : 0,0 ''
     IL_002a:  dup
     IL_002b:  ldnull
     IL_002c:  ceq
@@ -337,13 +306,12 @@
     IL_0044:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0049:  throw
     IL_004a:  ret
-  } // end of method SimpleClass::MethodWithReturnValue
+  } 
   .method public hidebysig instance void 
           MethodWithRef(object& returnNull) cil managed
   {
     // Code size       39 (0x27)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldind.ref
     IL_0002:  ldnull
@@ -361,15 +329,13 @@
     IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0025:  throw
-    .line 44,44 : 5,6 ''
     IL_0026:  ret
-  } // end of method SimpleClass::MethodWithRef
+  } 
   .method public hidebysig instance void 
           MethodWithGeneric<T>(!!T returnNull) cil managed
   {
     // Code size       47 (0x2f)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  box        !!T
     IL_0006:  ldnull
@@ -387,15 +353,13 @@
     IL_0028:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_002d:  throw
-    .line 48,48 : 5,6 ''
     IL_002e:  ret
-  } // end of method SimpleClass::MethodWithGeneric
+  } 
   .method public hidebysig instance void 
           MethodWithGenericRef<T>(!!T& returnNull) cil managed
   {
     // Code size       57 (0x39)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldobj      !!T
     IL_0006:  box        !!T
@@ -415,38 +379,33 @@
     IL_0032:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0037:  throw
-    .line 52,52 : 5,6 ''
     IL_0038:  ret
-  } // end of method SimpleClass::MethodWithGenericRef
+  } 
   .method public hidebysig instance string 
           MethodAllowsNullReturnValue() cil managed
   {
     // Code size       2 (0x2)
     .maxstack  1
-    .line 57,57 : 9,21 ''
     IL_0000:  ldnull
     IL_0001:  ret
-  } // end of method SimpleClass::MethodAllowsNullReturnValue
+  } 
   .method public hidebysig instance string 
           MethodWithCanBeNullResult() cil managed
   {
     .custom instance void CanBeNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       2 (0x2)
     .maxstack  1
-    .line 63,63 : 9,21 ''
     IL_0000:  ldnull
     IL_0001:  ret
-  } // end of method SimpleClass::MethodWithCanBeNullResult
+  } 
   .method public hidebysig instance void 
           MethodWithOutValue([out] string& nonNullOutArg) cil managed
   {
     // Code size       37 (0x25)
     .maxstack  2
-    .line 68,68 : 9,30 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 16707566,16707566 : 0,0 ''
     IL_0003:  ldarg.1
     IL_0004:  ldind.ref
     IL_0005:  ldnull
@@ -462,51 +421,43 @@
     IL_0019:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
     IL_001e:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0023:  throw
-    .line 69,69 : 5,6 ''
     IL_0024:  ret
-  } // end of method SimpleClass::MethodWithOutValue
+  } 
   .method public hidebysig instance void 
           MethodWithAllowedNullOutValue([out] string& nonNullOutArg) cil managed
   {
     // Code size       4 (0x4)
     .maxstack  2
-    .line 73,73 : 9,30 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 74,74 : 5,6 ''
     IL_0003:  ret
-  } // end of method SimpleClass::MethodWithAllowedNullOutValue
+  } 
   .method public hidebysig instance void 
           PublicWrapperOfPrivateMethod() cil managed
   {
     // Code size       8 (0x8)
     .maxstack  2
-    .line 78,78 : 9,33 ''
     IL_0000:  ldarg.0
     IL_0001:  ldnull
     IL_0002:  call       instance void SimpleClass::SomePrivateMethod(string)
-    .line 79,79 : 5,6 ''
     IL_0007:  ret
-  } // end of method SimpleClass::PublicWrapperOfPrivateMethod
+  } 
   .method private hidebysig instance void 
           SomePrivateMethod(string x) cil managed
   {
     // Code size       7 (0x7)
     .maxstack  8
-    .line 83,83 : 9,30 ''
     IL_0000:  ldarg.1
     IL_0001:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 84,84 : 5,6 ''
     IL_0006:  ret
-  } // end of method SimpleClass::SomePrivateMethod
+  } 
   .method public hidebysig instance void 
           MethodWithTwoRefs(string& first,
                             string& second) cil managed
   {
     // Code size       77 (0x4d)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldind.ref
     IL_0002:  ldnull
@@ -524,7 +475,6 @@
     IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0025:  throw
-    .line 16707566,16707566 : 0,0 ''
     IL_0026:  ldarg.2
     IL_0027:  ldind.ref
     IL_0028:  ldnull
@@ -542,24 +492,20 @@
     IL_0046:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_004b:  throw
-    .line 88,88 : 5,6 ''
     IL_004c:  ret
-  } // end of method SimpleClass::MethodWithTwoRefs
+  } 
   .method public hidebysig instance void 
           MethodWithTwoOuts([out] string& first,
                             [out] string& second) cil managed
   {
     // Code size       73 (0x49)
     .maxstack  2
-    .line 92,92 : 9,22 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 93,93 : 9,23 ''
     IL_0003:  ldarg.2
     IL_0004:  ldnull
     IL_0005:  stind.ref
-    .line 16707566,16707566 : 0,0 ''
     IL_0006:  ldarg.1
     IL_0007:  ldind.ref
     IL_0008:  ldnull
@@ -575,7 +521,6 @@
     IL_001c:  ldstr      "[NullGuard] Out parameter 'first' is null."
     IL_0021:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0026:  throw
-    .line 16707566,16707566 : 0,0 ''
     IL_0027:  ldarg.2
     IL_0028:  ldind.ref
     IL_0029:  ldnull
@@ -591,25 +536,22 @@
     IL_003d:  ldstr      "[NullGuard] Out parameter 'second' is null."
     IL_0042:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0047:  throw
-    .line 94,94 : 5,6 ''
     IL_0048:  ret
-  } // end of method SimpleClass::MethodWithTwoOuts
+  } 
   .method public hidebysig instance void 
           MethodWithOptionalParameter([opt] string optional) cil managed
   {
     .param [1] = nullref
     // Code size       1 (0x1)
     .maxstack  0
-    .line 98,98 : 5,6 ''
     IL_0000:  ret
-  } // end of method SimpleClass::MethodWithOptionalParameter
+  } 
   .method public hidebysig instance void 
           MethodWithOptionalParameterWithNonNullDefaultValue([opt] string optional) cil managed
   {
     .param [1] = "default"
     // Code size       37 (0x25)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq
@@ -625,27 +567,23 @@
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-    .line 102,102 : 5,6 ''
     IL_0024:  ret
-  } // end of method SimpleClass::MethodWithOptionalParameterWithNonNullDefaultValue
+  } 
   .method public hidebysig instance void 
           MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute([opt] string optional) cil managed
   {
     .param [1] = "default"
     // Code size       1 (0x1)
     .maxstack  0
-    .line 106,106 : 5,6 ''
     IL_0000:  ret
-  } // end of method SimpleClass::MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute
+  } 
   .method public hidebysig instance void 
           MethodWithGenericOut<T>([out] !!T& item) cil managed
   {
     // Code size       59 (0x3b)
     .maxstack  2
-    .line 110,110 : 9,27 ''
     IL_0000:  ldarg.1
     IL_0001:  initobj    !!T
-    .line 16707566,16707566 : 0,0 ''
     IL_0007:  ldarg.1
     IL_0008:  ldobj      !!T
     IL_000d:  box        !!T
@@ -663,19 +601,16 @@
     IL_002f:  ldstr      "[NullGuard] Out parameter 'item' is null."
     IL_0034:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0039:  throw
-    .line 111,111 : 5,6 ''
     IL_003a:  ret
-  } // end of method SimpleClass::MethodWithGenericOut
+  } 
   .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
   {
     // Code size       103 (0x67)
     .maxstack  3
-    .locals init ([0] !!T CS$0$0000)
-    .line 115,115 : 9,72 ''
+    .locals init ([0] !!T )
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0033
     IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()
-    .line 16707566,16707566 : 0,0 ''
     IL_0008:  dup
     IL_0009:  box        !!T
     IL_000e:  ldnull
@@ -695,10 +630,9 @@
     IL_002c:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0031:  throw
     IL_0032:  ret
-    IL_0033:  ldloca.s   CS$0$0000
+    IL_0033:  ldloca.s   
     IL_0035:  initobj    !!T
     IL_003b:  ldloc.0
-    .line 16707566,16707566 : 0,0 ''
     IL_003c:  dup
     IL_003d:  box        !!T
     IL_0042:  ldnull
@@ -718,19 +652,16 @@
     IL_0060:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0065:  throw
     IL_0066:  ret
-  } // end of method SimpleClass::MethodWithGenericReturn
+  } 
   .method public hidebysig instance object 
           MethodWithOutAndReturn([out] string& prefix) cil managed
   {
     // Code size       70 (0x46)
     .maxstack  3
-    .line 120,120 : 9,23 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  stind.ref
-    .line 121,121 : 9,21 ''
     IL_0003:  ldnull
-    .line 16707566,16707566 : 0,0 ''
     IL_0004:  ldarg.1
     IL_0005:  ldind.ref
     IL_0006:  ldnull
@@ -746,7 +677,6 @@
     IL_001a:  ldstr      "[NullGuard] Out parameter 'prefix' is null."
     IL_001f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0024:  throw
-    .line 16707566,16707566 : 0,0 ''
     IL_0025:  dup
     IL_0026:  ldnull
     IL_0027:  ceq
@@ -764,13 +694,12 @@
     IL_003f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0044:  throw
     IL_0045:  ret
-  } // end of method SimpleClass::MethodWithOutAndReturn
+  } 
   .method public hidebysig instance void 
           MethodWithExistingArgumentGuard(string x) cil managed
   {
     // Code size       67 (0x43)
     .maxstack  2
-    .line 16707566,16707566 : 0,0 ''
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq
@@ -786,86 +715,64 @@
     IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0023:  throw
-    .line 126,126 : 9,37 ''
     IL_0024:  ldarg.1
     IL_0025:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_002a:  brfalse.s  IL_003c
-    .line 127,127 : 13,69 ''
     IL_002c:  ldstr      "x is null or empty."
     IL_0031:  ldstr      "x"
     IL_0036:  newobj     instance void [mscorlib]System.ArgumentException::.ctor(string,
                                                                                  string)
     IL_003b:  throw
-    .line 129,129 : 9,30 ''
     IL_003c:  ldarg.1
     IL_003d:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 130,130 : 5,6 ''
     IL_0042:  ret
-  } // end of method SimpleClass::MethodWithExistingArgumentGuard
+  } 
   .method public hidebysig instance void 
           MethodWithExistingArgumentNullGuard(string x) cil managed
   {
     // Code size       26 (0x1a)
     .maxstack  1
-    .line 134,134 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0013
-    .line 135,135 : 13,50 ''
     IL_0008:  ldstr      "x"
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
     IL_0012:  throw
-    .line 137,137 : 9,30 ''
     IL_0013:  ldarg.1
     IL_0014:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 138,138 : 5,6 ''
     IL_0019:  ret
-  } // end of method SimpleClass::MethodWithExistingArgumentNullGuard
+  } 
   .method public hidebysig instance void 
           MethodWithExistingArgumentNullGuardWithMessage(string x) cil managed
   {
     // Code size       31 (0x1f)
     .maxstack  2
-    .line 142,142 : 9,37 ''
     IL_0000:  ldarg.1
     IL_0001:  call       bool [mscorlib]System.String::IsNullOrEmpty(string)
     IL_0006:  brfalse.s  IL_0018
-    .line 143,143 : 13,73 ''
     IL_0008:  ldstr      "x"
     IL_000d:  ldstr      "x is null or empty."
     IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0017:  throw
-    .line 145,145 : 9,30 ''
     IL_0018:  ldarg.1
     IL_0019:  call       void [mscorlib]System.Console::WriteLine(string)
-    .line 146,146 : 5,6 ''
     IL_001e:  ret
-  } // end of method SimpleClass::MethodWithExistingArgumentNullGuardWithMessage
+  } 
   .property instance string NonNullProperty()
   {
-    .get instance string SimpleClass::get_NonNullProperty()
-    .set instance void SimpleClass::set_NonNullProperty(string)
-  } // end of property SimpleClass::NonNullProperty
+  } 
   .property instance string NullProperty()
   {
-    .get instance string SimpleClass::get_NullProperty()
-    .set instance void SimpleClass::set_NullProperty(string)
-  } // end of property SimpleClass::NullProperty
+  } 
   .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
   {
-    .get instance string SimpleClass::get_PropertyAllowsNullGetButDoesNotAllowNullSet()
-    .set instance void SimpleClass::set_PropertyAllowsNullGetButDoesNotAllowNullSet(string)
-  } // end of property SimpleClass::PropertyAllowsNullGetButDoesNotAllowNullSet
+  } 
   .property instance string PropertyAllowsNullSetButDoesNotAllowNullGet()
   {
-    .get instance string SimpleClass::get_PropertyAllowsNullSetButDoesNotAllowNullGet()
-    .set instance void SimpleClass::set_PropertyAllowsNullSetButDoesNotAllowNullGet(string)
-  } // end of property SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet
+  } 
   .property instance valuetype [mscorlib]System.Nullable`1<int32>
           NonNullNullableProperty()
   {
-    .get instance valuetype [mscorlib]System.Nullable`1<int32> SimpleClass::get_NonNullNullableProperty()
-    .set instance void SimpleClass::set_NonNullNullableProperty(valuetype [mscorlib]System.Nullable`1<int32>)
-  } // end of property SimpleClass::NonNullNullableProperty
-} // end of class SimpleClass
+  } 
+}

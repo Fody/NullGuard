@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 [Serializable]
 public class WeavingException : Exception
@@ -17,8 +18,6 @@ public class WeavingException : Exception
     {
     }
 
-    protected WeavingException(
-      System.Runtime.Serialization.SerializationInfo info,
-      System.Runtime.Serialization.StreamingContext context)
+    protected WeavingException(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
 }
