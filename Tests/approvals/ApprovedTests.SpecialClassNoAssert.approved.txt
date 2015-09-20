@@ -86,13 +86,13 @@
       IL_0017:  ldarg.0
       IL_0018:  ldc.i4.m1
       IL_0019:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
-      .line 10,10 : 14,24 ''
+      .line 12,12 : 14,24 ''
       IL_001e:  ldarg.0
       IL_001f:  ldc.i4.0
       IL_0020:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
       .line 16707566,16707566 : 0,0 ''
       IL_0025:  br.s       IL_0051
-      .line 12,12 : 13,28 ''
+      .line 14,14 : 13,28 ''
       IL_0027:  ldarg.0
       IL_0028:  ldarg.0
       IL_0029:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
@@ -106,14 +106,14 @@
       IL_003c:  ldarg.0
       IL_003d:  ldc.i4.m1
       IL_003e:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
-      .line 10,10 : 34,37 ''
+      .line 12,12 : 34,37 ''
       IL_0043:  ldarg.0
       IL_0044:  dup
       IL_0045:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
       IL_004a:  ldc.i4.1
       IL_004b:  add
       IL_004c:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
-      .line 10,10 : 25,32 ''
+      .line 12,12 : 25,32 ''
       IL_0051:  ldarg.0
       IL_0052:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
       IL_0057:  ldarg.0
@@ -209,7 +209,7 @@
     {
       // Code size       12 (0xc)
       .maxstack  8
-      .line 20,20 : 30,59 ''
+      .line 22,22 : 30,59 ''
       IL_0000:  ldarg.0
       IL_0001:  ldfld      string SpecialClass/'<>c__DisplayClass5'::nonNullArg
       IL_0006:  call       void [mscorlib]System.Console::WriteLine(string)
@@ -259,7 +259,7 @@
         IL_001e:  ldarg.0
         IL_001f:  ldfld      string SpecialClass/'<SomeMethodAsync>d__7'::nonNullArg
         IL_0024:  stfld      string SpecialClass/'<>c__DisplayClass5'::nonNullArg
-        .line 20,20 : 9,61 ''
+        .line 22,22 : 9,61 ''
         IL_0029:  ldarg.0
         IL_002a:  ldfld      class SpecialClass/'<>c__DisplayClass5' SpecialClass/'<SomeMethodAsync>d__7'::'CS$<>8__locals6'
         IL_002f:  ldftn      instance void SpecialClass/'<>c__DisplayClass5'::'<SomeMethodAsync>b__4'()
@@ -357,7 +357,7 @@
     {
       // Code size       16 (0x10)
       .maxstack  8
-      .line 25,25 : 37,59 ''
+      .line 27,27 : 37,59 ''
       IL_0000:  ldarg.0
       IL_0001:  ldfld      bool SpecialClass/'<>c__DisplayClassb'::returnNull
       IL_0006:  brtrue.s   IL_000e
@@ -410,7 +410,7 @@
         IL_001e:  ldarg.0
         IL_001f:  ldfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__d'::returnNull
         IL_0024:  stfld      bool SpecialClass/'<>c__DisplayClassb'::returnNull
-        .line 25,25 : 9,61 ''
+        .line 27,27 : 9,61 ''
         IL_0029:  ldarg.0
         IL_002a:  ldfld      class SpecialClass/'<>c__DisplayClassb' SpecialClass/'<MethodWithReturnValueAsync>d__d'::'CS$<>8__localsc'
         IL_002f:  ldftn      instance string SpecialClass/'<>c__DisplayClassb'::'<MethodWithReturnValueAsync>b__a'()
@@ -533,7 +533,7 @@
         IL_0009:  ldloc.3
         IL_000a:  ldc.i4.0
         IL_000b:  beq.s      IL_0045
-        .line 31,31 : 9,31 ''
+        .line 33,33 : 9,31 ''
         IL_000d:  ldc.i4.s   100
         IL_000f:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Delay(int32)
         IL_0014:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
@@ -571,7 +571,7 @@
         IL_0066:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
         IL_006b:  ldloca.s   CS$0$0001
         IL_006d:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
-        .line 33,33 : 9,21 ''
+        .line 35,35 : 9,21 ''
         IL_0073:  ldnull
         IL_0074:  stloc.1
         .line 16707566,16707566 : 0,0 ''
@@ -588,7 +588,7 @@
         IL_0086:  ldloc.2
         IL_0087:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
         IL_008c:  leave.s    IL_00a2
-        .line 34,34 : 5,6 ''
+        .line 36,36 : 5,6 ''
       }  // end handler
       IL_008e:  ldarg.0
       IL_008f:  ldc.i4.s   -2
@@ -636,7 +636,7 @@
       {
         IL_0000:  ldc.i4.1
         IL_0001:  stloc.0
-        .line 40,40 : 9,19 ''
+        .line 42,42 : 9,19 ''
         IL_0002:  ldc.i4.s   42
         IL_0004:  stloc.1
         .line 16707566,16707566 : 0,0 ''
@@ -653,7 +653,7 @@
         IL_0016:  ldloc.2
         IL_0017:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::SetException(class [mscorlib]System.Exception)
         IL_001c:  leave.s    IL_0032
-        .line 41,41 : 5,6 ''
+        .line 43,43 : 5,6 ''
       }  // end handler
       IL_001e:  ldarg.0
       IL_001f:  ldc.i4.s   -2

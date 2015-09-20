@@ -201,8 +201,7 @@ public class MethodProcessor
     {
         foreach (var local in body.Variables)
         {
-            if (!local.VariableType.IsValueType ||
-                !local.VariableType.Resolve().IsGeneratedCode() ||
+            if (!local.VariableType.Resolve().IsGeneratedCode() ||
                 !local.VariableType.Resolve().IsIAsyncStateMachine())
                 continue;
 
