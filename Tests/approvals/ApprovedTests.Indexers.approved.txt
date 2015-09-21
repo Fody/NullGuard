@@ -4,6 +4,7 @@
   .class auto ansi nested public beforefieldinit NonNullable
          extends [mscorlib]System.Object
   {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string nonNullParam1,
                                       string nonNullParam2) cil managed
@@ -140,6 +141,7 @@
   .class auto ansi nested public beforefieldinit PassThroughGetterReturnValue
          extends [mscorlib]System.Object
   {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string returnValue) cil managed
     {
@@ -181,6 +183,7 @@
   .class auto ansi nested public beforefieldinit AllowedNulls
          extends [mscorlib]System.Object
   {
+    .custom instance void [mscorlib]System.Reflection.DefaultMemberAttribute::.ctor(string) = ( 01 00 04 49 74 65 6D 00 00 )                      // ...Item..
     .method public hidebysig specialname 
             instance string  get_Item(string allowNull,
                                       valuetype [mscorlib]System.Nullable`1<int32> nullableInt,
