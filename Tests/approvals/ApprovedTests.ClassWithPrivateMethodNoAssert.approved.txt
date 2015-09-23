@@ -17,6 +17,8 @@
   .method private hidebysig instance void 
           SomePrivateMethod(string x) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       20 (0x14)
     .maxstack  2
     IL_0000:  ldarg.1

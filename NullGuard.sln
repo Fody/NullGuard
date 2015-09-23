@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceAssembly", "ReferenceAssembly\ReferenceAssembly.csproj", "{B5AEB0E8-28F4-4955-A055-9C200F7113F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessMono", "AssemblyToProcessMono\AssemblyToProcessMono.csproj", "{A6D1B956-68D2-4D36-8AA0-24A88A40E4F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcessWithoutJetBrainsAnnotations", "AssemblyToProcessWithoutJetBrainsAnnotations\AssemblyToProcessWithoutJetBrainsAnnotations.csproj", "{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,12 @@ Global
 		{A6D1B956-68D2-4D36-8AA0-24A88A40E4F2}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{A6D1B956-68D2-4D36-8AA0-24A88A40E4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6D1B956-68D2-4D36-8AA0-24A88A40E4F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52DDFE30-3A96-4078-B4CA-6C1DFA2724D1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

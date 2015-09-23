@@ -53,5 +53,6 @@
   } 
   .property instance !T NonNullProperty()
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
   } 
 }

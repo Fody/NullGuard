@@ -6,3 +6,7 @@ Errors: [4] = Method 'System.Void InterfaceBadAttributes::MethodWithNoNullCheckO
 Errors: [5] = Method 'System.Void InterfaceBadAttributes::MethodWithNoNullCheckOnParam(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.
 Errors: [6] = Method 'System.Void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.
 Errors: [7] = Method 'System.Void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.
+Errors: [8] = NullGuard.InjectJetBrainsAnnotationsAttribute referenced invalid annotation type 'System.Int32' (doesn't contain an empty constructor).
+Errors: [9] = NullGuard.InjectJetBrainsAnnotationsAttribute referenced invalid annotation type 'System.Int32' (doesn't contain an empty constructor).
+Errors: [10] = NullGuard.InjectJetBrainsAnnotationsAttribute referenced invalid annotation type 'System.String' (doesn't contain an empty constructor).
+Errors: [11] = NullGuard.InjectJetBrainsAnnotationsAttribute referenced invalid annotation type 'System.String' (doesn't contain an empty constructor).

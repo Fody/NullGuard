@@ -632,9 +632,12 @@
           SomeMethodAsync(string nonNullArg,
                           string nullArg) cil managed
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.ItemNotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     .custom instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 22 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // .."SpecialClass+
                                                                                                                                        3C 53 6F 6D 65 4D 65 74 68 6F 64 41 73 79 6E 63   // <SomeMethodAsync
                                                                                                                                        3E 64 5F 5F 31 00 00 )                            // >d__1..
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       76 (0x4c)
     .maxstack  2
     .locals init (valuetype SpecialClass/'<SomeMethodAsync>d__1' V_0,
@@ -669,6 +672,7 @@
   .method public hidebysig instance class [mscorlib]System.Threading.Tasks.Task`1<string> 
           MethodWithReturnValueAsync(bool returnNull) cil managed
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.ItemNotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     .custom instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 2D 53 70 65 63 69 61 6C 43 6C 61 73 73 2B   // ..-SpecialClass+
                                                                                                                                        3C 4D 65 74 68 6F 64 57 69 74 68 52 65 74 75 72   // <MethodWithRetur
                                                                                                                                        6E 56 61 6C 75 65 41 73 79 6E 63 3E 64 5F 5F 32   // nValueAsync>d__2

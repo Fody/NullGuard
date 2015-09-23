@@ -22,6 +22,12 @@ public class VerifyTest
     {
         Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[2]);
     }
+
+    [Test]
+    public void PeVerify4()
+    {
+        Verifier.Verify(AssemblyWeaver.WithoutJetBrainsAnnotationsAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[3]);
+    }
 }
 
 #endif

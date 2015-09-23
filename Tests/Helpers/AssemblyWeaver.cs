@@ -38,6 +38,10 @@ public static class AssemblyWeaver
     public static Assembly[] Assemblies;
     public static string BeforeAssemblyPath;
     public static string MonoBeforeAssemblyPath;
+    public static string WithoutJetBrainsAnnotationsAssemblyPath;
+
+    // REVIEW: do we want to use _named_ test data assembly paths (instead of indexes)? I.e. WeavedAssemblyToProcess,
+    //         WeavedAssemblyToProcessWithoutDebugAssert, WeavedAssemblyToProcessMono, WeavedAssemblyToProcessWithoutJetBrainsAnnotations
     public static string[] AfterAssemblyPaths;
     public static string[] AfterAssemblySymbolPaths;
 
@@ -52,6 +56,8 @@ public static class AssemblyWeaver
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
         MonoBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll");
         var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
+        WithoutJetBrainsAnnotationsAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessWithoutJetBrainsAnnotations\bin\Debug\AssemblyToProcessWithoutJetBrainsAnnotations.dll");
+        var withoutJetBrainsAnnotationsAssemblyBeforePdbPath = Path.ChangeExtension(WithoutJetBrainsAnnotationsAssemblyPath, "pdb");
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
@@ -63,69 +69,28 @@ public static class AssemblyWeaver
         AfterAssemblyPaths = new [] {
             BeforeAssemblyPath.Replace(".dll", "2.dll"),
             BeforeAssemblyPath.Replace(".dll", "3.dll"),
-            MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
+            MonoBeforeAssemblyPath.Replace(".dll", "2.dll"),
+            WithoutJetBrainsAnnotationsAssemblyPath.Replace(".dll", "2.dll")
         };
         AfterAssemblySymbolPaths = new [] {
             beforePdbPath.Replace(".pdb", "2.pdb"),
             beforePdbPath.Replace(".pdb", "3.pdb"),
-            monoBeforeMdbPath.Replace(".mdb", "2.mdb")
+            monoBeforeMdbPath.Replace(".mdb", "2.mdb"),
+            withoutJetBrainsAnnotationsAssemblyBeforePdbPath.Replace(".pdb", "2.pdb")
         };
 
-        Assemblies = new Assembly[3];
-        Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[0], beforePdbPath, AfterAssemblySymbolPaths[0], moduleDefinition =>
+        Assemblies = new Assembly[4];
+        Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[0], beforePdbPath, AfterAssemblySymbolPaths[0]);
+        Assemblies[1] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[1], beforePdbPath, AfterAssemblySymbolPaths[1], moduleWeaver =>
         {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
+            moduleWeaver.Config =
+                    new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$"));
         });
-
-        Assemblies[1] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[1], beforePdbPath, AfterAssemblySymbolPaths[1], moduleDefinition =>
-        {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$")),
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
-
-        Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2], moduleDefinition =>
-        {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
+        Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2]);
+        Assemblies[3] = WeaveAssembly(WithoutJetBrainsAnnotationsAssemblyPath, AfterAssemblyPaths[3], withoutJetBrainsAnnotationsAssemblyBeforePdbPath, AfterAssemblySymbolPaths[3]);
     }
 
-    static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
+    static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleWeaver> changeConfiguration = null)
     {
         if (File.Exists(afterAssemblyPath))
             File.Delete(afterAssemblyPath);
@@ -144,7 +109,21 @@ public static class AssemblyWeaver
 
         var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath, readerParameters);
 
-        weaveAction(moduleDefinition);
+        var assemblyResolver = new MockAssemblyResolver();
+
+        var moduleWeaver = new ModuleWeaver
+        {
+            ModuleDefinition = moduleDefinition,
+            AssemblyResolver = assemblyResolver,
+            LogInfo = LogInfo,
+            LogWarn = LogWarn,
+            LogError = LogError,
+            DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+        };
+
+        changeConfiguration?.Invoke(moduleWeaver);
+
+        moduleWeaver.Execute();
 
         moduleDefinition.Write(afterAssemblyPath, writerParameters);
 

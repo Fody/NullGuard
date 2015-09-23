@@ -96,6 +96,18 @@ public class ApprovedTests
     }
 
     [Test]
+    public void SampleClassWithDisabledInjectJetBrainsAnnotations()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SampleClassWithDisabledInjectJetBrainsAnnotations"));
+    }
+
+    [Test]
+    public void SampleClassWithoutJetBrainsAnnotationsAttribute()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[3], "SampleClassWithoutJetBrainsAnnotationsAttribute"));
+    }
+
+    [Test]
     public void InfosList()
     {
         Approvals.VerifyAll(AssemblyWeaver.Infos.OrderBy(e => e), "Infos: ");

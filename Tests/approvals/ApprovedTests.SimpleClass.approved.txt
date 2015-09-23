@@ -11,6 +11,8 @@
   .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .field private valuetype [mscorlib]System.Nullable`1<int32> '<NonNullNullableProperty>k__BackingField'
   .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field private string '<PropertyWithNotNullAnnotation>k__BackingField'
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor() cil managed
   {
@@ -24,6 +26,8 @@
   .method public hidebysig specialname rtspecialname 
           instance void  .ctor([out] string& nonNullOutArg) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       43 (0x2b)
     .maxstack  2
     IL_0000:  ldarg.0
@@ -52,6 +56,8 @@
           instance void  .ctor(string nonNullArg,
                                string nullArg) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       60 (0x3c)
     .maxstack  3
     IL_0000:  ldarg.1
@@ -84,6 +90,8 @@
           SomeMethod(string nonNullArg,
                      string nullArg) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       43 (0x2b)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -281,6 +289,7 @@
   .method public hidebysig instance string 
           MethodWithReturnValue(bool returnNull) cil managed
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       75 (0x4b)
     .maxstack  3
     IL_0000:  ldarg.1
@@ -325,6 +334,8 @@
   .method public hidebysig instance void 
           MethodWithRef(object& returnNull) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       39 (0x27)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -349,6 +360,8 @@
   .method public hidebysig instance void 
           MethodWithGeneric<T>(!!T returnNull) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       47 (0x2f)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -373,6 +386,8 @@
   .method public hidebysig instance void 
           MethodWithGenericRef<T>(!!T& returnNull) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       57 (0x39)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -407,7 +422,7 @@
   .method public hidebysig instance string 
           MethodWithCanBeNullResult() cil managed
   {
-    .custom instance void CanBeNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.CanBeNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       2 (0x2)
     .maxstack  1
     IL_0000:  ldnull
@@ -416,6 +431,8 @@
   .method public hidebysig instance void 
           MethodWithOutValue([out] string& nonNullOutArg) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       37 (0x25)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -471,6 +488,10 @@
           MethodWithTwoRefs(string& first,
                             string& second) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    .param [2]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       77 (0x4d)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -513,6 +534,10 @@
           MethodWithTwoOuts([out] string& first,
                             [out] string& second) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    .param [2]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       73 (0x49)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -565,6 +590,7 @@
           MethodWithOptionalParameterWithNonNullDefaultValue([opt] string optional) cil managed
   {
     .param [1] = "default"
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       37 (0x25)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -595,6 +621,8 @@
   .method public hidebysig instance void 
           MethodWithGenericOut<T>([out] !!T& item) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       59 (0x3b)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -620,6 +648,7 @@
   } 
   .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       103 (0x67)
     .maxstack  3
     .locals init ([0] !!T )
@@ -671,6 +700,9 @@
   .method public hidebysig instance object 
           MethodWithOutAndReturn([out] string& prefix) cil managed
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       70 (0x46)
     .maxstack  3
     IL_0000:  ldarg.1
@@ -713,6 +745,8 @@
   .method public hidebysig instance void 
           MethodWithExistingArgumentGuard(string x) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       67 (0x43)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -774,8 +808,105 @@
     IL_0019:  call       void [mscorlib]System.Console::WriteLine(string)
     IL_001e:  ret
   } 
+  .method public hidebysig instance string 
+          MethodWithNotNullAnnotations(string nonNullArg) cil managed
+  {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       70 (0x46)
+    .maxstack  3
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  ceq
+    IL_0004:  ldc.i4.0
+    IL_0005:  ceq
+    IL_0007:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0011:  ldarg.1
+    IL_0012:  brtrue.s   IL_0024
+    IL_0014:  ldstr      "nonNullArg"
+    IL_0019:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0023:  throw
+    IL_0024:  ldnull
+    IL_0025:  dup
+    IL_0026:  ldnull
+    IL_0027:  ceq
+    IL_0029:  ldc.i4.0
+    IL_002a:  ceq
+    IL_002c:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SimpleClass::MethodWithNotNullAnnotations(System.String)' is null."
+    IL_0031:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0036:  dup
+    IL_0037:  brtrue.s   IL_0045
+    IL_0039:  pop
+    IL_003a:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SimpleClass::MethodWithNotNullAnnotations(System.String)' is null."
+    IL_003f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0044:  throw
+    IL_0045:  ret
+  } 
+  .method public hidebysig specialname instance string 
+          get_PropertyWithNotNullAnnotation() cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       39 (0x27)
+    .maxstack  3
+    IL_0000:  ldarg.0
+    IL_0001:  ldfld      string SimpleClass::'<PropertyWithNotNullAnnotation>k__BackingField'
+    IL_0006:  dup
+    IL_0007:  ldnull
+    IL_0008:  ceq
+    IL_000a:  ldc.i4.0
+    IL_000b:  ceq
+    IL_000d:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SimpleClass::PropertyWithNotNullAnnotation()' is null."
+    IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0017:  dup
+    IL_0018:  brtrue.s   IL_0026
+    IL_001a:  pop
+    IL_001b:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SimpleClass::PropertyWithNotNullAnnotation()' is null."
+    IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0025:  throw
+    IL_0026:  ret
+  } 
+  .method public hidebysig specialname instance void 
+          set_PropertyWithNotNullAnnotation(string 'value') cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       44 (0x2c)
+    .maxstack  2
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  ceq
+    IL_0004:  ldc.i4.0
+    IL_0005:  ceq
+    IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+    + "em.String SimpleClass::PropertyWithNotNullAnnotation()' to null."
+    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0011:  ldarg.1
+    IL_0012:  brtrue.s   IL_0024
+    IL_0014:  ldstr      "value"
+    IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+    + "em.String SimpleClass::PropertyWithNotNullAnnotation()' to null."
+    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0023:  throw
+    IL_0024:  ldarg.0
+    IL_0025:  ldarg.1
+    IL_0026:  stfld      string SimpleClass::'<PropertyWithNotNullAnnotation>k__BackingField'
+    IL_002b:  ret
+  } 
   .property instance string NonNullProperty()
   {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
   } 
   .property instance string NullProperty()
   {
@@ -789,5 +920,9 @@
   .property instance valuetype [mscorlib]System.Nullable`1<int32>
           NonNullNullableProperty()
   {
+  } 
+  .property instance string PropertyWithNotNullAnnotation()
+  {
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
   } 
 }

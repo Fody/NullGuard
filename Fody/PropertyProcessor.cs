@@ -22,7 +22,7 @@ public class PropertyProcessor
         this.isDebug = isDebug;
     }
 
-    public void Process(PropertyDefinition property)
+    public void Process(PropertyDefinition property, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         try
         {
@@ -30,7 +30,7 @@ public class PropertyProcessor
             {
                 return;
             }
-            InnerProcess(property);
+            InnerProcess(property, jetBrainsAnnotationsApplier);
         }
         catch (Exception exception)
         {
@@ -38,7 +38,7 @@ public class PropertyProcessor
         }
     }
 
-    void InnerProcess(PropertyDefinition property)
+    void InnerProcess(PropertyDefinition property, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         var localValidationFlags = validationFlags;
 
@@ -56,6 +56,9 @@ public class PropertyProcessor
         if (property.AllowsNull())
             return;
 
+        bool injectedGuardInGetter = false;
+        bool injectedGuardInSetter = false;
+
         if (property.GetMethod != null && property.GetMethod.Body != null)
         {
             var getBody = property.GetMethod.Body;
@@ -69,6 +72,7 @@ public class PropertyProcessor
                )
             {
                 InjectPropertyGetterGuard(getBody, sequencePoint, property);
+                injectedGuardInGetter = true;
             }
 
             getBody.InitLocals = true;
@@ -78,18 +82,27 @@ public class PropertyProcessor
         if (property.SetMethod != null && property.SetMethod.Body != null)
         {
             var setBody = property.SetMethod.Body;
+            var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
             var sequencePoint = setBody.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
 
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()))
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.SetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
+                && valueParameter.MayNotBeNull())
             {
                 InjectPropertySetterGuard(setBody, sequencePoint, property);
+                injectedGuardInSetter = true;
             }
 
             setBody.InitLocals = true;
             setBody.OptimizeMacros();
+        }
+
+        if (injectedGuardInGetter && injectedGuardInSetter)
+        {
+            // ReSharper doesn't support return- and param-level nullability attributes for properties, just one attribute for the whole property:
+            jetBrainsAnnotationsApplier.AddToProperty(property);
         }
     }
 
@@ -139,9 +152,6 @@ public class PropertyProcessor
     void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, PropertyDefinition property)
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
-
-        if (!valueParameter.MayNotBeNull())
-            return;
 
         var guardInstructions = new List<Instruction>();
         var errorMessage = string.Format(CultureInfo.InvariantCulture, CannotSetTheValueOfPropertyToNull, property.FullName);

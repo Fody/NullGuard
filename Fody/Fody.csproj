@@ -82,6 +82,7 @@
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>
+    <Compile Include="JetBrainsAnnotationsApplier.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="InstructionPatterns.cs" />
     <Compile Include="CecilExtensions.cs" />

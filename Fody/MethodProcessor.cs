@@ -24,7 +24,7 @@ public class MethodProcessor
         this.isDebug = isDebug;
     }
 
-    public void Process(MethodDefinition method)
+    public void Process(MethodDefinition method, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         try
         {
@@ -32,7 +32,7 @@ public class MethodProcessor
             {
                 return;
             }
-            InnerProcess(method);
+            InnerProcess(method, jetBrainsAnnotationsApplier);
         }
         catch (Exception exception)
         {
@@ -40,7 +40,7 @@ public class MethodProcessor
         }
     }
 
-    void InnerProcess(MethodDefinition method)
+    void InnerProcess(MethodDefinition method, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         var localValidationFlags = validationFlags;
 
@@ -61,13 +61,13 @@ public class MethodProcessor
 
         if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
         {
-            InjectMethodArgumentGuards(method, body, sequencePoint);
+            InjectMethodArgumentGuards(method, body, sequencePoint, jetBrainsAnnotationsApplier);
         }
 
         if (!method.IsAsyncStateMachine() &&
             !method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard(localValidationFlags, method, body, sequencePoint);
+            InjectMethodReturnGuard(localValidationFlags, method, body, sequencePoint, jetBrainsAnnotationsApplier);
         }
 
         if (method.IsAsyncStateMachine())
@@ -85,6 +85,8 @@ public class MethodProcessor
                 returnType.FullName != typeof(void).FullName)
             {
                 InjectMethodReturnGuardAsync(body, string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName), method.FullName);
+
+                jetBrainsAnnotationsApplier.AddToAsyncMethod(method);
             }
         }
 
@@ -92,7 +94,7 @@ public class MethodProcessor
         body.OptimizeMacros();
     }
 
-    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -132,10 +134,12 @@ public class MethodProcessor
             guardInstructions[0].HideLineFromDebugger(seqPoint);
 
             body.Instructions.Prepend(guardInstructions);
+
+            jetBrainsAnnotationsApplier.AddToParameter(parameter);
         }
     }
 
-    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint, JetBrainsAnnotationsApplier jetBrainsAnnotationsApplier)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -155,6 +159,8 @@ public class MethodProcessor
             {
                 var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName);
                 AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
+
+                jetBrainsAnnotationsApplier.AddToMethod(method);
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -193,6 +199,8 @@ public class MethodProcessor
                         guardInstructions[0].HideLineFromDebugger(seqPoint);
 
                         body.Instructions.Insert(ret, guardInstructions);
+
+                        jetBrainsAnnotationsApplier.AddToParameter(parameter);
                     }
                 }
             }
@@ -242,6 +250,8 @@ public class MethodProcessor
         foreach (var ret in returnPoints)
         {
             AddReturnNullGuard(method.Body.Instructions, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
+
+            // Here, we don't need to inject JetBrains Annotations on the compiler generated MoveNext method.
         }
 
         method.Body.OptimizeMacros();
