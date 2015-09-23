@@ -36,6 +36,8 @@ public class ModuleWeaver
 
         ReadConfig();
 
+        // REVIEW: Why do we check for module attributes (instead of just checking on assembly level) 
+        //         as the attribute targets are defined with AttributeTargets.Assembly | AttributeTargets.Class?
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
         if (nullGuardAttribute == null)
@@ -137,11 +139,13 @@ public class ModuleWeaver
             if (type.IsInterface || type.ContainsAllowNullAttribute() || type.IsGeneratedCode() || type.HasInterface("Windows.UI.Xaml.Markup.IXamlMetadataProvider"))
                 continue;
 
+            var jetBrainsAnnotationsApplier = JetBrainsAnnotationsApplier.CreateForType(type);
+
             foreach (var method in type.MethodsWithBody())
-                methodProcessor.Process(method);
+                methodProcessor.Process(method, jetBrainsAnnotationsApplier);
 
             foreach (var property in type.ConcreteProperties())
-                propertyProcessor.Process(property);
+                propertyProcessor.Process(property, jetBrainsAnnotationsApplier);
         }
     }
 

@@ -2,6 +2,7 @@
        extends [mscorlib]System.Object
 {
   .field private string '<SomeProperty>k__BackingField'
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
   .method public hidebysig instance void 
           PublicWrapperOfPrivateMethod() cil managed
   {
@@ -16,6 +17,8 @@
   .method private hidebysig instance void 
           SomePrivateMethod(string x) cil managed
   {
+    .param [1]
+    .custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       37 (0x25)
     .maxstack  2
     IL_0000:  ldarg.1
@@ -38,6 +41,7 @@
   .method public hidebysig specialname instance string 
           get_SomeProperty() cil managed
   {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       7 (0x7)
     .maxstack  8
     IL_0000:  ldarg.0
@@ -47,6 +51,7 @@
   .method public hidebysig specialname instance void 
           set_SomeProperty(string 'value') cil managed
   {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
     // Code size       8 (0x8)
     .maxstack  8
     IL_0000:  ldarg.0

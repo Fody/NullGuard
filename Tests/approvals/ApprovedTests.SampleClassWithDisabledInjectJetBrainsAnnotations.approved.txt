@@ -1,0 +1,267 @@
+﻿.class public auto ansi beforefieldinit SampleClassWithDisabledInjectJetBrainsAnnotations
+       extends [mscorlib]System.Object
+{
+  .class auto ansi sealed nested private beforefieldinit '<SomeAsyncMethod>d__1'
+         extends [mscorlib]System.ValueType
+         implements [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    .field public int32 '<>1__state'
+    .field public valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> '<>t__builder'
+    .field private valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter '<>u__1'
+    .method private hidebysig newslot virtual final 
+            instance void  MoveNext() cil managed
+    {
+      .override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::MoveNext
+      // Code size       194 (0xc2)
+      .maxstack  4
+      .locals init ([0] int32 ,
+               [1] string V_1,
+               [2] valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter V_2,
+               [3] class [mscorlib]System.Exception V_3)
+      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+      IL_0000:  ldarg.0
+      IL_0001:  ldfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+      IL_0006:  stloc.0
+      .try
+      {
+        IL_0007:  ldloc.0
+        IL_0008:  brfalse.s  IL_0042
+        IL_000a:  ldc.i4.0
+        IL_000b:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Delay(int32)
+        IL_0010:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
+        IL_0015:  stloc.2
+        IL_0016:  ldloca.s   V_2
+        IL_0018:  call       instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::get_IsCompleted()
+        IL_001d:  brtrue.s   IL_005e
+        IL_001f:  ldarg.0
+        IL_0020:  ldc.i4.0
+        IL_0021:  dup
+        IL_0022:  stloc.0
+        IL_0023:  stfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+        IL_0028:  ldarg.0
+        IL_0029:  ldloc.2
+        IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>u__1'
+        IL_002f:  ldarg.0
+        IL_0030:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+        IL_0035:  ldloca.s   V_2
+        IL_0037:  ldarg.0
+        IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::AwaitUnsafeOnCompleted<valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter,valuetype SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'>(!!0&,
+                                                                                                                                                                                                                                                                                                             !!1&)
+        IL_003d:  leave      IL_00c1
+        IL_0042:  ldarg.0
+        IL_0043:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>u__1'
+        IL_0048:  stloc.2
+        IL_0049:  ldarg.0
+        IL_004a:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>u__1'
+        IL_004f:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
+        IL_0055:  ldarg.0
+        IL_0056:  ldc.i4.m1
+        IL_0057:  dup
+        IL_0058:  stloc.0
+        IL_0059:  stfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+        IL_005e:  ldloca.s   V_2
+        IL_0060:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
+        IL_0065:  ldloca.s   V_2
+        IL_0067:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
+        IL_006d:  ldnull
+        IL_006e:  stloc.1
+        IL_006f:  leave.s    IL_0088
+      }  // end .try
+      catch [mscorlib]System.Exception 
+      {
+        IL_0071:  stloc.3
+        IL_0072:  ldarg.0
+        IL_0073:  ldc.i4.s   -2
+        IL_0075:  stfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+        IL_007a:  ldarg.0
+        IL_007b:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+        IL_0080:  ldloc.3
+        IL_0081:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
+        IL_0086:  leave.s    IL_00c1
+      }  // end handler
+      IL_0088:  ldarg.0
+      IL_0089:  ldc.i4.s   -2
+      IL_008b:  stfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+      IL_0090:  ldarg.0
+      IL_0091:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+      IL_0096:  ldloc.1
+      IL_0097:  dup
+      IL_0098:  ldnull
+      IL_0099:  ceq
+      IL_009b:  ldc.i4.0
+      IL_009c:  ceq
+      IL_009e:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
+      + "ng.Tasks.Task`1<System.String> SampleClassWithDisabledInjectJetBrainsAn"
+      + "notations::SomeAsyncMethod()' is null."
+      IL_00a3:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                         string)
+      IL_00a8:  dup
+      IL_00a9:  brtrue.s   IL_00bc
+      IL_00ab:  pop
+      IL_00ac:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
+      + "ng.Tasks.Task`1<System.String> SampleClassWithDisabledInjectJetBrainsAn"
+      + "notations::SomeAsyncMethod()' is null."
+      IL_00b1:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+      IL_00b6:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
+      IL_00bb:  ret
+      IL_00bc:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetResult(!0)
+      IL_00c1:  ret
+    } // end of method '<SomeAsyncMethod>d__1'::MoveNext
+    .method private hidebysig newslot virtual final 
+            instance void  SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine stateMachine) cil managed
+    {
+      .custom instance void [mscorlib]System.Diagnostics.DebuggerHiddenAttribute::.ctor() = ( 01 00 00 00 ) 
+      .override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine
+      // Code size       13 (0xd)
+      .maxstack  8
+      IL_0000:  ldarg.0
+      IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+      IL_0006:  ldarg.1
+      IL_0007:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)
+      IL_000c:  ret
+    } // end of method '<SomeAsyncMethod>d__1'::SetStateMachine
+  } 
+  .field private string '<SomeProperty>k__BackingField'
+  .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+  .method public hidebysig instance string 
+          SomeMethod(string nonNullArg) cil managed
+  {
+    // Code size       70 (0x46)
+    .maxstack  3
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  ceq
+    IL_0004:  ldc.i4.0
+    IL_0005:  ceq
+    IL_0007:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0011:  ldarg.1
+    IL_0012:  brtrue.s   IL_0024
+    IL_0014:  ldstr      "nonNullArg"
+    IL_0019:  ldstr      "[NullGuard] nonNullArg is null."
+    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0023:  throw
+    IL_0024:  ldnull
+    IL_0025:  dup
+    IL_0026:  ldnull
+    IL_0027:  ceq
+    IL_0029:  ldc.i4.0
+    IL_002a:  ceq
+    IL_002c:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SampleClassWithDisabledInjectJetBrainsAnnotations::SomeMethod(System.St"
+    + "ring)' is null."
+    IL_0031:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0036:  dup
+    IL_0037:  brtrue.s   IL_0045
+    IL_0039:  pop
+    IL_003a:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SampleClassWithDisabledInjectJetBrainsAnnotations::SomeMethod(System.St"
+    + "ring)' is null."
+    IL_003f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0044:  throw
+    IL_0045:  ret
+  } 
+  .method public hidebysig instance class [mscorlib]System.Threading.Tasks.Task`1<string> 
+          SomeAsyncMethod() cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.AsyncStateMachineAttribute::.ctor(class [mscorlib]System.Type) = ( 01 00 47 53 61 6D 70 6C 65 43 6C 61 73 73 57 69   // ..GSampleClassWi
+                                                                                                                                       74 68 44 69 73 61 62 6C 65 64 49 6E 6A 65 63 74   // thDisabledInject
+                                                                                                                                       4A 65 74 42 72 61 69 6E 73 41 6E 6E 6F 74 61 74   // JetBrainsAnnotat
+                                                                                                                                       69 6F 6E 73 2B 3C 53 6F 6D 65 41 73 79 6E 63 4D   // ions+<SomeAsyncM
+                                                                                                                                       65 74 68 6F 64 3E 64 5F 5F 31 00 00 )             // ethod>d__1..
+    // Code size       49 (0x31)
+    .maxstack  2
+    .locals init (valuetype SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1' V_0,
+             valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
+    IL_0000:  ldloca.s   V_0
+    IL_0002:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
+    IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+    IL_000c:  ldloca.s   V_0
+    IL_000e:  ldc.i4.m1
+    IL_000f:  stfld      int32 SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>1__state'
+    IL_0014:  ldloc.0
+    IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+    IL_001a:  stloc.1
+    IL_001b:  ldloca.s   V_1
+    IL_001d:  ldloca.s   V_0
+    IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<valuetype SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'>(!!0&)
+    IL_0024:  ldloca.s   V_0
+    IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SampleClassWithDisabledInjectJetBrainsAnnotations/'<SomeAsyncMethod>d__1'::'<>t__builder'
+    IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
+    IL_0030:  ret
+  } 
+  .method public hidebysig specialname instance string 
+          get_SomeProperty() cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       39 (0x27)
+    .maxstack  3
+    IL_0000:  ldarg.0
+    IL_0001:  ldfld      string SampleClassWithDisabledInjectJetBrainsAnnotations::'<SomeProperty>k__BackingField'
+    IL_0006:  dup
+    IL_0007:  ldnull
+    IL_0008:  ceq
+    IL_000a:  ldc.i4.0
+    IL_000b:  ceq
+    IL_000d:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SampleClassWithDisabledInjectJetBrainsAnnotations::SomeProperty()' is"
+    + " null."
+    IL_0012:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0017:  dup
+    IL_0018:  brtrue.s   IL_0026
+    IL_001a:  pop
+    IL_001b:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SampleClassWithDisabledInjectJetBrainsAnnotations::SomeProperty()' is"
+    + " null."
+    IL_0020:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0025:  throw
+    IL_0026:  ret
+  } 
+  .method public hidebysig specialname instance void 
+          set_SomeProperty(string 'value') cil managed
+  {
+    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = ( 01 00 00 00 ) 
+    // Code size       44 (0x2c)
+    .maxstack  2
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  ceq
+    IL_0004:  ldc.i4.0
+    IL_0005:  ceq
+    IL_0007:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+    + "em.String SampleClassWithDisabledInjectJetBrainsAnnotations::SomeProper"
+    + "ty()' to null."
+    IL_000c:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0011:  ldarg.1
+    IL_0012:  brtrue.s   IL_0024
+    IL_0014:  ldstr      "value"
+    IL_0019:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
+    + "em.String SampleClassWithDisabledInjectJetBrainsAnnotations::SomeProper"
+    + "ty()' to null."
+    IL_001e:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0023:  throw
+    IL_0024:  ldarg.0
+    IL_0025:  ldarg.1
+    IL_0026:  stfld      string SampleClassWithDisabledInjectJetBrainsAnnotations::'<SomeProperty>k__BackingField'
+    IL_002b:  ret
+  } 
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } 
+  .property instance string SomeProperty()
+  {
+  } 
+}

@@ -1,3 +1,4 @@
 ﻿Infos: [0] = 	No reference to 'NullGuard.dll' found. References not modified.
-Infos: [1] = 	Removing reference to 'NullGuard.dll'.
+Infos: [1] = 	No reference to 'NullGuard.dll' found. References not modified.
 Infos: [2] = 	Removing reference to 'NullGuard.dll'.
+Infos: [3] = 	Removing reference to 'NullGuard.dll'.

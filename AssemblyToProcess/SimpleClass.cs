@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using NullGuard;
 
 public class SimpleClass
@@ -144,4 +145,13 @@ public class SimpleClass
 
         Console.WriteLine(x);
     }
+
+    [NotNull]
+    public string MethodWithNotNullAnnotations([NotNull] string nonNullArg)
+    {
+        return null;
+    }
+
+    [NotNull]
+    public string PropertyWithNotNullAnnotation { get; set; }
 }

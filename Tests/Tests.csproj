@@ -122,6 +122,8 @@
     <Content Include="approvals\ApprovedTests.InfosList.approved.txt" />
     <Content Include="approvals\ApprovedTests.InterfaceBadAttributes.approved.txt" />
     <Content Include="approvals\ApprovedTests.PublicNestedInsideNonPublic.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SampleClassWithDisabledInjectJetBrainsAnnotations.approved.txt" />
+    <Content Include="approvals\ApprovedTests.SampleClassWithoutJetBrainsAnnotationsAttribute.approved.txt" />
     <Content Include="approvals\ApprovedTests.SimpleClass.approved.txt" />
     <Content Include="approvals\ApprovedTests.SimpleClassNoAssert.approved.txt" />
     <Content Include="approvals\ApprovedTests.SkipIXamlMetadataProvider.approved.txt" />
