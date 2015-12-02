@@ -208,4 +208,25 @@ public class RewritingMethods
         var ClassToExclude = (dynamic)Activator.CreateInstance(classToExcludeType, "");
         ClassToExclude.Test(null);
     }
+
+    [Test]
+    public void ReturnValueChecksWithBranchToRetInstruction()
+    {
+        // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
+
+        var sample = (dynamic) Activator.CreateInstance(sampleClassType);
+        var exception = Assert.Throws<InvalidOperationException>(() => sample.ReturnValueChecksWithBranchToRetInstruction());
+        Assert.AreEqual("[NullGuard] Return value of method 'System.String SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null.", exception.Message);
+    }
+
+    [Test]
+    public void OutValueChecksWithRetInstructionAsSwitchCase()
+    {
+        // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
+
+        var sample = (dynamic) Activator.CreateInstance(sampleClassType);
+        string value;
+        var exception = Assert.Throws<InvalidOperationException>(() => sample.OutValueChecksWithRetInstructionAsSwitchCase(0, out value));
+        Assert.AreEqual("[NullGuard] Out parameter 'outParam' is null.", exception.Message);
+    }
 }

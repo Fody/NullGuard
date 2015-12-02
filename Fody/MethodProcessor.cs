@@ -154,7 +154,7 @@ public class MethodProcessor
                 !method.IsGetter)
             {
                 var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName);
-                AddReturnNullGuard(body.Instructions, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(body, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -192,7 +192,7 @@ public class MethodProcessor
 
                         guardInstructions[0].HideLineFromDebugger(seqPoint);
 
-                        body.Instructions.Insert(ret, guardInstructions);
+                        body.InsertAtMethodReturnPoint(ret, guardInstructions);
                     }
                 }
             }
@@ -241,15 +241,15 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            AddReturnNullGuard(method.Body.Instructions, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
+            AddReturnNullGuard(method.Body, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
         }
 
         method.Body.OptimizeMacros();
     }
 
-    void AddReturnNullGuard(Collection<Instruction> instructions, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
+    void AddReturnNullGuard(MethodBody methodBody, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
-        var returnInstruction = instructions[ret];
+        var returnInstruction = methodBody.Instructions[ret];
 
         var guardInstructions = new List<Instruction>();
 
@@ -264,7 +264,7 @@ public class MethodProcessor
 
         InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
         {
-            // Clean up the stack since we're about to throw up.
+            // Clean up the stack (important if finalInstructions doesn't throw, e.g. for async methods):
             i.Add(Instruction.Create(OpCodes.Pop));
 
             InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
@@ -274,7 +274,7 @@ public class MethodProcessor
 
         guardInstructions[0].HideLineFromDebugger(seqPoint);
 
-        instructions.Insert(ret, guardInstructions);
+        methodBody.InsertAtMethodReturnPoint(ret, guardInstructions);
     }
 
     static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)

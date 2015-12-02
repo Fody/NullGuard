@@ -132,7 +132,7 @@ public class PropertyProcessor
 
             guardInstructions[0].HideLineFromDebugger(seqPoint);
 
-            getBody.Instructions.Insert(ret, guardInstructions);
+            getBody.InsertAtMethodReturnPoint(ret, guardInstructions);
         }
     }
 
