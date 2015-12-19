@@ -15,7 +15,8 @@ public static class Decompiler
 			identifier = "/item:" + identifier;
 		}
 
-		using (var process = Process.Start(new ProcessStartInfo(exePath, string.Format("\"{0}\" /text /linenum {1}", assemblyPath, identifier))
+		using (var process = Process.Start(
+            new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum {identifier}")
 		{
 			RedirectStandardOutput = true,
 			UseShellExecute = false,

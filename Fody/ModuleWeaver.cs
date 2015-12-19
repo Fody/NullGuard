@@ -86,7 +86,7 @@ public class ModuleWeaver
         {
             if (!bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
             {
-                throw new WeavingException(string.Format("Could not parse 'IncludeDebugAssert' from '{0}'.", includeDebugAssertAttribute.Value));
+                throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{includeDebugAssertAttribute.Value}'.");
             }
         }
     }
@@ -94,13 +94,10 @@ public class ModuleWeaver
     void ReadExcludeRegex()
     {
         var attribute = Config.Attribute("ExcludeRegex");
-        if(attribute != null)
-        {
-            var regex = attribute.Value;
-            if(!string.IsNullOrWhiteSpace(regex))
-            { 
-                ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant); 
-            }
+        var regex = attribute?.Value;
+        if(!string.IsNullOrWhiteSpace(regex))
+        { 
+            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant); 
         }
     }
 
@@ -112,13 +109,13 @@ public class ModuleWeaver
             {
                 if (method.ContainsAllowNullAttribute())
                 {
-                    LogError(string.Format("Method '{0}' is abstract but has a [AllowNullAttribute]. Remove this attribute.", method.FullName));
+                    LogError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
                 }
                 foreach (var parameter in method.Parameters)
                 {
                     if (parameter.ContainsAllowNullAttribute())
                     {
-                        LogError(string.Format("Method '{0}' is abstract but has a [AllowNullAttribute]. Remove this attribute.", method.FullName));
+                        LogError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
                     }
                 }
             }

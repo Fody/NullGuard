@@ -10,7 +10,7 @@ public static class Verifier
     {
         var before = Validate(beforeAssemblyPath);
         var after = Validate(afterAssemblyPath);
-        var message = string.Format("Failed processing {0}\r\n{1}", Path.GetFileName(afterAssemblyPath), after);
+        var message = $"Failed processing {Path.GetFileName(afterAssemblyPath)}\r\n{after}";
         Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
     }
 
@@ -32,9 +32,13 @@ public static class Verifier
     {
         var path = Path.Combine(ToolLocationHelper.GetPathToDotNetFrameworkSdk(TargetDotNetFrameworkVersion.Version40), @"bin\NETFX 4.0 Tools\peverify.exe");
         if (!File.Exists(path))
+        {
             path = path.Replace("v7.0", "v8.0");
+        }
         if (!File.Exists(path))
+        {
             Assert.Ignore("PEVerify could not be found");
+        }
         return path;
     }
 

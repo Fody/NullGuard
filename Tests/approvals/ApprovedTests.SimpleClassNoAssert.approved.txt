@@ -545,24 +545,27 @@
   .method public hidebysig instance string 
           ReturnValueChecksWithBranchToRetInstruction() cil managed
   {
-    // Code size       42 (0x2a)
-    .maxstack  3
+    // Code size       44 (0x2c)
+    .maxstack  2
+    .locals init ([0] string returnValue)
     IL_0000:  ldnull
-    IL_0001:  ldstr      ""
-    IL_0006:  call       instance int32 [mscorlib]System.String::get_Length()
-    IL_000b:  ldc.i4.s   42
-    IL_000d:  bne.un.s   IL_001a
-    IL_000f:  ldstr      "Not reachable"
-    IL_0014:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
-    IL_0019:  throw
-    IL_001a:  dup
-    IL_001b:  brtrue.s   IL_0029
-    IL_001d:  pop
-    IL_001e:  ldstr      "[NullGuard] Return value of method 'System.String "
+    IL_0001:  stloc.0
+    IL_0002:  ldstr      ""
+    IL_0007:  call       instance int32 [mscorlib]System.String::get_Length()
+    IL_000c:  ldc.i4.s   42
+    IL_000e:  bne.un.s   IL_001b
+    IL_0010:  ldstr      "Not reachable"
+    IL_0015:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
+    IL_001a:  throw
+    IL_001b:  ldloc.0
+    IL_001c:  dup
+    IL_001d:  brtrue.s   IL_002b
+    IL_001f:  pop
+    IL_0020:  ldstr      "[NullGuard] Return value of method 'System.String "
     + "SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null."
-    IL_0023:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0028:  throw
-    IL_0029:  ret
+    IL_0025:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_002a:  throw
+    IL_002b:  ret
   } 
   .method public hidebysig instance void 
           OutValueChecksWithBranchToRetInstruction([out] string& outParam) cil managed
@@ -590,25 +593,28 @@
   .method public hidebysig specialname instance string 
           get_GetterReturnValueChecksWithBranchToRetInstruction() cil managed
   {
-    // Code size       42 (0x2a)
-    .maxstack  3
+    // Code size       44 (0x2c)
+    .maxstack  2
+    .locals init ([0] string returnValue)
     IL_0000:  ldnull
-    IL_0001:  ldstr      ""
-    IL_0006:  call       instance int32 [mscorlib]System.String::get_Length()
-    IL_000b:  ldc.i4.s   42
-    IL_000d:  bne.un.s   IL_001a
-    IL_000f:  ldstr      "Not reachable"
-    IL_0014:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
-    IL_0019:  throw
-    IL_001a:  dup
-    IL_001b:  brtrue.s   IL_0029
-    IL_001d:  pop
-    IL_001e:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    IL_0001:  stloc.0
+    IL_0002:  ldstr      ""
+    IL_0007:  call       instance int32 [mscorlib]System.String::get_Length()
+    IL_000c:  ldc.i4.s   42
+    IL_000e:  bne.un.s   IL_001b
+    IL_0010:  ldstr      "Not reachable"
+    IL_0015:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
+    IL_001a:  throw
+    IL_001b:  ldloc.0
+    IL_001c:  dup
+    IL_001d:  brtrue.s   IL_002b
+    IL_001f:  pop
+    IL_0020:  ldstr      "[NullGuard] Return value of property 'System.Strin"
     + "g SimpleClass::GetterReturnValueChecksWithBranchToRetInstruction()' is "
     + "null."
-    IL_0023:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0028:  throw
-    IL_0029:  ret
+    IL_0025:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_002a:  throw
+    IL_002b:  ret
   } 
   .method public hidebysig instance void 
           OutValueChecksWithRetInstructionAsSwitchCase(int32 i,

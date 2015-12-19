@@ -13,10 +13,7 @@ public class Indexers
 
     public class PassThroughGetterReturnValue
     {
-        public string this[[AllowNull] string returnValue]
-        {
-            get { return returnValue; }
-        }
+        public string this[[AllowNull] string returnValue] => returnValue;
     }
 
     public class AllowedNulls
