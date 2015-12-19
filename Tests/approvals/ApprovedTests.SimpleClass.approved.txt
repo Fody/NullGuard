@@ -759,6 +759,202 @@
     IL_0019:  call       void [mscorlib]System.Console::WriteLine(string)
     IL_001e:  ret
   } 
+  .method public hidebysig instance string 
+          ReturnValueChecksWithBranchToRetInstruction() cil managed
+  {
+    // Code size       59 (0x3b)
+    .maxstack  3
+    IL_0000:  ldnull
+    IL_0001:  ldstr      ""
+    IL_0006:  call       instance int32 [mscorlib]System.String::get_Length()
+    IL_000b:  ldc.i4.s   42
+    IL_000d:  bne.un.s   IL_001a
+    IL_000f:  ldstr      "Not reachable"
+    IL_0014:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
+    IL_0019:  throw
+    IL_001a:  dup
+    IL_001b:  ldnull
+    IL_001c:  ceq
+    IL_001e:  ldc.i4.0
+    IL_001f:  ceq
+    IL_0021:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null."
+    IL_0026:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_002b:  dup
+    IL_002c:  brtrue.s   IL_003a
+    IL_002e:  pop
+    IL_002f:  ldstr      "[NullGuard] Return value of method 'System.String "
+    + "SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null."
+    IL_0034:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0039:  throw
+    IL_003a:  ret
+  } 
+  .method public hidebysig instance void 
+          OutValueChecksWithBranchToRetInstruction([out] string& outParam) cil managed
+  {
+    // Code size       62 (0x3e)
+    .maxstack  2
+    IL_0000:  ldarg.1
+    IL_0001:  ldnull
+    IL_0002:  stind.ref
+    IL_0003:  ldstr      ""
+    IL_0008:  call       instance int32 [mscorlib]System.String::get_Length()
+    IL_000d:  ldc.i4.s   42
+    IL_000f:  bne.un.s   IL_001c
+    IL_0011:  ldstr      "Not reachable"
+    IL_0016:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
+    IL_001b:  throw
+    IL_001c:  ldarg.1
+    IL_001d:  ldind.ref
+    IL_001e:  ldnull
+    IL_001f:  ceq
+    IL_0021:  ldc.i4.0
+    IL_0022:  ceq
+    IL_0024:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0029:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_002e:  ldarg.1
+    IL_002f:  ldind.ref
+    IL_0030:  brtrue.s   IL_003d
+    IL_0032:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0037:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_003c:  throw
+    IL_003d:  ret
+  } 
+  .method public hidebysig specialname instance string 
+          get_GetterReturnValueChecksWithBranchToRetInstruction() cil managed
+  {
+    // Code size       59 (0x3b)
+    .maxstack  3
+    IL_0000:  ldnull
+    IL_0001:  ldstr      ""
+    IL_0006:  call       instance int32 [mscorlib]System.String::get_Length()
+    IL_000b:  ldc.i4.s   42
+    IL_000d:  bne.un.s   IL_001a
+    IL_000f:  ldstr      "Not reachable"
+    IL_0014:  newobj     instance void [mscorlib]System.Exception::.ctor(string)
+    IL_0019:  throw
+    IL_001a:  dup
+    IL_001b:  ldnull
+    IL_001c:  ceq
+    IL_001e:  ldc.i4.0
+    IL_001f:  ceq
+    IL_0021:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SimpleClass::GetterReturnValueChecksWithBranchToRetInstruction()' is "
+    + "null."
+    IL_0026:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_002b:  dup
+    IL_002c:  brtrue.s   IL_003a
+    IL_002e:  pop
+    IL_002f:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+    + "g SimpleClass::GetterReturnValueChecksWithBranchToRetInstruction()' is "
+    + "null."
+    IL_0034:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0039:  throw
+    IL_003a:  ret
+  } 
+  .method public hidebysig instance void 
+          OutValueChecksWithRetInstructionAsSwitchCase(int32 i,
+                                                       [out] string& outParam) cil managed
+  {
+    // Code size       215 (0xd7)
+    .maxstack  2
+    IL_0000:  ldarg.2
+    IL_0001:  ldnull
+    IL_0002:  stind.ref
+    IL_0003:  ldarg.1
+    IL_0004:  switch     ( 
+                          IL_003b,
+                          IL_005d,
+                          IL_0089,
+                          IL_00ab)
+    IL_0019:  ldarg.2
+    IL_001a:  ldind.ref
+    IL_001b:  ldnull
+    IL_001c:  ceq
+    IL_001e:  ldc.i4.0
+    IL_001f:  ceq
+    IL_0021:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0026:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_002b:  ldarg.2
+    IL_002c:  ldind.ref
+    IL_002d:  brtrue.s   IL_003a
+    IL_002f:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0034:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0039:  throw
+    IL_003a:  ret
+    IL_003b:  ldarg.2
+    IL_003c:  ldind.ref
+    IL_003d:  ldnull
+    IL_003e:  ceq
+    IL_0040:  ldc.i4.0
+    IL_0041:  ceq
+    IL_0043:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0048:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_004d:  ldarg.2
+    IL_004e:  ldind.ref
+    IL_004f:  brtrue.s   IL_005c
+    IL_0051:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0056:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_005b:  throw
+    IL_005c:  ret
+    IL_005d:  ldstr      "1"
+    IL_0062:  call       void [mscorlib]System.Console::WriteLine(string)
+    IL_0067:  ldarg.2
+    IL_0068:  ldind.ref
+    IL_0069:  ldnull
+    IL_006a:  ceq
+    IL_006c:  ldc.i4.0
+    IL_006d:  ceq
+    IL_006f:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0074:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_0079:  ldarg.2
+    IL_007a:  ldind.ref
+    IL_007b:  brtrue.s   IL_0088
+    IL_007d:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0082:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_0087:  throw
+    IL_0088:  ret
+    IL_0089:  ldarg.2
+    IL_008a:  ldind.ref
+    IL_008b:  ldnull
+    IL_008c:  ceq
+    IL_008e:  ldc.i4.0
+    IL_008f:  ceq
+    IL_0091:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_0096:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_009b:  ldarg.2
+    IL_009c:  ldind.ref
+    IL_009d:  brtrue.s   IL_00aa
+    IL_009f:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_00a4:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_00a9:  throw
+    IL_00aa:  ret
+    IL_00ab:  ldstr      "3"
+    IL_00b0:  call       void [mscorlib]System.Console::WriteLine(string)
+    IL_00b5:  ldarg.2
+    IL_00b6:  ldind.ref
+    IL_00b7:  ldnull
+    IL_00b8:  ceq
+    IL_00ba:  ldc.i4.0
+    IL_00bb:  ceq
+    IL_00bd:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_00c2:  call       void [System]System.Diagnostics.Debug::Assert(bool,
+                                                                       string)
+    IL_00c7:  ldarg.2
+    IL_00c8:  ldind.ref
+    IL_00c9:  brtrue.s   IL_00d6
+    IL_00cb:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+    IL_00d0:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+    IL_00d5:  throw
+    IL_00d6:  ret
+  } 
   .property instance string NonNullProperty()
   {
   } 
@@ -773,6 +969,9 @@
   } 
   .property instance valuetype [mscorlib]System.Nullable`1<int32>
           NonNullNullableProperty()
+  {
+  } 
+  .property instance string GetterReturnValueChecksWithBranchToRetInstruction()
   {
   } 
 }
