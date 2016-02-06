@@ -175,7 +175,7 @@ If you want ArgumentNullException to be thrown for Debug builds then update Fody
 
     <NullGuard IncludeDebugAssert="false" />
 
-An complete example of FodyWeavers.xml looks like this:
+A complete example of FodyWeavers.xml looks like this:
 
     <?xml version="1.0" encoding="utf-8" ?>
     <Weavers>
