@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
-MinimumVisualStudioVersion = 10.0.40219.1
+VisualStudioVersion =  14.0.22823.1
+MinimumVisualStudioVersion = 14.0.22823.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B5AEB0E8-28F4-4955-A055-9C200F7113F0} = {B5AEB0E8-28F4-4955-A055-9C200F7113F0}

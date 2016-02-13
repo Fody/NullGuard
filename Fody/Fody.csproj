@@ -43,7 +43,6 @@
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="NugetAssets\dotnet.targets" />
     <None Include="NugetAssets\install.ps" />
     <None Include="NugetAssets\NullGuard.Fody.nuspec">
       <SubType>Designer</SubType>
@@ -109,7 +108,6 @@
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wpa81+wp8+win8+MonoAndroid16+MonoTouch40" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\dotnet.targets" DestinationFiles="$(SolutionDir)NuGetBuild\build\dotnet\NullGuard.Fody.targets" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)NullGuard.Fody.dll" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
