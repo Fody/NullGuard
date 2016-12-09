@@ -47,7 +47,8 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-        Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(AssemblyWeaver).Assembly.Location));
+        // Needed for local test run with NUnit 3.5
+        // Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(AssemblyWeaver).Assembly.Location));
 
         BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
         MonoBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll");
