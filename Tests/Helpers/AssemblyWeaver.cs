@@ -122,7 +122,7 @@ public static class AssemblyWeaver
 
             var weavingTask = new ModuleWeaver
             {
-                Config = new XElement("NullGuard", new XAttribute("ExplicitMode", true)),
+                Config = new XElement("NullGuard", new XAttribute("Mode", "Explicit")),
                 ModuleDefinition = moduleDefinition,
                 AssemblyResolver = assemblyResolver,
                 DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver

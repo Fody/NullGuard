@@ -194,9 +194,9 @@ If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly
 to toggle the behavior to only add null guards for items that have an explicit not null annotation. 
 To get this behavior just enable the explicit mode in the FodyWeavers.xml:
 
-    <NullGuard ExplicitMode="true" />
+    <NullGuard Mode="Explicit" />
 
-This will toggle behavior like this:
+This will toggle the behavior of null guards like this:
 
     public class Sample
     {

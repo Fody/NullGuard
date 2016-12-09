@@ -11,7 +11,7 @@ public class ModuleWeaver
     public XElement Config { get; set; }
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
-    public bool ExplicitMode = false;
+    public NullGuardMode NullGuardMode;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarn { get; set; }
@@ -95,12 +95,12 @@ public class ModuleWeaver
 
     void ReadExplicitMode()
     {
-        var explicitModeAttribute = Config.Attribute("ExplicitMode");
-        if (explicitModeAttribute != null)
+        var modeAttribute = Config.Attribute("Mode");
+        if (modeAttribute != null)
         {
-            if (!bool.TryParse(explicitModeAttribute.Value, out ExplicitMode))
+            if (!Enum.TryParse(modeAttribute.Value, out NullGuardMode))
             {
-                throw new WeavingException($"Could not parse 'ExplicitMode' from '{explicitModeAttribute.Value}'.");
+                throw new WeavingException($"Could not parse 'NullGuardMode' from '{modeAttribute.Value}'.");
             }
         }
     }
@@ -139,7 +139,7 @@ public class ModuleWeaver
     void ProcessAssembly(List<TypeDefinition> types)
     {
         var isDebug = IncludeDebugAssert && DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
-        var explicitMode = ExplicitMode;
+        var explicitMode = (NullGuardMode == NullGuardMode.Explicit);
 
         var methodProcessor = new MethodProcessor(ValidationFlags, isDebug, explicitMode);
         var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug, explicitMode);
