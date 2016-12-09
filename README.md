@@ -186,11 +186,59 @@ You can also use RegEx to specify the name of a class to exclude from NullGuard.
 
     <NullGuard ExcludeRegex="^ClassToExclude$" />
 
+#### Explicit Mode
+If you are (already) using R#'s [NotNull] attribute in your code to explicitly annotate not null items, you may want
+to toggle the behavior to only add null guards for items that have an explicit not null annotation. 
+To get this behavior just enable the explicit mode in the FodyWeavers.xml:
+
+    <NullGuard ExplicitMode="true" />
+
+This will toggle behavior like this:
+
+    public class Sample
+    {
+        public void SomeMethod([NotNull] string arg)
+        {
+            // throws ArgumentNullException if arg is null.
+        }
+
+        public void AnotherMethod(string arg)
+        {
+            // arg may be null here
+        }
+
+        [NotNull]
+        public string MethodWithReturn()
+        {
+            return SomeOtherClass.SomeMethod();
+        }
+
+        public string MethodAllowsNullReturnValue()
+        {
+            return null;
+        }
+
+        // Null checking works for automatic properties too.
+        // can only be applied to a whole property
+        [NotNull]
+        public string SomeProperty { get; set; }
+
+        // can be applied to a whole property
+        public string NullProperty { get; set; }
+
+        // Just the setter is not supported in explicit mode :-(
+        public string NullPropertyOnSet { get; set; }
+        // Just the getter is not supported in explicit mode :-(
+        public string NullPropertyOnGet { get; set; }
+
+
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
   * [Simon Cropp](https://github.com/simoncropp)
   * [Tim Murphy](https://github.com/TimMurphy)
+  * [Tom Englert](https://github.com/tom-englert)
 
 ## Icon
 
