@@ -187,7 +187,7 @@ You can also use RegEx to specify the name of a class to exclude from NullGuard.
     <NullGuard ExcludeRegex="^ClassToExclude$" />
 
 #### Explicit Mode
-If you are (already) using R#'s [NotNull] attribute in your code to explicitly annotate not null items, you may want
+If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly annotate not null items, you may want
 to toggle the behavior to only add null guards for items that have an explicit not null annotation. 
 To get this behavior just enable the explicit mode in the FodyWeavers.xml:
 
@@ -231,7 +231,7 @@ This will toggle behavior like this:
         // Just the getter is not supported in explicit mode :-(
         public string NullPropertyOnGet { get; set; }
 
-
+You may use the `[NotNull]` attribute defined in JetBrains.Anntotations, or simply define your own.
 
 ## Contributors
 
