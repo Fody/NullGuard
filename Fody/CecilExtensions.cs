@@ -8,6 +8,7 @@ public static class CecilExtensions
 {
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
+    const string NotNullAttributeTypeName = "NotNullAttribute";
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
@@ -42,16 +43,31 @@ public static class CecilExtensions
         return method.Parameters.Last();
     }
 
-    public static bool AllowsNull(this ICustomAttributeProvider value)
+    public static bool AllowsNull(this ICustomAttributeProvider value, bool explicitMode)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
+        if (explicitMode)
+        {
+            return value.CustomAttributes.All(a => a.AttributeType.Name != NotNullAttributeTypeName);
+        }
+        else
+        {
+            return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
+        }
     }
 
-    public static bool AllowsNullReturnValue (this MethodDefinition methodDefinition)
+    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, bool explicitMode)
     {
-        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
-               // ReSharper uses a *method* attribute for CanBeNull for the return value
-               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        if (explicitMode)
+        {
+            // ReSharper uses a *method* attribute for NotNull for the return value
+            return methodDefinition.CustomAttributes.All(a => a.AttributeType.Name != NotNullAttributeTypeName);
+        }
+        else
+        {
+            return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+                   // ReSharper uses a *method* attribute for CanBeNull for the return value
+                   methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        }
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
@@ -73,9 +89,9 @@ public static class CecilExtensions
         }
     }
 
-    public static bool MayNotBeNull(this ParameterDefinition arg)
+    public static bool MayNotBeNull(this ParameterDefinition arg, bool explicitMode)
     {
-        return !arg.AllowsNull() && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
+        return !arg.AllowsNull(explicitMode) && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
 
     static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)
@@ -143,11 +159,11 @@ public static class CecilExtensions
         // with a valid SequencePoint. That way IL can be hidden from
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-	    i.SequencePoint = new SequencePoint(doc)
-	    {
-		    StartLine = 0xfeefee,
-		    EndLine = 0xfeefee
-	    };
+        i.SequencePoint = new SequencePoint(doc)
+        {
+            StartLine = 0xfeefee,
+            EndLine = 0xfeefee
+        };
     }
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)

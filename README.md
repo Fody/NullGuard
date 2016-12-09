@@ -44,6 +44,9 @@ https://nuget.org/packages/NullGuard.Fody/
 
         // Or just the setter.
         public string NullPropertyOnSet { get; [param: AllowNull] set; }
+
+        // Or just the getter.
+        public string NullPropertyOnGet { [return: AllowNull] get; set; }
     }
 
 ### What gets compiled 
@@ -186,11 +189,62 @@ You can also use RegEx to specify the name of a class to exclude from NullGuard.
 
     <NullGuard ExcludeRegex="^ClassToExclude$" />
 
+#### Explicit Mode
+If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly annotate not null items, you may want
+to toggle the behavior to only add null guards for items that have an explicit not null annotation. 
+To get this behavior just enable the explicit mode in the FodyWeavers.xml:
+
+    <NullGuard Mode="Explicit" />
+
+This will toggle the behavior of null guards like this:
+
+    public class Sample
+    {
+        public void SomeMethod([NotNull] string arg)
+        {
+            // throws ArgumentNullException if arg is null.
+        }
+
+        public void AnotherMethod(string arg)
+        {
+            // arg may be null here
+        }
+
+        [NotNull]
+        public string MethodWithReturn()
+        {
+            return SomeOtherClass.SomeMethod();
+        }
+
+        public string MethodAllowsNullReturnValue()
+        {
+            return null;
+        }
+
+        // Null checking works for automatic properties too.
+        // Default in explicit mode is nullable
+        public string NullProperty { get; set; }
+
+        // NotNull can be applied to a whole property
+        [NotNull]
+        public string SomeProperty { get; set; }
+
+        // or just the getter by overwriting the set method,
+        [NotNull]
+        public string NullPropertyOnSet { get; [param: AllowNull] set; }
+
+        // or just the setter.by overwriting the get method.
+        [NotNull]
+        public string NullPropertyOnGet { [return: AllowNull] get; set; }
+
+You may use the `[NotNull]` attribute defined in JetBrains.Anntotations, or simply define your own.
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
   * [Simon Cropp](https://github.com/simoncropp)
   * [Tim Murphy](https://github.com/TimMurphy)
+  * [Tom Englert](https://github.com/tom-englert)
 
 ## Icon
 

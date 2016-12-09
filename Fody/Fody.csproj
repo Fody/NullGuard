@@ -88,6 +88,7 @@
     <Compile Include="MethodProcessor.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
+    <Compile Include="NullGuardMode.cs" />
     <Compile Include="PropertyProcessor.cs" />
     <Compile Include="ReferenceFinder.cs" />
     <Compile Include="WeavingException.cs" />
