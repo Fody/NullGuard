@@ -59,7 +59,7 @@ public class RewritingProperties
     }
 
     [Test]
-    public void PropertyAllowsNullGetButNotSet([Values(0)] int index)
+    public void PropertyAllowsNullGetButNotSet([Values(0, 1)] int index)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType(index));
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
@@ -68,7 +68,7 @@ public class RewritingProperties
     }
 
     [Test]
-    public void PropertyAllowsNullSetButNotGet([Values(0)] int index)
+    public void PropertyAllowsNullSetButNotGet([Values(0, 1)] int index)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType(index));
         sample.PropertyAllowsNullSetButDoesNotAllowNullGet = null;

@@ -29,6 +29,12 @@ public class SimpleClass
     public string NullProperty { get; set; }
 
     [NotNull]
+    public string PropertyAllowsNullGetButDoesNotAllowNullSet { [return: AllowNull] get; set; }
+
+    [NotNull]
+    public string PropertyAllowsNullSetButDoesNotAllowNullGet { get; [param: AllowNull] set; }
+
+    [NotNull]
     public int? NonNullNullableProperty { get; set; }
 
     [NotNull]

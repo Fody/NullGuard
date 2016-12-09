@@ -44,6 +44,9 @@ https://nuget.org/packages/NullGuard.Fody/
 
         // Or just the setter.
         public string NullPropertyOnSet { get; [param: AllowNull] set; }
+
+        // Or just the getter.
+        public string NullPropertyOnGet { [return: AllowNull] get; set; }
     }
 
 ### What gets compiled 
@@ -219,17 +222,20 @@ This will toggle behavior like this:
         }
 
         // Null checking works for automatic properties too.
-        // can only be applied to a whole property
+        // Default in explicit mode is nullable
+        public string NullProperty { get; set; }
+
+        // NotNull can be applied to a whole property
         [NotNull]
         public string SomeProperty { get; set; }
 
-        // can be applied to a whole property
-        public string NullProperty { get; set; }
+        // or just the getter by overwriting the set method,
+        [NotNull]
+        public string NullPropertyOnSet { get; [param: AllowNull] set; }
 
-        // Just the setter is not supported in explicit mode :-(
-        public string NullPropertyOnSet { get; set; }
-        // Just the getter is not supported in explicit mode :-(
-        public string NullPropertyOnGet { get; set; }
+        // or just the setter.by overwriting the get method.
+        [NotNull]
+        public string NullPropertyOnGet { [return: AllowNull] get; set; }
 
 You may use the `[NotNull]` attribute defined in JetBrains.Anntotations, or simply define your own.
 

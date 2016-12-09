@@ -66,9 +66,8 @@ public class PropertyProcessor
 
             getBody.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())) &&
-                (explicitMode || !property.GetMethod.MethodReturnType.AllowsNull(explicitMode))
-               )
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()))
+                && !property.GetMethod.MethodReturnType.AllowsNull(false))
             {
                 InjectPropertyGetterGuard(getBody, sequencePoint, property);
             }
@@ -142,7 +141,7 @@ public class PropertyProcessor
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
-        if (!explicitMode && !valueParameter.MayNotBeNull(explicitMode))
+        if (!valueParameter.MayNotBeNull(false))
             return;
 
         var guardInstructions = new List<Instruction>();
