@@ -16,12 +16,14 @@ public class MethodProcessor
     const string IsNull = "[NullGuard] {0} is null.";
 
     bool isDebug;
+    bool explicitMode;
     ValidationFlags validationFlags;
 
-    public MethodProcessor(ValidationFlags validationFlags, bool isDebug)
+    public MethodProcessor(ValidationFlags validationFlags, bool isDebug, bool explicitMode)
     {
         this.validationFlags = validationFlags;
         this.isDebug = isDebug;
+        this.explicitMode = explicitMode;
     }
 
     public void Process(MethodDefinition method)
@@ -74,13 +76,13 @@ public class MethodProcessor
         {
             var returnType = method.ReturnType;
             var genericReturnType = method.ReturnType as GenericInstanceType;
-	        if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
-	        {
-		        returnType = genericReturnType.GenericArguments[0];
-	        }
+            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
+            {
+                returnType = genericReturnType.GenericArguments[0];
+            }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue() &&
+                !method.AllowsNullReturnValue(explicitMode) &&
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
@@ -98,7 +100,7 @@ public class MethodProcessor
 
         foreach (var parameter in method.Parameters.Reverse())
         {
-            if (!parameter.MayNotBeNull())
+            if (!parameter.MayNotBeNull(explicitMode))
                 continue;
 
             if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
@@ -148,7 +150,7 @@ public class MethodProcessor
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue() &&
+                !method.AllowsNullReturnValue(explicitMode) &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)
@@ -167,7 +169,7 @@ public class MethodProcessor
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
                         parameter.ParameterType.IsRefType() &&
-                        !parameter.AllowsNull())
+                        !parameter.AllowsNull(explicitMode))
                     {
                         var errorMessage = string.Format(CultureInfo.InvariantCulture, OutParameterIsNull, parameter.Name);
 
@@ -205,10 +207,10 @@ public class MethodProcessor
         {
             var resolve = local.VariableType.Resolve();
             if (!resolve.IsGeneratedCode() ||
-	            !resolve.IsIAsyncStateMachine())
-	        {
-		        continue;
-	        }
+                !resolve.IsIAsyncStateMachine())
+            {
+                continue;
+            }
 
             var moveNext = resolve.Methods.First(x => x.Name == "MoveNext");
 

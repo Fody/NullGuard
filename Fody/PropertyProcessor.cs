@@ -14,12 +14,14 @@ public class PropertyProcessor
     const string CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
 
     bool isDebug;
+    bool explicitMode;
     ValidationFlags validationFlags;
 
-    public PropertyProcessor(ValidationFlags validationFlags, bool isDebug)
+    public PropertyProcessor(ValidationFlags validationFlags, bool isDebug, bool explicitMode)
     {
         this.validationFlags = validationFlags;
         this.isDebug = isDebug;
+        this.explicitMode = explicitMode;
     }
 
     public void Process(PropertyDefinition property)
@@ -53,7 +55,7 @@ public class PropertyProcessor
 
         if (!localValidationFlags.HasFlag(ValidationFlags.Properties)) return;
 
-        if (property.AllowsNull())
+        if (property.AllowsNull(explicitMode))
             return;
 
         if (property.GetMethod != null && property.GetMethod.Body != null)
@@ -65,7 +67,7 @@ public class PropertyProcessor
             getBody.SimplifyMacros();
 
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || (property.GetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())) &&
-                !property.GetMethod.MethodReturnType.AllowsNull()
+                (explicitMode || !property.GetMethod.MethodReturnType.AllowsNull(explicitMode))
                )
             {
                 InjectPropertyGetterGuard(getBody, sequencePoint, property);
@@ -140,7 +142,7 @@ public class PropertyProcessor
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
-        if (!valueParameter.MayNotBeNull())
+        if (!explicitMode && !valueParameter.MayNotBeNull(explicitMode))
             return;
 
         var guardInstructions = new List<Instruction>();

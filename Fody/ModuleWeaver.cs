@@ -11,6 +11,7 @@ public class ModuleWeaver
     public XElement Config { get; set; }
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
+    public bool ExplicitMode = false;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarn { get; set; }
@@ -77,6 +78,7 @@ public class ModuleWeaver
 
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
+        ReadExplicitMode();
     }
 
     void ReadIncludeDebugAssert()
@@ -91,13 +93,25 @@ public class ModuleWeaver
         }
     }
 
+    void ReadExplicitMode()
+    {
+        var explicitModeAttribute = Config.Attribute("ExplicitMode");
+        if (explicitModeAttribute != null)
+        {
+            if (!bool.TryParse(explicitModeAttribute.Value, out ExplicitMode))
+            {
+                throw new WeavingException($"Could not parse 'ExplicitMode' from '{explicitModeAttribute.Value}'.");
+            }
+        }
+    }
+
     void ReadExcludeRegex()
     {
         var attribute = Config.Attribute("ExcludeRegex");
         var regex = attribute?.Value;
-        if(!string.IsNullOrWhiteSpace(regex))
-        { 
-            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant); 
+        if (!string.IsNullOrWhiteSpace(regex))
+        {
+            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant);
         }
     }
 
@@ -125,9 +139,10 @@ public class ModuleWeaver
     void ProcessAssembly(List<TypeDefinition> types)
     {
         var isDebug = IncludeDebugAssert && DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
+        var explicitMode = ExplicitMode;
 
-        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug);
-        var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);
+        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug, explicitMode);
+        var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug, explicitMode);
 
         foreach (var type in types)
         {

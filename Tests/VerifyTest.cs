@@ -8,19 +8,19 @@ public class VerifyTest
     [Test]
     public void PeVerify1()
     {
-        Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[0]);
+        Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.Assemblies[0].Location);
     }
 
     [Test]
     public void PeVerify2()
     {
-        Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[1]);
+        Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.Assemblies[1].Location);
     }
 
     [Test]
     public void PeVerify3()
     {
-        Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[2]);
+        Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.Assemblies[2].Location);
     }
 }
 

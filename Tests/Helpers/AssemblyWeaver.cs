@@ -38,8 +38,7 @@ public static class AssemblyWeaver
     public static Assembly[] Assemblies;
     public static string BeforeAssemblyPath;
     public static string MonoBeforeAssemblyPath;
-    public static string[] AfterAssemblyPaths;
-    public static string[] AfterAssemblySymbolPaths;
+    public static Assembly[] RewritingTestAssemblies;
 
     static AssemblyWeaver()
     {
@@ -48,31 +47,24 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
+        Directory.SetCurrentDirectory(Path.GetDirectoryName(typeof(AssemblyWeaver).Assembly.Location));
+
         BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
-        var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
         MonoBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll");
-        var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
+        var explicitBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessExplicit\bin\Debug\AssemblyToProcessExplicit.dll");
+
+        Func<string, string> getSymbolFilePath = assemblyPath => Path.ChangeExtension(assemblyPath, "pdb");
+        Func<string, string> getMonoSymbolFilePath = assemblyPath => assemblyPath + ".mdb";
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
-        beforePdbPath = beforePdbPath.Replace("Debug", "Release");
         MonoBeforeAssemblyPath = MonoBeforeAssemblyPath.Replace("Debug", "Release");
-        monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
+        explicitBeforeAssemblyPath = explicitBeforeAssemblyPath.Replace("Debug", "Release");
 #endif
 
-        AfterAssemblyPaths = new [] {
-            BeforeAssemblyPath.Replace(".dll", "2.dll"),
-            BeforeAssemblyPath.Replace(".dll", "3.dll"),
-            MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
-        };
-        AfterAssemblySymbolPaths = new [] {
-            beforePdbPath.Replace(".pdb", "2.pdb"),
-            beforePdbPath.Replace(".pdb", "3.pdb"),
-            monoBeforeMdbPath.Replace(".mdb", "2.mdb")
-        };
+        Assemblies = new Assembly[4];
 
-        Assemblies = new Assembly[3];
-        Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[0], beforePdbPath, AfterAssemblySymbolPaths[0], moduleDefinition =>
+        Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, getSymbolFilePath, 2, moduleDefinition =>
         {
             var assemblyResolver = new MockAssemblyResolver();
 
@@ -89,7 +81,7 @@ public static class AssemblyWeaver
             weavingTask.Execute();
         });
 
-        Assemblies[1] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[1], beforePdbPath, AfterAssemblySymbolPaths[1], moduleDefinition =>
+        Assemblies[1] = WeaveAssembly(BeforeAssemblyPath, getSymbolFilePath, 3, moduleDefinition =>
         {
             var assemblyResolver = new MockAssemblyResolver();
 
@@ -107,7 +99,7 @@ public static class AssemblyWeaver
             weavingTask.Execute();
         });
 
-        Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2], moduleDefinition =>
+        Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, getMonoSymbolFilePath, 2, moduleDefinition =>
         {
             var assemblyResolver = new MockAssemblyResolver();
 
@@ -123,10 +115,31 @@ public static class AssemblyWeaver
 
             weavingTask.Execute();
         });
+
+        Assemblies[3] = WeaveAssembly(explicitBeforeAssemblyPath, getSymbolFilePath, 4, moduleDefinition =>
+        {
+            var assemblyResolver = new MockAssemblyResolver();
+
+            var weavingTask = new ModuleWeaver
+            {
+                Config = new XElement("NullGuard", new XAttribute("ExplicitMode", true)),
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver,
+                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+            };
+
+            weavingTask.Execute();
+        });
+
+        RewritingTestAssemblies = new[] { Assemblies[0], Assemblies[3] };
     }
 
-    static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
+    static Assembly WeaveAssembly(string beforeAssemblyPath, Func<string, string> getSymbolFilePath, int pathIndex, Action<ModuleDefinition> weaveAction)
     {
+        var afterAssemblyPath = AddIndex(beforeAssemblyPath, pathIndex);
+        var beforePdbPath = getSymbolFilePath(beforeAssemblyPath);
+        var afterPdbPath = AddIndex(beforePdbPath, pathIndex);
+
         if (File.Exists(afterAssemblyPath))
             File.Delete(afterAssemblyPath);
         if (File.Exists(afterPdbPath))
@@ -149,6 +162,11 @@ public static class AssemblyWeaver
         moduleDefinition.Write(afterAssemblyPath, writerParameters);
 
         return Assembly.LoadFile(afterAssemblyPath);
+    }
+
+    static string AddIndex(string filePath, int index)
+    {
+        return Path.ChangeExtension(filePath, index.ToString()) + Path.GetExtension(filePath);
     }
 
     static void LogInfo(string error)

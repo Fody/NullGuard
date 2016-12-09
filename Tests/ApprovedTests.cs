@@ -14,85 +14,85 @@ public class ApprovedTests
     [Test]
     public void ClassWithBadAttributes()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "ClassWithBadAttributes"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "ClassWithBadAttributes"));
     }
 
     [Test]
     public void ClassWithPrivateMethod()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "ClassWithPrivateMethod"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "ClassWithPrivateMethod"));
     }
 
     [Test]
     public void ClassWithPrivateMethodNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "ClassWithPrivateMethod"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[1].Location, "ClassWithPrivateMethod"));
     }
 
     [Test]
     public void GenericClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "GenericClass`1"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "GenericClass`1"));
     }
 
     [Test]
     public void GenericClassNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "GenericClass`1"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[1].Location, "GenericClass`1"));
     }
 
     [Test]
     public void Indexers()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "Indexers"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "Indexers"));
     }
 
     [Test]
     public void InterfaceBadAttributes()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "InterfaceBadAttributes"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "InterfaceBadAttributes"));
     }
 
     [Test]
     public void SimpleClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SimpleClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "SimpleClass"));
     }
 
     [Test]
     public void SimpleClassNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "SimpleClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[1].Location, "SimpleClass"));
     }
 
     [Test]
     public void SkipIXamlMetadataProvider()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "XamlMetadataProvider"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "XamlMetadataProvider"));
     }
 
     [Test]
     public void SpecialClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "SpecialClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "SpecialClass"));
     }
 
     [Test]
     public void SpecialClassNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[1], "SpecialClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[1].Location, "SpecialClass"));
     }
 
     [Test]
     public void PublicNestedInsideNonPublic()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "NonPublicWithNested"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "NonPublicWithNested"));
     }
 
     [Test]
     public void UnsafeClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPaths[0], "UnsafeClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.Assemblies[0].Location, "UnsafeClass"));
     }
 
     [Test]
