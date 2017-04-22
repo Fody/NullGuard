@@ -8,7 +8,7 @@ using NUnit.Framework;
 public class LargeAssemblyTest
 {
     [Test]
-    [Ignore]
+    [Explicit]
     public void ProcessAllAssemblies()
     {
         foreach (var assemblyPath in Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll"))
