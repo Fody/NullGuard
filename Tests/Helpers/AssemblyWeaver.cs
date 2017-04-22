@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil;
+using NUnit.Framework;
 
 public static class AssemblyWeaver
 {
@@ -48,9 +49,9 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-        BeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory,@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
-        MonoBeforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll");
+        MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
         var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
 
 #if (!DEBUG)
