@@ -50,7 +50,7 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if ((!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!(method.IsPublic || method.IsExplicitInterfaceMethod()) || !method.DeclaringType.IsPublicOrNestedPublic())))
+        if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!(method.IsPublic || method.IsExplicitInterfaceMethod()) || !method.DeclaringType.IsPublicOrNestedPublic()))
             return;
 
         var body = method.Body;
@@ -225,7 +225,7 @@ public class MethodProcessor
 
         if (setExceptionInstruction == null)
         {
-            // Mono's broken compiler doen't add a SetException call if there's no await.
+            // Mono's broken compiler doesn't add a SetException call if there's no await.
             // Bail out since we're not about to rewrite the whole method to fix this. :/
             LogTo.Warning("Cannot add guards to {0} as the method contains no await keyword.", methodName);
             return;
@@ -291,14 +291,14 @@ public class MethodProcessor
                 // Checks for throw new ArgumentNullException("x");
                 if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionConstructor.FullName &&
                     instructions[i - 1].OpCode == OpCodes.Ldstr &&
-                    (string)(instructions[i - 1].Operand) == parameter.Name)
+                    (string)instructions[i - 1].Operand == parameter.Name)
                     return true;
 
                 // Checks for throw new ArgumentNullException("x", "some message");
                 if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionWithMessageConstructor.FullName &&
                     i > 1 &&
                     instructions[i - 2].OpCode == OpCodes.Ldstr &&
-                    (string)(instructions[i - 2].Operand) == parameter.Name)
+                    (string)instructions[i - 2].Operand == parameter.Name)
                     return true;
             }
         }

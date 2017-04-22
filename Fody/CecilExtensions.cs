@@ -11,8 +11,8 @@ public static class CecilExtensions
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
-        return (type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
-                || (type.BaseType != null && type.BaseType.Resolve().HasInterface(interfaceFullName)));
+        return type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
+               || type.BaseType != null && type.BaseType.Resolve().HasInterface(interfaceFullName);
     }
 
     public static IEnumerable<MethodDefinition> AbstractMethods(this TypeDefinition type)
@@ -152,7 +152,7 @@ public static class CecilExtensions
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
     {
-        return arg.IsPublic || (arg.IsNestedPublic && arg.DeclaringType.IsPublicOrNestedPublic());
+        return arg.IsPublic || arg.IsNestedPublic && arg.DeclaringType.IsPublicOrNestedPublic();
     }
 
     public static bool IsExplicitInterfaceMethod(this MethodDefinition method)
