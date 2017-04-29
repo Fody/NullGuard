@@ -32,4 +32,8 @@ public class MockAssemblyResolver : IAssemblyResolver
     {
         throw new NotImplementedException();
     }
+
+    public void Dispose()
+    {
+    }
 }

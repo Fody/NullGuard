@@ -11,7 +11,7 @@ public static class CecilExtensions
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
-        return type.Interfaces.Any(i => i.FullName.Equals(interfaceFullName))
+        return type.Interfaces.Any(i => i.InterfaceType.FullName.Equals(interfaceFullName))
                || type.BaseType != null && type.BaseType.Resolve().HasInterface(interfaceFullName);
     }
 
@@ -47,7 +47,7 @@ public static class CecilExtensions
         return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
-    public static bool AllowsNullReturnValue (this MethodDefinition methodDefinition)
+    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition)
     {
         return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
                // ReSharper uses a *method* attribute for CanBeNull for the return value
@@ -122,33 +122,56 @@ public static class CecilExtensions
 
     public static bool IsIAsyncStateMachine(this TypeDefinition typeDefinition)
     {
-        return typeDefinition.Interfaces.Any(x => x.Name == "IAsyncStateMachine");
+        return typeDefinition.Interfaces.Any(x => x.InterfaceType.Name == "IAsyncStateMachine");
     }
 
-    public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
-    {
-        if (seqPoint == null)
-            return;
-
-        HideLineFromDebugger(i, seqPoint.Document);
-    }
-
-    public static void HideLineFromDebugger(this Instruction i, Document doc)
+    public static void HideLineFromDebugger(this MethodDefinition method, Instruction i, Document doc)
     {
         if (doc == null)
             return;
+
+        var oldSequencePoint = method.DebugInformation.SequencePoints.FirstOrDefault(sp => sp.Offset == i.Offset);
+        if (oldSequencePoint != null)
+            method.DebugInformation.SequencePoints.Remove(oldSequencePoint);
 
         // This tells the debugger to ignore and step through
         // all the following instructions to the next instruction
         // with a valid SequencePoint. That way IL can be hidden from
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-	    i.SequencePoint = new SequencePoint(doc)
-	    {
-		    StartLine = 0xfeefee,
-		    EndLine = 0xfeefee
-	    };
+        var hiddenSequencePoint = new SequencePoint(i, doc)
+        {
+            StartLine = 0xfeefee,
+            EndLine = 0xfeefee
+        };
+
+        method.DebugInformation.SequencePoints.Remove(oldSequencePoint);
     }
+
+    //public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
+    //{
+    //    if (seqPoint == null)
+    //        return;
+
+    //    HideLineFromDebugger(i, seqPoint.Document);
+    //}
+
+    //private static void HideLineFromDebugger(this Instruction i, Document doc)
+    //{
+    //    if (doc == null)
+    //        return;
+
+    //    // This tells the debugger to ignore and step through
+    //    // all the following instructions to the next instruction
+    //    // with a valid SequencePoint. That way IL can be hidden from
+    //    // the Debugger. See
+    //    // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
+    //    i.SequencePoint = new SequencePoint(doc)
+    //    {
+    //        StartLine = 0xfeefee,
+    //        EndLine = 0xfeefee
+    //    };
+    //}
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
     {
@@ -160,5 +183,10 @@ public static class CecilExtensions
         return method.IsPrivate &&
             method.HasOverrides &&
             method.Overrides.Any(o => o.DeclaringType.Resolve().IsInterface);
+    }
+
+    public static AssemblyDefinition Resolve(this IAssemblyResolver assemblyResolver, string assemblyName)
+    {
+        return assemblyResolver.Resolve(new AssemblyNameReference(assemblyName, null));
     }
 }

@@ -55,29 +55,29 @@ public class MethodProcessor
 
         var body = method.Body;
 
-        var sequencePoint = body.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+        var doc = method.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
 
         body.SimplifyMacros();
 
         if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
         {
-            InjectMethodArgumentGuards(method, body, sequencePoint);
+            InjectMethodArgumentGuards(method, body, doc);
         }
 
         if (!method.IsAsyncStateMachine() &&
             !method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard(localValidationFlags, method, body, sequencePoint);
+            InjectMethodReturnGuard(localValidationFlags, method, body, doc);
         }
 
         if (method.IsAsyncStateMachine())
         {
             var returnType = method.ReturnType;
             var genericReturnType = method.ReturnType as GenericInstanceType;
-	        if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
-	        {
-		        returnType = genericReturnType.GenericArguments[0];
-	        }
+            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
+            {
+                returnType = genericReturnType.GenericArguments[0];
+            }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 !method.AllowsNullReturnValue() &&
@@ -92,7 +92,7 @@ public class MethodProcessor
         body.OptimizeMacros();
     }
 
-    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, Document doc)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -129,13 +129,13 @@ public class MethodProcessor
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
-            guardInstructions[0].HideLineFromDebugger(seqPoint);
+            method.HideLineFromDebugger(guardInstructions[0], doc);
 
             body.Instructions.Prepend(guardInstructions);
         }
     }
 
-    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, SequencePoint seqPoint)
+    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, Document doc)
     {
         var guardInstructions = new List<Instruction>();
 
@@ -154,7 +154,7 @@ public class MethodProcessor
                 !method.IsGetter)
             {
                 var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName);
-                AddReturnNullGuard(body, seqPoint, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(method, doc, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -190,7 +190,7 @@ public class MethodProcessor
                             i.Add(Instruction.Create(OpCodes.Throw));
                         });
 
-                        guardInstructions[0].HideLineFromDebugger(seqPoint);
+                        method.HideLineFromDebugger(guardInstructions[0], doc);
 
                         body.InsertAtMethodReturnPoint(ret, guardInstructions);
                     }
@@ -205,10 +205,10 @@ public class MethodProcessor
         {
             var resolve = local.VariableType.Resolve();
             if (!resolve.IsGeneratedCode() ||
-	            !resolve.IsIAsyncStateMachine())
-	        {
-		        continue;
-	        }
+                !resolve.IsIAsyncStateMachine())
+            {
+                continue;
+            }
 
             var moveNext = resolve.Methods.First(x => x.Name == "MoveNext");
 
@@ -241,15 +241,15 @@ public class MethodProcessor
 
         foreach (var ret in returnPoints)
         {
-            AddReturnNullGuard(method.Body, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
+            AddReturnNullGuard(method, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
         }
 
         method.Body.OptimizeMacros();
     }
 
-    void AddReturnNullGuard(MethodBody methodBody, SequencePoint seqPoint, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
+    void AddReturnNullGuard(MethodDefinition methodDefinition, Document doc, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
-        var returnInstruction = methodBody.Instructions[ret];
+        var returnInstruction = methodDefinition.Body.Instructions[ret];
 
         var guardInstructions = new List<Instruction>();
 
@@ -272,9 +272,9 @@ public class MethodProcessor
             i.AddRange(finalInstructions);
         });
 
-        guardInstructions[0].HideLineFromDebugger(seqPoint);
+        methodDefinition.HideLineFromDebugger(guardInstructions[0], doc);
 
-        methodBody.InsertAtMethodReturnPoint(ret, guardInstructions);
+        methodDefinition.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
     }
 
     static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)

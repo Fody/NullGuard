@@ -58,34 +58,34 @@ public class PropertyProcessor
 
         if (property.GetMethod != null && property.GetMethod.Body != null)
         {
-            var getBody = property.GetMethod.Body;
+            var getMethod = property.GetMethod;
 
-            var sequencePoint = getBody.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+            var doc = getMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
 
-            getBody.SimplifyMacros();
+            getMethod.Body.SimplifyMacros();
 
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.GetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) &&
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
-                InjectPropertyGetterGuard(getBody, sequencePoint, property);
+                InjectPropertyGetterGuard(getMethod, doc, property);
             }
 
-            getBody.InitLocals = true;
-            getBody.OptimizeMacros();
+            getMethod.Body.InitLocals = true;
+            getMethod.Body.OptimizeMacros();
         }
 
         if (property.SetMethod != null && property.SetMethod.Body != null)
         {
             var setBody = property.SetMethod.Body;
 
-            var sequencePoint = setBody.Instructions.Select(i => i.SequencePoint).FirstOrDefault();
+            var doc = property.SetMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
 
             setBody.SimplifyMacros();
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
             {
-                InjectPropertySetterGuard(setBody, sequencePoint, property);
+                InjectPropertySetterGuard(property.SetMethod, doc, property);
             }
 
             setBody.InitLocals = true;
@@ -93,11 +93,11 @@ public class PropertyProcessor
         }
     }
 
-    void InjectPropertyGetterGuard(MethodBody getBody, SequencePoint seqPoint, PropertyReference property)
+    void InjectPropertyGetterGuard(MethodDefinition getMethod, Document doc, PropertyReference property)
     {
         var guardInstructions = new List<Instruction>();
 
-        var returnPoints = getBody.Instructions
+        var returnPoints = getMethod.Body.Instructions
             .Select((o, i) => new { o, i })
             .Where(a => a.o.OpCode == OpCodes.Ret)
             .Select(a => a.i)
@@ -105,7 +105,7 @@ public class PropertyProcessor
 
         foreach (var ret in returnPoints)
         {
-            var returnInstruction = getBody.Instructions[ret];
+            var returnInstruction = getMethod.Body.Instructions[ret];
             var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfPropertyIsNull, property.FullName);
 
             guardInstructions.Clear();
@@ -130,13 +130,13 @@ public class PropertyProcessor
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
-            guardInstructions[0].HideLineFromDebugger(seqPoint);
+            getMethod.HideLineFromDebugger(guardInstructions[0], doc);
 
-            getBody.InsertAtMethodReturnPoint(ret, guardInstructions);
+            getMethod.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
         }
     }
 
-    void InjectPropertySetterGuard(MethodBody setBody, SequencePoint seqPoint, PropertyDefinition property)
+    void InjectPropertySetterGuard(MethodDefinition setMethod, Document doc, PropertyDefinition property)
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
@@ -145,7 +145,7 @@ public class PropertyProcessor
 
         var guardInstructions = new List<Instruction>();
         var errorMessage = string.Format(CultureInfo.InvariantCulture, CannotSetTheValueOfPropertyToNull, property.FullName);
-        var entry = setBody.Instructions.First();
+        var entry = setMethod.Body.Instructions.First();
 
         if (isDebug)
         {
@@ -164,8 +164,8 @@ public class PropertyProcessor
             i.Add(Instruction.Create(OpCodes.Throw));
         });
 
-        guardInstructions[0].HideLineFromDebugger(seqPoint);
+        setMethod.HideLineFromDebugger(guardInstructions[0], doc);
 
-        setBody.Instructions.Prepend(guardInstructions);
+        setMethod.Body.Instructions.Prepend(guardInstructions);
     }
 }
