@@ -16,4 +16,4 @@ test_script:
 
 artifacts:
   - path: NuGetBuild\*.nupkg
-  - path: Test\bin\Release\*.dll
+  - path: AssemblyToProcess\bin\Release\*.*
