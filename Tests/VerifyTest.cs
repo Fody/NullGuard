@@ -17,11 +17,11 @@ public class VerifyTest
         Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[1]);
     }
 
-    [Test]
-    public void PeVerify3()
-    {
-        Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[2]);
-    }
+    //[Test]
+    //public void PeVerify3()
+    //{
+    //    Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[2]);
+    //}
 }
 
 #endif

@@ -5,6 +5,9 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Mdb;
+using Mono.Cecil.Pdb;
 using NUnit.Framework;
 
 public static class AssemblyWeaver
@@ -38,8 +41,10 @@ public static class AssemblyWeaver
     public static TestTraceListener TestListener;
     public static Assembly[] Assemblies;
     public static string BeforeAssemblyPath;
-    public static string MonoBeforeAssemblyPath;
+
+    //public static string MonoBeforeAssemblyPath;
     public static string[] AfterAssemblyPaths;
+
     public static string[] AfterAssemblySymbolPaths;
 
     static AssemblyWeaver()
@@ -49,27 +54,27 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory,@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
+        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
-        MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
-        var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
+        //MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
+        //var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
         beforePdbPath = beforePdbPath.Replace("Debug", "Release");
-        MonoBeforeAssemblyPath = MonoBeforeAssemblyPath.Replace("Debug", "Release");
-        monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
+        //MonoBeforeAssemblyPath = MonoBeforeAssemblyPath.Replace("Debug", "Release");
+        //monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
 #endif
 
-        AfterAssemblyPaths = new [] {
+        AfterAssemblyPaths = new[] {
             BeforeAssemblyPath.Replace(".dll", "2.dll"),
             BeforeAssemblyPath.Replace(".dll", "3.dll"),
-            MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
+            //MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
         };
-        AfterAssemblySymbolPaths = new [] {
+        AfterAssemblySymbolPaths = new[] {
             beforePdbPath.Replace(".pdb", "2.pdb"),
             beforePdbPath.Replace(".pdb", "3.pdb"),
-            monoBeforeMdbPath.Replace(".mdb", "2.mdb")
+            //monoBeforeMdbPath.Replace(".mdb", "2.mdb")
         };
 
         Assemblies = new Assembly[3];
@@ -108,22 +113,22 @@ public static class AssemblyWeaver
             weavingTask.Execute();
         });
 
-        Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2], moduleDefinition =>
-        {
-            var assemblyResolver = new MockAssemblyResolver();
+        //Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2], moduleDefinition =>
+        //{
+        //    var assemblyResolver = new MockAssemblyResolver();
 
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
+        //    var weavingTask = new ModuleWeaver
+        //    {
+        //        ModuleDefinition = moduleDefinition,
+        //        AssemblyResolver = assemblyResolver,
+        //        LogInfo = LogInfo,
+        //        LogWarn = LogWarn,
+        //        LogError = LogError,
+        //        DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+        //    };
 
-            weavingTask.Execute();
-        });
+        //    weavingTask.Execute();
+        //});
     }
 
     static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
@@ -138,7 +143,12 @@ public static class AssemblyWeaver
 
         if (File.Exists(beforePdbPath))
         {
+            ISymbolReaderProvider symbolProvider = new PdbReaderProvider();
+            if (Path.GetExtension(beforePdbPath) == ".mdb")
+                symbolProvider = new MdbReaderProvider();
+
             readerParameters.ReadSymbols = true;
+            readerParameters.SymbolReaderProvider = symbolProvider;
             readerParameters.SymbolStream = new FileStream(beforePdbPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             writerParameters.WriteSymbols = true;
         }

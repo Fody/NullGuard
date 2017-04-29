@@ -6,28 +6,28 @@ using NUnit.Framework;
 
 public static class Decompiler
 {
-	public static string Decompile(string assemblyPath, string identifier = "")
-	{
-		var exePath = GetPathToILDasm();
+    public static string Decompile(string assemblyPath, string identifier = "")
+    {
+        var exePath = GetPathToILDasm();
 
-		if (!string.IsNullOrEmpty(identifier))
-		{
-			identifier = "/item:" + identifier;
-		}
+        if (!string.IsNullOrEmpty(identifier))
+        {
+            identifier = "/item:" + identifier;
+        }
 
-		using (var process = Process.Start(
+        using (var process = Process.Start(
             new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum {identifier}")
-		{
-			RedirectStandardOutput = true,
-			UseShellExecute = false,
-			CreateNoWindow = true
-		}))
-		{
-			process.WaitForExit(10000);
+            {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }))
+        {
+            process.WaitForExit(10000);
 
-			var stringBuilder = new StringBuilder();
-			string line;
-			while ((line = process.StandardOutput.ReadLine())!=null)
+            var stringBuilder = new StringBuilder();
+            string line;
+            while ((line = process.StandardOutput.ReadLine()) != null)
             {
                 if (line.Contains(".line "))
                 {
@@ -65,18 +65,16 @@ public static class Decompiler
                 }
 
                 stringBuilder.AppendLine(line);
-			}
-			return stringBuilder.ToString();
-		}
-	}
+            }
+            return stringBuilder.ToString();
+        }
+    }
 
-	static string GetPathToILDasm()
-	{
-		var path = Path.Combine(ToolLocationHelper.GetPathToDotNetFrameworkSdk(TargetDotNetFrameworkVersion.Version40), @"bin\NETFX 4.0 Tools\ildasm.exe");
-		if (!File.Exists(path))
-			path = path.Replace("v7.0", "v8.0");
-		if (!File.Exists(path))
-			Assert.Ignore("ILDasm could not be found");
-		return path;
-	}
+    static string GetPathToILDasm()
+    {
+        var path = ToolLocationHelper.GetPathToDotNetFrameworkSdkFile("ildasm.exe", TargetDotNetFrameworkVersion.VersionLatest);
+        if (!File.Exists(path))
+            Assert.Ignore("ILDasm could not be found");
+        return path;
+    }
 }

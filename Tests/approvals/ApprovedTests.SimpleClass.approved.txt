@@ -607,7 +607,7 @@
   {
     // Code size       103 (0x67)
     .maxstack  3
-    .locals init ([0] !!T )
+    .locals init ([0] !!T V_0)
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_0033
     IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()
@@ -630,7 +630,7 @@
     IL_002c:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0031:  throw
     IL_0032:  ret
-    IL_0033:  ldloca.s   
+    IL_0033:  ldloca.s   V_0
     IL_0035:  initobj    !!T
     IL_003b:  ldloc.0
     IL_003c:  dup

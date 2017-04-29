@@ -1,1 +1,1 @@
-﻿Warns: [0] = Cannot add guards to System.Threading.Tasks.Task`1<System.Collections.Generic.List`1<System.Int32>> SpecialClass::Issue30Exception() as the method contains no await keyword.
+﻿Warns:  is empty
