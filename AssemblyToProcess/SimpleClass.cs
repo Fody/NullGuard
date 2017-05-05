@@ -149,7 +149,7 @@ public class SimpleClass
     {
         // This is a regression test scenario for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/57.
 
-        // It is important that the return value is asinged *before* the branch, otherwise the C# compiler emits
+        // It is important that the return value is assigned *before* the branch, otherwise the C# compiler emits
         // instructions before the RET instructions, which wouldn't trigger the original issue.
         string returnValue = null;
 

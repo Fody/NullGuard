@@ -60,10 +60,47 @@
       IL_0010:  ldarg.0
       IL_0011:  ldc.i4.m1
       IL_0012:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
+//000012:         for (var i = 0; i < end; i++)
       IL_0017:  ldarg.0
       IL_0018:  ldc.i4.0
       IL_0019:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+//000013:         {
+//000014:             yield return i;
+//000015:         }
+//000016:     }
+//000017: 
+//000018: #if (DEBUG)
+//000019: 
+//000020:     public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
+//000021:     {
+//000022:         await Task.Run(() => Console.WriteLine(nonNullArg));
+//000023:     }
+//000024: 
+//000025:     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+//000026:     {
+//000027:         return await Task.Run(() => returnNull ? null : "");
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_001e:  br.s       IL_004c
+//000014:             yield return i;
       IL_0020:  ldarg.0
       IL_0021:  ldarg.0
       IL_0022:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
@@ -73,9 +110,43 @@
       IL_002e:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
       IL_0033:  ldc.i4.1
       IL_0034:  ret
+//000015:         }
+//000016:     }
+//000017: 
+//000018: #if (DEBUG)
+//000019: 
+//000020:     public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
+//000021:     {
+//000022:         await Task.Run(() => Console.WriteLine(nonNullArg));
+//000023:     }
+//000024: 
+//000025:     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+//000026:     {
+//000027:         return await Task.Run(() => returnNull ? null : "");
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_0035:  ldarg.0
       IL_0036:  ldc.i4.m1
       IL_0037:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
+//000012:         for (var i = 0; i < end; i++)
       IL_003c:  ldarg.0
       IL_003d:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
       IL_0042:  stloc.1
@@ -89,6 +160,10 @@
       IL_0052:  ldarg.0
       IL_0053:  ldfld      int32 SpecialClass/'<CountTo>d__0'::end
       IL_0058:  blt.s      IL_0020
+//000013:         {
+//000014:             yield return i;
+//000015:         }
+//000016:     }
       IL_005a:  ldc.i4.0
       IL_005b:  ret
     } // end of method '<CountTo>d__0'::MoveNext
@@ -192,6 +267,12 @@
     {
       // Code size       12 (0xc)
       .maxstack  8
+//000017: 
+//000018: #if (DEBUG)
+//000019: 
+//000020:     public async Task SomeMethodAsync(string nonNullArg, [AllowNull] string nullArg)
+//000021:     {
+//000022:         await Task.Run(() => Console.WriteLine(nonNullArg));
       IL_0000:  ldarg.0
       IL_0001:  ldfld      string SpecialClass/'<>c__DisplayClass1_0'::nonNullArg
       IL_0006:  call       void [mscorlib]System.Console::WriteLine(string)
@@ -216,6 +297,31 @@
                [1] class SpecialClass/'<>c__DisplayClass1_0' 'CS$<>8__locals0',
                [2] valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter V_2,
                [3] class [mscorlib]System.Exception V_3)
+//000023:     }
+//000024: 
+//000025:     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+//000026:     {
+//000027:         return await Task.Run(() => returnNull ? null : "");
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_0000:  ldarg.0
       IL_0001:  ldfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
       IL_0006:  stloc.0
@@ -229,6 +335,7 @@
         IL_0011:  ldarg.0
         IL_0012:  ldfld      string SpecialClass/'<SomeMethodAsync>d__1'::nonNullArg
         IL_0017:  stfld      string SpecialClass/'<>c__DisplayClass1_0'::nonNullArg
+//000022:         await Task.Run(() => Console.WriteLine(nonNullArg));
         IL_001c:  ldloc.1
         IL_001d:  ldftn      instance void SpecialClass/'<>c__DisplayClass1_0'::'<SomeMethodAsync>b__0'()
         IL_0023:  newobj     instance void [mscorlib]System.Action::.ctor(object,
@@ -236,6 +343,31 @@
         IL_0028:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Run(class [mscorlib]System.Action)
         IL_002d:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
         IL_0032:  stloc.2
+//000023:     }
+//000024: 
+//000025:     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+//000026:     {
+//000027:         return await Task.Run(() => returnNull ? null : "");
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
         IL_0033:  ldloca.s   V_2
         IL_0035:  call       instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::get_IsCompleted()
         IL_003a:  brtrue.s   IL_0078
@@ -282,10 +414,35 @@
         IL_0098:  ldloc.3
         IL_0099:  call       instance void [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetException(class [mscorlib]System.Exception)
         IL_009e:  leave.s    IL_00b3
+//000023:     }
       }  // end handler
       IL_00a0:  ldarg.0
       IL_00a1:  ldc.i4.s   -2
       IL_00a3:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
+//000024: 
+//000025:     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
+//000026:     {
+//000027:         return await Task.Run(() => returnNull ? null : "");
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_00a8:  ldarg.0
       IL_00a9:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
       IL_00ae:  call       instance void [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetResult()
@@ -322,6 +479,7 @@
     {
       // Code size       16 (0x10)
       .maxstack  8
+//000027:         return await Task.Run(() => returnNull ? null : "");
       IL_0000:  ldarg.0
       IL_0001:  ldfld      bool SpecialClass/'<>c__DisplayClass2_0'::returnNull
       IL_0006:  brtrue.s   IL_000e
@@ -352,6 +510,26 @@
                [4] valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<string> V_4,
                [5] string V_5,
                [6] class [mscorlib]System.Exception V_6)
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_0000:  ldarg.0
       IL_0001:  ldfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
       IL_0006:  stloc.0
@@ -365,6 +543,7 @@
         IL_0011:  ldarg.0
         IL_0012:  ldfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__2'::returnNull
         IL_0017:  stfld      bool SpecialClass/'<>c__DisplayClass2_0'::returnNull
+//000027:         return await Task.Run(() => returnNull ? null : "");
         IL_001c:  ldloc.2
         IL_001d:  ldftn      instance string SpecialClass/'<>c__DisplayClass2_0'::'<MethodWithReturnValueAsync>b__0'()
         IL_0023:  newobj     instance void class [mscorlib]System.Func`1<string>::.ctor(object,
@@ -372,6 +551,26 @@
         IL_0028:  call       class [mscorlib]System.Threading.Tasks.Task`1<!!0> [mscorlib]System.Threading.Tasks.Task::Run<string>(class [mscorlib]System.Func`1<!!0>)
         IL_002d:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<!0> class [mscorlib]System.Threading.Tasks.Task`1<string>::GetAwaiter()
         IL_0032:  stloc.s    V_4
+//000028:     }
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
         IL_0034:  ldloca.s   V_4
         IL_0036:  call       instance bool valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<string>::get_IsCompleted()
         IL_003b:  brtrue.s   IL_007e
@@ -423,10 +622,30 @@
         IL_00a6:  ldloc.s    V_6
         IL_00a8:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
         IL_00ad:  leave.s    IL_00e8
+//000028:     }
       }  // end handler
       IL_00af:  ldarg.0
       IL_00b0:  ldc.i4.s   -2
       IL_00b2:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
+//000029: 
+//000030:     [return: AllowNull]
+//000031:     public async Task<string> MethodAllowsNullReturnValueAsync()
+//000032:     {
+//000033:         await Task.Delay(100);
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_00b7:  ldarg.0
       IL_00b8:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
       IL_00bd:  ldloc.1
@@ -489,10 +708,25 @@
       {
         IL_0007:  ldloc.0
         IL_0008:  brfalse.s  IL_0040
+//000033:         await Task.Delay(100);
         IL_000a:  ldc.i4.s   100
         IL_000c:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Delay(int32)
         IL_0011:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
         IL_0016:  stloc.2
+//000034: 
+//000035:         return null;
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
         IL_0017:  ldloca.s   V_2
         IL_0019:  call       instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::get_IsCompleted()
         IL_001e:  brtrue.s   IL_005c
@@ -526,9 +760,22 @@
         IL_005e:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
         IL_0063:  ldloca.s   V_2
         IL_0065:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
+//000035:         return null;
         IL_006b:  ldnull
         IL_006c:  stloc.1
         IL_006d:  leave.s    IL_0086
+//000036:     }
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       }  // end .try
       catch [mscorlib]System.Exception 
       {
@@ -541,10 +788,22 @@
         IL_007e:  ldloc.3
         IL_007f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [mscorlib]System.Exception)
         IL_0084:  leave.s    IL_009a
+//000036:     }
       }  // end handler
       IL_0086:  ldarg.0
       IL_0087:  ldc.i4.s   -2
       IL_0089:  stfld      int32 SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>1__state'
+//000037: 
+//000038: #pragma warning disable 1998
+//000039: 
+//000040:     public async Task<int> NoAwaitCode()
+//000041:     {
+//000042:         return 42;
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_008e:  ldarg.0
       IL_008f:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
       IL_0094:  ldloc.1
@@ -582,11 +841,17 @@
       IL_0000:  ldarg.0
       IL_0001:  ldfld      int32 SpecialClass/'<NoAwaitCode>d__4'::'<>1__state'
       IL_0006:  stloc.0
+//000042:         return 42;
       .try
       {
         IL_0007:  ldc.i4.s   42
         IL_0009:  stloc.1
         IL_000a:  leave.s    IL_0023
+//000043:     }
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       }  // end .try
       catch [mscorlib]System.Exception 
       {
@@ -599,10 +864,15 @@
         IL_001b:  ldloc.2
         IL_001c:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::SetException(class [mscorlib]System.Exception)
         IL_0021:  leave.s    IL_0037
+//000043:     }
       }  // end handler
       IL_0023:  ldarg.0
       IL_0024:  ldc.i4.s   -2
       IL_0026:  stfld      int32 SpecialClass/'<NoAwaitCode>d__4'::'<>1__state'
+//000044: 
+//000045: #pragma warning restore 1998
+//000046: #endif
+//000047: }
       IL_002b:  ldarg.0
       IL_002c:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
       IL_0031:  ldloc.1

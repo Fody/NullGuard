@@ -123,7 +123,7 @@ public class RewritingMethods
         sample.MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(optional: null);
     }
 
-    [Test, Explicit("Fails on AppVeyor - TODO")]
+    [Test]
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);

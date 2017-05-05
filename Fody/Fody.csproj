@@ -87,6 +87,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="PropertyProcessor.cs" />
     <Compile Include="ReferenceFinder.cs" />
+    <Compile Include="SymbolExtensions.cs" />
     <Compile Include="WeavingException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
