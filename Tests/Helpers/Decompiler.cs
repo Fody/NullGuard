@@ -72,7 +72,7 @@ public static class Decompiler
 
     static string GetPathToILDasm()
     {
-        var path = ToolLocationHelper.GetPathToDotNetFrameworkSdkFile("ildasm.exe", TargetDotNetFrameworkVersion.VersionLatest);
+        var path = SdkToolsHelper.GetSdkToolPath("ildasm.exe");
         if (!File.Exists(path))
             Assert.Ignore("ILDasm could not be found");
         return path;
