@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.Build.Utilities;
 using NUnit.Framework;
 
 public static class Verifier
