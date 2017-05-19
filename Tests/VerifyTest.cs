@@ -1,23 +1,22 @@
 ﻿#if(DEBUG)
 
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class VerifyTest
 {
-    [Test]
+    [SkippableFact]
     public void PeVerify1()
     {
         Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[0]);
     }
 
-    [Test]
+    [SkippableFact]
     public void PeVerify2()
     {
         Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[1]);
     }
 
-    //[Test]
+    //[SkippableFact]
     //public void PeVerify3()
     //{
     //    Verifier.Verify(AssemblyWeaver.MonoBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[2]);

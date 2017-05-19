@@ -1,7 +1,7 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
-[TestFixture]
 public class RewritingProperties
 {
     Type sampleClassType;
@@ -9,8 +9,7 @@ public class RewritingProperties
     Type classWithPrivateMethodType;
     Type classToExcludeType;
 
-    [SetUp]
-    public void SetUp()
+    public RewritingProperties()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         genericClassType = AssemblyWeaver.Assemblies[0].GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
@@ -20,17 +19,17 @@ public class RewritingProperties
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [Test]
+    [Fact]
     public void PropertySetterRequiresNonNullArgument()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        Assert.AreEqual("value", exception.ParamName);
-        Assert.AreEqual("[NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.\r\nParameter name: value", exception.Message);
-        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
+        Assert.Equal("value", exception.ParamName);
+        Assert.Equal("[NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.\r\nParameter name: value", exception.Message);
+        Assert.Equal("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyGetterRequiresNonNullReturnValue()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
@@ -41,10 +40,10 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.Equal("Fail: [NullGuard] Return value of property 'System.String SimpleClass::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void GenericPropertyGetterRequiresNonNullReturnValue()
     {
         var sample = (dynamic)Activator.CreateInstance(genericClassType);
@@ -55,19 +54,19 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.Equal("Fail: [NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyAllowsNullGetButNotSet()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
+        Assert.Equal("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyAllowsNullSetButNotGet()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
@@ -79,24 +78,24 @@ public class RewritingProperties
 
             // ReSharper restore UnusedVariable
         });
-        Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet()' is null.", AssemblyWeaver.TestListener.Message);
+        Assert.Equal("Fail: [NullGuard] Return value of property 'System.String SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertySetterRequiresAllowsNullArgumentForNullableType()
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.NonNullNullableProperty = null;
     }
 
-    [Test]
+    [Fact]
     public void DoesNotRequireNullSetterWhenPropertiesNotSpecifiedByAttribute()
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         sample.SomeProperty = null;
     }
 
-    [Test]
+    [Fact]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         var classToExclude = (dynamic) Activator.CreateInstance(classToExcludeType, "");
