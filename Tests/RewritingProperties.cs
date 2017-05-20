@@ -4,24 +4,14 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingProperties
 {
-    Type sampleClassType;
-    Type genericClassType;
-    Type classWithPrivateMethodType;
-    Type classToExcludeType;
-
     [SetUp]
     public void SetUp()
     {
-        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
-        genericClassType = AssemblyWeaver.Assemblies[0].GetType("GenericClass`1").MakeGenericType(new[] { typeof(string) });
-        classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
-        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
-
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [Test]
-    public void PropertySetterRequiresNonNullArgument()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void PropertySetterRequiresNonNullArgument(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
@@ -30,8 +20,8 @@ public class RewritingProperties
         Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void PropertyGetterRequiresNonNullReturnValue()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void PropertyGetterRequiresNonNullReturnValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() =>
@@ -44,10 +34,10 @@ public class RewritingProperties
         Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void GenericPropertyGetterRequiresNonNullReturnValue()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.GenericClassTypes))]
+    public void GenericPropertyGetterRequiresNonNullReturnValue(Type genericClassType)
     {
-        var sample = (dynamic)Activator.CreateInstance(genericClassType);
+        var sample = (dynamic)Activator.CreateInstance(genericClassType.MakeGenericType(new [] {typeof(string)}));
         Assert.Throws<InvalidOperationException>(() =>
         {
             // ReSharper disable UnusedVariable
@@ -58,8 +48,8 @@ public class RewritingProperties
         Assert.AreEqual("Fail: [NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void PropertyAllowsNullGetButNotSet()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void PropertyAllowsNullGetButNotSet(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
@@ -67,8 +57,8 @@ public class RewritingProperties
         Assert.AreEqual("Fail: [NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void PropertyAllowsNullSetButNotGet()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void PropertyAllowsNullSetButNotGet(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.PropertyAllowsNullSetButDoesNotAllowNullGet = null;
@@ -82,22 +72,22 @@ public class RewritingProperties
         Assert.AreEqual("Fail: [NullGuard] Return value of property 'System.String SimpleClass::PropertyAllowsNullSetButDoesNotAllowNullGet()' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void PropertySetterRequiresAllowsNullArgumentForNullableType()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void PropertySetterRequiresAllowsNullArgumentForNullableType(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.NonNullNullableProperty = null;
     }
 
-    [Test]
-    public void DoesNotRequireNullSetterWhenPropertiesNotSpecifiedByAttribute()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.ClassWithPrivateMethodTypes))]
+    public void DoesNotRequireNullSetterWhenPropertiesNotSpecifiedByAttribute(Type classWithPrivateMethodType)
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         sample.SomeProperty = null;
     }
 
-    [Test]
-    public void AllowsNullWhenClassMatchExcludeRegex()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.ClassToExcludeTypes))]
+    public void AllowsNullWhenClassMatchExcludeRegex(Type classToExcludeType)
     {
         var classToExclude = (dynamic) Activator.CreateInstance(classToExcludeType, "");
         classToExclude.Property = null;
