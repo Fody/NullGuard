@@ -97,6 +97,8 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
+    <Exec Command="dotnet restore $(SolutionDir)NullGuard.NetStandard.sln"></Exec>
+    <Exec Command="dotnet build $(SolutionDir)NullGuard.NetStandard.sln"></Exec>
     <Copy SourceFiles="$(ProjectDir)NugetAssets\NullGuard.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\uninstall.ps1" />
@@ -106,6 +108,8 @@
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wpa81+wp8+win8+MonoAndroid16+MonoTouch40" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyNetStandard\bin\$(ConfigurationName)\netstandard1.0\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyNetStandard\bin\$(ConfigurationName)\netstandard1.0\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard10" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)NullGuard.Fody.dll" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

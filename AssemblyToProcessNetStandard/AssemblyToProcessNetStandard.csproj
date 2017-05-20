@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>AssemblyToProcess</AssemblyName>
+    <RootNamespace>AssemblyToProcess</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyToProcess\ClassToExclude.cs" Link="ClassToExclude.cs" />
+    <Compile Include="..\AssemblyToProcess\ClassWithBadAttributes.cs" Link="ClassWithBadAttributes.cs" />
+    <Compile Include="..\AssemblyToProcess\ClassWithExplicitInterface.cs" Link="ClassWithExplicitInterface.cs" />
+    <Compile Include="..\AssemblyToProcess\ClassWithPrivateMethod.cs" Link="ClassWithPrivateMethod.cs" />
+    <Compile Include="..\AssemblyToProcess\GenericClass.cs" Link="GenericClass.cs" />
+    <Compile Include="..\AssemblyToProcess\Indexers.cs" Link="Indexers.cs" />
+    <Compile Include="..\AssemblyToProcess\InterfaceBadAttributes.cs" Link="InterfaceBadAttributes.cs" />
+    <Compile Include="..\AssemblyToProcess\IXamlMetadataProvider.cs" Link="IXamlMetadataProvider.cs" />
+    <Compile Include="..\AssemblyToProcess\NonPublicWithNested.cs" Link="NonPublicWithNested.cs" />
+    <Compile Include="..\AssemblyToProcess\ReSharperAnnotations.cs" Link="ReSharperAnnotations.cs" />
+    <Compile Include="..\AssemblyToProcess\Sample\Sample.cs" Link="Sample\Sample.cs" />
+    <Compile Include="..\AssemblyToProcess\Sample\SampleOutput.cs" Link="Sample\SampleOutput.cs" />
+    <Compile Include="..\AssemblyToProcess\Sample\SomeOtherClass.cs" Link="Sample\SomeOtherClass.cs" />
+    <Compile Include="..\AssemblyToProcess\SimpleClass.cs" Link="SimpleClass.cs" />
+    <Compile Include="..\AssemblyToProcess\SpecialClass.cs" Link="SpecialClass.cs" />
+    <Compile Include="..\AssemblyToProcess\UnsafeClass.cs" Link="UnsafeClass.cs" />
+    <Compile Include="..\AssemblyToProcess\XamlMetadataProvider.cs" Link="XamlMetadataProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Sample\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReferenceAssemblyNetStandard\RefernceAssemblyNetStandard.csproj" />
+  </ItemGroup>
+
+</Project>
