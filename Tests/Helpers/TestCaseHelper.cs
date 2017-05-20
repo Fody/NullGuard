@@ -19,13 +19,13 @@ public static class TestCaseHelper
 
     private static IEnumerable<TestCaseData> GetWovenTypes(string typeName)
     {
-        yield return new TestCaseData(AssemblyWeaver.Assemblies[0].GetType(typeName)).SetName("net framework");
-        yield return new TestCaseData(AssemblyWeaver.Assemblies[3].GetType(typeName)).SetName("net standard");
+        yield return new TestCaseData(AssemblyWeaver.Assemblies[0].GetType(typeName)).SetDescription("net framework");
+        yield return new TestCaseData(AssemblyWeaver.Assemblies[3].GetType(typeName)).SetDescription("net standard");
     }
 
     private static IEnumerable<TestCaseData> GetTypesWovenWithConfig(string typeName)
     {
-        yield return new TestCaseData(AssemblyWeaver.Assemblies[1].GetType(typeName)).SetName("net framework");
-        yield return new TestCaseData(AssemblyWeaver.Assemblies[4].GetType(typeName)).SetName("net standard");
+        yield return new TestCaseData(AssemblyWeaver.Assemblies[1].GetType(typeName)).SetDescription("net framework");
+        yield return new TestCaseData(AssemblyWeaver.Assemblies[4].GetType(typeName)).SetDescription("net standard");
     }
 }
