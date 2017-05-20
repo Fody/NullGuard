@@ -6,6 +6,10 @@
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NET462</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="ApprovalTests" Version="3.0.13" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
@@ -44,9 +48,7 @@
   
   <ItemGroup>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.CSharp">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\Microsoft.CSharp.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   
   <ItemGroup>
