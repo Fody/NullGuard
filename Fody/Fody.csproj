@@ -98,7 +98,7 @@
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
     <Exec Command="dotnet restore $(SolutionDir)NullGuard.NetStandard.sln"></Exec>
-    <Exec Command="dotnet build $(SolutionDir)NullGuard.NetStandard.sln"></Exec>
+    <Exec Command="dotnet build $(SolutionDir)NullGuard.NetStandard.sln -c $(ConfigurationName)"></Exec>
     <Copy SourceFiles="$(ProjectDir)NugetAssets\NullGuard.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\install.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\install.ps1" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\uninstall.ps" DestinationFiles="$(SolutionDir)NuGetBuild\Tools\uninstall.ps1" />
