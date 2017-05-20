@@ -10,6 +10,7 @@
     {
       // Code size       110 (0x6e)
       .maxstack  3
+      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
       IL_0000:  ldarg.1
       IL_0001:  ldnull
       IL_0002:  ceq
@@ -40,7 +41,27 @@
       IL_0042:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0047:  throw
+//000009:             get { return "return value of NonNullable"; }
       IL_0048:  ldstr      "return value of NonNullable"
+//000010:             set { }
+//000011:         }
+//000012:     }
+//000013: 
+//000014:     public class PassThroughGetterReturnValue
+//000015:     {
+//000016:         public string this[[AllowNull] string returnValue] => returnValue;
+//000017:     }
+//000018: 
+//000019:     public class AllowedNulls
+//000020:     {
+//000021:         [AllowNull]
+//000022:         public string this[[AllowNull] string allowNull, int? nullableInt, string optional = null]
+//000023:         {
+//000024:             get { return null; }
+//000025:             set { }
+//000026:         }
+//000027:     }
+//000028: }
       IL_004d:  dup
       IL_004e:  ldnull
       IL_004f:  ceq
@@ -144,7 +165,20 @@
     {
       // Code size       34 (0x22)
       .maxstack  3
+//000016:         public string this[[AllowNull] string returnValue] => returnValue;
       IL_0000:  ldarg.1
+//000017:     }
+//000018: 
+//000019:     public class AllowedNulls
+//000020:     {
+//000021:         [AllowNull]
+//000022:         public string this[[AllowNull] string allowNull, int? nullableInt, string optional = null]
+//000023:         {
+//000024:             get { return null; }
+//000025:             set { }
+//000026:         }
+//000027:     }
+//000028: }
       IL_0001:  dup
       IL_0002:  ldnull
       IL_0003:  ceq
@@ -188,7 +222,7 @@
       .param [3] = nullref
       // Code size       2 (0x2)
       .maxstack  1
-      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+//000024:             get { return null; }
       IL_0000:  ldnull
       IL_0001:  ret
     } // end of method AllowedNulls::get_Item

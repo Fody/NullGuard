@@ -16,7 +16,7 @@ public static class Decompiler
         }
 
         using (var process = Process.Start(
-            new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum {identifier}")
+            new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum /source {identifier}")
             {
                 RedirectStandardOutput = true,
                 UseShellExecute = false,

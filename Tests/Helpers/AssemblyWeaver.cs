@@ -145,14 +145,19 @@ public static class AssemblyWeaver
 
         if (File.Exists(beforePdbPath))
         {
-            ISymbolReaderProvider symbolProvider = new PdbReaderProvider();
+            ISymbolReaderProvider symbolReaderProvider = new PdbReaderProvider();
+            ISymbolWriterProvider symbolWriterProvider = new PdbWriterProvider();
             if (Path.GetExtension(beforePdbPath) == ".mdb")
-                symbolProvider = new MdbReaderProvider();
+            {
+                symbolReaderProvider = new MdbReaderProvider();
+                symbolWriterProvider = new MdbWriterProvider();
+            }
 
             readerParameters.ReadSymbols = true;
-            readerParameters.SymbolReaderProvider = symbolProvider;
+            readerParameters.SymbolReaderProvider = symbolReaderProvider;
             readerParameters.SymbolStream = new FileStream(beforePdbPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             writerParameters.WriteSymbols = true;
+            writerParameters.SymbolWriterProvider = symbolWriterProvider;
         }
 
         var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath, readerParameters);

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 
 public static class CecilExtensions
 {
@@ -124,54 +123,6 @@ public static class CecilExtensions
     {
         return typeDefinition.Interfaces.Any(x => x.InterfaceType.Name == "IAsyncStateMachine");
     }
-
-    public static void HideLineFromDebugger(this MethodDefinition method, Instruction i, Document doc)
-    {
-        if (doc == null)
-            return;
-
-        var oldSequencePoint = method.DebugInformation.SequencePoints.FirstOrDefault(sp => sp.Offset == i.Offset);
-        if (oldSequencePoint != null)
-            method.DebugInformation.SequencePoints.Remove(oldSequencePoint);
-
-        // This tells the debugger to ignore and step through
-        // all the following instructions to the next instruction
-        // with a valid SequencePoint. That way IL can be hidden from
-        // the Debugger. See
-        // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-        var hiddenSequencePoint = new SequencePoint(i, doc)
-        {
-            StartLine = 0xfeefee,
-            EndLine = 0xfeefee
-        };
-
-        method.DebugInformation.SequencePoints.Remove(oldSequencePoint);
-    }
-
-    //public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
-    //{
-    //    if (seqPoint == null)
-    //        return;
-
-    //    HideLineFromDebugger(i, seqPoint.Document);
-    //}
-
-    //private static void HideLineFromDebugger(this Instruction i, Document doc)
-    //{
-    //    if (doc == null)
-    //        return;
-
-    //    // This tells the debugger to ignore and step through
-    //    // all the following instructions to the next instruction
-    //    // with a valid SequencePoint. That way IL can be hidden from
-    //    // the Debugger. See
-    //    // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-    //    i.SequencePoint = new SequencePoint(doc)
-    //    {
-    //        StartLine = 0xfeefee,
-    //        EndLine = 0xfeefee
-    //    };
-    //}
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
     {

@@ -8,6 +8,7 @@
     // Code size       8 (0x8)
     .maxstack  2
     .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+//000008:         SomePrivateMethod(null);
     IL_0000:  ldarg.0
     IL_0001:  ldnull
     IL_0002:  call       instance void ClassWithPrivateMethod::SomePrivateMethod(string)
@@ -18,6 +19,16 @@
   {
     // Code size       37 (0x25)
     .maxstack  2
+//000009:     }
+//000010: 
+//000011:     // ReSharper disable UnusedParameter.Local
+//000012:     void SomePrivateMethod(string x)
+//000013:     // ReSharper restore UnusedParameter.Local
+//000014:     {
+//000015:     }
+//000016: 
+//000017:     public string SomeProperty { get; set; }
+//000018: }
     IL_0000:  ldarg.1
     IL_0001:  ldnull
     IL_0002:  ceq

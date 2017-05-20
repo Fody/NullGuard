@@ -90,6 +90,7 @@ public class MethodProcessor
 
         body.InitLocals = true;
         body.OptimizeMacros();
+        method.UpdateDebugInfo();
     }
 
     void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, Document doc)
