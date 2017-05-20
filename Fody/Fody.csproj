@@ -36,5 +36,7 @@
     <Copy SourceFiles="$(ProjectDir)NugetAssets\NullGuard.Fody.nuspec" DestinationFolder="..\NuGetBuild" />
     <Copy SourceFiles="$(OutputPath)NullGuard.Fody.dll" DestinationFolder="..\NuGetBuild" />
     <Copy SourceFiles="$(OutputPath)NullGuard.Fody.pdb" DestinationFolder="..\NuGetBuild" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\install.ps" DestinationFolder="..\NuGetBuild\Tools" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\uninstall.ps" DestinationFolder="..\NuGetBuild\Tools" />
   </Target>
 </Project>
