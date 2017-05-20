@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 #if (DEBUG)
 using System.Threading.Tasks;
 #endif
@@ -9,26 +9,24 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingMethods
 {
-    Type sampleClassType;
-    Type classWithPrivateMethodType;
-    Type specialClassType;
-    Type classToExcludeType;
-    Type classWithExplicitInterfaceType;
-
     [SetUp]
     public void SetUp()
     {
-        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
-        classWithPrivateMethodType = AssemblyWeaver.Assemblies[0].GetType("ClassWithPrivateMethod");
-        specialClassType = AssemblyWeaver.Assemblies[0].GetType("SpecialClass");
-        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
-        classWithExplicitInterfaceType = AssemblyWeaver.Assemblies[0].GetType("ClassWithExplicitInterface");
-
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [Test]
-    public void RequiresNonNullArgumentForExplicitInterface()
+    private static IEnumerable<TestCaseData> ClassWithExplicitInterfaceTypes => TestCaseHelper.GetWovenTypes("ClassWithExplicitInterface");
+
+    private static IEnumerable<TestCaseData> SampleClassTypes => TestCaseHelper.GetWovenTypes("SimpleClass");
+
+    private static IEnumerable<TestCaseData> SpecialClassTypes => TestCaseHelper.GetWovenTypes("SpecialClass");
+
+    private static IEnumerable<TestCaseData> ClassWithPrivateMethodTypes => TestCaseHelper.GetWovenTypes("ClassWithPrivateMethod");
+
+    private static IEnumerable<TestCaseData> ClassToExcludeTypes => TestCaseHelper.GetTypesWovenWithConfig("ClassToExclude");
+
+    [TestCaseSource(nameof(ClassWithExplicitInterfaceTypes))]
+    public void RequiresNonNullArgumentForExplicitInterface(Type classWithExplicitInterfaceType)
     {
         AssemblyWeaver.TestListener.Reset();
         var sample = (IComparable<string>)Activator.CreateInstance(classWithExplicitInterfaceType);
@@ -37,8 +35,8 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] other is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void RequiresNonNullArgument()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void RequiresNonNullArgument(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethod(null, ""));
@@ -46,38 +44,38 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] nonNullArg is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullWhenAttributeApplied()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void AllowsNullWhenAttributeApplied(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.SomeMethod("", null);
     }
 
-    [Test]
-    public void RequiresNonNullMethodReturnValue()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void RequiresNonNullMethodReturnValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
         Assert.AreEqual("Fail: [NullGuard] Return value of method 'System.String SimpleClass::MethodWithReturnValue(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void RequiresNonNullGenericMethodReturnValue()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void RequiresNonNullGenericMethodReturnValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
         Assert.AreEqual("Fail: [NullGuard] Return value of method 'T SimpleClass::MethodWithGenericReturn(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullReturnValueWhenAttributeApplied()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void AllowsNullReturnValueWhenAttributeApplied(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.MethodAllowsNullReturnValue();
     }
 
-    [Test]
-    public void RequiresNonNullOutValue()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void RequiresNonNullOutValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         string value;
@@ -85,30 +83,30 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullOutValue()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void AllowsNullOutValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         string value;
         sample.MethodWithAllowedNullOutValue(out value);
     }
 
-    [Test]
-    public void DoesNotRequireNonNullForNonPublicMethod()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void DoesNotRequireNonNullForNonPublicMethod(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.PublicWrapperOfPrivateMethod();
     }
 
-    [Test]
-    public void DoesNotRequireNonNullForOptionalParameter()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void DoesNotRequireNonNullForOptionalParameter(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.MethodWithOptionalParameter(optional: null);
     }
 
-    [Test]
-    public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null));
@@ -116,32 +114,32 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] optional is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void DoesNotRequireNonNullForOptionalParameterWithNonNullDefaultValueButAllowNullAttribute()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void DoesNotRequireNonNullForOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(Type sampleClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(sampleClassType);
         sample.MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(optional: null);
     }
 
-    [Test, Explicit("Fails on AppVeyor - TODO")]
-    public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
+    [TestCaseSource(nameof(ClassWithPrivateMethodTypes)), Explicit("Fails on AppVeyor - TODO")]
+    public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic(Type classWithPrivateMethodType)
     {
         var sample = (dynamic)Activator.CreateInstance(classWithPrivateMethodType);
         Assert.Throws<ArgumentNullException>(() => sample.PublicWrapperOfPrivateMethod());
         Assert.AreEqual("Fail: [NullGuard] x is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void ReturnGuardDoesNotInterfereWithIteratorMethod()
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void ReturnGuardDoesNotInterfereWithIteratorMethod(Type specialClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         Assert.That(new[] { 0, 1, 2, 3, 4 }, Is.EquivalentTo(sample.CountTo(5)));
     }
 
 #if (DEBUG)
-
-    [Test]
-    public void RequiresNonNullArgumentAsync()
+    
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void RequiresNonNullArgumentAsync(Type specialClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
@@ -149,15 +147,15 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] nonNullArg is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullWhenAttributeAppliedAsync()
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void AllowsNullWhenAttributeAppliedAsync(Type specialClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
         sample.SomeMethodAsync("", null);
     }
 
-    [Test]
-    public void RequiresNonNullMethodReturnValueAsync()
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void RequiresNonNullMethodReturnValueAsync(Type specialClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
 
@@ -177,8 +175,8 @@ public class RewritingMethods
         Assert.AreEqual("Fail: [NullGuard] Return value of method 'System.Threading.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync(System.Boolean)' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullReturnValueWhenAttributeAppliedAsync()
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void AllowsNullReturnValueWhenAttributeAppliedAsync(Type specialClassType)
     {
         var sample = (dynamic)Activator.CreateInstance(specialClassType);
 
@@ -195,8 +193,8 @@ public class RewritingMethods
         Assert.Null(ex);
     }
 
-    [Test]
-    public void NoAwaitWillCompile()
+    [TestCaseSource(nameof(SpecialClassTypes))]
+    public void NoAwaitWillCompile(Type specialClassType)
     {
         var instance = (dynamic)Activator.CreateInstance(specialClassType);
         Assert.AreEqual(42, instance.NoAwaitCode().Result);
@@ -204,15 +202,15 @@ public class RewritingMethods
 
 #endif
 
-    [Test]
-    public void AllowsNullWhenClassMatchExcludeRegex()
+    [TestCaseSource(nameof(ClassToExcludeTypes))]
+    public void AllowsNullWhenClassMatchExcludeRegex(Type classToExcludeType)
     {
         var ClassToExclude = (dynamic)Activator.CreateInstance(classToExcludeType, "");
         ClassToExclude.Test(null);
     }
 
-    [Test]
-    public void ReturnValueChecksWithBranchToRetInstruction()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void ReturnValueChecksWithBranchToRetInstruction(Type sampleClassType)
     {
         // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
 
@@ -221,8 +219,8 @@ public class RewritingMethods
         Assert.AreEqual("[NullGuard] Return value of method 'System.String SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null.", exception.Message);
     }
 
-    [Test]
-    public void OutValueChecksWithRetInstructionAsSwitchCase()
+    [TestCaseSource(nameof(SampleClassTypes))]
+    public void OutValueChecksWithRetInstructionAsSwitchCase(Type sampleClassType)
     {
         // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
 

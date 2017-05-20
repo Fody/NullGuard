@@ -41,7 +41,7 @@ public static class AssemblyWeaver
     public static TestTraceListener TestListener;
     public static Assembly[] Assemblies;
     public static string BeforeAssemblyPath;
-
+    public static string NetStandardBeforeAssemblyPath;
     //public static string MonoBeforeAssemblyPath;
     public static string[] AfterAssemblyPaths;
 
@@ -56,12 +56,16 @@ public static class AssemblyWeaver
 
         BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
+        NetStandardBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessNetStandard\bin\Debug\netcoreapp1.1\AssemblyToProcess.dll"));
+        var netStandardBeforePdbPath = Path.ChangeExtension(NetStandardBeforeAssemblyPath, "pdb");
         //MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
         //var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
 
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
         beforePdbPath = beforePdbPath.Replace("Debug", "Release");
+        NetStandardBeforeAssemblyPath = NetStandardBeforeAssemblyPath.Replace("Debug", "Release");
+        netStandardBeforePdbPath = netStandardBeforePdbPath.Replace("Debug", "Release");
         //MonoBeforeAssemblyPath = MonoBeforeAssemblyPath.Replace("Debug", "Release");
         //monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
 #endif
@@ -69,15 +73,19 @@ public static class AssemblyWeaver
         AfterAssemblyPaths = new[] {
             BeforeAssemblyPath.Replace(".dll", "2.dll"),
             BeforeAssemblyPath.Replace(".dll", "3.dll"),
-            //MonoBeforeAssemblyPath.Replace(".dll", "2.dll")
+            null, //MonoBeforeAssemblyPath.Replace(".dll", "2.dll"),
+            NetStandardBeforeAssemblyPath.Replace(".dll", "2.dll"),
+            NetStandardBeforeAssemblyPath.Replace(".dll", "3.dll")
         };
         AfterAssemblySymbolPaths = new[] {
             beforePdbPath.Replace(".pdb", "2.pdb"),
             beforePdbPath.Replace(".pdb", "3.pdb"),
-            //monoBeforeMdbPath.Replace(".mdb", "2.mdb")
+            null, //monoBeforeMdbPath.Replace(".mdb", "2.mdb"),
+            netStandardBeforePdbPath.Replace(".pdb", "2.pdb"),
+            netStandardBeforePdbPath.Replace(".pdb", "3.pdb"),
         };
 
-        Assemblies = new Assembly[3];
+        Assemblies = new Assembly[5];
         Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[0], beforePdbPath, AfterAssemblySymbolPaths[0], moduleDefinition =>
         {
             var assemblyResolver = new MockAssemblyResolver();
@@ -129,6 +137,41 @@ public static class AssemblyWeaver
 
         //    weavingTask.Execute();
         //});
+
+        Assemblies[3] = WeaveAssembly(NetStandardBeforeAssemblyPath, AfterAssemblyPaths[3], netStandardBeforePdbPath, AfterAssemblySymbolPaths[3], moduleDefinition =>
+        {
+            var assemblyResolver = new MockAssemblyResolver();
+
+            var weavingTask = new ModuleWeaver
+            {
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver,
+                LogInfo = LogInfo,
+                LogWarn = LogWarn,
+                LogError = LogError,
+                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+            };
+
+            weavingTask.Execute();
+        });
+
+        Assemblies[4] = WeaveAssembly(NetStandardBeforeAssemblyPath, AfterAssemblyPaths[4], netStandardBeforePdbPath, AfterAssemblySymbolPaths[4], moduleDefinition =>
+        {
+            var assemblyResolver = new MockAssemblyResolver();
+
+            var weavingTask = new ModuleWeaver
+            {
+                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$")),
+                ModuleDefinition = moduleDefinition,
+                AssemblyResolver = assemblyResolver,
+                LogInfo = LogInfo,
+                LogWarn = LogWarn,
+                LogError = LogError,
+                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
+            };
+
+            weavingTask.Execute();
+        });
     }
 
     static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
