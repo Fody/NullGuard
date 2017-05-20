@@ -4,16 +4,27 @@ configuration: Release
 
 image: Visual Studio 2017
 
-before_build:
-  - nuget restore NullGuard.sln
+install:
+  - choco install gitversion.portable -pre -y
 
-build:
-  parallel: true
-  project: NullGuard.sln
+before_build:
+  - dotnet restore NullGuard.sln
+  - ps: gitversion /l console /output buildserver /updateassemblyinfo
+
+build_script:
+  - dotnet build NullGuard.sln
 
 test_script:
-  - nunit3-console Tests\bin\Release\Tests.dll --x86 --result=myresults.xml;format=AppVeyor
+  - ps: |
+      Push-Location Tests;
+      dotnet xunit -configuration $env:CONFIGURATION -notrait "Category=explicit";
+      Pop-Location
+  
+after_test:
+  - dotnet pack -c %CONFIGURATION% -o ../NuGetBuild Fody/Fody.csproj
 
 artifacts:
   - path: NuGetBuild\*.nupkg
-  - path: AssemblyToProcess\bin\Release\*.*
+  - path: AssemblyToProcess\bin\Release\
+    name: AssemblyToProcess
+    type: zip

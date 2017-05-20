@@ -6,7 +6,7 @@ using Xunit;
 
 public class LargeAssemblyTest
 {
-    [Fact]
+    [Fact, Trait("Category", "Explicit")]
     public void ProcessAllAssemblies()
     {
         foreach (var assemblyPath in Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll"))
