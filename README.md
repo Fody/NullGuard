@@ -1,13 +1,18 @@
+[![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody)
+[![NuGet Status](http://img.shields.io/nuget/v/NullGuard.Fody.svg?style=flat)](https://www.nuget.org/packages/NullGuard.Fody/)
+
+
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 
-## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/NullGuard.Fody.svg?style=flat)](https://www.nuget.org/packages/NullGuard.Fody/)
+## The nuget package
 
 https://nuget.org/packages/NullGuard.Fody/
 
     PM> Install-Package NullGuard.Fody
+
 
 ### Your Code
 
@@ -45,6 +50,7 @@ https://nuget.org/packages/NullGuard.Fody/
         // Or just the setter.
         public string NullPropertyOnSet { get; [param: AllowNull] set; }
     }
+
 
 ### What gets compiled 
 
@@ -119,7 +125,8 @@ https://nuget.org/packages/NullGuard.Fody/
             }
         }
     }
-    
+
+
 ## Attributes
 
 Where and how injection occurs can be controlled via attributes. The NullGuard.Fody nuget ships with an assembly containing these attributes.
@@ -168,6 +175,7 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
         }
     }
 
+
 ## Configuration
 
 For Release builds NullGuard will weave code that throws ArgumentNullException. For Debug builds NullGuard weaves Debug.Assert. 
@@ -186,11 +194,13 @@ You can also use RegEx to specify the name of a class to exclude from NullGuard.
 
     <NullGuard ExcludeRegex="^ClassToExclude$" />
 
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
   * [Simon Cropp](https://github.com/simoncropp)
   * [Tim Murphy](https://github.com/TimMurphy)
+
 
 ## Icon
 
