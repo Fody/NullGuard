@@ -23,7 +23,7 @@ test:
       - explicit     
   
 after_test:
-  - dotnet pack -c %CONFIGURATION% -o ../NuGetBuild Fody/Fody.csproj --no-build
+  - ps: dotnet pack -c %CONFIGURATION% -o ../NuGetBuild Fody/Fody.csproj --no-build /p:Version=$env:GitVersion_NuGetVersion
 
 artifacts:
   - path: NuGetBuild\*.nupkg
