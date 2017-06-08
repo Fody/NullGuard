@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using Microsoft.Build.Utilities;
-using NUnit.Framework;
+using Xunit;
 
 public static class Decompiler
 {
@@ -73,8 +73,8 @@ public static class Decompiler
     static string GetPathToILDasm()
     {
         var path = ToolLocationHelper.GetPathToDotNetFrameworkSdkFile("ildasm.exe", TargetDotNetFrameworkVersion.VersionLatest);
-        if (!File.Exists(path))
-            Assert.Ignore("ILDasm could not be found");
+        Skip.IfNot(File.Exists(path), "ILDasm could not be found");
+
         return path;
     }
 }

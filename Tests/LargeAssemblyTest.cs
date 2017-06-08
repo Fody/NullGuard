@@ -2,13 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using Mono.Cecil;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class LargeAssemblyTest
 {
-    [Test]
-    [Explicit]
+    [Fact, Trait("Category", "Explicit")]
     public void ProcessAllAssemblies()
     {
         foreach (var assemblyPath in Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll"))

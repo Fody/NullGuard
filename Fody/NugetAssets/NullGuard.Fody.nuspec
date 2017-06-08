@@ -15,7 +15,7 @@
     <language>en-AU</language>
     <tags>Null Check, ILWeaving, Fody, Cecil</tags>
     <dependencies>
-      <dependency id="Fody" version="2.0.7" />
+      <dependency id="Fody" version="2.0.9" />
     </dependencies>
   </metadata>
 </package>

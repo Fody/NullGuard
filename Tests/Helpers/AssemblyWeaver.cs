@@ -8,7 +8,6 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Mdb;
 using Mono.Cecil.Pdb;
-using NUnit.Framework;
 
 public static class AssemblyWeaver
 {
@@ -49,12 +48,15 @@ public static class AssemblyWeaver
 
     static AssemblyWeaver()
     {
+        string target = "net462";
         TestListener = new TestTraceListener();
 
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
+        var assemblyPathUri = new Uri(new Uri(typeof(AssemblyWeaver).GetTypeInfo().Assembly.CodeBase), $"../../../../AssemblyToProcess/bin/Debug/{target}/AssemblyToProcess.dll");
+        BeforeAssemblyPath = Path.GetFullPath(assemblyPathUri.LocalPath);
+        //BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
         var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
         //MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
         //var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";

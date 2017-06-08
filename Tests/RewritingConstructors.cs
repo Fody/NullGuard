@@ -1,14 +1,13 @@
 ﻿using System;
-using NUnit.Framework;
+using System.Reflection;
+using Xunit;
 
-[TestFixture]
 public class RewritingConstructors
 {
     Type sampleClassType;
     Type classToExcludeType;
 
-    [SetUp]
-    public void SetUp()
+    public RewritingConstructors()
     {
         sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
         classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
@@ -16,32 +15,31 @@ public class RewritingConstructors
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [Test]
+    [Fact]
     public void RequiresNonNullArgument()
     {
-        Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, null, "")),
-            Throws.TargetInvocationException
-                .With.InnerException.TypeOf<ArgumentNullException>()
-                .And.InnerException.Property("ParamName").EqualTo("nonNullArg"));
+        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(sampleClassType, null, ""));
+
+        var argumentNullException = Assert.IsType<ArgumentNullException>(targetInvocationException.InnerException);
+        Assert.Equal("nonNullArg", argumentNullException.ParamName);
     }
 
-    [Test]
+    [Fact]
     public void RequiresNonNullOutArgument()
     {
         var args = new object[1];
-        Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, args)),
-            Throws.TargetInvocationException
-                .With.InnerException.TypeOf<InvalidOperationException>());
-        Assert.AreEqual("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
+        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(sampleClassType, args));
+        var invalidOperationException = Assert.IsType<InvalidOperationException>(targetInvocationException.InnerException);
+        Assert.Equal("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
+    [Fact]
     public void AllowsNullWhenAttributeApplied()
     {
         Activator.CreateInstance(sampleClassType, "", null);
     }
 
-    [Test]
+    [Fact]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         Activator.CreateInstance(classToExcludeType, new object[]{ null });
