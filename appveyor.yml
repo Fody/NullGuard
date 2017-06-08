@@ -8,7 +8,7 @@ install:
   - choco install gitversion.portable -pre -y
 
 before_build:
-  - dotnet restore NullGuard.sln
+  - ps: Get-ChildItem -Recurse -Filter *.csproj | %{ dotnet restore $_.Directory }
   - ps: gitversion /l console /output buildserver /updateassemblyinfo
 
 build_script:
