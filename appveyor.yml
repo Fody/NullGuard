@@ -14,11 +14,13 @@ before_build:
 build_script:
   - msbuild NullGuard.sln
 
-test_script:
-  - ps: |
-      Push-Location Tests;
-      dotnet xunit -configuration $env:CONFIGURATION -notrait "Category=explicit";
-      Pop-Location
+test:
+  assemblies:
+    only:
+      - Tests.dll
+  categories:
+    except:
+      - explicit     
   
 after_test:
   - dotnet pack -c %CONFIGURATION% -o ../NuGetBuild Fody/Fody.csproj
