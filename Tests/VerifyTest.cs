@@ -17,6 +17,18 @@ public class VerifyTest
         Verifier.Verify(AssemblyWeaver.BeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[1]);
     }
 
+    [Test]
+    public void PeVerifyNetStandard1()
+    {
+        Verifier.Verify(AssemblyWeaver.NetStandardBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[3]);
+    }
+
+    [Test]
+    public void PeVerifyNetStandard2()
+    {
+        Verifier.Verify(AssemblyWeaver.NetStandardBeforeAssemblyPath, AssemblyWeaver.AfterAssemblyPaths[4]);
+    }
+
     //[Test]
     //public void PeVerify3()
     //{

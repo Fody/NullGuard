@@ -4,20 +4,14 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingConstructors
 {
-    Type sampleClassType;
-    Type classToExcludeType;
-
     [SetUp]
     public void SetUp()
     {
-        sampleClassType = AssemblyWeaver.Assemblies[0].GetType("SimpleClass");
-        classToExcludeType = AssemblyWeaver.Assemblies[1].GetType("ClassToExclude");
-
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [Test]
-    public void RequiresNonNullArgument()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void RequiresNonNullArgument(Type sampleClassType)
     {
         Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, null, "")),
             Throws.TargetInvocationException
@@ -25,8 +19,8 @@ public class RewritingConstructors
                 .And.InnerException.Property("ParamName").EqualTo("nonNullArg"));
     }
 
-    [Test]
-    public void RequiresNonNullOutArgument()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void RequiresNonNullOutArgument(Type sampleClassType)
     {
         var args = new object[1];
         Assert.That(new TestDelegate(() => Activator.CreateInstance(sampleClassType, args)),
@@ -35,14 +29,14 @@ public class RewritingConstructors
         Assert.AreEqual("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);
     }
 
-    [Test]
-    public void AllowsNullWhenAttributeApplied()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.SampleClassTypes))]
+    public void AllowsNullWhenAttributeApplied(Type sampleClassType)
     {
         Activator.CreateInstance(sampleClassType, "", null);
     }
 
-    [Test]
-    public void AllowsNullWhenClassMatchExcludeRegex()
+    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.ClassToExcludeTypes))]
+    public void AllowsNullWhenClassMatchExcludeRegex(Type classToExcludeType)
     {
         Activator.CreateInstance(classToExcludeType, new object[]{ null });
     }
