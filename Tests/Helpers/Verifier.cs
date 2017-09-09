@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.Build.Utilities;
 using NUnit.Framework;
 
 public static class Verifier
@@ -30,7 +29,7 @@ public static class Verifier
 
     static string GetPathToPEVerify()
     {
-        var path = ToolLocationHelper.GetPathToDotNetFrameworkSdkFile("peverify.exe", TargetDotNetFrameworkVersion.VersionLatest);
+        var path = SdkToolsHelper.GetSdkToolPath("peverify.exe");
         if (!File.Exists(path))
             Assert.Ignore("PEVerify could not be found");
         return path;
