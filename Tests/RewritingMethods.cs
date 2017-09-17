@@ -9,16 +9,9 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingMethods
 {
-    [SetUp]
-    public void SetUp()
-    {
-        AssemblyWeaver.TestListener.Reset();
-    }
-
     [Test]
     public void RequiresNonNullArgumentForExplicitInterface()
     {
-        AssemblyWeaver.TestListener.Reset();
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (IComparable<string>)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));

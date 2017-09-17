@@ -6,12 +6,6 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingConstructors
 {
-    [SetUp]
-    public void SetUp()
-    {
-        AssemblyWeaver.TestListener.Reset();
-    }
-
     [Test]
     public void RequiresNonNullArgument()
     {

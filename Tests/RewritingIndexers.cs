@@ -5,12 +5,6 @@ using NUnit.Framework;
 [TestFixture]
 public class RewritingIndexers
 {
-    [SetUp]
-    public void SetUp()
-    {
-        AssemblyWeaver.TestListener.Reset();
-    }
-
     [Test]
     public void NonNullableIndexerSetterWithFirstArgumentNull()
     {

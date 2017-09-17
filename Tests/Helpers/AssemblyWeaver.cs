@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
@@ -10,41 +9,6 @@ using NUnit.Framework;
 
 public static class AssemblyWeaver
 {
-    public class TestTraceListener : TraceListener
-    {
-        public  TestTraceListener()
-        {
-            Trace.Listeners.Add(this);
-        }
-        public string Message;
-
-        public void Reset()
-        {
-            Message = null;
-        }
-
-        public override void Write(string message)
-        {
-            if (Message != null)
-            {
-                throw new Exception("More than one Debug message came through. Did you forget to reset before a test?");
-            }
-
-            Message = message;
-        }
-
-        public override void WriteLine(string message)
-        {
-            if (Message != null)
-            {
-                throw new Exception("More than one Debug message came through. Did you forget to reset before a test?");
-            }
-
-            Message = message;
-        }
-    }
-
-    public static TestTraceListener TestListener;
     public static Assembly Assembly;
     public static string BeforeAssemblyPath;
     public static string BeforeSymbolPath;
@@ -59,11 +23,6 @@ public static class AssemblyWeaver
 
     static AssemblyWeaver()
     {
-        TestListener = new TestTraceListener();
-
-        Debug.Listeners.Clear();
-        Debug.Listeners.Add(TestListener);
-
         var testDirectory = TestContext.CurrentContext.TestDirectory;
         BeforeAssemblyPath = Path.GetFullPath(Path.Combine(testDirectory, @"..\..\..\..\AssemblyToProcess\bin\Debug\net452\AssemblyToProcess.dll"));
         BeforeSymbolPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
