@@ -7,20 +7,20 @@ public static class Decompiler
 {
     public static string Decompile(string assemblyPath, string identifier = "")
     {
-        var exePath = GetPathToILDasm();
+        var exePath = GetPathToIldasm();
 
         if (!string.IsNullOrEmpty(identifier))
         {
-            identifier = "/item:" + identifier;
+            identifier = $"/item:{identifier}";
         }
 
-        using (var process = Process.Start(
-            new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum /source {identifier}")
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            }))
+        var startInfo = new ProcessStartInfo(exePath, $"\"{assemblyPath}\" /text /linenum /source {identifier}")
+        {
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        using (var process = Process.Start(startInfo))
         {
             process.WaitForExit(10000);
 
@@ -69,11 +69,13 @@ public static class Decompiler
         }
     }
 
-    static string GetPathToILDasm()
+    static string GetPathToIldasm()
     {
         var path = SdkToolsHelper.GetSdkToolPath("ildasm.exe");
         if (!File.Exists(path))
-            Assert.Ignore("ILDasm could not be found");
+        {
+            Assert.Ignore("ildasm could not be found");
+        }
         return path;
     }
 }

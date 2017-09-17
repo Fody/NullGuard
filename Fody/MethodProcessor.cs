@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -11,17 +10,17 @@ using NullGuard;
 
 public class MethodProcessor
 {
-    const string OutParameterIsNull = "[NullGuard] Out parameter '{0}' is null.";
     const string ReturnValueOfMethodIsNull = "[NullGuard] Return value of method '{0}' is null.";
-    const string IsNull = "[NullGuard] {0} is null.";
 
     bool isDebug;
+    Action<string> logWarn;
     ValidationFlags validationFlags;
 
-    public MethodProcessor(ValidationFlags validationFlags, bool isDebug)
+    public MethodProcessor(ValidationFlags validationFlags, bool isDebug, Action<string> logWarn)
     {
         this.validationFlags = validationFlags;
         this.isDebug = isDebug;
+        this.logWarn = logWarn;
     }
 
     public void Process(MethodDefinition method)
@@ -36,7 +35,7 @@ public class MethodProcessor
         }
         catch (Exception exception)
         {
-            LogTo.Error(exception, "An error occurred processing method '{0}'.", method.FullName);
+            throw new Exception($"An error occurred processing method '{method.FullName}'.", exception);
         }
     }
 
@@ -50,8 +49,11 @@ public class MethodProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic) && (!(method.IsPublic || method.IsExplicitInterfaceMethod()) || !method.DeclaringType.IsPublicOrNestedPublic()))
+        if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic) &&
+            (!(method.IsPublic || method.IsExplicitInterfaceMethod()) || !method.DeclaringType.IsPublicOrNestedPublic()))
+        {
             return;
+        }
 
         var body = method.Body;
 
@@ -73,8 +75,9 @@ public class MethodProcessor
         if (method.IsAsyncStateMachine())
         {
             var returnType = method.ReturnType;
-            var genericReturnType = method.ReturnType as GenericInstanceType;
-            if (genericReturnType != null && genericReturnType.HasGenericArguments && genericReturnType.Name.StartsWith("Task"))
+            if (method.ReturnType is GenericInstanceType genericReturnType &&
+                genericReturnType.HasGenericArguments &&
+                genericReturnType.Name.StartsWith("Task"))
             {
                 returnType = genericReturnType.GenericArguments[0];
             }
@@ -100,16 +103,22 @@ public class MethodProcessor
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull())
+            {
                 continue;
+            }
 
             if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
+            {
                 continue;
+            }
 
             if (CheckForExistingGuard(body.Instructions, parameter))
+            {
                 continue;
+            }
 
             var entry = body.Instructions.First();
-            var errorMessage = string.Format(CultureInfo.InvariantCulture, IsNull, parameter.Name);
+            var errorMessage = $"[NullGuard] {parameter.Name} is null.";
 
             guardInstructions.Clear();
 
@@ -154,7 +163,7 @@ public class MethodProcessor
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)
             {
-                var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName);
+                var errorMessage = string.Format(ReturnValueOfMethodIsNull, method.FullName);
                 AddReturnNullGuard(method, doc, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
@@ -170,7 +179,7 @@ public class MethodProcessor
                         parameter.ParameterType.IsRefType() &&
                         !parameter.AllowsNull())
                     {
-                        var errorMessage = string.Format(CultureInfo.InvariantCulture, OutParameterIsNull, parameter.Name);
+                        var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 
                         guardInstructions.Clear();
 
@@ -228,7 +237,7 @@ public class MethodProcessor
         {
             // Mono's broken compiler doesn't add a SetException call if there's no await.
             // Bail out since we're not about to rewrite the whole method to fix this. :/
-            LogTo.Warning("Cannot add guards to {0} as the method contains no await keyword.", methodName);
+            logWarn($"Cannot add guards to '{methodName}' as the method contains no await keyword.");
             return;
         }
 

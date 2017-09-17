@@ -30,19 +30,19 @@ public class ModuleWeaver
 
     public void Execute()
     {
-        LoggerFactory.LogInfo = LogInfo;
-        LoggerFactory.LogWarn = LogWarn;
-        LoggerFactory.LogError = LogError;
-
         ReadConfig();
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
         if (nullGuardAttribute == null)
+        {
             nullGuardAttribute = ModuleDefinition.Assembly.GetNullGuardAttribute();
+        }
 
         if (nullGuardAttribute != null)
+        {
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
+        }
 
         ReferenceFinder.FindReferences(AssemblyResolver, ModuleDefinition);
         var types = GetTypesToProcess();
@@ -56,16 +56,11 @@ public class ModuleWeaver
     List<TypeDefinition> GetTypesToProcess()
     {
         var allTypes = new List<TypeDefinition>(ModuleDefinition.GetTypes());
-        List<TypeDefinition> types;
-        if (ExcludeRegex != null)
+        if (ExcludeRegex == null)
         {
-            types = allTypes.Where(x => !ExcludeRegex.IsMatch(x.FullName)).ToList();
+            return allTypes;
         }
-        else
-        {
-            types = allTypes;
-        }
-        return types;
+        return allTypes.Where(x => !ExcludeRegex.IsMatch(x.FullName)).ToList();
     }
 
     void ReadConfig()
@@ -82,13 +77,15 @@ public class ModuleWeaver
     void ReadIncludeDebugAssert()
     {
         var includeDebugAssertAttribute = Config.Attribute("IncludeDebugAssert");
-        if (includeDebugAssertAttribute != null)
+        if (includeDebugAssertAttribute == null)
         {
-            if (!bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
-            {
-                throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{includeDebugAssertAttribute.Value}'.");
-            }
+            return;
         }
+        if (bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
+        {
+            return;
+        }
+        throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{includeDebugAssertAttribute.Value}'.");
     }
 
     void ReadExcludeRegex()
@@ -96,8 +93,8 @@ public class ModuleWeaver
         var attribute = Config.Attribute("ExcludeRegex");
         var regex = attribute?.Value;
         if(!string.IsNullOrWhiteSpace(regex))
-        { 
-            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant); 
+        {
+            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant);
         }
     }
 
@@ -124,21 +121,32 @@ public class ModuleWeaver
 
     void ProcessAssembly(List<TypeDefinition> types)
     {
-        var isDebug = IncludeDebugAssert && DefineConstants.Any(c => c == "DEBUG") && ReferenceFinder.DebugAssertMethod != null;
+        var isDebug = IncludeDebugAssert &&
+                      DefineConstants.Any(c => c == "DEBUG") &&
+                      ReferenceFinder.DebugAssertMethod != null;
 
-        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug);
+        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug, LogWarn);
         var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);
 
         foreach (var type in types)
         {
-            if (type.IsInterface || type.ContainsAllowNullAttribute() || type.IsGeneratedCode() || type.HasInterface("Windows.UI.Xaml.Markup.IXamlMetadataProvider"))
+            if (type.IsInterface ||
+                type.ContainsAllowNullAttribute() ||
+                type.IsGeneratedCode() ||
+                type.HasInterface("Windows.UI.Xaml.Markup.IXamlMetadataProvider"))
+            {
                 continue;
+            }
 
             foreach (var method in type.MethodsWithBody())
+            {
                 methodProcessor.Process(method);
+            }
 
             foreach (var property in type.ConcreteProperties())
+            {
                 propertyProcessor.Process(property);
+            }
         }
     }
 

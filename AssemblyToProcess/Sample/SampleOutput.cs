@@ -4,7 +4,7 @@
     {
 
         public string NullProperty { get; set; }
-    
+
         string nullPropertyOnSet;
         public string NullPropertyOnSet
         {
@@ -17,12 +17,9 @@
                 }
                 return returnValue;
             }
-            set
-            {
-                nullPropertyOnSet = value;
-            }
+            set => nullPropertyOnSet = value;
         }
-    
+
         string someProperty;
         public string SomeProperty
         {

@@ -23,13 +23,7 @@ public class MockAssemblyResolver : IAssemblyResolver
             return AssemblyDefinition.ReadAssembly(firstOrDefault.CodeBase.Replace("file:///", ""));
         }
         var codeBase = Assembly.Load(fullName).CodeBase.Replace("file:///", "");
-
         return AssemblyDefinition.ReadAssembly(codeBase);
-    }
-
-    public AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
-    {
-        throw new NotImplementedException();
     }
 
     public void Dispose()

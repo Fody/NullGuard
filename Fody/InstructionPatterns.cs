@@ -31,7 +31,8 @@ public static class InstructionPatterns
         // Duplicate the stack (this should be the return value)
         instructions.Add(Instruction.Create(OpCodes.Dup));
 
-        if (methodReturnType != null && methodReturnType.GetElementType().IsGenericParameter)
+        if (methodReturnType != null &&
+            methodReturnType.GetElementType().IsGenericParameter)
         {
             // Generic parameters must be boxed before access
             instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
@@ -54,14 +55,13 @@ public static class InstructionPatterns
 
                 // Box the type to an object
                 instructions.Add(Instruction.Create(OpCodes.Box, elementType));
+                return;
             }
-            else
-            {
-                // Loads an object reference onto the stack
-                instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-            }
+            // Loads an object reference onto the stack
+            instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+            return;
         }
-        else if (elementType.IsGenericParameter)
+        if (elementType.IsGenericParameter)
         {
             // Box the type to an object
             instructions.Add(Instruction.Create(OpCodes.Box, parameter.ParameterType));

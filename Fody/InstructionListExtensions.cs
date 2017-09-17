@@ -16,13 +16,11 @@ public static class InstructionListExtensions
         }
     }
 
-    /// <summary>
-    /// Inserts a set of instructions at a given <paramref name="exitPointInstructionIndex"/>, ensuring that all branches that previously
-    /// pointed to the return statement now point to the new instructions.
-    /// 
-    /// It's important that this method is only called for RET instruction exit points, otherwise we'd also need to fix
-    /// up ExceptionHandler delimiter points.
-    /// </summary>
+    // Inserts a set of instructions at a given exitPointInstructionIndex, ensuring that all branches that previously
+    // pointed to the return statement now point to the new instructions.
+    //
+    // It's important that this method is only called for RET instruction exit points, otherwise we'd also need to fix
+    // up ExceptionHandler delimiter points.
     public static void InsertAtMethodReturnPoint(this MethodBody methodBody, int exitPointInstructionIndex, ICollection<Instruction> instructions)
     {
         var exitPointInstruction = methodBody.Instructions[exitPointInstructionIndex];
@@ -48,20 +46,24 @@ public static class InstructionListExtensions
         foreach (var instruction in instructions)
         {
             if (exitPointInstruction.Equals(instruction.Operand))
+            {
                 yield return x => instruction.Operand = x;
+            }
 
             // For switch instructions, operand is an Instruction-Array:
-            var operandInstructions = instruction.Operand as Instruction[];
-            if (operandInstructions != null)
+            if (!(instruction.Operand is Instruction[] operandInstructions))
             {
-                for (var i = 0; i < operandInstructions.Length; i++)
+                continue;
+            }
+
+            for (var i = 0; i < operandInstructions.Length; i++)
+            {
+                if (!exitPointInstruction.Equals(operandInstructions[i]))
                 {
-                    if (exitPointInstruction.Equals(operandInstructions[i]))
-                    {
-                        var localI = i;
-                        yield return x => operandInstructions[localI] = x;
-                    }
+                    continue;
                 }
+                var localI = i;
+                yield return x => operandInstructions[localI] = x;
             }
         }
     }

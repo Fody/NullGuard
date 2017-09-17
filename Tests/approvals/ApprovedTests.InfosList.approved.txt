@@ -1,2 +1,0 @@
-﻿Infos: [0] = 	Removing reference to 'NullGuard.dll'.
-Infos: [1] = 	Removing reference to 'NullGuard.dll'.

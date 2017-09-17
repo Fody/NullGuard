@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -34,7 +33,7 @@ public class PropertyProcessor
         }
         catch (Exception exception)
         {
-            LogTo.Error(exception, "An error occurred processing property '{0}'.", property.FullName);
+            throw new Exception($"An error occurred processing property '{property.FullName}'.", exception);
         }
     }
 
@@ -51,12 +50,17 @@ public class PropertyProcessor
             localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
         }
 
-        if (!localValidationFlags.HasFlag(ValidationFlags.Properties)) return;
+        if (!localValidationFlags.HasFlag(ValidationFlags.Properties))
+        {
+            return;
+        }
 
         if (property.AllowsNull())
+        {
             return;
+        }
 
-        if (property.GetMethod != null && property.GetMethod.Body != null)
+        if (property.GetMethod?.Body != null)
         {
             var getMethod = property.GetMethod;
 
@@ -64,7 +68,9 @@ public class PropertyProcessor
 
             getMethod.Body.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.GetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) &&
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
+                property.GetMethod.IsPublic &&
+                property.DeclaringType.IsPublicOrNestedPublic()) &&
                 !property.GetMethod.MethodReturnType.AllowsNull()
                )
             {
@@ -75,7 +81,7 @@ public class PropertyProcessor
             getMethod.Body.OptimizeMacros();
         }
 
-        if (property.SetMethod != null && property.SetMethod.Body != null)
+        if (property.SetMethod?.Body != null)
         {
             var setBody = property.SetMethod.Body;
 
@@ -83,7 +89,9 @@ public class PropertyProcessor
 
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) || property.SetMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
+                property.SetMethod.IsPublic &&
+                property.DeclaringType.IsPublicOrNestedPublic())
             {
                 InjectPropertySetterGuard(property.SetMethod, doc, property);
             }

@@ -5,8 +5,6 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Mdb;
 using Mono.Cecil.Pdb;
 using NUnit.Framework;
 
@@ -14,6 +12,10 @@ public static class AssemblyWeaver
 {
     public class TestTraceListener : TraceListener
     {
+        public  TestTraceListener()
+        {
+            Trace.Listeners.Add(this);
+        }
         public string Message;
 
         public void Reset()
@@ -24,7 +26,9 @@ public static class AssemblyWeaver
         public override void Write(string message)
         {
             if (Message != null)
+            {
                 throw new Exception("More than one Debug message came through. Did you forget to reset before a test?");
+            }
 
             Message = message;
         }
@@ -32,20 +36,26 @@ public static class AssemblyWeaver
         public override void WriteLine(string message)
         {
             if (Message != null)
+            {
                 throw new Exception("More than one Debug message came through. Did you forget to reset before a test?");
+            }
 
             Message = message;
         }
     }
 
     public static TestTraceListener TestListener;
-    public static Assembly[] Assemblies;
+    public static Assembly Assembly;
     public static string BeforeAssemblyPath;
-    public static string NetStandardBeforeAssemblyPath;
-    //public static string MonoBeforeAssemblyPath;
-    public static string[] AfterAssemblyPaths;
+    public static string BeforeSymbolPath;
+    public static string AfterAssemblyPath;
+    public static string AfterSymbolPath;
 
-    public static string[] AfterAssemblySymbolPaths;
+    public static dynamic GetInstance(string typeName)
+    {
+        var type = Assembly.GetType(typeName);
+        return Activator.CreateInstance(type);
+    }
 
     static AssemblyWeaver()
     {
@@ -54,160 +64,60 @@ public static class AssemblyWeaver
         Debug.Listeners.Clear();
         Debug.Listeners.Add(TestListener);
 
-        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
-        var beforePdbPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
-        NetStandardBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessNetStandard\bin\Debug\netcoreapp1.1\AssemblyToProcess.dll"));
-        var netStandardBeforePdbPath = Path.ChangeExtension(NetStandardBeforeAssemblyPath, "pdb");
-        //MonoBeforeAssemblyPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcessMono\bin\Debug\AssemblyToProcessMono.dll"));
-        //var monoBeforeMdbPath = MonoBeforeAssemblyPath + ".mdb";
-
+        var testDirectory = TestContext.CurrentContext.TestDirectory;
+        BeforeAssemblyPath = Path.GetFullPath(Path.Combine(testDirectory, @"..\..\..\..\AssemblyToProcess\bin\Debug\net452\AssemblyToProcess.dll"));
+        BeforeSymbolPath = Path.ChangeExtension(BeforeAssemblyPath, "pdb");
 #if (!DEBUG)
         BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
-        beforePdbPath = beforePdbPath.Replace("Debug", "Release");
-        NetStandardBeforeAssemblyPath = NetStandardBeforeAssemblyPath.Replace("Debug", "Release");
-        netStandardBeforePdbPath = netStandardBeforePdbPath.Replace("Debug", "Release");
-        //MonoBeforeAssemblyPath = MonoBeforeAssemblyPath.Replace("Debug", "Release");
-        //monoBeforeMdbPath = monoBeforeMdbPath.Replace("Debug", "Release");
+        BeforeSymbolPath = BeforeSymbolPath.Replace("Debug", "Release");
 #endif
 
-        AfterAssemblyPaths = new[] {
-            BeforeAssemblyPath.Replace(".dll", "2.dll"),
-            BeforeAssemblyPath.Replace(".dll", "3.dll"),
-            null, //MonoBeforeAssemblyPath.Replace(".dll", "2.dll"),
-            NetStandardBeforeAssemblyPath.Replace(".dll", "2.dll"),
-            NetStandardBeforeAssemblyPath.Replace(".dll", "3.dll")
-        };
-        AfterAssemblySymbolPaths = new[] {
-            beforePdbPath.Replace(".pdb", "2.pdb"),
-            beforePdbPath.Replace(".pdb", "3.pdb"),
-            null, //monoBeforeMdbPath.Replace(".mdb", "2.mdb"),
-            netStandardBeforePdbPath.Replace(".pdb", "2.pdb"),
-            netStandardBeforePdbPath.Replace(".pdb", "3.pdb"),
-        };
+        AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
+        AfterSymbolPath = BeforeSymbolPath.Replace(".pdb", "2.pdb");
 
-        Assemblies = new Assembly[5];
-        Assemblies[0] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[0], beforePdbPath, AfterAssemblySymbolPaths[0], moduleDefinition =>
+        if (File.Exists(AfterAssemblyPath))
         {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
-
-        Assemblies[1] = WeaveAssembly(BeforeAssemblyPath, AfterAssemblyPaths[1], beforePdbPath, AfterAssemblySymbolPaths[1], moduleDefinition =>
+            File.Delete(AfterAssemblyPath);
+        }
+        if (File.Exists(AfterSymbolPath))
         {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$")),
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
-
-        //Assemblies[2] = WeaveAssembly(MonoBeforeAssemblyPath, AfterAssemblyPaths[2], monoBeforeMdbPath, AfterAssemblySymbolPaths[2], moduleDefinition =>
-        //{
-        //    var assemblyResolver = new MockAssemblyResolver();
-
-        //    var weavingTask = new ModuleWeaver
-        //    {
-        //        ModuleDefinition = moduleDefinition,
-        //        AssemblyResolver = assemblyResolver,
-        //        LogInfo = LogInfo,
-        //        LogWarn = LogWarn,
-        //        LogError = LogError,
-        //        DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-        //    };
-
-        //    weavingTask.Execute();
-        //});
-
-        Assemblies[3] = WeaveAssembly(NetStandardBeforeAssemblyPath, AfterAssemblyPaths[3], netStandardBeforePdbPath, AfterAssemblySymbolPaths[3], moduleDefinition =>
-        {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
-
-        Assemblies[4] = WeaveAssembly(NetStandardBeforeAssemblyPath, AfterAssemblyPaths[4], netStandardBeforePdbPath, AfterAssemblySymbolPaths[4], moduleDefinition =>
-        {
-            var assemblyResolver = new MockAssemblyResolver();
-
-            var weavingTask = new ModuleWeaver
-            {
-                Config = new XElement("NullGuard", new XAttribute("IncludeDebugAssert", false), new XAttribute("ExcludeRegex", "^ClassToExclude$")),
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = assemblyResolver,
-                LogInfo = LogInfo,
-                LogWarn = LogWarn,
-                LogError = LogError,
-                DefineConstants = new List<string> { "DEBUG" } // Always testing the debug weaver
-            };
-
-            weavingTask.Execute();
-        });
-    }
-
-    static Assembly WeaveAssembly(string beforeAssemblyPath, string afterAssemblyPath, string beforePdbPath, string afterPdbPath, Action<ModuleDefinition> weaveAction)
-    {
-        if (File.Exists(afterAssemblyPath))
-            File.Delete(afterAssemblyPath);
-        if (File.Exists(afterPdbPath))
-            File.Delete(afterPdbPath);
-
-        var readerParameters = new ReaderParameters();
-        var writerParameters = new WriterParameters();
-
-        if (File.Exists(beforePdbPath))
-        {
-            ISymbolReaderProvider symbolReaderProvider = new PdbReaderProvider();
-            ISymbolWriterProvider symbolWriterProvider = new PdbWriterProvider();
-            if (Path.GetExtension(beforePdbPath) == ".mdb")
-            {
-                symbolReaderProvider = new MdbReaderProvider();
-                symbolWriterProvider = new MdbWriterProvider();
-            }
-
-            readerParameters.ReadSymbols = true;
-            readerParameters.SymbolReaderProvider = symbolReaderProvider;
-            readerParameters.SymbolStream = new FileStream(beforePdbPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            writerParameters.WriteSymbols = true;
-            writerParameters.SymbolWriterProvider = symbolWriterProvider;
+            File.Delete(AfterSymbolPath);
         }
 
-        var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath, readerParameters);
+        var assemblyResolver = new MockAssemblyResolver();
+        var readerParameters = new ReaderParameters {AssemblyResolver = assemblyResolver};
+        var writerParameters = new WriterParameters();
 
-        weaveAction(moduleDefinition);
+        if (File.Exists(BeforeSymbolPath))
+        {
+            readerParameters.ReadSymbols = true;
+            readerParameters.SymbolReaderProvider = new PdbReaderProvider();
+            readerParameters.SymbolStream = new FileStream(BeforeSymbolPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            writerParameters.WriteSymbols = true;
+            writerParameters.SymbolWriterProvider = new PdbWriterProvider();
+        }
 
-        moduleDefinition.Write(afterAssemblyPath, writerParameters);
+        var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath, readerParameters);
 
-        return Assembly.LoadFile(afterAssemblyPath);
+
+        var weavingTask = new ModuleWeaver
+        {
+            Config = new XElement("NullGuard",
+                new XAttribute("IncludeDebugAssert", false),
+                new XAttribute("ExcludeRegex", "^ClassToExclude$")),
+            ModuleDefinition = moduleDefinition,
+            AssemblyResolver = assemblyResolver,
+            LogInfo = LogInfo,
+            LogWarn = LogWarn,
+            LogError = LogError,
+            DefineConstants = new List<string> {"DEBUG"} // Always testing the debug weaver
+        };
+
+        weavingTask.Execute();
+
+        moduleDefinition.Write(AfterAssemblyPath, writerParameters);
+
+        Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
 
     static void LogInfo(string error)

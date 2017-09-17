@@ -1,4 +1,5 @@
 using System;
+using ApprovalTests;
 using NUnit.Framework;
 
 [TestFixture]
@@ -10,95 +11,97 @@ public class RewritingIndexers
         AssemblyWeaver.TestListener.Reset();
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerSetterWithFirstArgumentNull(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerSetterWithFirstArgumentNull()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: null, nonNullParam2: null] = "value");
-        Assert.AreEqual("nonNullParam1", exception.ParamName);
-        Assert.AreEqual("Fail: [NullGuard] nonNullParam1 is null.", AssemblyWeaver.TestListener.Message);
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerSetterWithSecondArgumentNull(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerSetterWithSecondArgumentNull()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: null] = "value");
-        Assert.AreEqual("nonNullParam2", exception.ParamName);
-        Assert.AreEqual("Fail: [NullGuard] nonNullParam2 is null.", AssemblyWeaver.TestListener.Message);
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerSetterWithValueArgumentNull(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerSetterWithValueArgumentNull()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = null);
-        Assert.AreEqual("value", exception.ParamName);
-        Assert.AreEqual(
-            "Fail: [NullGuard] Cannot set the value of property 'System.String Indexers/NonNullable::Item(System.String,System.String)' to null.",
-            AssemblyWeaver.TestListener.Message);
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerSetterWithNonNullArguments(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerSetterWithNonNullArguments()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = "value";
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerGetterWithFirstArgumentNull(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerGetterWithFirstArgumentNull()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: null, nonNullParam2: null]));
-        Assert.AreEqual("nonNullParam1", exception.ParamName);
-        Assert.AreEqual("Fail: [NullGuard] nonNullParam1 is null.", AssemblyWeaver.TestListener.Message);
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerGetterWithSecondArgumentNull(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerGetterWithSecondArgumentNull()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: "arg 1", nonNullParam2: null]));
-        Assert.AreEqual("nonNullParam2", exception.ParamName);
-        Assert.AreEqual("Fail: [NullGuard] nonNullParam2 is null.", AssemblyWeaver.TestListener.Message);
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void NonNullableIndexerGetterWithNonNullArguments(Type indexersClassType)
+    [Test]
+    public void NonNullableIndexerGetterWithNonNullArguments()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("NonNullable"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         Assert.AreEqual("return value of NonNullable", instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"]);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void PassThroughGetterReturnValueWithNullArgument(Type indexersClassType)
+    [Test]
+    public void PassThroughGetterReturnValueWithNullArgument()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("PassThroughGetterReturnValue"));
-        Assert.Throws<InvalidOperationException>(() => IgnoreValue(instance[returnValue: null]));
-        Assert.AreEqual(
-            "Fail: [NullGuard] Return value of property 'System.String Indexers/PassThroughGetterReturnValue::Item(System.String)' is null.",
-            AssemblyWeaver.TestListener.Message);
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
+        var exception = Assert.Throws<InvalidOperationException>(() => IgnoreValue(instance[returnValue: null]));
+        Approvals.Verify(exception.Message);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void PassThroughGetterReturnValueWithNonNullArgument(Type indexersClassType)
+    [Test]
+    public void PassThroughGetterReturnValueWithNonNullArgument()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("PassThroughGetterReturnValue"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
         Assert.AreEqual("not null", instance[returnValue: "not null"]);
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void AllowedNullsIndexerSetter(Type indexersClassType)
+    [Test]
+    public void AllowedNullsIndexerSetter()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("AllowedNulls"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("AllowedNulls"));
         instance[allowNull: null, nullableInt: null] = null;
     }
 
-    [TestCaseSource(typeof(TestCaseHelper), nameof(TestCaseHelper.IndexersClassTypes))]
-    public void AllowedNullsIndexerGetter(Type indexersClassType)
+    [Test]
+    public void AllowedNullsIndexerGetter()
     {
-        var instance = (dynamic) Activator.CreateInstance(indexersClassType.GetNestedType("AllowedNulls"));
+        var type = AssemblyWeaver.Assembly.GetType("Indexers");
+        var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("AllowedNulls"));
         Assert.AreEqual(null, instance[allowNull: null, nullableInt: null]);
     }
 

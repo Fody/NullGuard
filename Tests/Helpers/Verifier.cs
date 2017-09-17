@@ -31,12 +31,14 @@ public static class Verifier
     {
         var path = SdkToolsHelper.GetSdkToolPath("peverify.exe");
         if (!File.Exists(path))
+        {
             Assert.Ignore("PEVerify could not be found");
+        }
         return path;
     }
 
     static string TrimLineNumbers(string foo)
     {
-        return Regex.Replace(foo, @"0x.*]", "");
+        return Regex.Replace(foo, "0x.*]", "");
     }
 }

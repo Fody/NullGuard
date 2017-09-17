@@ -1,145 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5A86453B-96FB-4B6E-A283-225BB9F753D3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests</RootNamespace>
-    <AssemblyName>Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ApprovalTests, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
-      <HintPath>..\packages\ApprovalTests.3.0.13\lib\net40\ApprovalTests.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ApprovalUtilities, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
-      <HintPath>..\packages\ApprovalUtilities.3.0.13\lib\net45\ApprovalUtilities.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ApprovalUtilities.Net45, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ApprovalUtilities.3.0.13\lib\net45\ApprovalUtilities.Net45.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="ApprovalTests" Version="*" />
+    <PackageReference Include="ApprovalUtilities" Version="*" />
+    <PackageReference Include="FodyCecil" Version="*" />
+    <PackageReference Include="NUnit" Version="*" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\FodyCecil.2.0.7\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\FodyCecil.2.0.7\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\FodyCecil.2.0.7\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\FodyCecil.2.0.7\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.2.1\lib\net452\NServiceBus.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
+    <ProjectReference Include="..\Fody\Fody.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ApprovedTests.cs" />
-    <Compile Include="Helpers\AssemblyWeaver.cs" />
-    <Compile Include="Helpers\Decompiler.cs" />
-    <Compile Include="Helpers\MockAssemblyResolver.cs" />
-    <Compile Include="Helpers\SdkToolsHelper.cs" />
-    <Compile Include="Helpers\Verifier.cs" />
-    <Compile Include="LargeAssemblyTest.cs" />
-    <Compile Include="RewritingConstructors.cs" />
-    <Compile Include="RewritingIndexers.cs" />
-    <Compile Include="RewritingProperties.cs" />
-    <Compile Include="RewritingMethods.cs" />
-    <Compile Include="Helpers\TestCaseHelper.cs" />
-    <Compile Include="VerifyTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
-      <Project>{23c29b37-221d-473e-967b-dc423f5f4ab2}</Project>
-      <Name>AssemblyToProcess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fody\Fody.csproj">
-      <Project>{C3578A7B-09A6-4444-9383-0DEAFA4958BD}</Project>
-      <Name>Fody</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="approvals\ApprovedTests.ClassWithBadAttributes.approved.txt" />
-    <Content Include="approvals\ApprovedTests.ClassWithPrivateMethod.approved.txt" />
-    <Content Include="approvals\ApprovedTests.ClassWithPrivateMethodNoAssert.approved.txt" />
-    <Content Include="approvals\ApprovedTests.ErrorsList.approved.txt" />
-    <Content Include="approvals\ApprovedTests.GenericClass.approved.txt" />
-    <Content Include="approvals\ApprovedTests.GenericClassNoAssert.approved.txt" />
-    <Content Include="approvals\ApprovedTests.Indexers.approved.txt" />
-    <Content Include="approvals\ApprovedTests.InfosList.approved.txt" />
-    <Content Include="approvals\ApprovedTests.InterfaceBadAttributes.approved.txt" />
-    <Content Include="approvals\ApprovedTests.PublicNestedInsideNonPublic.approved.txt" />
-    <Content Include="approvals\ApprovedTests.SimpleClass.approved.txt" />
-    <Content Include="approvals\ApprovedTests.SimpleClassNoAssert.approved.txt" />
-    <Content Include="approvals\ApprovedTests.SkipIXamlMetadataProvider.approved.txt" />
-    <Content Include="approvals\ApprovedTests.SpecialClass.approved.txt" />
-    <Content Include="approvals\ApprovedTests.SpecialClassNoAssert.approved.txt" />
-    <Content Include="approvals\ApprovedTests.UnsafeClass.approved.txt" />
-    <Content Include="approvals\ApprovedTests.WarnsList.approved.txt" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

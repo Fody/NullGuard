@@ -88,14 +88,14 @@ public static class CecilExtensions
         {
             return false;
         }
-        var byReferenceType = arg as ByReferenceType;
-        if (byReferenceType != null && byReferenceType.ElementType.IsValueType)
+        if (arg is ByReferenceType byReferenceType &&
+            byReferenceType.ElementType.IsValueType)
         {
             return false;
         }
 
-        var pointerType = arg as PointerType;
-        if (pointerType != null && pointerType.ElementType.IsValueType)
+        if (arg is PointerType pointerType &&
+            pointerType.ElementType.IsValueType)
         {
             return false;
         }
