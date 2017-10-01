@@ -31,6 +31,7 @@ public partial class ModuleWeaver
         AddAssemblyIfExists("mscorlib", types);
         AddAssemblyIfExists("System.Runtime", types);
         AddAssemblyIfExists("System", types);
+        AddAssemblyIfExists("netstandard", types);
         AddAssemblyIfExists("System.Diagnostics.Debug", types);
 
         var argumentNullException = types.FirstOrThrow(x => x.Name == "ArgumentNullException", "ArgumentNullException");
