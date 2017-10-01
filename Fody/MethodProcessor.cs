@@ -8,20 +8,9 @@ using Mono.Cecil.Rocks;
 using Mono.Collections.Generic;
 using NullGuard;
 
-public class MethodProcessor
+public partial class ModuleWeaver
 {
     const string ReturnValueOfMethodIsNull = "[NullGuard] Return value of method '{0}' is null.";
-
-    bool isDebug;
-    Action<string> logWarn;
-    ValidationFlags validationFlags;
-
-    public MethodProcessor(ValidationFlags validationFlags, bool isDebug, Action<string> logWarn)
-    {
-        this.validationFlags = validationFlags;
-        this.isDebug = isDebug;
-        this.logWarn = logWarn;
-    }
 
     public void Process(MethodDefinition method)
     {
@@ -41,7 +30,7 @@ public class MethodProcessor
 
     void InnerProcess(MethodDefinition method)
     {
-        var localValidationFlags = validationFlags;
+        var localValidationFlags = ValidationFlags;
 
         var attribute = method.DeclaringType.GetNullGuardAttribute();
         if (attribute != null)
@@ -124,16 +113,16 @@ public class MethodProcessor
 
             if (isDebug)
             {
-                InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
+                LoadArgumentOntoStack(guardInstructions, parameter);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
+                CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
-            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
+            LoadArgumentOntoStack(guardInstructions, parameter);
 
-            InstructionPatterns.IfNull(guardInstructions, entry, i =>
+            IfNull(guardInstructions, entry, i =>
             {
-                InstructionPatterns.LoadArgumentNullException(i, parameter.Name, errorMessage);
+                LoadArgumentNullException(i, parameter.Name, errorMessage);
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -185,16 +174,16 @@ public class MethodProcessor
 
                         if (isDebug)
                         {
-                            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
+                            LoadArgumentOntoStack(guardInstructions, parameter);
 
-                            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
+                            CallDebugAssertInstructions(guardInstructions, errorMessage);
                         }
 
-                        InstructionPatterns.LoadArgumentOntoStack(guardInstructions, parameter);
+                        LoadArgumentOntoStack(guardInstructions, parameter);
 
-                        InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+                        IfNull(guardInstructions, returnInstruction, i =>
                         {
-                            InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
+                            LoadInvalidOperationException(i, errorMessage);
 
                             // Throw the top item off the stack
                             i.Add(Instruction.Create(OpCodes.Throw));
@@ -237,7 +226,7 @@ public class MethodProcessor
         {
             // Mono's broken compiler doesn't add a SetException call if there's no await.
             // Bail out since we're not about to rewrite the whole method to fix this. :/
-            logWarn($"Cannot add guards to '{methodName}' as the method contains no await keyword.");
+            LogWarn($"Cannot add guards to '{methodName}' as the method contains no await keyword.");
             return;
         }
 
@@ -265,19 +254,19 @@ public class MethodProcessor
 
         if (isDebug)
         {
-            InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
+            DuplicateReturnValue(guardInstructions, returnType);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
+            CallDebugAssertInstructions(guardInstructions, errorMessage);
         }
 
-        InstructionPatterns.DuplicateReturnValue(guardInstructions, returnType);
+        DuplicateReturnValue(guardInstructions, returnType);
 
-        InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+        IfNull(guardInstructions, returnInstruction, i =>
         {
             // Clean up the stack (important if finalInstructions doesn't throw, e.g. for async methods):
             i.Add(Instruction.Create(OpCodes.Pop));
 
-            InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
+            LoadInvalidOperationException(i, errorMessage);
 
             i.AddRange(finalInstructions);
         });
@@ -287,29 +276,36 @@ public class MethodProcessor
         methodDefinition.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
     }
 
-    static bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
+    bool CheckForExistingGuard(Collection<Instruction> instructions, ParameterDefinition parameter)
     {
         for (var i = 1; i < instructions.Count - 1; i++)
         {
-            if (instructions[i].OpCode == OpCodes.Newobj)
+            if (instructions[i].OpCode != OpCodes.Newobj)
             {
-                var newObjectMethodRef = instructions[i].Operand as MethodReference;
+                continue;
+            }
+            var newObjectMethodRef = instructions[i].Operand as MethodReference;
 
-                if (newObjectMethodRef == null || instructions[i + 1].OpCode != OpCodes.Throw)
-                    continue;
+            if (newObjectMethodRef == null || instructions[i + 1].OpCode != OpCodes.Throw)
+            {
+                continue;
+            }
 
-                // Checks for throw new ArgumentNullException("x");
-                if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionConstructor.FullName &&
-                    instructions[i - 1].OpCode == OpCodes.Ldstr &&
-                    (string)instructions[i - 1].Operand == parameter.Name)
-                    return true;
+            // Checks for throw new ArgumentNullException("x");
+            if (newObjectMethodRef.FullName == ArgumentNullExceptionConstructor.FullName &&
+                instructions[i - 1].OpCode == OpCodes.Ldstr &&
+                (string) instructions[i - 1].Operand == parameter.Name)
+            {
+                return true;
+            }
 
-                // Checks for throw new ArgumentNullException("x", "some message");
-                if (newObjectMethodRef.FullName == ReferenceFinder.ArgumentNullExceptionWithMessageConstructor.FullName &&
-                    i > 1 &&
-                    instructions[i - 2].OpCode == OpCodes.Ldstr &&
-                    (string)instructions[i - 2].Operand == parameter.Name)
-                    return true;
+            // Checks for throw new ArgumentNullException("x", "some message");
+            if (newObjectMethodRef.FullName == ArgumentNullExceptionWithMessageConstructor.FullName &&
+                i > 1 &&
+                instructions[i - 2].OpCode == OpCodes.Ldstr &&
+                (string) instructions[i - 2].Operand == parameter.Name)
+            {
+                return true;
             }
         }
 

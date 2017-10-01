@@ -3,7 +3,7 @@ public class UnsafeClass
 {
 	unsafe public int* MethodWithAmp(int* instance)
 	{
-		return default(int*);
+		return default;
 	}
 	unsafe public int* NullProperty { get; set; }
 }

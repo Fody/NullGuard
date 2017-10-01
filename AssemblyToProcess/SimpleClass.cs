@@ -107,12 +107,12 @@ public class SimpleClass
 
     public void MethodWithGenericOut<T>(out T item)
     {
-        item = default(T);
+        item = default;
     }
 
     public T MethodWithGenericReturn<T>(bool returnNull)
     {
-        return returnNull ? default(T) : Activator.CreateInstance<T>();
+        return returnNull ? default : Activator.CreateInstance<T>();
     }
 
     public object MethodWithOutAndReturn(out string prefix)

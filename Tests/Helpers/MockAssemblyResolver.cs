@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mono.Cecil;
@@ -22,7 +23,16 @@ public class MockAssemblyResolver : IAssemblyResolver
         {
             return AssemblyDefinition.ReadAssembly(firstOrDefault.CodeBase.Replace("file:///", ""));
         }
-        var codeBase = Assembly.Load(fullName).CodeBase.Replace("file:///", "");
+        Assembly assembly;
+        try
+        {
+            assembly = Assembly.Load(fullName);
+        }
+        catch (FileNotFoundException)
+        {
+            return null;
+        }
+        var codeBase = assembly.CodeBase.Replace("file:///", "");
         return AssemblyDefinition.ReadAssembly(codeBase);
     }
 

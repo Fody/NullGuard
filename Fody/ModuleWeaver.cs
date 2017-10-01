@@ -6,11 +6,12 @@ using System.Xml.Linq;
 using Mono.Cecil;
 using NullGuard;
 
-public class ModuleWeaver
+public partial class ModuleWeaver
 {
     public XElement Config { get; set; }
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
+    private bool isDebug;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarn { get; set; }
@@ -44,7 +45,7 @@ public class ModuleWeaver
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
         }
 
-        ReferenceFinder.FindReferences(AssemblyResolver, ModuleDefinition);
+        FindReferences();
         var types = GetTypesToProcess();
 
         CheckForBadAttributes(types);
@@ -121,12 +122,9 @@ public class ModuleWeaver
 
     void ProcessAssembly(List<TypeDefinition> types)
     {
-        var isDebug = IncludeDebugAssert &&
+        this.isDebug = IncludeDebugAssert &&
                       DefineConstants.Any(c => c == "DEBUG") &&
-                      ReferenceFinder.DebugAssertMethod != null;
-
-        var methodProcessor = new MethodProcessor(ValidationFlags, isDebug, LogWarn);
-        var propertyProcessor = new PropertyProcessor(ValidationFlags, isDebug);
+                      DebugAssertMethod != null;
 
         foreach (var type in types)
         {
@@ -140,12 +138,12 @@ public class ModuleWeaver
 
             foreach (var method in type.MethodsWithBody())
             {
-                methodProcessor.Process(method);
+                Process(method);
             }
 
             foreach (var property in type.ConcreteProperties())
             {
-                propertyProcessor.Process(property);
+                Process(property);
             }
         }
     }

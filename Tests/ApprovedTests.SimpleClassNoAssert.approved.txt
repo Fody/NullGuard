@@ -130,12 +130,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -363,12 +363,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -569,12 +569,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -814,12 +814,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1015,12 +1015,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1239,12 +1239,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1482,12 +1482,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1663,12 +1663,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1812,12 +1812,12 @@
 //000107: 
 //000108:     public void MethodWithGenericOut<T>(out T item)
 //000109:     {
-//000110:         item = default(T);
+//000110:         item = default;
 //000111:     }
 //000112: 
 //000113:     public T MethodWithGenericReturn<T>(bool returnNull)
 //000114:     {
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
 //000116:     }
 //000117: 
 //000118:     public object MethodWithOutAndReturn(out string prefix)
@@ -1979,7 +1979,7 @@
     // Code size       59 (0x3b)
     .maxstack  2
     .locals init ([0] !!T __var_0)
-//000115:         return returnNull ? default(T) : Activator.CreateInstance<T>();
+//000115:         return returnNull ? default : Activator.CreateInstance<T>();
     IL_0000:  ldarg.1
     IL_0001:  brtrue.s   IL_001d
     IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()

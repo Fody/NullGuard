@@ -1,56 +1,58 @@
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-
-public static class ReferenceFinder
+public partial class ModuleWeaver
 {
-    public static MethodReference ArgumentExceptionConstructor;
-    public static MethodReference ArgumentNullExceptionConstructor;
-    public static MethodReference ArgumentNullExceptionWithMessageConstructor;
-    public static MethodReference InvalidOperationExceptionConstructor;
+    public MethodReference ArgumentNullExceptionConstructor;
+    public MethodReference ArgumentNullExceptionWithMessageConstructor;
+    public MethodReference InvalidOperationExceptionConstructor;
+    public MethodReference DebugAssertMethod;
 
-    public static MethodReference DebugAssertMethod;
-
-    public static void FindReferences(IAssemblyResolver assemblyResolver, ModuleDefinition moduleDefinition)
+    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
-        var baseLib = assemblyResolver.Resolve("mscorlib");
-        var baseLibTypes = baseLib.MainModule.Types;
-
-        var winrt = baseLibTypes.All(type => type.Name != "Object");
-        if (winrt)
+        try
         {
-            baseLib = assemblyResolver.Resolve("System.Runtime");
-            baseLibTypes = baseLib.MainModule.Types;
+            var assembly = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+
+            if (assembly != null)
+            {
+                types.AddRange(assembly.MainModule.Types);
+            }
         }
+        catch (AssemblyResolutionException)
+        {
+            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
+        }
+    }
+    public void FindReferences()
+    {
+        var types = new List<TypeDefinition>();
 
-        var argumentException = baseLibTypes.First(x => x.Name == "ArgumentException");
-        ArgumentExceptionConstructor = moduleDefinition.ImportReference(argumentException.Methods.First(x =>
+        AddAssemblyIfExists("mscorlib", types);
+        AddAssemblyIfExists("System.Runtime", types);
+        AddAssemblyIfExists("System", types);
+        AddAssemblyIfExists("System.Diagnostics.Debug", types);
+
+        var argumentNullException = types.FirstOrThrow(x => x.Name == "ArgumentNullException", "ArgumentNullException");
+        ArgumentNullExceptionConstructor = ModuleDefinition.ImportReference(argumentNullException.Methods.First(x =>
+            x.IsConstructor &&
+            x.Parameters.Count == 1 &&
+            x.Parameters[0].ParameterType.Name == "String"));
+        ArgumentNullExceptionWithMessageConstructor = ModuleDefinition.ImportReference(argumentNullException.Methods.First(x =>
             x.IsConstructor &&
             x.Parameters.Count == 2 &&
             x.Parameters[0].ParameterType.Name == "String" &&
             x.Parameters[1].ParameterType.Name == "String"));
 
-        var argumentNullException = baseLibTypes.First(x => x.Name == "ArgumentNullException");
-        ArgumentNullExceptionConstructor = moduleDefinition.ImportReference(argumentNullException.Methods.First(x =>
-            x.IsConstructor &&
-            x.Parameters.Count == 1 &&
-            x.Parameters[0].ParameterType.Name == "String"));
-        ArgumentNullExceptionWithMessageConstructor = moduleDefinition.ImportReference(argumentNullException.Methods.First(x =>
-            x.IsConstructor &&
-            x.Parameters.Count == 2 &&
-            x.Parameters[0].ParameterType.Name == "String" &&
-            x.Parameters[1].ParameterType.Name == "String"));
-
-        var invalidOperationException = baseLibTypes.First(x => x.Name == "InvalidOperationException");
-        InvalidOperationExceptionConstructor = moduleDefinition.ImportReference(invalidOperationException.Methods.First(x =>
+        var invalidOperationException = types.FirstOrThrow(x => x.Name == "InvalidOperationException", "InvalidOperationException");
+        InvalidOperationExceptionConstructor = ModuleDefinition.ImportReference(invalidOperationException.Methods.First(x =>
             x.IsConstructor &&
             x.Parameters.Count == 1 &&
             x.Parameters[0].ParameterType.Name == "String"));
 
-        var debugLib = !winrt ? assemblyResolver.Resolve("System") : assemblyResolver.Resolve("System.Diagnostics.Debug");
-        var debugLibTypes = debugLib.MainModule.Types;
 
-        var debug = debugLibTypes.First(x => x.Name == "Debug");
-        DebugAssertMethod = moduleDefinition.ImportReference(debug.Methods.First(x =>
+        var debug = types.FirstOrThrow(x => x.Name == "Debug", "Debug");
+        DebugAssertMethod = ModuleDefinition.ImportReference(debug.Methods.First(x =>
             x.IsStatic &&
             x.Parameters.Count == 2 &&
             x.Parameters[0].ParameterType.Name == "Boolean" &&

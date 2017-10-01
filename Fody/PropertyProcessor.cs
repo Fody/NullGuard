@@ -7,21 +7,12 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using NullGuard;
 
-public class PropertyProcessor
+public partial class ModuleWeaver
 {
     const string ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
     const string CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
 
-    bool isDebug;
-    ValidationFlags validationFlags;
-
-    public PropertyProcessor(ValidationFlags validationFlags, bool isDebug)
-    {
-        this.validationFlags = validationFlags;
-        this.isDebug = isDebug;
-    }
-
-    public void Process(PropertyDefinition property)
+ public void Process(PropertyDefinition property)
     {
         try
         {
@@ -39,7 +30,7 @@ public class PropertyProcessor
 
     void InnerProcess(PropertyDefinition property)
     {
-        var localValidationFlags = validationFlags;
+        var localValidationFlags = ValidationFlags;
 
         if (!property.PropertyType.IsRefType())
             return;
@@ -120,19 +111,19 @@ public class PropertyProcessor
 
             if (isDebug)
             {
-                InstructionPatterns.DuplicateReturnValue(guardInstructions, property.PropertyType);
+                DuplicateReturnValue(guardInstructions, property.PropertyType);
 
-                InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
+                CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
-            InstructionPatterns.DuplicateReturnValue(guardInstructions, property.PropertyType);
+            DuplicateReturnValue(guardInstructions, property.PropertyType);
 
-            InstructionPatterns.IfNull(guardInstructions, returnInstruction, i =>
+            IfNull(guardInstructions, returnInstruction, i =>
             {
                 // Clean up the stack since we're about to throw up.
                 i.Add(Instruction.Create(OpCodes.Pop));
 
-                InstructionPatterns.LoadInvalidOperationException(i, errorMessage);
+                LoadInvalidOperationException(i, errorMessage);
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -157,16 +148,16 @@ public class PropertyProcessor
 
         if (isDebug)
         {
-            InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
+            LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-            InstructionPatterns.CallDebugAssertInstructions(guardInstructions, errorMessage);
+            CallDebugAssertInstructions(guardInstructions, errorMessage);
         }
 
-        InstructionPatterns.LoadArgumentOntoStack(guardInstructions, valueParameter);
+        LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-        InstructionPatterns.IfNull(guardInstructions, entry, i =>
+        IfNull(guardInstructions, entry, i =>
         {
-            InstructionPatterns.LoadArgumentNullException(i, valueParameter.Name, errorMessage);
+            LoadArgumentNullException(i, valueParameter.Name, errorMessage);
 
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public static class InstructionPatterns
+public partial class ModuleWeaver
 {
-    public static void CallDebugAssertInstructions(List<Instruction> instructions, string message)
+    public void CallDebugAssertInstructions(List<Instruction> instructions, string message)
     {
         // Load null onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldnull));
@@ -23,7 +23,7 @@ public static class InstructionPatterns
         instructions.Add(Instruction.Create(OpCodes.Ldstr, message));
 
         // Call Debug.Assert
-        instructions.Add(Instruction.Create(OpCodes.Call, ReferenceFinder.DebugAssertMethod));
+        instructions.Add(Instruction.Create(OpCodes.Call, DebugAssertMethod));
     }
 
     public static void DuplicateReturnValue(List<Instruction> instructions, TypeReference methodReturnType)
@@ -68,7 +68,7 @@ public static class InstructionPatterns
         }
     }
 
-    public static void LoadArgumentNullException(List<Instruction> instructions, string valueName, string errorString)
+    public void LoadArgumentNullException(List<Instruction> instructions, string valueName, string errorString)
     {
         // Load the name of the argument onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldstr, valueName));
@@ -77,19 +77,19 @@ public static class InstructionPatterns
         instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
 
         // Load the ArgumentNullException onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.ArgumentNullExceptionWithMessageConstructor));
+        instructions.Add(Instruction.Create(OpCodes.Newobj, ArgumentNullExceptionWithMessageConstructor));
     }
 
-    public static void LoadInvalidOperationException(List<Instruction> instructions, string errorString)
+    public void LoadInvalidOperationException(List<Instruction> instructions, string errorString)
     {
         // Load the exception text onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
 
         // Load the InvalidOperationException onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ReferenceFinder.InvalidOperationExceptionConstructor));
+        instructions.Add(Instruction.Create(OpCodes.Newobj, InvalidOperationExceptionConstructor));
     }
 
-    public static void IfNull(List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
+    public void IfNull(List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
     {
         // Branch if value on stack is true, not null or non-zero
         instructions.Add(Instruction.Create(OpCodes.Brtrue_S, returnInstruction));
