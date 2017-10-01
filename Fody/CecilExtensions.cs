@@ -7,6 +7,7 @@ public static class CecilExtensions
 {
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
+    const string ItemCanBeNullAttributeTypeName = "ItemCanBeNullAttribute";
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
@@ -50,7 +51,7 @@ public static class CecilExtensions
     {
         return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
                // ReSharper uses a *method* attribute for CanBeNull for the return value
-               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName || a.AttributeType.Name == ItemCanBeNullAttributeTypeName);
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
