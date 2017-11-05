@@ -64,6 +64,10 @@ public static class Decompiler
                 {
                     continue;
                 }
+                if (line.Contains(".language '"))
+                {
+                    continue;
+                }
 
                 stringBuilder.AppendLine(line);
             }
