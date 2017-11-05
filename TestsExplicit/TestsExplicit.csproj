@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ApprovalTests" Version="*" />
+    <PackageReference Include="ApprovalUtilities" Version="*" />
+    <PackageReference Include="FodyCecil" Version="*" />
+    <PackageReference Include="NUnit" Version="*" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="Microsoft.CSharp" />
+    <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
+    <ProjectReference Include="..\Fody\Fody.csproj" />
+  </ItemGroup>
+</Project>

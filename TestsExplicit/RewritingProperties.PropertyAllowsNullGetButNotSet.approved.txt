@@ -1,0 +1,2 @@
+﻿[NullGuard] Cannot set the value of property 'System.String SimpleClass::NonNullProperty()' to null.
+Parameter name: value

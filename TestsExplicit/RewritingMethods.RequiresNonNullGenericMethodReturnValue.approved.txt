@@ -1,0 +1,1 @@
+﻿[NullGuard] Return value of method 'T SimpleClass::MethodWithGenericReturn(System.Boolean)' is null.

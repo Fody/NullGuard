@@ -22,8 +22,6 @@ public static class Decompiler
         };
         using (var process = Process.Start(startInfo))
         {
-            // process.WaitForExit(10000);
-
             var stringBuilder = new StringBuilder();
             string line;
             while ((line = process.StandardOutput.ReadLine()) != null)
@@ -37,6 +35,10 @@ public static class Decompiler
                     continue;
                 }
                 if (line.StartsWith("// "))
+                {
+                    continue;
+                }
+                if (line.StartsWith("//0"))
                 {
                     continue;
                 }

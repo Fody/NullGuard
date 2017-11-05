@@ -46,7 +46,7 @@ public partial class ModuleWeaver
             return;
         }
 
-        if (property.AllowsNull())
+        if (property.AllowsNull(nullGuardMode))
         {
             return;
         }
@@ -62,7 +62,7 @@ public partial class ModuleWeaver
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
                 property.GetMethod.IsPublic &&
                 property.DeclaringType.IsPublicOrNestedPublic()) &&
-                !property.GetMethod.MethodReturnType.AllowsNull()
+                !property.GetMethod.MethodReturnType.ImplicitAllowsNull()
                )
             {
                 InjectPropertyGetterGuard(getMethod, doc, property);
@@ -139,7 +139,7 @@ public partial class ModuleWeaver
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
-        if (!valueParameter.MayNotBeNull())
+        if (!valueParameter.MayNotBeNull(setMethod, NullGuardMode.Implicit))
             return;
 
         var guardInstructions = new List<Instruction>();

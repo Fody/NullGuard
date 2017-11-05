@@ -24,6 +24,8 @@
     <Copy SourceFiles="$(OutputPath)NullGuard.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\netstandard1.0\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
     <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\netstandard1.0\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\portable40-net40+sl5+win8+wp8+wpa81\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\portable40-net40+sl5+win8+wp8+wpa81" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\portable40-net40+sl5+win8+wp8+wpa81\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\portable40-net40+sl5+win8+wp8+wpa81" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)NullGuard.Fody.dll" />
   </Target>
 </Project>

@@ -12,6 +12,7 @@ public partial class ModuleWeaver
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
     private bool isDebug;
+    private NullGuardMode nullGuardMode;
     public List<string> DefineConstants { get; set; }
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarn { get; set; }
@@ -33,6 +34,11 @@ public partial class ModuleWeaver
     {
         ReadConfig();
 
+        if (nullGuardMode == NullGuardMode.AutoDetect)
+        {
+            nullGuardMode = ModuleDefinition.AutoDetectMode();
+        }
+
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
         if (nullGuardAttribute == null)
@@ -44,6 +50,8 @@ public partial class ModuleWeaver
         {
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
         }
+
+        LogInfo($"Mode={nullGuardMode}, ValidationFlags={ValidationFlags}");
 
         FindReferences();
         var types = GetTypesToProcess();
@@ -73,6 +81,7 @@ public partial class ModuleWeaver
 
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
+        ReadMode();
     }
 
     void ReadIncludeDebugAssert()
@@ -87,6 +96,18 @@ public partial class ModuleWeaver
             return;
         }
         throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{includeDebugAssertAttribute.Value}'.");
+    }
+
+    void ReadMode()
+    {
+        var modeAttribute = Config.Attribute("Mode");
+        if (modeAttribute != null)
+        {
+            if (!Enum.TryParse(modeAttribute.Value, out nullGuardMode))
+            {
+                throw new WeavingException($"Could not parse 'NullGuardMode' from '{modeAttribute.Value}'.");
+            }
+        }
     }
 
     void ReadExcludeRegex()
