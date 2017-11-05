@@ -11,6 +11,16 @@ internal static class ExplicitMode
     private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     private const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
 
+    private enum Nullability : byte
+    {
+        Undefined,
+        CanBeNull,
+        NotNull
+    }
+
+    private static readonly MethodNullabilityCache _methodCache = new MethodNullabilityCache();
+    private static readonly PropertyNullabilityCache _propertyCache = new PropertyNullabilityCache();
+
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
         // If we are referencing JetBrains.Annotations and using NotNull attributes, use explicit mode as default.
@@ -39,138 +49,42 @@ internal static class ExplicitMode
 
     public static bool AllowsNull(PropertyDefinition property)
     {
-        if (property.HasNotNullAttribute())
-            return false;
+        var nullability = _propertyCache.GetOrCreate(property);
 
-        if (!property.HasThis)
-            return true;
-
-        if (property.HasNotNullAttributeOnImplicitImplementedInterface())
-            return false;
-
-        if (property.EnumerateOverrides().Any(p => !AllowsNull(p)))
-            return false;
-
-        return true;
+        return nullability.Nullability != Nullability.NotNull;
     }
 
     public static bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
-        if (parameter.HasNullabilityAnnotation(out var value))
-            return value;
+        var nullability = _methodCache.GetOrCreate(method);
 
-        if (!method.HasThis)
-            return true;
-
-        if (HasNullabilityAnnotationOnImplicitImplementedInterface(parameter, method, out var allowsNull))
-            return allowsNull;
-
-        if (method.EnumerateOverrides().Any(m => !AllowsNull(m.Parameters[parameter.Index], m)))
-            return false;
-
-        return true;
+        return nullability.Parameters[parameter.Index] != Nullability.NotNull;
     }
 
     public static bool AllowsNull(MethodDefinition method)
     {
-        if (method.HasNotNullAttribute())
-            return false;
+        var nullability = _methodCache.GetOrCreate(method);
 
-        if (!method.HasThis)
-            return true;
-
-        if (HasNotNullAttributeOnImplicitImplementedInterface(method))
-            return false;
-
-        if (method.EnumerateOverrides().Any(m => !AllowsNull(m)))
-            return false;
-
-        return true;
+        return nullability.ReturnValue != Nullability.NotNull;
     }
 
-    private static bool HasNotNullAttributeOnImplicitImplementedInterface(this PropertyDefinition property)
+    private static Nullability GetNullability(this ParameterDefinition value)
     {
-        var declaringType = property.DeclaringType;
-
-        foreach (var interfaceType in declaringType.GetInterfaces())
-        {
-            var interfaceProperty = interfaceType.Properties.Find(property);
-            if (interfaceProperty == null)
-                continue;
-
-            if (declaringType.FindExplicitInterfaceImplementation(interfaceProperty) != null)
-                continue;
-
-            if (interfaceProperty.HasNotNullAttribute())
-                return true;
-        }
-        return false;
-    }
-
-    private static bool HasNullabilityAnnotationOnImplicitImplementedInterface(ParameterReference parameter, MethodDefinition method, out bool allowsNull)
-    {
-        allowsNull = true;
-
-        var declaringType = method.DeclaringType;
-        var parameterIndex = parameter.Index;
-
-        foreach (var interfaceType in declaringType.GetInterfaces())
-        {
-            var interfaceMethod = interfaceType.Methods.Find(method);
-            if (interfaceMethod == null)
-                continue;
-
-            if (declaringType.FindExplicitInterfaceImplementation(interfaceMethod) != null)
-                continue;
-
-            if (interfaceMethod.Parameters[parameterIndex].HasNullabilityAnnotation(out allowsNull))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static bool HasNotNullAttributeOnImplicitImplementedInterface(MethodDefinition method)
-    {
-        var declaringType = method.DeclaringType;
-
-        foreach (var interfaceType in declaringType.GetInterfaces())
-        {
-            var interfaceMethod = interfaceType.Methods.Find(method);
-            if (interfaceMethod == null)
-                continue;
-
-            if (declaringType.FindExplicitInterfaceImplementation(interfaceMethod) != null)
-                continue;
-
-            if (interfaceMethod.HasNotNullAttribute())
-                return true;
-        }
-        return false;
-    }
-
-    private static bool HasNullabilityAnnotation(this ParameterDefinition value, out bool allowsNull)
-    {
-        allowsNull = true;
-
         if (value == null)
-            return false;
+            return Nullability.Undefined;
 
         // Liskov: weakening of preconditions is OK, stop searching for NotNull if parameter is CanBeNull.
         if (!value.IsOut && value.HasCanBeNullAttribute())
         {
-            return true;
+            return Nullability.CanBeNull;
         }
 
         if (value.HasNotNullAttribute())
         {
-            allowsNull = false;
-            return true;
+            return Nullability.NotNull;
         }
 
-        return false;
+        return Nullability.Undefined;
     }
 
     private static bool HasNotNullAttribute(this ICustomAttributeProvider value)
@@ -248,6 +162,228 @@ internal static class ExplicitMode
         foreach (var setOverride in setMethod.EnumerateOverrides())
         {
             yield return setOverride.DeclaringType.Properties.FirstOrDefault(p => p.SetMethod == setOverride);
+        }
+    }
+
+    private class MethodNullability
+    {
+        private readonly MethodDefinition _method;
+        private readonly Nullability[] _parameters;
+        private Nullability _returnValue;
+        private bool _isInheritanceResolved;
+
+        public MethodNullability(MethodDefinition method)
+        {
+            _method = method;
+            _parameters = method.Parameters.Select(p => p.GetNullability()).ToArray();
+            _returnValue = method.HasNotNullAttribute() ? Nullability.NotNull : Nullability.Undefined;
+        }
+
+        public Nullability ReturnValue
+        {
+            get
+            {
+                ResolveInheritance();
+                return _returnValue;
+            }
+        }
+
+        public IReadOnlyList<Nullability> Parameters
+        {
+            get
+            {
+                ResolveInheritance();
+                return _parameters;
+            }
+        }
+
+        private bool IsAnyValueUndefined => ReturnValue == Nullability.Undefined || Parameters.Any(p => p == Nullability.Undefined);
+
+        private void MergeFrom(MethodNullability baseMethod)
+        {
+            if (baseMethod == null)
+                return;
+
+            baseMethod.ResolveInheritance();
+
+            if (_returnValue == Nullability.Undefined)
+                _returnValue = baseMethod._returnValue;
+
+            for (int i = 0; i < Parameters.Count; i++)
+            {
+                if (_parameters[i] == Nullability.Undefined)
+                {
+                    _parameters[i] = baseMethod._parameters[i];
+                }
+            }
+        }
+
+        private void ResolveInheritance()
+        {
+            if (_isInheritanceResolved)
+                return;
+
+            _isInheritanceResolved = true;
+
+            if (!_method.HasThis || !IsAnyValueUndefined)
+                return;
+
+            var declaringType = _method.DeclaringType;
+
+            foreach (var interfaceType in declaringType.GetInterfaces())
+            {
+                var interfaceMethod = interfaceType.Methods.Find(_method);
+                if (interfaceMethod == null)
+                    continue;
+
+                if (declaringType.FindExplicitInterfaceImplementation(interfaceMethod) != null)
+                    continue;
+
+                var interfaceNullability = _methodCache.GetOrCreate(interfaceMethod);
+
+                MergeFrom(interfaceNullability);
+            }
+
+            foreach (var overrideMethod in _method.EnumerateOverrides())
+            {
+                var overrideNullability = _methodCache.GetOrCreate(overrideMethod);
+
+                MergeFrom(overrideNullability);
+            }
+        }
+
+        public override string ToString()
+        {
+            var parms = string.Join(", ", Parameters);
+            return $"{ReturnValue} {_method.Name}({parms})";
+        }
+    }
+
+    private class PropertyNullability
+    {
+        private readonly PropertyDefinition _property;
+        private Nullability _nullability;
+        private bool _isInheritanceResolved;
+
+        public PropertyNullability(PropertyDefinition property)
+        {
+            _property = property;
+            _nullability = property.HasNotNullAttribute() ? Nullability.NotNull : Nullability.Undefined;
+        }
+
+        public Nullability Nullability
+        {
+            get
+            {
+                ResolveInheritance();
+                return _nullability;
+            }
+        }
+
+        private bool IsAnyValueUndefined => Nullability == Nullability.Undefined;
+
+        private void MergeFrom(PropertyNullability baseProperty)
+        {
+            if (baseProperty == null)
+                return;
+
+            baseProperty.ResolveInheritance();
+
+            if (_nullability == Nullability.Undefined)
+                _nullability = baseProperty._nullability;
+        }
+
+        private void ResolveInheritance()
+        {
+            if (_isInheritanceResolved)
+                return;
+
+            _isInheritanceResolved = true;
+
+            if (!_property.HasThis || !IsAnyValueUndefined)
+                return;
+
+            var declaringType = _property.DeclaringType;
+
+            foreach (var interfaceType in declaringType.GetInterfaces())
+            {
+                var interfaceProperty = interfaceType.Properties.Find(_property);
+                if (interfaceProperty == null)
+                    continue;
+
+                if (declaringType.FindExplicitInterfaceImplementation(interfaceProperty) != null)
+                    continue;
+
+                var interfaceNullability = _propertyCache.GetOrCreate(interfaceProperty);
+
+                MergeFrom(interfaceNullability);
+            }
+
+            foreach (var overrideProperty in _property.EnumerateOverrides())
+            {
+                var overrideNullability = _propertyCache.GetOrCreate(overrideProperty);
+
+                MergeFrom(overrideNullability);
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{Nullability} {_property.Name}";
+        }
+    }
+
+    private class MethodNullabilityCache
+    {
+        private readonly Dictionary<string, Dictionary<string, MethodNullability>> _cache = new Dictionary<string, Dictionary<string, MethodNullability>>();
+
+        public MethodNullability GetOrCreate(MethodDefinition method)
+        {
+            var assemblyName = method.Module.Assembly.Name.Name;
+
+            if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
+            {
+                assmblyCache = new Dictionary<string, MethodNullability>();
+                _cache.Add(assemblyName, assmblyCache);
+            }
+
+            var key = DocCommentId.GetDocCommentId(method);
+
+            if (assmblyCache.TryGetValue(key, out var value))
+                return value;
+
+            value = new MethodNullability(method);
+
+            assmblyCache.Add(key, value);
+
+            return value;
+        }
+    }
+
+    private class PropertyNullabilityCache
+    {
+        private readonly Dictionary<string, Dictionary<string, PropertyNullability>> _cache = new Dictionary<string, Dictionary<string, PropertyNullability>>();
+
+        public PropertyNullability GetOrCreate(PropertyDefinition property)
+        {
+            var assemblyName = property.Module.Assembly.Name.Name;
+
+            if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
+            {
+                assmblyCache = new Dictionary<string, PropertyNullability>();
+                _cache.Add(assemblyName, assmblyCache);
+            }
+
+            var key = DocCommentId.GetDocCommentId(property);
+
+            if (assmblyCache.TryGetValue(key, out var value))
+                return value;
+
+            value = new PropertyNullability(property);
+
+            assmblyCache.Add(key, value);
+
+            return value;
         }
     }
 }
