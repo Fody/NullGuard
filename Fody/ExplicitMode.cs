@@ -42,6 +42,9 @@ internal static class ExplicitMode
         if (property.HasNotNullAttribute())
             return false;
 
+        if (!property.HasThis)
+            return true;
+
         if (property.HasNotNullAttributeOnImplicitImplementedInterface())
             return false;
 
@@ -56,6 +59,9 @@ internal static class ExplicitMode
         if (parameter.HasNullabilityAnnotation(out var value))
             return value;
 
+        if (!method.HasThis)
+            return true;
+
         if (HasNullabilityAnnotationOnImplicitImplementedInterface(parameter, method, out var allowsNull))
             return allowsNull;
 
@@ -69,6 +75,9 @@ internal static class ExplicitMode
     {
         if (method.HasNotNullAttribute())
             return false;
+
+        if (!method.HasThis)
+            return true;
 
         if (HasNotNullAttributeOnImplicitImplementedInterface(method))
             return false;
