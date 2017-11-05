@@ -1,7 +1,6 @@
-﻿.class public auto ansi beforefieldinit ImplementsInheritedInterface
+﻿.class public auto ansi beforefieldinit ImplementsInterface
        extends [mscorlib]System.Object
-       implements InheritedInterface,
-                  BaseInterfaceWithAttributes
+       implements [AssemblyWithExternalAnnotations]AssemblyWithExternalAnnotations.InterfaceWithAttributes
 {
   .field private string '<NotNullProperty>k__BackingField'
   .method public hidebysig newslot virtual final 
@@ -29,8 +28,8 @@
     IL_0002:  brtrue.s   IL_0010
     IL_0004:  pop
     IL_0005:  ldstr      "[NullGuard] Return value of method 'System.String "
-    + "ImplementsInheritedInterface::MethodWithNotNullReturnValue"
-    + "(System.String)' is null."
+    + "ImplementsInterface::MethodWithNotNullReturnValue(System.S"
+    + "tring)' is null."
     IL_000a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_000f:  throw
     IL_0010:  ret
@@ -41,12 +40,12 @@
     // Code size       22 (0x16)
     .maxstack  2
     IL_0000:  ldarg.0
-    IL_0001:  ldfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
+    IL_0001:  ldfld      string ImplementsInterface::'<NotNullProperty>k__BackingField'
     IL_0006:  dup
     IL_0007:  brtrue.s   IL_0015
     IL_0009:  pop
     IL_000a:  ldstr      "[NullGuard] Return value of property 'System.Strin"
-    + "g ImplementsInheritedInterface::NotNullProperty()' is null."
+    + "g ImplementsInterface::NotNullProperty()' is null."
     IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0014:  throw
     IL_0015:  ret
@@ -60,14 +59,13 @@
     IL_0001:  brtrue.s   IL_0013
     IL_0003:  ldstr      "value"
     IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
-    + "em.String ImplementsInheritedInterface::NotNullProperty()'"
-    + " to null."
+    + "em.String ImplementsInterface::NotNullProperty()' to null."
     IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0012:  throw
     IL_0013:  ldarg.0
     IL_0014:  ldarg.1
-    IL_0015:  stfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
+    IL_0015:  stfld      string ImplementsInterface::'<NotNullProperty>k__BackingField'
     IL_001a:  ret
   } 
   .method public hidebysig specialname rtspecialname 

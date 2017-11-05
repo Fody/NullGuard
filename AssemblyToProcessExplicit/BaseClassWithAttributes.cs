@@ -26,7 +26,7 @@ public interface BaseInterfaceWithAttributes
 
 public interface InheritedInterface : BaseInterfaceWithAttributes
 {
-    
+
 }
 
 public interface InterfaceWithAttributes
@@ -40,83 +40,242 @@ public interface InterfaceWithAttributes
     string NotNullProperty { get; set; }
 }
 
-
-
-public class DerivedClass : BaseClassWithAttributes
+namespace InternalBase
 {
-    public override void MethodWithNotNullParameter(string canBeNull, string arg)
+    public class DerivedClass : BaseClassWithAttributes
     {
+        public override void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public override string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public override string NotNullProperty { get; set; }
     }
 
-    public override string MethodWithNotNullReturnValue(string arg)
+    public class ImplementsInterface : InterfaceWithAttributes
     {
-        return arg;
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
     }
 
-    public override string NotNullProperty { get; set; }
+    public class ImplementsInheritedInterface : InheritedInterface
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
+    }
+
+    [NullGuard(ValidationFlags.All)] // TODO: need this due to https://github.com/Fody/NullGuard/issues/37 https://github.com/Fody/NullGuard/issues/60, remove after fix of #60
+    public class ImplementsInterfaceExplicit : InterfaceWithAttributes
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+            ((InterfaceWithAttributes)this).MethodWithNotNullParameter(canBeNull, arg);
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return ((InterfaceWithAttributes)this).MethodWithNotNullReturnValue(arg);
+        }
+
+        public string NotNullProperty
+        {
+            get => ((InterfaceWithAttributes)this).NotNullProperty;
+            set => ((InterfaceWithAttributes)this).NotNullProperty = value;
+        }
+
+        void InterfaceWithAttributes.MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        string InterfaceWithAttributes.MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        string InterfaceWithAttributes.NotNullProperty
+        {
+            get;
+            set;
+        }
+    }
 }
 
-public class ImplementsInterface : InterfaceWithAttributes
+namespace AssemblyBase
 {
-    public void MethodWithNotNullParameter(string canBeNull, string arg)
+    public class DerivedClass : AssemblyWithAnnotations.BaseClassWithAttributes
     {
+        public override void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public override string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public override string NotNullProperty { get; set; }
     }
 
-    public string MethodWithNotNullReturnValue(string arg)
+    public class ImplementsInterface : AssemblyWithAnnotations.InterfaceWithAttributes
     {
-        return arg;
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
     }
 
-    public string NotNullProperty { get; set; }
+    public class ImplementsInheritedInterface : AssemblyWithAnnotations.InheritedInterface
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
+    }
+
+    [NullGuard(ValidationFlags.All)] // TODO: need this due to https://github.com/Fody/NullGuard/issues/37 https://github.com/Fody/NullGuard/issues/60, remove after fix of #60
+    public class ImplementsInterfaceExplicit : AssemblyWithAnnotations.InterfaceWithAttributes
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+            ((AssemblyWithAnnotations.InterfaceWithAttributes)this).MethodWithNotNullParameter(canBeNull, arg);
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return ((AssemblyWithAnnotations.InterfaceWithAttributes)this).MethodWithNotNullReturnValue(arg);
+        }
+
+        public string NotNullProperty
+        {
+            get => ((AssemblyWithAnnotations.InterfaceWithAttributes)this).NotNullProperty;
+            set => ((AssemblyWithAnnotations.InterfaceWithAttributes)this).NotNullProperty = value;
+        }
+
+        void AssemblyWithAnnotations.InterfaceWithAttributes.MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        string AssemblyWithAnnotations.InterfaceWithAttributes.MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        string AssemblyWithAnnotations.InterfaceWithAttributes.NotNullProperty
+        {
+            get;
+            set;
+        }
+    }
 }
 
-public class ImplementsInheritedInterface : InheritedInterface
+namespace ExternalBase
 {
-    public void MethodWithNotNullParameter(string canBeNull, string arg)
+    public class DerivedClass : AssemblyWithExternalAnnotations.BaseClassWithAttributes
     {
+        public override void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public override string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public override string NotNullProperty { get; set; }
     }
 
-    public string MethodWithNotNullReturnValue(string arg)
+    public class ImplementsInterface : AssemblyWithExternalAnnotations.InterfaceWithAttributes
     {
-        return arg;
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
     }
 
-    public string NotNullProperty { get; set; }
+    public class ImplementsInheritedInterface : AssemblyWithExternalAnnotations.InheritedInterface
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        public string NotNullProperty { get; set; }
+    }
+
+    [NullGuard(ValidationFlags.All)] // TODO: need this due to https://github.com/Fody/NullGuard/issues/37 https://github.com/Fody/NullGuard/issues/60, remove after fix of #60
+    public class ImplementsInterfaceExplicit : AssemblyWithExternalAnnotations.InterfaceWithAttributes
+    {
+        public void MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+            ((AssemblyWithExternalAnnotations.InterfaceWithAttributes)this).MethodWithNotNullParameter(canBeNull, arg);
+        }
+
+        public string MethodWithNotNullReturnValue(string arg)
+        {
+            return ((AssemblyWithExternalAnnotations.InterfaceWithAttributes)this).MethodWithNotNullReturnValue(arg);
+        }
+
+        public string NotNullProperty
+        {
+            get => ((AssemblyWithExternalAnnotations.InterfaceWithAttributes)this).NotNullProperty;
+            set => ((AssemblyWithExternalAnnotations.InterfaceWithAttributes)this).NotNullProperty = value;
+        }
+
+        void AssemblyWithExternalAnnotations.InterfaceWithAttributes.MethodWithNotNullParameter(string canBeNull, string arg)
+        {
+        }
+
+        string AssemblyWithExternalAnnotations.InterfaceWithAttributes.MethodWithNotNullReturnValue(string arg)
+        {
+            return arg;
+        }
+
+        string AssemblyWithExternalAnnotations.InterfaceWithAttributes.NotNullProperty
+        {
+            get;
+            set;
+        }
+    }
 }
-
-[NullGuard(ValidationFlags.All)] // TODO: need this due to https://github.com/Fody/NullGuard/issues/37 https://github.com/Fody/NullGuard/issues/60, remove after fix of #60
-public class ImplementsInterfaceExplicit : InterfaceWithAttributes
-{
-    public void MethodWithNotNullParameter(string canBeNull, string arg)
-    {
-        ((InterfaceWithAttributes)this).MethodWithNotNullParameter(canBeNull, arg);
-    }
-
-    public string MethodWithNotNullReturnValue(string arg)
-    {
-        return ((InterfaceWithAttributes)this).MethodWithNotNullReturnValue(arg);
-    }
-
-    public string NotNullProperty
-    {
-        get => ((InterfaceWithAttributes)this).NotNullProperty;
-        set => ((InterfaceWithAttributes)this).NotNullProperty = value;
-    }
-
-    void InterfaceWithAttributes.MethodWithNotNullParameter(string canBeNull, string arg)
-    {
-    }
-
-    string InterfaceWithAttributes.MethodWithNotNullReturnValue(string arg)
-    {
-        return arg;
-    }
-
-    string InterfaceWithAttributes.NotNullProperty
-    {
-        get;
-        set;
-    }
-}
-
-

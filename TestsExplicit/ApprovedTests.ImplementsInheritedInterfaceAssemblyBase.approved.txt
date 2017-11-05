@@ -1,7 +1,7 @@
 ﻿.class public auto ansi beforefieldinit ImplementsInheritedInterface
        extends [mscorlib]System.Object
-       implements InheritedInterface,
-                  BaseInterfaceWithAttributes
+       implements [AssemblyWithAnnotations]AssemblyWithAnnotations.InheritedInterface,
+                  [AssemblyWithAnnotations]AssemblyWithAnnotations.BaseInterfaceWithAttributes
 {
   .field private string '<NotNullProperty>k__BackingField'
   .method public hidebysig newslot virtual final 

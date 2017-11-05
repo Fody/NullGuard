@@ -27,7 +27,8 @@
     IL_0002:  brtrue.s   IL_0010
     IL_0004:  pop
     IL_0005:  ldstr      "[NullGuard] Return value of method 'System.String "
-    + "DerivedClass::MethodWithNotNullReturnValue(System.String)' is null."
+    + "DerivedClass::MethodWithNotNullReturnValue(System.String)'"
+    + " is null."
     IL_000a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_000f:  throw
     IL_0010:  ret

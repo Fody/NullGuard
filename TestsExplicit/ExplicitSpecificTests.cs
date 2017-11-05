@@ -9,10 +9,18 @@
     public class ExplicitSpecificTests
     {
         static object[] FixtureArgs = {
-            new object[] { "DerivedClass", string.Empty },
-            new object[] { "ImplementsInterface", string.Empty },
-            new object[] { "ImplementsInheritedInterface", string.Empty },
-            new object[] { "ImplementsInterfaceExplicit", "InterfaceWithAttributes." },
+            new object[] { "InternalBase.DerivedClass", string.Empty },
+            new object[] { "InternalBase.ImplementsInterface", string.Empty },
+            new object[] { "InternalBase.ImplementsInheritedInterface", string.Empty },
+            new object[] { "InternalBase.ImplementsInterfaceExplicit", "InterfaceWithAttributes." },
+            new object[] { "AssemblyBase.DerivedClass", string.Empty },
+            new object[] { "AssemblyBase.ImplementsInterface", string.Empty },
+            new object[] { "AssemblyBase.ImplementsInheritedInterface", string.Empty },
+            new object[] { "AssemblyBase.ImplementsInterfaceExplicit", "AssemblyWithAnnotations.InterfaceWithAttributes." },
+            new object[] { "ExternalBase.DerivedClass", string.Empty },
+            new object[] { "ExternalBase.ImplementsInterface", string.Empty },
+            new object[] { "ExternalBase.ImplementsInheritedInterface", string.Empty },
+            new object[] { "ExternalBase.ImplementsInterfaceExplicit", "AssemblyWithExternalAnnotations.InterfaceWithAttributes." },
         };
 
         private readonly string _className;

@@ -116,18 +116,18 @@ internal static class ExplicitMode
     private static PropertyDefinition Find(this ICollection<PropertyDefinition> properties, PropertyReference reference)
     {
         return properties.FirstOrDefault(property => property.Name == reference.Name
-            && property.PropertyType == reference.PropertyType
-            && property.Parameters.Select(parameter => parameter.ParameterType.Resolve()).SequenceEqual(reference.Parameters.Select(parameter => parameter.ParameterType.Resolve())));
+            && TypeReferenceEqualityComparer.Default.Equals(property.PropertyType, reference.PropertyType)
+            && property.Parameters.Select(parameter => parameter.ParameterType.Resolve()).SequenceEqual(reference.Parameters.Select(parameter => parameter.ParameterType.Resolve()), TypeReferenceEqualityComparer.Default));
     }
 
     private static MethodDefinition FindExplicitInterfaceImplementation(this TypeDefinition type, MethodDefinition interfaceMethod)
     {
-        return type.Methods.FirstOrDefault(m => m.EnumerateOverrides().Any(o => o == interfaceMethod));
+        return type.Methods.FirstOrDefault(m => m.EnumerateOverrides().Any(o => MemberReferenceEqualityComparer.Default.Equals(o, interfaceMethod)));
     }
 
     private static PropertyDefinition FindExplicitInterfaceImplementation(this TypeDefinition type, PropertyDefinition interfaceProperty)
     {
-        return type.Properties.FirstOrDefault(p => p.EnumerateOverrides().Any(o => o == interfaceProperty));
+        return type.Properties.FirstOrDefault(p => p.EnumerateOverrides().Any(o => MemberReferenceEqualityComparer.Default.Equals(o, interfaceProperty)));
     }
 
     private static IEnumerable<MethodDefinition> EnumerateOverrides(this MethodDefinition method)
@@ -197,7 +197,7 @@ internal static class ExplicitMode
             }
         }
 
-        private bool IsAnyValueUndefined => ReturnValue == Nullability.Undefined || Parameters.Any(p => p == Nullability.Undefined);
+        private bool IsAnyValueUndefined => _returnValue == Nullability.Undefined || _parameters.Any(p => p == Nullability.Undefined);
 
         private void MergeFrom(MethodNullability baseMethod)
         {
@@ -254,8 +254,8 @@ internal static class ExplicitMode
 
         public override string ToString()
         {
-            var parms = string.Join(", ", Parameters);
-            return $"{ReturnValue} {_method.Name}({parms})";
+            var parms = string.Join(", ", _parameters);
+            return $"{_returnValue} {_method.Name}({parms})";
         }
     }
 
@@ -280,7 +280,7 @@ internal static class ExplicitMode
             }
         }
 
-        private bool IsAnyValueUndefined => Nullability == Nullability.Undefined;
+        private bool IsAnyValueUndefined => _nullability == Nullability.Undefined;
 
         private void MergeFrom(PropertyNullability baseProperty)
         {
@@ -329,7 +329,7 @@ internal static class ExplicitMode
 
         public override string ToString()
         {
-            return $"{Nullability} {_property.Name}";
+            return $"{_nullability} {_property.Name}";
         }
     }
 
@@ -339,7 +339,8 @@ internal static class ExplicitMode
 
         public MethodNullability GetOrCreate(MethodDefinition method)
         {
-            var assemblyName = method.Module.Assembly.Name.Name;
+            var module = method.Module;
+            var assemblyName = module.Assembly.Name.Name;
 
             if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
             {

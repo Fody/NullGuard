@@ -1,5 +1,6 @@
 ﻿#if(DEBUG)
 
+using System;
 using System.Linq;
 using ApprovalTests;
 using NUnit.Framework;
@@ -82,25 +83,73 @@ public class ApprovedTests
     [Test]
     public void DerivedClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "DerivedClass"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.DerivedClass"), v => v.Replace("InternalBase.", string.Empty));
     }
 
     [Test]
     public void ImplementsInterface()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ImplementsInterface"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterface"), v => v.Replace("InternalBase.", string.Empty));
     }
 
     [Test]
     public void ImplementsInheritedInterface()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ImplementsInheritedInterface"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInheritedInterface"), v => v.Replace("InternalBase.", string.Empty));
     }
 
     [Test]
     public void ImplementsInterfaceExplicit()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ImplementsInterfaceExplicit"));
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterfaceExplicit"), v => v.Replace("InternalBase.", string.Empty));
+    }
+
+    [Test]
+    public void DerivedClassAssemblyBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.DerivedClass"), v => v.Replace("AssemblyBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInterfaceAssemblyBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterface"), v => v.Replace("AssemblyBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInheritedInterfaceAssemblyBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInheritedInterface"), v => v.Replace("AssemblyBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInterfaceExplicitAssemblyBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterfaceExplicit"), v => v.Replace("AssemblyBase.", string.Empty));
+    }
+
+    [Test]
+    public void DerivedClassExternalBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.DerivedClass"), v => v.Replace("ExternalBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInterfaceExternalBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterface"), v => v.Replace("ExternalBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInheritedInterfaceExternalBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInheritedInterface"), v => v.Replace("ExternalBase.", string.Empty));
+    }
+
+    [Test]
+    public void ImplementsInterfaceExplicitExternalBase()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterfaceExplicit"), v => v.Replace("ExternalBase.", string.Empty));
     }
 
     [Test]
