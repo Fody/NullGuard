@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Mono.Cecil;
@@ -18,8 +20,7 @@ internal static class ExplicitMode
         NotNull
     }
 
-    private static readonly MethodNullabilityCache _methodCache = new MethodNullabilityCache();
-    private static readonly PropertyNullabilityCache _propertyCache = new PropertyNullabilityCache();
+    private static readonly MemberNullabilityCache _memberNullabilityCache = new MemberNullabilityCache();
 
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
@@ -49,21 +50,21 @@ internal static class ExplicitMode
 
     public static bool AllowsNull(PropertyDefinition property)
     {
-        var nullability = _propertyCache.GetOrCreate(property);
+        var nullability = _memberNullabilityCache.GetOrCreate(property);
 
         return nullability.Nullability != Nullability.NotNull;
     }
 
     public static bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
-        var nullability = _methodCache.GetOrCreate(method);
+        var nullability = _memberNullabilityCache.GetOrCreate(method);
 
         return nullability.Parameters[parameter.Index] != Nullability.NotNull;
     }
 
     public static bool AllowsNull(MethodDefinition method)
     {
-        var nullability = _methodCache.GetOrCreate(method);
+        var nullability = _memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ReturnValue != Nullability.NotNull;
     }
@@ -165,7 +166,11 @@ internal static class ExplicitMode
         }
     }
 
-    private class MethodNullability
+    private class MemberNullability
+    {
+    }
+
+    private class MethodNullability : MemberNullability
     {
         private readonly MethodDefinition _method;
         private readonly Nullability[] _parameters;
@@ -239,14 +244,14 @@ internal static class ExplicitMode
                 if (declaringType.FindExplicitInterfaceImplementation(interfaceMethod) != null)
                     continue;
 
-                var interfaceNullability = _methodCache.GetOrCreate(interfaceMethod);
+                var interfaceNullability = _memberNullabilityCache.GetOrCreate(interfaceMethod);
 
                 MergeFrom(interfaceNullability);
             }
 
             foreach (var overrideMethod in _method.EnumerateOverrides())
             {
-                var overrideNullability = _methodCache.GetOrCreate(overrideMethod);
+                var overrideNullability = _memberNullabilityCache.GetOrCreate(overrideMethod);
 
                 MergeFrom(overrideNullability);
             }
@@ -259,7 +264,7 @@ internal static class ExplicitMode
         }
     }
 
-    private class PropertyNullability
+    private class PropertyNullability : MemberNullability
     {
         private readonly PropertyDefinition _property;
         private Nullability _nullability;
@@ -314,14 +319,14 @@ internal static class ExplicitMode
                 if (declaringType.FindExplicitInterfaceImplementation(interfaceProperty) != null)
                     continue;
 
-                var interfaceNullability = _propertyCache.GetOrCreate(interfaceProperty);
+                var interfaceNullability = _memberNullabilityCache.GetOrCreate(interfaceProperty);
 
                 MergeFrom(interfaceNullability);
             }
 
             foreach (var overrideProperty in _property.EnumerateOverrides())
             {
-                var overrideNullability = _propertyCache.GetOrCreate(overrideProperty);
+                var overrideNullability = _memberNullabilityCache.GetOrCreate(overrideProperty);
 
                 MergeFrom(overrideNullability);
             }
@@ -333,58 +338,68 @@ internal static class ExplicitMode
         }
     }
 
-    private class MethodNullabilityCache
+    private class MemberNullabilityCache
     {
-        private readonly Dictionary<string, Dictionary<string, MethodNullability>> _cache = new Dictionary<string, Dictionary<string, MethodNullability>>();
+        private readonly Dictionary<string, AssemblyCache> _cache = new Dictionary<string, AssemblyCache>();
 
         public MethodNullability GetOrCreate(MethodDefinition method)
         {
-            var module = method.Module;
+            return (MethodNullability)GetOrCreate(method, () => new MethodNullability(method));
+        }
+
+        public PropertyNullability GetOrCreate(PropertyDefinition property)
+        {
+            return (PropertyNullability)GetOrCreate(property, () => new PropertyNullability(property));
+        }
+
+        private MemberNullability GetOrCreate(MemberReference member, Func<MemberNullability> createNew)
+        {
+            var module = member.Module;
             var assemblyName = module.Assembly.Name.Name;
+
+            var key = DocCommentId.GetDocCommentId((IMemberDefinition)member);
 
             if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
             {
-                assmblyCache = new Dictionary<string, MethodNullability>();
+                var moduleFileName = module.FileName;
+
+                assmblyCache = new AssemblyCache(moduleFileName);
                 _cache.Add(assemblyName, assmblyCache);
             }
-
-            var key = DocCommentId.GetDocCommentId(method);
 
             if (assmblyCache.TryGetValue(key, out var value))
                 return value;
 
-            value = new MethodNullability(method);
+            value = createNew();
 
             assmblyCache.Add(key, value);
 
             return value;
         }
-    }
 
-    private class PropertyNullabilityCache
-    {
-        private readonly Dictionary<string, Dictionary<string, PropertyNullability>> _cache = new Dictionary<string, Dictionary<string, PropertyNullability>>();
-
-        public PropertyNullability GetOrCreate(PropertyDefinition property)
+        private class AssemblyCache
         {
-            var assemblyName = property.Module.Assembly.Name.Name;
+            private Dictionary<string, MemberNullability> _cache = new Dictionary<string, MemberNullability>();
 
-            if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
+            public AssemblyCache(string moduleFileName)
             {
-                assmblyCache = new Dictionary<string, PropertyNullability>();
-                _cache.Add(assemblyName, assmblyCache);
+                var externalAnnotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
+
+                if (File.Exists(externalAnnotations))
+                {
+
+                }
             }
 
-            var key = DocCommentId.GetDocCommentId(property);
+            public void Add(string key, MemberNullability value)
+            {
+                _cache.Add(key, value);
+            }
 
-            if (assmblyCache.TryGetValue(key, out var value))
-                return value;
-
-            value = new PropertyNullability(property);
-
-            assmblyCache.Add(key, value);
-
-            return value;
+            public bool TryGetValue(string key, out MemberNullability value)
+            {
+                return _cache.TryGetValue(key, out value);
+            }
         }
     }
 }
