@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
@@ -11,7 +10,17 @@
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="AssemblyWithExternalAnnotations.ExternalAnnotations.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AssemblyWithExternalAnnotations.ExternalAnnotations.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="2.2.0" />
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

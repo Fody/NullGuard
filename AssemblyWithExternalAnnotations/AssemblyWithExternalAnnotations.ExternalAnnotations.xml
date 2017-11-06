@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assembly name="AssemblyWithExternalAnnotations">
+  <member name="M:AssemblyWithExternalAnnotations.BaseClassWithAttributes.MethodWithNotNullParameter(System.String,System.String)">
+    <parameter name="arg">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:AssemblyWithExternalAnnotations.BaseClassWithAttributes.MethodWithNotNullReturnValue(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="P:AssemblyWithExternalAnnotations.BaseClassWithAttributes.NotNullProperty">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="M:AssemblyWithExternalAnnotations.BaseInterfaceWithAttributes.MethodWithNotNullParameter(System.String,System.String)">
+    <parameter name="arg">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:AssemblyWithExternalAnnotations.BaseInterfaceWithAttributes.MethodWithNotNullReturnValue(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="P:AssemblyWithExternalAnnotations.BaseInterfaceWithAttributes.NotNullProperty">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="M:AssemblyWithExternalAnnotations.InterfaceWithAttributes.MethodWithNotNullParameter(System.String,System.String)">
+    <parameter name="arg">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:AssemblyWithExternalAnnotations.InterfaceWithAttributes.MethodWithNotNullReturnValue(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="P:AssemblyWithExternalAnnotations.InterfaceWithAttributes.NotNullProperty">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+</assembly>
