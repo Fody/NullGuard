@@ -413,9 +413,7 @@ internal static class ExplicitMode
 
             if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
             {
-                var moduleFileName = module.FileName;
-
-                assmblyCache = new AssemblyCache(moduleFileName);
+                assmblyCache = new AssemblyCache(module.FileName);
                 _cache.Add(assemblyName, assmblyCache);
             }
 
@@ -431,47 +429,19 @@ internal static class ExplicitMode
             {
                 var externalAnnotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
 
-                if (File.Exists(externalAnnotations))
+                if (!File.Exists(externalAnnotations))
+                    return;
+
+                try
                 {
                     _externalAnnotations = XDocument.Load(externalAnnotations)
                         .Element("assembly")?
                         .Elements("member")
                         .ToDictionary(member => member.Attribute("name")?.Value);
-
-                    //if (memberName.Length > 2 && memberName[1] == ':')
-                            //{
-                            //    memberType = memberName[0].ToString();
-                            //    memberName = memberName.Substring(2);
-                            //}
-
-                            //MemberNullabilityInfo memberInfo = result.ContainsKey(memberName)
-                            //    ? result[memberName]
-                            //    : new MemberNullabilityInfo(memberType);
-
-                            //foreach (XElement childElement in memberElement.Elements())
-                            //{
-                            //    if (childElement.Name == "parameter")
-                            //    {
-                            //        string parameterName = childElement.Attribute("name")?.Value;
-                            //        if (parameterName != null)
-                            //        {
-                            //            foreach (XElement attributeElement in childElement.Elements("attribute"))
-                            //            {
-                            //                if (ElementHasNullabilityDefinition(attributeElement))
-                            //                {
-                            //                    memberInfo.ParametersNullability[parameterName] = true;
-                            //                }
-                            //            }
-                            //        }
-                            //    }
-                            //    if (childElement.Name == "attribute")
-                            //    {
-                            //        if (ElementHasNullabilityDefinition(childElement))
-                            //        {
-                            //            memberInfo.HasNullabilityDefined = true;
-                            //        }
-                            //    }
-                            //}
+                }
+                catch
+                {
+                    // invalid file, ignore (TODO: log something?)
                 }
             }
 
