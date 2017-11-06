@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
@@ -166,6 +167,21 @@ internal static class ExplicitMode
         }
     }
 
+    private static Nullability GetNullabilityAnnotation(this XElement element)
+    {
+        var value = element.Attribute("ctor")?.Value;
+        if (value == null)
+            return Nullability.Undefined;
+
+        if (value.EndsWith(".NotNullAttribute.#ctor"))
+            return Nullability.NotNull;
+
+        if (value.EndsWith(".CanBeNullAttribute.#ctor"))
+            return Nullability.CanBeNull;
+
+        return Nullability.Undefined;
+    }
+
     private class MemberNullability
     {
     }
@@ -177,11 +193,42 @@ internal static class ExplicitMode
         private Nullability _returnValue;
         private bool _isInheritanceResolved;
 
-        public MethodNullability(MethodDefinition method)
+        public MethodNullability(MethodDefinition method, XElement externalAnnotation)
         {
             _method = method;
             _parameters = method.Parameters.Select(p => p.GetNullability()).ToArray();
             _returnValue = method.HasNotNullAttribute() ? Nullability.NotNull : Nullability.Undefined;
+
+            if (externalAnnotation == null)
+                return;
+
+            if (_returnValue == Nullability.Undefined)
+                _returnValue = externalAnnotation.Element("attribute")?.GetNullabilityAnnotation() ?? Nullability.Undefined;
+
+            foreach (var childElement in externalAnnotation.Elements("parameter"))
+            {
+                var parameterName = childElement.Attribute("name")?.Value;
+                if (parameterName == null)
+                    continue;
+
+                var parameter = method.Parameters.FirstOrDefault(p => p.Name == parameterName);
+                if (parameter == null)
+                    continue;
+
+                var parameterIndex = parameter.Index;
+                if (_parameters[parameterIndex] != Nullability.Undefined)
+                    continue;
+
+                foreach (var attributeElement in childElement.Elements("attribute"))
+                {
+                    var parameterNullability = attributeElement.GetNullabilityAnnotation();
+                    if (parameterNullability == Nullability.Undefined)
+                        continue;
+
+                    _parameters[parameterIndex] = parameterNullability;
+                    break;
+                }
+            }
         }
 
         public Nullability ReturnValue
@@ -214,7 +261,7 @@ internal static class ExplicitMode
             if (_returnValue == Nullability.Undefined)
                 _returnValue = baseMethod._returnValue;
 
-            for (int i = 0; i < Parameters.Count; i++)
+            for (var i = 0; i < Parameters.Count; i++)
             {
                 if (_parameters[i] == Nullability.Undefined)
                 {
@@ -270,10 +317,15 @@ internal static class ExplicitMode
         private Nullability _nullability;
         private bool _isInheritanceResolved;
 
-        public PropertyNullability(PropertyDefinition property)
+        public PropertyNullability(PropertyDefinition property, XElement externalAnnotation)
         {
             _property = property;
             _nullability = property.HasNotNullAttribute() ? Nullability.NotNull : Nullability.Undefined;
+
+            if ((_nullability != Nullability.Undefined) || (externalAnnotation == null))
+                return;
+
+            _nullability = externalAnnotation.Element("attribute")?.GetNullabilityAnnotation() ?? Nullability.CanBeNull;
         }
 
         public Nullability Nullability
@@ -344,15 +396,15 @@ internal static class ExplicitMode
 
         public MethodNullability GetOrCreate(MethodDefinition method)
         {
-            return (MethodNullability)GetOrCreate(method, () => new MethodNullability(method));
+            return (MethodNullability)GetOrCreate(method, externalAnnotation => new MethodNullability(method, externalAnnotation));
         }
 
         public PropertyNullability GetOrCreate(PropertyDefinition property)
         {
-            return (PropertyNullability)GetOrCreate(property, () => new PropertyNullability(property));
+            return (PropertyNullability)GetOrCreate(property, externalAnnotation => new PropertyNullability(property, externalAnnotation));
         }
 
-        private MemberNullability GetOrCreate(MemberReference member, Func<MemberNullability> createNew)
+        private MemberNullability GetOrCreate(MemberReference member, Func<XElement, MemberNullability> createNew)
         {
             var module = member.Module;
             var assemblyName = module.Assembly.Name.Name;
@@ -367,19 +419,13 @@ internal static class ExplicitMode
                 _cache.Add(assemblyName, assmblyCache);
             }
 
-            if (assmblyCache.TryGetValue(key, out var value))
-                return value;
-
-            value = createNew();
-
-            assmblyCache.Add(key, value);
-
-            return value;
+            return assmblyCache.GetOrCreate(key, createNew);
         }
 
         private class AssemblyCache
         {
-            private Dictionary<string, MemberNullability> _cache = new Dictionary<string, MemberNullability>();
+            private readonly Dictionary<string, MemberNullability> _cache = new Dictionary<string, MemberNullability>();
+            private readonly Dictionary<string, XElement> _externalAnnotations;
 
             public AssemblyCache(string moduleFileName)
             {
@@ -387,18 +433,61 @@ internal static class ExplicitMode
 
                 if (File.Exists(externalAnnotations))
                 {
+                    _externalAnnotations = XDocument.Load(externalAnnotations)
+                        .Element("assembly")?
+                        .Elements("member")
+                        .ToDictionary(member => member.Attribute("name")?.Value);
 
+                    //if (memberName.Length > 2 && memberName[1] == ':')
+                            //{
+                            //    memberType = memberName[0].ToString();
+                            //    memberName = memberName.Substring(2);
+                            //}
+
+                            //MemberNullabilityInfo memberInfo = result.ContainsKey(memberName)
+                            //    ? result[memberName]
+                            //    : new MemberNullabilityInfo(memberType);
+
+                            //foreach (XElement childElement in memberElement.Elements())
+                            //{
+                            //    if (childElement.Name == "parameter")
+                            //    {
+                            //        string parameterName = childElement.Attribute("name")?.Value;
+                            //        if (parameterName != null)
+                            //        {
+                            //            foreach (XElement attributeElement in childElement.Elements("attribute"))
+                            //            {
+                            //                if (ElementHasNullabilityDefinition(attributeElement))
+                            //                {
+                            //                    memberInfo.ParametersNullability[parameterName] = true;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //    if (childElement.Name == "attribute")
+                            //    {
+                            //        if (ElementHasNullabilityDefinition(childElement))
+                            //        {
+                            //            memberInfo.HasNullabilityDefined = true;
+                            //        }
+                            //    }
+                            //}
                 }
             }
 
-            public void Add(string key, MemberNullability value)
+            public MemberNullability GetOrCreate(string key, Func<XElement, MemberNullability> createNew)
             {
-                _cache.Add(key, value);
-            }
+                if (_cache.TryGetValue(key, out var value))
+                    return value;
 
-            public bool TryGetValue(string key, out MemberNullability value)
-            {
-                return _cache.TryGetValue(key, out value);
+                XElement externalAnnotation = null;
+                _externalAnnotations?.TryGetValue(key, out externalAnnotation);
+
+                value = createNew(externalAnnotation);
+
+                _cache.Add(key, value);
+
+                return value;
             }
         }
     }
