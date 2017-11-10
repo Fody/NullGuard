@@ -41,16 +41,48 @@ public static class CecilExtensions
         return method.Parameters.Last();
     }
 
-    public static bool AllowsNull(this ICustomAttributeProvider value)
+    public static bool AllowsNull(this ParameterDefinition parameter, MethodDefinition method, NullGuardMode mode)
+    {
+        if (mode == NullGuardMode.Explicit)
+        {
+            return ExplicitMode.AllowsNull(parameter, method);
+        }
+        else
+        {
+            return parameter.ImplicitAllowsNull();
+        }
+    }
+
+    public static bool AllowsNull(this PropertyDefinition property, NullGuardMode mode)
+    {
+        if (mode == NullGuardMode.Explicit)
+        {
+            return ExplicitMode.AllowsNull(property);
+        }
+        else
+        {
+            return property.ImplicitAllowsNull();
+        }
+    }
+
+    public static bool ImplicitAllowsNull(this ICustomAttributeProvider value)
     {
         return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
-    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition)
+    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, NullGuardMode mode)
     {
-        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
-               // ReSharper uses a *method* attribute for CanBeNull for the return value
-               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        if (mode == NullGuardMode.Explicit)
+        {
+            // ReSharper uses a *method* attribute for NotNull for the return value
+            return ExplicitMode.AllowsNull(methodDefinition);
+        }
+        else
+        {
+            return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+                   // ReSharper uses a *method* attribute for CanBeNull for the return value
+                   methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        }
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
@@ -72,9 +104,9 @@ public static class CecilExtensions
         }
     }
 
-    public static bool MayNotBeNull(this ParameterDefinition arg)
+    public static bool MayNotBeNull(this ParameterDefinition arg, MethodDefinition method, NullGuardMode mode)
     {
-        return !arg.AllowsNull() && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
+        return !arg.AllowsNull(method, mode) && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
 
     static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)

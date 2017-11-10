@@ -1,0 +1,3 @@
+﻿Errors: [0] = Method 'System.Void ClassWithBadAttributes::MethodWithNoNullCheckOnParam(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.
+Errors: [1] = Method 'System.Void ClassWithBadAttributes::set_PropertyWithNoNullCheckOnSet(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.
+Errors: [2] = Method 'System.Void InterfaceBadAttributes::set_PropertyWithNoNullCheckOnSet(System.String)' is abstract but has a [AllowNullAttribute]. Remove this attribute.

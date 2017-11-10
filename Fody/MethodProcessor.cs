@@ -72,7 +72,7 @@ public partial class ModuleWeaver
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue() &&
+                !method.AllowsNullReturnValue(nullGuardMode) &&
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
@@ -91,7 +91,7 @@ public partial class ModuleWeaver
 
         foreach (var parameter in method.Parameters.Reverse())
         {
-            if (!parameter.MayNotBeNull())
+            if (!parameter.MayNotBeNull(method, nullGuardMode))
             {
                 continue;
             }
@@ -147,7 +147,7 @@ public partial class ModuleWeaver
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue() &&
+                !method.AllowsNullReturnValue(nullGuardMode) &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)
@@ -166,7 +166,7 @@ public partial class ModuleWeaver
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
                         parameter.ParameterType.IsRefType() &&
-                        !parameter.AllowsNull())
+                        !parameter.AllowsNull(method, nullGuardMode))
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 

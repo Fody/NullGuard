@@ -12,7 +12,8 @@ build:
   project: NullGuard.sln
 
 test_script:
-  - nunit3-console Tests\bin\Release\Tests.dll --x86 --result=myresults.xml;format=AppVeyor
+  - nunit3-console Tests\bin\Release\net461\Tests.dll --x86 --result=myresults.xml;format=AppVeyor
+  - nunit3-console TestsExplicit\bin\Release\net461\TestsExplicit.dll --x86 --result=myresults.xml;format=AppVeyor
 
 artifacts:
   - path: NuGetBuild\*.nupkg

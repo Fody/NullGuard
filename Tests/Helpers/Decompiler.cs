@@ -22,7 +22,7 @@ public static class Decompiler
         };
         using (var process = Process.Start(startInfo))
         {
-            process.WaitForExit(10000);
+            // process.WaitForExit(10000);
 
             var stringBuilder = new StringBuilder();
             string line;
