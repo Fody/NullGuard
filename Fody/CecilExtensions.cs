@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
 
 public static class CecilExtensions
 {
@@ -161,15 +163,44 @@ public static class CecilExtensions
         return arg.IsPublic || arg.IsNestedPublic && arg.DeclaringType.IsPublicOrNestedPublic();
     }
 
-    public static bool IsExplicitInterfaceMethod(this MethodDefinition method)
+    public static bool IsOverrideOrImplementationOfPublicMember(this MethodDefinition member)
     {
-        return method.IsPrivate &&
-            method.HasOverrides &&
-            method.Overrides.Any(o => o.DeclaringType.Resolve().IsInterface);
+        return member.EnumerateOverridesAndImplementations().Any(m => m.IsPublicVisible());
+    }
+
+    private static bool IsPublicVisible(this MethodDefinition member)
+    {
+        var type = member.DeclaringType.Resolve();
+
+        if (!type.IsPublicOrNestedPublic())
+            return false;
+
+        return type.IsInterface || member.IsPublic;
     }
 
     public static AssemblyDefinition Resolve(this IAssemblyResolver assemblyResolver, string assemblyName)
     {
         return assemblyResolver.Resolve(new AssemblyNameReference(assemblyName, null));
+    }
+
+    public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    {
+        var index = 0;
+        foreach (var item in source)
+        {
+            if (predicate(item))
+                return index;
+            index++;
+        }
+
+        return -1;
+    }
+
+    public static void AddRange<T>(this IList<T> collection, IEnumerable<T> values)
+    {
+        foreach (var value in values)
+        {
+            collection.Add(value);
+        }
     }
 }

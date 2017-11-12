@@ -51,19 +51,17 @@ public partial class ModuleWeaver
             return;
         }
 
-        if (property.GetMethod?.Body != null)
+        var getMethod = property.GetMethod;
+        if (getMethod?.Body != null)
         {
-            var getMethod = property.GetMethod;
-
             var doc = getMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
 
             getMethod.Body.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
-                property.GetMethod.IsPublic &&
-                property.DeclaringType.IsPublicOrNestedPublic()) &&
-                !property.GetMethod.MethodReturnType.ImplicitAllowsNull()
-               )
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) 
+                || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) 
+                || getMethod.IsOverrideOrImplementationOfPublicMember())
+                && !getMethod.MethodReturnType.ImplicitAllowsNull())
             {
                 InjectPropertyGetterGuard(getMethod, doc, property);
             }
@@ -72,19 +70,20 @@ public partial class ModuleWeaver
             getMethod.Body.OptimizeMacros();
         }
 
-        if (property.SetMethod?.Body != null)
+        var setMethod = property.SetMethod;
+        if (setMethod?.Body != null)
         {
-            var setBody = property.SetMethod.Body;
+            var setBody = setMethod.Body;
 
-            var doc = property.SetMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
+            var doc = setMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
 
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
-                property.SetMethod.IsPublic &&
-                property.DeclaringType.IsPublicOrNestedPublic())
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) 
+                || (setMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) 
+                || setMethod.IsOverrideOrImplementationOfPublicMember())
             {
-                InjectPropertySetterGuard(property.SetMethod, doc, property);
+                InjectPropertySetterGuard(setMethod, doc, property);
             }
 
             setBody.InitLocals = true;

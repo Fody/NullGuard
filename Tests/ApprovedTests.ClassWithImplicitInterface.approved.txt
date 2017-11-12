@@ -1,0 +1,135 @@
+﻿.class public auto ansi beforefieldinit ClassWithImplicitInterface
+       extends [mscorlib]System.Object
+       implements class [mscorlib]System.IComparable`1<string>
+{
+  .class interface abstract auto ansi nested private IPrivate
+  {
+    .method public hidebysig newslot abstract virtual 
+            instance int32  CompareTo(string other) cil managed
+    {
+    } // end of method IPrivate::CompareTo
+  } 
+  .class auto ansi nested private beforefieldinit ClassWithImplicitPrivateInterface
+         extends [mscorlib]System.Object
+         implements ClassWithImplicitInterface/IPrivate
+  {
+    .method public hidebysig newslot virtual final 
+            instance int32  CompareTo(string other1) cil managed
+    {
+      // Code size       2 (0x2)
+      .maxstack  8
+      .language '{3F5162F8-07C6-11D3-9053-00C04FA302A1}', '{994B45C4-E6E9-11D2-903F-00C04FA302A1}', '{5A869D0B-6611-11D3-BD2A-0000F80849BD}'
+//000031:             return 0;
+      IL_0000:  ldc.i4.0
+      IL_0001:  ret
+    } // end of method ClassWithImplicitPrivateInterface::CompareTo
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  8
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method ClassWithImplicitPrivateInterface::.ctor
+  } 
+  .class auto ansi nested private beforefieldinit ClassWithImplicitPublicInterface
+         extends [mscorlib]System.Object
+         implements class [mscorlib]System.IComparable`1<string>
+  {
+    .method public hidebysig newslot virtual final 
+            instance int32  CompareTo(string other1) cil managed
+    {
+      // Code size       21 (0x15)
+      .maxstack  2
+//000032:         }
+//000033:     }
+//000034: 
+//000035:     private class ClassWithImplicitPublicInterface : IComparable<string>
+//000036:     {
+//000037:         public int CompareTo(string other1)
+//000038:         {
+//000039:             return 0;
+//000040:         }
+//000041:     }
+//000042: }
+      IL_0000:  ldarg.1
+      IL_0001:  brtrue.s   IL_0013
+      IL_0003:  ldstr      "other1"
+      IL_0008:  ldstr      "[NullGuard] other1 is null."
+      IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                       string)
+      IL_0012:  throw
+//000039:             return 0;
+      IL_0013:  ldc.i4.0
+      IL_0014:  ret
+    } // end of method ClassWithImplicitPublicInterface::CompareTo
+    .method public hidebysig specialname rtspecialname 
+            instance void  .ctor() cil managed
+    {
+      // Code size       7 (0x7)
+      .maxstack  8
+      IL_0000:  ldarg.0
+      IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+      IL_0006:  ret
+    } // end of method ClassWithImplicitPublicInterface::.ctor
+  } 
+  .method public hidebysig newslot virtual final 
+          instance int32  CompareTo(string other) cil managed
+  {
+    // Code size       21 (0x15)
+    .maxstack  2
+//000040:         }
+//000041:     }
+//000042: }
+    IL_0000:  ldarg.1
+    IL_0001:  brtrue.s   IL_0013
+    IL_0003:  ldstr      "other"
+    IL_0008:  ldstr      "[NullGuard] other is null."
+    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+                                                                                     string)
+    IL_0012:  throw
+//000009:         return 0;
+    IL_0013:  ldc.i4.0
+    IL_0014:  ret
+  } 
+  .method public hidebysig instance int32 
+          CallInteralClassWithPrivateInterface(string other) cil managed
+  {
+    // Code size       12 (0xc)
+    .maxstack  2
+//000010:     }
+//000011: 
+//000012:     public int CallInteralClassWithPrivateInterface([AllowNull] string other)
+//000013:     {
+//000014:         return new ClassWithImplicitPrivateInterface().CompareTo(other);
+    IL_0000:  newobj     instance void ClassWithImplicitInterface/ClassWithImplicitPrivateInterface::.ctor()
+    IL_0005:  ldarg.1
+    IL_0006:  call       instance int32 ClassWithImplicitInterface/ClassWithImplicitPrivateInterface::CompareTo(string)
+    IL_000b:  ret
+  } 
+  .method public hidebysig instance int32 
+          CallInteralClassWithPublicInterface(string other) cil managed
+  {
+    // Code size       12 (0xc)
+    .maxstack  2
+//000015:     }
+//000016: 
+//000017:     public int CallInteralClassWithPublicInterface([AllowNull] string other)
+//000018:     {
+//000019:         return new ClassWithImplicitPublicInterface().CompareTo(other);
+    IL_0000:  newobj     instance void ClassWithImplicitInterface/ClassWithImplicitPublicInterface::.ctor()
+    IL_0005:  ldarg.1
+    IL_0006:  call       instance int32 ClassWithImplicitInterface/ClassWithImplicitPublicInterface::CompareTo(string)
+    IL_000b:  ret
+  } 
+  .method public hidebysig specialname rtspecialname 
+          instance void  .ctor() cil managed
+  {
+    // Code size       7 (0x7)
+    .maxstack  1
+    IL_0000:  ldarg.0
+    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+    IL_0006:  ret
+  } 
+}
