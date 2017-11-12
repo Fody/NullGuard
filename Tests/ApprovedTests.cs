@@ -80,6 +80,18 @@ public class ApprovedTests
     }
 
     [Test]
+    public void ClassWithImplicitInterface()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
+    }
+
+    [Test]
+    public void ClassWithExplicitInterface()
+    {
+        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
+    }
+
+    [Test]
     public void InfosList()
     {
         Approvals.VerifyAll(AssemblyWeaver.Infos.OrderBy(e => e), "Infos: ");

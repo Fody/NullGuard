@@ -19,6 +19,49 @@ public class RewritingMethods
     }
 
     [Test]
+    public void RequiresNonNullArgumentForInternalClassWithExplicitPublicInterface()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
+        var sample = (dynamic)Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInteralClassWithPublicInterface(null));
+        Approvals.Verify(exception.Message);
+    }
+
+    [Test]
+    public void AllowsNullForInternalClassWithExplicitPrivateInterface()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
+        var sample = (dynamic)Activator.CreateInstance(type);
+        Assert.DoesNotThrow(() => sample.CallInteralClassWithPrivateInterface(null));
+    }
+
+    [Test]
+    public void RequiresNonNullArgumentForImplicitInterface()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
+        var sample = (IComparable<string>)Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
+        Approvals.Verify(exception.Message);
+    }
+
+    [Test]
+    public void RequiresNonNullArgumentForInternalClassWithImplicitPublicInterface()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
+        var sample = (dynamic)Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInteralClassWithPublicInterface(null));
+        Approvals.Verify(exception.Message);
+    }
+
+    [Test]
+    public void AllowsNullForInternalClassWithImplicitPrivateInterface()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
+        var sample = (dynamic)Activator.CreateInstance(type);
+        Assert.DoesNotThrow(() => sample.CallInteralClassWithPrivateInterface(null));
+    }
+
+    [Test]
     public void RequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");

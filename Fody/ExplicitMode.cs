@@ -6,9 +6,8 @@ using System.Xml.Linq;
 
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
-using Mono.Collections.Generic;
 
-internal static class ExplicitMode
+public static class ExplicitMode
 {
     private const string NotNullAttributeTypeName = "NotNullAttribute";
     private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
@@ -99,40 +98,226 @@ internal static class ExplicitMode
         return value?.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName) ?? false;
     }
 
-    private static IEnumerable<TypeDefinition> GetInterfaces(this TypeDefinition typeDefinition)
+    public static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)
     {
-        if (typeDefinition.IsInterface)
-            yield return typeDefinition;
-
-        foreach (var interfaceType in typeDefinition.Interfaces.Select(i => i.InterfaceType.Resolve()).SelectMany(i => i.GetInterfaces()))
+        foreach (var implementation in typeDefinition.Interfaces)
         {
-            yield return interfaceType;
+            var interfaceType = implementation.InterfaceType;
+
+            yield return interfaceType.ResolveGenericArguments(typeReference);
         }
     }
 
-    private static MethodDefinition Find(this Collection<MethodDefinition> methods, MethodReference reference)
+    public static IEnumerable<MethodDefinition> EnumerateOverridesAndImplementations(this MethodDefinition method)
     {
-        return MetadataResolver.GetMethod(methods, reference);
+        if (!method.HasThis)
+            yield break;
+
+        if (method.IsPrivate)
+        {
+            if (method.HasOverrides)
+            {
+                foreach (var methodOverride in method.Overrides)
+                {
+                    yield return methodOverride.Resolve();
+                }
+            }
+
+            yield break;
+        }
+
+        var declaringType = method.DeclaringType;
+
+        foreach (var interfaceType in declaringType.EnumerateInterfaces(declaringType))
+        {
+            var interfaceMethod = interfaceType.Find(method);
+            if (interfaceMethod == null)
+                continue;
+
+            if (declaringType.HasExplicitInterfaceImplementation(method))
+                continue;
+
+            yield return interfaceMethod;
+        }
+
+        var baseMethod = method.FindBase()?.Resolve();
+        if (baseMethod != null)
+        {
+            yield return baseMethod;
+
+            foreach (var baseImplementation in baseMethod.EnumerateOverridesAndImplementations())
+            {
+                yield return baseImplementation;
+            }
+        }
     }
 
-    private static PropertyDefinition Find(this ICollection<PropertyDefinition> properties, PropertyReference reference)
+    public static IEnumerable<PropertyDefinition> EnumerateOverridesAndImplementations(this PropertyDefinition property)
     {
-        return properties.FirstOrDefault(property => property.Name == reference.Name
-            && TypeReferenceEqualityComparer.Default.Equals(property.PropertyType, reference.PropertyType)
-            && property.Parameters.Select(parameter => parameter.ParameterType.Resolve()).SequenceEqual(reference.Parameters.Select(parameter => parameter.ParameterType.Resolve()), TypeReferenceEqualityComparer.Default));
+        if (!property.HasThis)
+            yield break;
+
+        var propertyOverrides = property.EnumerateOverrides().ToArray();
+        if (propertyOverrides.Any())
+        {
+            foreach (var propertyOverride in propertyOverrides)
+            {
+                yield return propertyOverride;
+            }
+
+            yield break;
+        }
+
+        var declaringType = property.GetMethod?.DeclaringType;
+        if (declaringType != null)
+        {
+            foreach (var interfaceType in declaringType.EnumerateInterfaces(declaringType))
+            {
+                var interfaceProperty = interfaceType.Find(property);
+                if (interfaceProperty == null)
+                    continue;
+
+                if (declaringType.HasExplicitInterfaceImplementation(property))
+                    continue;
+
+                yield return interfaceProperty;
+            }
+        }
+
+        var baseProperty = property.GetBaseProperty();
+        if (baseProperty != null)
+        {
+            yield return baseProperty;
+
+            foreach (var baseImplementation in baseProperty.EnumerateOverridesAndImplementations())
+            {
+                yield return baseImplementation;
+            }
+        }
     }
 
-    private static MethodDefinition FindExplicitInterfaceImplementation(this TypeDefinition type, MethodDefinition interfaceMethod)
+    public static MethodReference FindBase(this MethodDefinition method)
     {
-        return type.Methods.FirstOrDefault(m => m.EnumerateOverrides().Any(o => MemberReferenceEqualityComparer.Default.Equals(o, interfaceMethod)));
+        if (!method.IsVirtual || method.IsNewSlot)
+            return null;
+
+        TypeReference type = method.DeclaringType;
+
+        for (type = type.Resolve().BaseType?.ResolveGenericArguments(type); type != null; type = type.Resolve().BaseType?.ResolveGenericArguments(type))
+        {
+            var matchingMethod = type.Find(method);
+            if (matchingMethod != null)
+                return matchingMethod;
+        }
+
+        return null;
     }
 
-    private static PropertyDefinition FindExplicitInterfaceImplementation(this TypeDefinition type, PropertyDefinition interfaceProperty)
+    public static MethodDefinition Find(this TypeReference declaringType, MethodReference reference)
     {
-        return type.Properties.FirstOrDefault(p => p.EnumerateOverrides().Any(o => MemberReferenceEqualityComparer.Default.Equals(o, interfaceProperty)));
+        return declaringType.Resolve().Methods.FirstOrDefault(method => HasSameSignature(declaringType, method, reference.DeclaringType, reference.Resolve()));
     }
 
-    private static IEnumerable<MethodDefinition> EnumerateOverrides(this MethodDefinition method)
+    public static PropertyDefinition Find(this TypeReference declaringType, PropertyReference reference)
+    {
+        return declaringType.Resolve().Properties.FirstOrDefault(property => HasSameSignature(declaringType, property, reference.DeclaringType, reference.Resolve()));
+    }
+
+    private static bool HasSameSignature(TypeReference declaringType1, MethodDefinition method1, TypeReference declaringType2, MethodDefinition method2)
+    {
+        return method1.Name == method2.Name
+               && TypeReferenceEqualityComparer.Default.Equals(method1.ReturnType.ResolveGenericParameter(declaringType1), method2.ReturnType.ResolveGenericParameter(declaringType2))
+               && method1.GenericParameters.Count == method2.GenericParameters.Count
+               && AreaAllParametersOfSameType(declaringType1, method1, declaringType2, method2);
+    }
+
+    private static bool HasSameSignature(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
+    {
+        return property1.Name == property2.Name
+               && TypeReferenceEqualityComparer.Default.Equals(property1.PropertyType.ResolveGenericParameter(declaringType1), property2.PropertyType.ResolveGenericParameter(declaringType2))
+               && AreaAllParametersOfSameType(declaringType1, property1, declaringType2, property2);
+    }
+
+    private static bool AreaAllParametersOfSameType(TypeReference declaringType1, IMethodSignature method1, TypeReference declaringType2, IMethodSignature method2)
+    {
+        if (!method2.HasParameters)
+            return !method1.HasParameters;
+
+        if (!method1.HasParameters)
+            return false;
+
+        if (method1.Parameters.Count != method2.Parameters.Count)
+            return false;
+
+        for (var i = 0; i < method1.Parameters.Count; i++)
+        {
+            var p1 = method1.Parameters[i].ParameterType.ResolveGenericParameter(declaringType1);
+
+            var p2 = method2.Parameters[i].ParameterType.ResolveGenericParameter(declaringType2);
+
+            if (!TypeReferenceEqualityComparer.Default.Equals(p1, p2))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static bool AreaAllParametersOfSameType(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
+    {
+        if (!property2.HasParameters)
+            return !property1.HasParameters;
+
+        if (!property1.HasParameters)
+            return false;
+
+        if (property1.Parameters.Count != property2.Parameters.Count)
+            return false;
+
+        for (var i = 0; i < property1.Parameters.Count; i++)
+        {
+            var p1 = property1.Parameters[i].ParameterType.ResolveGenericParameter(declaringType1);
+
+            var p2 = property2.Parameters[i].ParameterType.ResolveGenericParameter(declaringType2);
+
+            if (!TypeReferenceEqualityComparer.Default.Equals(p1, p2))
+                return false;
+        }
+
+        return true;
+    }
+
+    public static bool HasExplicitInterfaceImplementation(this TypeDefinition type, MethodDefinition method)
+    {
+        if (method == null)
+            return false;
+
+        return method.DeclaringType.Methods
+            .Where(m => m != method && m.HasOverrides)
+            .SelectMany(m => m.Overrides)
+            .Any(methodReference => HasSameSignature(type, method, methodReference.DeclaringType, methodReference.Resolve()));
+    }
+
+    public static bool HasExplicitInterfaceImplementation(this TypeDefinition type, PropertyDefinition property)
+    {
+        return type.HasExplicitInterfaceImplementation(property.GetMethod);
+    }
+
+    private static PropertyDefinition GetBaseProperty(this PropertyDefinition property)
+    {
+        var getMethod = property.GetMethod;
+        var getMethodBase = getMethod?.FindBase();
+
+        if (getMethodBase != null)
+        {
+            var baseProperty = getMethodBase.DeclaringType.Resolve().Properties.FirstOrDefault(p => p.GetMethod == getMethodBase);
+            if (baseProperty != null)
+                return baseProperty;
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<MethodReference> EnumerateOverrides(this MethodDefinition method)
     {
         if (method == null)
             yield break;
@@ -142,14 +327,9 @@ internal static class ExplicitMode
             // Explicit interface implementations...
             foreach (var reference in method.Overrides)
             {
-                yield return reference.Resolve();
+                yield return reference;
             }
         }
-
-        // override of base class method...
-        var baseMethod = method.GetBaseMethod();
-        if (baseMethod != method)
-            yield return baseMethod;
     }
 
     private static IEnumerable<PropertyDefinition> EnumerateOverrides(this PropertyDefinition property)
@@ -157,14 +337,41 @@ internal static class ExplicitMode
         var getMethod = property.GetMethod;
         foreach (var getOverride in getMethod.EnumerateOverrides())
         {
-            yield return getOverride.DeclaringType.Properties.FirstOrDefault(p => p.GetMethod == getOverride);
+            var typeDefinition = getOverride.DeclaringType.Resolve();
+            var ovr = typeDefinition.Properties.FirstOrDefault(p => MemberReferenceEqualityComparer.Default.Equals(p.GetMethod, getOverride));
+            if (ovr != null)
+                yield return ovr;
+        }
+    }
+
+    private static TypeReference ResolveGenericParameter(this TypeReference parameterType, TypeReference declaringType)
+    {
+        if (parameterType.IsGenericParameter && declaringType.IsGenericInstance)
+        {
+            var parameterIndex = ((GenericParameter)parameterType).Position;
+            parameterType = ((GenericInstanceType)declaringType).GenericArguments[parameterIndex];
         }
 
-        var setMethod = property.SetMethod;
-        foreach (var setOverride in setMethod.EnumerateOverrides())
-        {
-            yield return setOverride.DeclaringType.Properties.FirstOrDefault(p => p.SetMethod == setOverride);
-        }
+        return parameterType;
+    }
+
+    private static TypeReference ResolveGenericArguments(this TypeReference baseType, TypeReference derivedType)
+    {
+        if (!baseType.IsGenericInstance)
+            return baseType;
+
+        if (!derivedType.IsGenericInstance)
+            return baseType;
+
+        var genericBase = (GenericInstanceType)baseType;
+        if (!genericBase.HasGenericArguments)
+            return baseType;
+
+        var result = new GenericInstanceType(baseType);
+
+        result.GenericArguments.AddRange(genericBase.GenericArguments.Select(arg => ResolveGenericParameter(arg, derivedType)));
+
+        return result;
     }
 
     private static Nullability GetNullabilityAnnotation(this XElement element)
@@ -280,27 +487,11 @@ internal static class ExplicitMode
             if (!_method.HasThis || !IsAnyValueUndefined)
                 return;
 
-            var declaringType = _method.DeclaringType;
-
-            foreach (var interfaceType in declaringType.GetInterfaces())
+            foreach (var method in _method.EnumerateOverridesAndImplementations())
             {
-                var interfaceMethod = interfaceType.Methods.Find(_method);
-                if (interfaceMethod == null)
-                    continue;
+                var nullability = _memberNullabilityCache.GetOrCreate(method.Resolve());
 
-                if (declaringType.FindExplicitInterfaceImplementation(interfaceMethod) != null)
-                    continue;
-
-                var interfaceNullability = _memberNullabilityCache.GetOrCreate(interfaceMethod);
-
-                MergeFrom(interfaceNullability);
-            }
-
-            foreach (var overrideMethod in _method.EnumerateOverrides())
-            {
-                var overrideNullability = _memberNullabilityCache.GetOrCreate(overrideMethod);
-
-                MergeFrom(overrideNullability);
+                MergeFrom(nullability);
             }
         }
 
@@ -360,27 +551,11 @@ internal static class ExplicitMode
             if (!_property.HasThis || !IsAnyValueUndefined)
                 return;
 
-            var declaringType = _property.DeclaringType;
-
-            foreach (var interfaceType in declaringType.GetInterfaces())
+            foreach (var property in _property.EnumerateOverridesAndImplementations())
             {
-                var interfaceProperty = interfaceType.Properties.Find(_property);
-                if (interfaceProperty == null)
-                    continue;
+                var nullability = _memberNullabilityCache.GetOrCreate(property.Resolve());
 
-                if (declaringType.FindExplicitInterfaceImplementation(interfaceProperty) != null)
-                    continue;
-
-                var interfaceNullability = _memberNullabilityCache.GetOrCreate(interfaceProperty);
-
-                MergeFrom(interfaceNullability);
-            }
-
-            foreach (var overrideProperty in _property.EnumerateOverrides())
-            {
-                var overrideNullability = _memberNullabilityCache.GetOrCreate(overrideProperty);
-
-                MergeFrom(overrideNullability);
+                MergeFrom(nullability);
             }
         }
 
