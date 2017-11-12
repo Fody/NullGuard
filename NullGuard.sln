@@ -26,9 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithAnnotations", "AssemblyWithAnnotations\AssemblyWithAnnotations.csproj", "{E6300522-9050-43C0-8B29-9993E26415FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithAnnotations", "AssemblyWithAnnotations\AssemblyWithAnnotations.csproj", "{E6300522-9050-43C0-8B29-9993E26415FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithExternalAnnotations", "AssemblyWithExternalAnnotations\AssemblyWithExternalAnnotations.csproj", "{B834F8CA-7CA6-4BBE-B54F-009F38EE9064}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyWithExternalAnnotations", "AssemblyWithExternalAnnotations\AssemblyWithExternalAnnotations.csproj", "{B834F8CA-7CA6-4BBE-B54F-009F38EE9064}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsCommon", "TestsCommon\TestsCommon.csproj", "{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,10 @@ Global
 		{B834F8CA-7CA6-4BBE-B54F-009F38EE9064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B834F8CA-7CA6-4BBE-B54F-009F38EE9064}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B834F8CA-7CA6-4BBE-B54F-009F38EE9064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
