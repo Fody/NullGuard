@@ -1,0 +1,2 @@
+﻿[NullGuard] other is null.
+Parameter name: other
