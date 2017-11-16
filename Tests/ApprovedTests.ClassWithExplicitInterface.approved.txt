@@ -51,7 +51,7 @@
 //000037:     {
 //000038:         int IComparable<string>.CompareTo(string other1)
 //000039:         {
-//000040:             return 0;
+//000040:             return 1;
 //000041:         }
 //000042:     }
 //000043: }
@@ -62,8 +62,8 @@
       IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                        string)
       IL_0012:  throw
-//000040:             return 0;
-      IL_0013:  ldc.i4.0
+//000040:             return 1;
+      IL_0013:  ldc.i4.1
       IL_0014:  ret
     } // end of method ClassWithExplicitPublicInterface::'System.IComparable<System.String>.CompareTo'
     .method public hidebysig specialname rtspecialname 
