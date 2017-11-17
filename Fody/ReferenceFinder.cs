@@ -16,7 +16,7 @@ public partial class ModuleWeaver
 
             if (assembly != null)
             {
-                types.AddRange(assembly.MainModule.Types);
+                types.AddRange(assembly.MainModule.Types.Where(type => type.IsPublic));
             }
         }
         catch (AssemblyResolutionException)
