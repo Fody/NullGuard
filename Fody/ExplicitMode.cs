@@ -10,6 +10,7 @@ using Mono.Cecil.Rocks;
 public static class ExplicitMode
 {
     private const string NotNullAttributeTypeName = "NotNullAttribute";
+    private const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
     private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     private const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
 
@@ -88,14 +89,24 @@ public static class ExplicitMode
         return Nullability.Undefined;
     }
 
+    private static bool HasNotNullAttribute(this MethodDefinition value)
+    {
+        return value.HasAttribute((value.IsAsyncStateMachine() ? ItemNotNullAttributeTypeName : NotNullAttributeTypeName));
+    }
+
     private static bool HasNotNullAttribute(this ICustomAttributeProvider value)
     {
-        return value?.CustomAttributes.Any(a => a.AttributeType.Name == NotNullAttributeTypeName) ?? false;
+        return value.HasAttribute(NotNullAttributeTypeName);
     }
 
     private static bool HasCanBeNullAttribute(this ICustomAttributeProvider value)
     {
-        return value?.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName) ?? false;
+        return value.HasAttribute(CanBeNullAttributeTypeName);
+    }
+
+    private static bool HasAttribute(this ICustomAttributeProvider value, string attributeName)
+    {
+        return value?.CustomAttributes.Any(a => a.AttributeType.Name == attributeName) ?? false;
     }
 
     public static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)

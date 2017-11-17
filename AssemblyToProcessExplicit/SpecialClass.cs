@@ -25,13 +25,12 @@ public class SpecialClass
         await Task.Run(() => Console.WriteLine(nonNullArg));
     }
 
-    [NotNull]
+    [ItemNotNull]
     public async Task<string> MethodWithReturnValueAsync(bool returnNull)
     {
         return await Task.Run(() => returnNull ? null : "");
     }
 
-    [return: AllowNull]
     public async Task<string> MethodAllowsNullReturnValueAsync()
     {
         await Task.Delay(100);
@@ -41,7 +40,6 @@ public class SpecialClass
 
 #pragma warning disable 1998
 
-    [NotNull]
     public async Task<int> NoAwaitCode()
     {
         return 42;
