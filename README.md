@@ -192,6 +192,9 @@ public class Sample
 }
 ```
 
+Inheritance of nullability is supported in explicit mode, i.e. if you implement an interface or derive from a base method with `[NotNull]` annotations, 
+null guards will be added to your implementation.
+
 You may use the `[NotNull]` attribute defined in `JetBrains.Anntotations`, or simply define your own. 
 However not referencing `JetBrains.Anntotations` will not auto-detect explicit mode, so you have to set this in the configuration
 
