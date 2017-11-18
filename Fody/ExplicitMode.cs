@@ -14,13 +14,6 @@ public static class ExplicitMode
     private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     private const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
 
-    private enum Nullability : byte
-    {
-        Undefined,
-        CanBeNull,
-        NotNull
-    }
-
     [Flags]
     private enum NullabilityAttributes
     {
@@ -63,21 +56,21 @@ public static class ExplicitMode
     {
         var nullability = _memberNullabilityCache.GetOrCreate(property);
 
-        return nullability.Nullability != Nullability.NotNull;
+        return nullability.AllowsNull;
     }
 
     public static bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
         var nullability = _memberNullabilityCache.GetOrCreate(method);
 
-        return nullability.GetParameterNullability(parameter.Index) != Nullability.NotNull;
+        return nullability.ParameterAllowsNull(parameter.Index);
     }
 
     public static bool AllowsNull(MethodDefinition method)
     {
         var nullability = _memberNullabilityCache.GetOrCreate(method);
 
-        return nullability.ReturnValue != Nullability.NotNull;
+        return nullability.ReturnValueAllowsNull;
     }
 
     private static NullabilityAttributes GetNullabilityAttributes(this ICustomAttributeProvider value)
@@ -415,20 +408,20 @@ public static class ExplicitMode
     private class MethodNullability : MemberNullability
     {
         private readonly MethodDefinition _method;
-        private readonly NullabilityAttributes[] _parameters;
-        private NullabilityAttributes _returnValue;
+        private readonly NullabilityAttributes[] _parameterAttributes;
+        private NullabilityAttributes _returnValueAttributes;
         private bool _isInheritanceResolved;
 
         public MethodNullability(MethodDefinition method, XElement externalAnnotation)
         {
             _method = method;
-            _parameters = method.Parameters.Select(GetNullabilityAttributes).ToArray();
-            _returnValue = method.GetNullabilityAttributes();
+            _parameterAttributes = method.Parameters.Select(GetNullabilityAttributes).ToArray();
+            _returnValueAttributes = method.GetNullabilityAttributes();
 
             if (externalAnnotation == null)
                 return;
 
-            _returnValue |= externalAnnotation.GetNullabilityAttributes();
+            _returnValueAttributes |= externalAnnotation.GetNullabilityAttributes();
 
             foreach (var childElement in externalAnnotation.Elements("parameter"))
             {
@@ -441,29 +434,33 @@ public static class ExplicitMode
                     continue;
 
                 var parameterIndex = parameter.Index;
-                _parameters[parameterIndex] |= childElement.GetNullabilityAttributes();
+                _parameterAttributes[parameterIndex] |= childElement.GetNullabilityAttributes();
             }
         }
 
-        public Nullability ReturnValue
+        public bool ReturnValueAllowsNull
         {
             get
             {
                 ResolveInheritance();
 
-                var value = _method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
+                var effeciveAttribute = _method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
 
-                return _returnValue.HasFlag(value) ? Nullability.NotNull : Nullability.CanBeNull;
+                return !_returnValueAttributes.HasFlag(effeciveAttribute);
             }
         }
 
-        public Nullability GetParameterNullability(int index)
+        public bool ParameterAllowsNull(int index)
         {
             ResolveInheritance();
 
-            var p = _parameters[index];
+            var attributes = _parameterAttributes[index];
+            var parameter = _method.Parameters[index];
 
-            return (p.HasFlag(NullabilityAttributes.NotNull) && !p.HasFlag(NullabilityAttributes.CanBeNull)) ? Nullability.NotNull : Nullability.CanBeNull;
+            if (parameter.IsOut)
+                return !attributes.HasFlag(NullabilityAttributes.NotNull);
+
+            return !attributes.HasFlag(NullabilityAttributes.NotNull) || attributes.HasFlag(NullabilityAttributes.CanBeNull);
         }
 
         private void MergeFrom(MethodNullability baseMethod)
@@ -473,11 +470,11 @@ public static class ExplicitMode
 
             baseMethod.ResolveInheritance();
 
-            _returnValue |= baseMethod._returnValue;
+            _returnValueAttributes |= baseMethod._returnValueAttributes;
 
-            for (var i = 0; i < _parameters.Length; i++)
+            for (var i = 0; i < _parameterAttributes.Length; i++)
             {
-                _parameters[i] |= baseMethod._parameters[i];
+                _parameterAttributes[i] |= baseMethod._parameterAttributes[i];
             }
         }
 
@@ -501,35 +498,35 @@ public static class ExplicitMode
 
         public override string ToString()
         {
-            var parms = string.Join(", ", _parameters);
-            return $"{_returnValue} {_method.Name}({parms})";
+            var parms = string.Join(", ", _parameterAttributes);
+            return $"{_returnValueAttributes} {_method.Name}({parms})";
         }
     }
 
     private class PropertyNullability : MemberNullability
     {
         private readonly PropertyDefinition _property;
-        private NullabilityAttributes _nullability;
+        private NullabilityAttributes _nullabilityAttributes;
         private bool _isInheritanceResolved;
 
         public PropertyNullability(PropertyDefinition property, XElement externalAnnotation)
         {
             _property = property;
-            _nullability = property.GetNullabilityAttributes();
+            _nullabilityAttributes = property.GetNullabilityAttributes();
 
             if (externalAnnotation == null)
                 return;
 
-            _nullability |= externalAnnotation.GetNullabilityAttributes();
+            _nullabilityAttributes |= externalAnnotation.GetNullabilityAttributes();
         }
 
-        public Nullability Nullability
+        public bool AllowsNull
         {
             get
             {
                 ResolveInheritance();
 
-                return _nullability.HasFlag(NullabilityAttributes.NotNull) ? Nullability.NotNull : Nullability.CanBeNull;
+                return !_nullabilityAttributes.HasFlag(NullabilityAttributes.NotNull);
             }
         }
 
@@ -540,7 +537,7 @@ public static class ExplicitMode
 
             baseProperty.ResolveInheritance();
 
-            _nullability |= baseProperty._nullability;
+            _nullabilityAttributes |= baseProperty._nullabilityAttributes;
         }
 
         private void ResolveInheritance()
@@ -563,7 +560,7 @@ public static class ExplicitMode
 
         public override string ToString()
         {
-            return $"{_nullability} {_property.Name}";
+            return $"{_nullabilityAttributes} {_property.Name}";
         }
     }
 
