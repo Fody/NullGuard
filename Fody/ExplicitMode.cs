@@ -35,7 +35,7 @@ public static class ExplicitMode
 
         foreach (var typeDefinition in moduleDefinition.GetTypes())
         {
-            foreach (var method in typeDefinition.GetMethods())
+            foreach (var method in typeDefinition.Methods)
             {
                 if (method.GetNullabilityAttributes().HasFlag(NullabilityAttributes.NotNull) || method.Parameters.Any(parameter => parameter.GetNullabilityAttributes().HasFlag(NullabilityAttributes.NotNull)))
                 {
