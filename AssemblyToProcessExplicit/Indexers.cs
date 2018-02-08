@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using NullGuard;
 
 public class Indexers
 {
@@ -8,7 +7,7 @@ public class Indexers
         [NotNull]
         public string this[[NotNull] string nonNullParam1, [NotNull] string nonNullParam2]
         {
-            get { return "return value of NonNullable"; }
+            get => "return value of NonNullable";
             set { }
         }
     }

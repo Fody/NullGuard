@@ -3,10 +3,10 @@
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="*" />
-    <PackageReference Include="ApprovalUtilities" Version="*" />
-    <PackageReference Include="FodyCecil" Version="*" />
-    <PackageReference Include="NUnit" Version="*" />
+    <PackageReference Include="ApprovalTests" Version="3.0.13" />
+    <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
+    <PackageReference Include="FodyHelpers" Version="2.3.25" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />

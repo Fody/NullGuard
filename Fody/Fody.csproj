@@ -1,31 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <AssemblyName>NullGuard.Fody</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyCecil" Version="*" />
-    <PackageReference Include="PepitaPackage" Version="*" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-*" />
+    <PackageReference Include="FodyHelpers" Version="2.3.25" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>
   </ItemGroup>
-  <Target Name="BuildNugets" AfterTargets="CopyFilesToOutputDirectory">
-    <ItemGroup>
-      <FilesToDelete Include="$(SolutionDir)NuGetBuild\**\*.*" />
-    </ItemGroup>
-    <Delete Files="@(FilesToDelete)" />
-    <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(ProjectDir)NullGuard.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(OutputPath)NullGuard.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(OutputPath)NullGuard.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\netstandard1.0\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\netstandard1.0\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\netstandard1.0" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\portable40-net40+sl5+win8+wp8+wpa81\NullGuard.dll" DestinationFolder="$(SolutionDir)NuGetBuild\lib\portable40-net40+sl5+win8+wp8+wpa81" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\portable40-net40+sl5+win8+wp8+wpa81\NullGuard.xml" DestinationFolder="$(SolutionDir)NuGetBuild\lib\portable40-net40+sl5+win8+wp8+wpa81" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(OutputPath)NullGuard.Fody.dll" />
-  </Target>
 </Project>
