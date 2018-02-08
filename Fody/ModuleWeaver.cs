@@ -2,35 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
+using Fody;
 using Mono.Cecil;
 using NullGuard;
 
-public partial class ModuleWeaver
+public partial class ModuleWeaver: BaseModuleWeaver
 {
-    public XElement Config { get; set; }
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
     private bool isDebug;
     private NullGuardMode nullGuardMode;
-    public List<string> DefineConstants { get; set; }
-    public Action<string> LogInfo { get; set; }
-    public Action<string> LogWarn { get; set; }
-    public Action<string> LogError { get; set; }
-    public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
     {
-        LogInfo = s => { };
-        LogWarn = s => { };
-        LogError = s => { };
         ValidationFlags = ValidationFlags.AllPublic;
         DefineConstants = new List<string>();
     }
 
-    public void Execute()
+    public override void Execute()
     {
         ReadConfig();
 
@@ -60,6 +51,15 @@ public partial class ModuleWeaver
         ProcessAssembly(types);
         RemoveAttributes(types);
         RemoveReference();
+    }
+
+    public override IEnumerable<string> GetAssembliesForScanning()
+    {
+        yield return "mscorlib";
+        yield return "System.Runtime";
+        yield return "System";
+        yield return "netstandard";
+        yield return "System.Diagnostics.Debug";
     }
 
     List<TypeDefinition> GetTypesToProcess()

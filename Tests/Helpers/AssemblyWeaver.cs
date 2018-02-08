@@ -67,7 +67,7 @@ public static class AssemblyWeaver
             ModuleDefinition = moduleDefinition,
             AssemblyResolver = assemblyResolver,
             LogInfo = LogInfo,
-            LogWarn = LogWarn,
+            LogWarning = LogWarn,
             LogError = LogError,
             DefineConstants = new List<string> {"DEBUG"} // Always testing the debug weaver
         };

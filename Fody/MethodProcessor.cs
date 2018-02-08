@@ -227,7 +227,7 @@ public partial class ModuleWeaver
         {
             // Mono's broken compiler doesn't add a SetException call if there's no await.
             // Bail out since we're not about to rewrite the whole method to fix this. :/
-            LogWarn($"Cannot add guards to '{methodName}' as the method contains no await keyword.");
+            LogWarning($"Cannot add guards to '{methodName}' as the method contains no await keyword.");
             return;
         }
 
