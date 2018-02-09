@@ -1,11 +1,7 @@
 using System.Collections.Generic;
-
 using JetBrains.Annotations;
-#if (DEBUG)
 using System;
 using System.Threading.Tasks;
-using NullGuard;
-#endif
 
 public class SpecialClass
 {
@@ -17,8 +13,6 @@ public class SpecialClass
             yield return i;
         }
     }
-
-#if (DEBUG)
 
     public async Task SomeMethodAsync([NotNull] string nonNullArg, [CanBeNull] string nullArg)
     {
@@ -46,5 +40,4 @@ public class SpecialClass
     }
 
 #pragma warning restore 1998
-#endif
 }

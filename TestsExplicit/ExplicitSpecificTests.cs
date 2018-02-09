@@ -1,109 +1,108 @@
-﻿namespace TestsExplicit
+﻿#pragma warning disable xUnit1026 // Theory methods should use all of their parameters
+using Xunit;
+using System;
+using System.Collections.Generic;
+
+public class ExplicitSpecificTests
 {
-    using System;
-
-    using NUnit.Framework;
-
-    [TestFixture]
-    [TestFixtureSource(nameof(FixtureArgs))]
-    public class ExplicitSpecificTests
+    public static IEnumerable<object[]> GetFixtureArgs
     {
-        static object[] FixtureArgs = {
-            new object[] { "InternalBase.DerivedClass", string.Empty },
-            new object[] { "InternalBase.ImplementsInterface", string.Empty },
-            new object[] { "InternalBase.ImplementsInheritedInterface", string.Empty },
-            new object[] { "InternalBase.ImplementsInterfaceExplicit", "InterfaceWithAttributes." },
-            new object[] { "AssemblyBase.DerivedClass", string.Empty },
-            new object[] { "AssemblyBase.ImplementsInterface", string.Empty },
-            new object[] { "AssemblyBase.ImplementsInheritedInterface", string.Empty },
-            new object[] { "AssemblyBase.ImplementsInterfaceExplicit", "AssemblyWithAnnotations.InterfaceWithAttributes." },
-            new object[] { "ExternalBase.DerivedClass", string.Empty },
-            new object[] { "ExternalBase.ImplementsInterface", string.Empty },
-            new object[] { "ExternalBase.ImplementsInheritedInterface", string.Empty },
-            new object[] { "ExternalBase.ImplementsInterfaceExplicit", "AssemblyWithExternalAnnotations.InterfaceWithAttributes." },
-        };
-
-        private readonly string _className;
-        private readonly string _interfaceName;
-
-        public ExplicitSpecificTests(string className, string interfaceName)
+        get
         {
-            _className = className;
-            _interfaceName = interfaceName;
-        }
+            yield return new object[] {"InternalBase.DerivedClass", string.Empty};
+            yield return new object[] {"InternalBase.ImplementsInterface", string.Empty};
+            yield return new object[] {"InternalBase.ImplementsInheritedInterface", string.Empty};
+            yield return new object[] {"InternalBase.ImplementsInterfaceExplicit", "InterfaceWithAttributes."};
+            yield return new object[] {"AssemblyBase.DerivedClass", string.Empty};
+            yield return new object[] {"AssemblyBase.ImplementsInterface", string.Empty};
+            yield return new object[] {"AssemblyBase.ImplementsInheritedInterface", string.Empty};
+            yield return new object[] {"AssemblyBase.ImplementsInterfaceExplicit", "AssemblyWithAnnotations.InterfaceWithAttributes."};
+            yield return new object[] {"ExternalBase.DerivedClass", string.Empty};
+            yield return new object[] {"ExternalBase.ImplementsInterface", string.Empty};
+            yield return new object[] {"ExternalBase.ImplementsInheritedInterface", string.Empty};
+            yield return new object[] {"ExternalBase.ImplementsInterfaceExplicit", "AssemblyWithExternalAnnotations.InterfaceWithAttributes."};
 
-        [Test]
-        public void InheritsNullabilityForMethodParameterAndThrowsOnNull()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithNotNullParameter((string)null, (string)null));
-            Assert.AreEqual("[NullGuard] arg is null.\r\nParameter name: arg", exception.Message);
         }
+    }
 
-        [Test]
-        public void InheritsNullabilityForMethodParameterAndDoesNotThrowOnNotNull()
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForMethodParameterAndThrowsOnNull(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() =>
         {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            Assert.DoesNotThrow(() => sample.MethodWithNotNullParameter((string)null, "Test"));
-        }
+            sample.MethodWithNotNullParameter((string) null, (string) null);
+        });
+        Assert.Equal("[NullGuard] arg is null.\r\nParameter name: arg", exception.Message);
+    }
 
-        [Test]
-        public void InheritsNullabilityForMethodReturnAndThrowsOnNull()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithNotNullReturnValue((string)null));
-            Assert.AreEqual($"[NullGuard] Return value of method 'System.String {_className}::{_interfaceName}MethodWithNotNullReturnValue(System.String)' is null.", exception.Message);
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForMethodParameterAndDoesNotThrowOnNotNull(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        sample.MethodWithNotNullParameter((string)null, "Test");
+    }
 
-        [Test]
-        public void InheritsNullabilityForMethodReturnAndDoesNotThrowOnNotNull()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            Assert.DoesNotThrow(() => sample.MethodWithNotNullReturnValue("Test"));
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForMethodReturnAndThrowsOnNull(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithNotNullReturnValue((string)null));
+        Assert.Equal($"[NullGuard] Return value of method 'System.String {className}::{interfaceName}MethodWithNotNullReturnValue(System.String)' is null.", exception.Message);
+    }
 
-        [Test]
-        public void InheritsNullabilityForPropertyAndThrowsOnNullSet()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            var exception = Assert.Throws<ArgumentNullException>(() => sample.NotNullProperty = (string)null);
-            Assert.AreEqual($"[NullGuard] Cannot set the value of property 'System.String {_className}::{_interfaceName}NotNullProperty()' to null.\r\nParameter name: value", exception.Message);
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForMethodReturnAndDoesNotThrowOnNotNull(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        sample.MethodWithNotNullReturnValue("Test");
+    }
 
-        [Test]
-        public void InheritsNullabilityForPropertyAndDoesNotThrowOnNotNullSet()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            Assert.DoesNotThrow(() => sample.NotNullProperty = "Test");
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForPropertyAndThrowsOnNullSet(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.NotNullProperty = (string)null);
+        Assert.Equal($"[NullGuard] Cannot set the value of property 'System.String {className}::{interfaceName}NotNullProperty()' to null.\r\nParameter name: value", exception.Message);
+    }
 
-        [Test]
-        public void InheritsNullabilityForPropertyAndThrowsOnNullGet()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            string value;
-            var exception = Assert.Throws<InvalidOperationException>(() => value = sample.NotNullProperty);
-            Assert.AreEqual($"[NullGuard] Return value of property 'System.String {_className}::{_interfaceName}NotNullProperty()' is null.", exception.Message);
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForPropertyAndDoesNotThrowOnNotNullSet(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        sample.NotNullProperty = "Test";
+    }
 
-        [Test]
-        public void InheritsNullabilityForPropertyAndDoesNotThrowOnNotNullGet()
-        {
-            var type = AssemblyWeaver.Assembly.GetType(_className);
-            var sample = (dynamic)Activator.CreateInstance(type);
-            string value;
-            Assert.DoesNotThrow(() =>
-            {
-                sample.NotNullProperty = "Test";
-                value = sample.NotNullProperty;
-            });
-        }
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForPropertyAndThrowsOnNullGet(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic)Activator.CreateInstance(type);
+        string value;
+        var exception = Assert.Throws<InvalidOperationException>(() => value = sample.NotNullProperty);
+        Assert.Equal($"[NullGuard] Return value of property 'System.String {className}::{interfaceName}NotNullProperty()' is null.", exception.Message);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetFixtureArgs))]
+    public void InheritsNullabilityForPropertyAndDoesNotThrowOnNotNullGet(string className, string interfaceName)
+    {
+        var type = AssemblyWeaver.Assembly.GetType(className);
+        var sample = (dynamic) Activator.CreateInstance(type);
+        sample.NotNullProperty = "Test";
+        string value = sample.NotNullProperty;
     }
 }

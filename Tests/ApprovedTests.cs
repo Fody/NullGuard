@@ -1,113 +1,110 @@
-﻿#if(DEBUG)
-
-using System.Linq;
+﻿using System.Linq;
 using ApprovalTests;
-using NUnit.Framework;
+using Fody;
+using ObjectApproval;
+using Xunit;
 
-[TestFixture]
 public class ApprovedTests
 {
-    [Test]
+    [Fact]
     public void ClassWithBadAttributes()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
     }
 
-    [Test]
+    [Fact]
     public void ClassWithPrivateMethod()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
-    [Test]
+    [Fact]
     public void ClassWithPrivateMethodNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
-    [Test]
+    [Fact]
     public void GenericClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
     }
 
-    [Test]
+    [Fact]
     public void Indexers()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
     }
 
-    [Test]
+    [Fact]
     public void InterfaceBadAttributes()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
     }
 
-    [Test]
+    [Fact]
     public void SimpleClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
-    [Test]
+    [Fact]
     public void SimpleClassNoAssert()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
-    [Test]
+    [Fact]
     public void SkipIXamlMetadataProvider()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
     }
 
-    [Test]
+    [Fact]
     public void SpecialClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
     }
 
-    [Test]
+    [Fact]
     public void PublicNestedInsideNonPublic()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
     }
 
-    [Test]
+    [Fact]
     public void UnsafeClass()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
     }
 
-    [Test]
+    [Fact]
     public void ClassWithImplicitInterface()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
     }
 
-    [Test]
+    [Fact]
     public void ClassWithExplicitInterface()
     {
-        Approvals.Verify(Decompiler.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
     }
 
-    [Test]
+    [Fact]
     public void InfosList()
     {
-        Approvals.VerifyAll(AssemblyWeaver.Infos.OrderBy(e => e), "Infos: ");
+        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
     }
 
-    [Test]
+    [Fact]
     public void WarnsList()
     {
-        Approvals.VerifyAll(AssemblyWeaver.Warns.OrderBy(e => e), "Warns: ");
+        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
     }
 
-    [Test]
+    [Fact]
     public void ErrorsList()
     {
-        Approvals.VerifyAll(AssemblyWeaver.Errors.OrderBy(e => e), "Errors: ");
+        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 }
-
-#endif

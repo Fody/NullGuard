@@ -1,59 +1,58 @@
 ﻿using System;
 using System.Linq;
 using Mono.Cecil;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class InheritanceTests
 {
     ModuleDefinition _module = ModuleDefinition.ReadModule(typeof(InheritanceTests).Assembly.Location);
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsExplicitImplementedInterfaceMethods()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithExplicitInterfaceImplentation));
         var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
-        Assert.AreEqual(2, methods.Length);
+        Assert.Equal(2, methods.Length);
 
         var result = methods.SelectMany(method => method.EnumerateOverridesAndImplementations());
         var expected = "System.Int32 System.IComparable`1::CompareTo(T)|System.Int32 System.IComparable`1::CompareTo(T)";
         var actual = string.Join("|", result);
 
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsImplicitImplementedInterfaceMethodss()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithImplicitInterfaceImplementation));
         var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
-        Assert.AreEqual(2, methods.Length);
+        Assert.Equal(2, methods.Length);
 
         var result = methods.SelectMany(method => method.EnumerateOverridesAndImplementations());
         var expected = "System.Int32 System.IComparable`1::CompareTo(T)|System.Int32 System.IComparable`1::CompareTo(T)";
         var actual = string.Join("|", result);
 
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectImplementedInterfaceMethodsWhenClassHasBothExplicitAndImplicitImplementations()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithExplicitAndImplicitInterfaceImplementation));
         var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
-        Assert.AreEqual(3, methods.Length);
+        Assert.Equal(3, methods.Length);
 
         var interfaceMethods = methods.SelectMany(method => method.EnumerateOverridesAndImplementations()).ToArray();
-        Assert.AreEqual(2, interfaceMethods.Length);
+        Assert.Equal(2, interfaceMethods.Length);
 
         var result = methods.SelectMany(method => method.EnumerateOverridesAndImplementations());
         var expected = "System.Int32 System.IComparable`1::CompareTo(T)|System.Int32 System.IComparable`1::CompareTo(T)";
         var actual = string.Join("|", result);
 
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodOnClassWithMixedGenericInterfaces()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces));
@@ -63,10 +62,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "U3 IGenericDerivedInterface`3::Method(U2)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodOnDerivedClassWithMixedGenericInterfacesWhereOriginalImplementationIsOnBaseClass()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(DerivedClassClassWithMixedGenericInterfaces));
@@ -76,10 +75,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "System.Int32 BaseClassWithMixedGenericInterfaces::Method(System.Boolean)|T2 IGenericBaseInterface`2::Method(T1)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectPropertyOnDerivedClassWithMixedGenericInterfacesWhereOriginalImplementationIsOnBaseClass()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(DerivedClassClassWithMixedGenericInterfaces));
@@ -89,10 +88,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "System.Boolean BaseClassWithMixedGenericInterfaces::Property()";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodFromBaseInterfaceOnClassWithMixedGenericInterfaces()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces));
@@ -102,10 +101,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T2 IGenericBaseInterface`2::Method(T1)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodOnClassWithMixedGenericInterfaces2()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces2));
@@ -115,10 +114,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "U3 IGenericDerivedInterface2`3::Method(U2)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodFromBaseInterfaceOnClassWithMixedGenericInterfaces2()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces2));
@@ -128,30 +127,30 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T2 IGenericBaseInterface`2::Method(T1)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsNoMethodFromBaseInterfaceOnClassWithMixedGenericInterfacesWhenExplictImplementationExists()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces3));
         var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Method)) && m.Parameters[0].ParameterType == _module.TypeSystem.String);
 
         var result = method.EnumerateOverridesAndImplementations();
-        Assert.AreEqual(0, result.Count());
+        Assert.Empty(result);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsNoPropertyFromBaseInterfaceOnClassWithMixedGenericInterfacesWhenExplictImplementationExists()
     {
         var type = _module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces3));
         var property = type.Properties.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Property)));
 
         var result = property.EnumerateOverridesAndImplementations();
-        Assert.AreEqual(0, result.Count());
+        Assert.Empty(result);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsBaseMembersForMethodOverrides1()
     {
         var type = _module.GetTypes().Single(t => t.Name.Contains(nameof(DerivedGenericClass1<string>)));
@@ -161,10 +160,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T2 GenericBaseClass`2::Method(T1)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsBaseMembersForMethodOverrides2()
     {
         var type = _module.GetTypes().Single(t => t.Name.Contains(nameof(DerivedGenericClass2<string>)));
@@ -174,10 +173,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T1 GenericBaseClass`2::Method(T2)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsBaseMembersForMethodOverridesInDerivedDerived()
     {
         var type = _module.GetTypes().Single(t => t.Name.Contains(nameof(DerivedDerivedClass)));
@@ -187,10 +186,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T1 GenericBaseClass`2::Method(T2)";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsBaseMembersForPropertyOverrides()
     {
         var type = _module.GetTypes().Single(t => t.Name.Contains(nameof(DerivedGenericClass2<string>)));
@@ -200,10 +199,10 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T1 GenericBaseClass`2::Property()";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Test]
+    [Fact]
     public void EnumerateOverridesAndImplementationsFindsBaseMembersForPropertyOverridesInDerivedDerived()
     {
         var type = _module.GetTypes().Single(t => t.Name.Contains(nameof(DerivedDerivedClass)));
@@ -213,7 +212,7 @@ public class InheritanceTests
 
         var actual = string.Join("|", result);
         var expected = "T1 GenericBaseClass`2::Property()";
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 }
 

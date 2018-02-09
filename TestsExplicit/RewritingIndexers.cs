@@ -1,11 +1,10 @@
 using System;
 using ApprovalTests;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class RewritingIndexers
 {
-    [Test]
+    [Fact]
     public void NonNullableIndexerSetterWithFirstArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -14,7 +13,7 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerSetterWithSecondArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -23,7 +22,7 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerSetterWithValueArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -32,7 +31,7 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerSetterWithNonNullArguments()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -40,7 +39,7 @@ public class RewritingIndexers
         instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = "value";
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerGetterWithFirstArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -49,7 +48,7 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerGetterWithSecondArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -58,15 +57,15 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void NonNullableIndexerGetterWithNonNullArguments()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
-        Assert.AreEqual("return value of NonNullable", instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"]);
+        Assert.Equal("return value of NonNullable", instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"]);
     }
 
-    [Test]
+    [Fact]
     public void PassThroughGetterReturnValueWithNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -75,15 +74,15 @@ public class RewritingIndexers
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void PassThroughGetterReturnValueWithNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
-        Assert.AreEqual("not null", instance[returnValue: "not null"]);
+        Assert.Equal("not null", instance[returnValue: "not null"]);
     }
 
-    [Test]
+    [Fact]
     public void AllowedNullsIndexerSetter()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
@@ -91,12 +90,12 @@ public class RewritingIndexers
         instance[allowNull: null, nullableInt: null] = null;
     }
 
-    [Test]
+    [Fact]
     public void AllowedNullsIndexerGetter()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("AllowedNulls"));
-        Assert.AreEqual(null, instance[allowNull: null, nullableInt: null]);
+        Assert.Equal(null, instance[allowNull: null, nullableInt: null]);
     }
 
     // ReSharper disable once UnusedParameter.Local

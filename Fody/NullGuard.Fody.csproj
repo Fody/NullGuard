@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
-    <AssemblyName>NullGuard.Fody</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="2.3.25" />
+    <PackageReference Include="FodyHelpers" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ReferenceAssembly\ValidationFlags.cs">

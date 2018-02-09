@@ -18,6 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AssemblyWithAnnotations\AssemblyWithAnnotations.csproj" />
     <ProjectReference Include="..\AssemblyWithExternalAnnotations\AssemblyWithExternalAnnotations.csproj" />
-    <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj" />
+    <ProjectReference Include="..\ReferenceAssembly\NullGuard.csproj" />
   </ItemGroup>
 </Project>

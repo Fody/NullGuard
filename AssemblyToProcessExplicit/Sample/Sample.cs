@@ -24,7 +24,7 @@
         public string SomeProperty { get; set; }
 
         // can be applied to a whole property
-        [CanBeNull] 
+        [CanBeNull]
         public string NullProperty { get; set; }
 
         // Or just the setter.

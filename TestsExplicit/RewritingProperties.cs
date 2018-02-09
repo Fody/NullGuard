@@ -1,11 +1,10 @@
 ﻿using System;
 using ApprovalTests;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class RewritingProperties
 {
-    [Test]
+    [Fact]
     public void PropertySetterRequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
@@ -14,7 +13,7 @@ public class RewritingProperties
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyGetterRequiresNonNullReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
@@ -29,7 +28,7 @@ public class RewritingProperties
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void GenericPropertyGetterRequiresNonNullReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("GenericClass`1");
@@ -44,7 +43,7 @@ public class RewritingProperties
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyAllowsNullGetButNotSet()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
@@ -54,7 +53,7 @@ public class RewritingProperties
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertyAllowsNullSetButNotGet()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
@@ -70,7 +69,7 @@ public class RewritingProperties
         Approvals.Verify(exception.Message);
     }
 
-    [Test]
+    [Fact]
     public void PropertySetterRequiresAllowsNullArgumentForNullableType()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
@@ -78,7 +77,7 @@ public class RewritingProperties
         sample.NonNullNullableProperty = null;
     }
 
-    [Test]
+    [Fact]
     public void DoesNotRequireNullSetterWhenPropertiesNotSpecifiedByAttribute()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
@@ -86,7 +85,7 @@ public class RewritingProperties
         sample.SomeProperty = null;
     }
 
-    [Test]
+    [Fact]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");

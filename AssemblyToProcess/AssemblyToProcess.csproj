@@ -7,6 +7,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj" />
+    <ProjectReference Include="..\ReferenceAssembly\NullGuard.csproj" />
   </ItemGroup>
 </Project>
