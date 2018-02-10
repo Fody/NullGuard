@@ -2,5 +2,6 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
+    <Version>1.7.0</Version>
   </PropertyGroup>
 </Project>
