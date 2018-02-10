@@ -1,22 +1,17 @@
-configuration: Release
-
+version: 1.0.{build}
 image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
 install:
 - cmd: appveyor downloadfile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-
 before_build:
-  - nuget restore NullGuard.sln
-
+- ps: nuget restore
 build:
-  parallel: true
-  project: NullGuard.sln
-
-
+  verbosity: minimal
 test_script:
-- ps: >-
+- cmd: >-
     %xunit20%\xunit.console Tests\bin\Release\net46\Tests.dll
 
     dotnet test "Tests\Tests.csproj" --framework netcoreapp2.0 --configuration Release --no-build --output bin\Release\netcoreapp2.0
-
 artifacts:
 - path: nugets\**\*.nupkg
