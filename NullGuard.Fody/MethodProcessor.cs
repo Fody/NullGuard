@@ -39,7 +39,7 @@ public partial class ModuleWeaver
         }
 
         if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic)
-            && !((method.IsPublic && method.DeclaringType.IsPublicOrNestedPublic())
+            && !(method.IsPublic && method.DeclaringType.IsPublicOrNestedPublic()
             || method.IsOverrideOrImplementationOfPublicMember()))
         {
             return;

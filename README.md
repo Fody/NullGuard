@@ -2,7 +2,7 @@
 [![NuGet Status](http://img.shields.io/nuget/v/NullGuard.Fody.svg?style=flat)](https://www.nuget.org/packages/NullGuard.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/)
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
@@ -14,20 +14,23 @@ https://nuget.org/packages/NullGuard.Fody/
 ```powershell
 PM> Install-Package NullGuard.Fody
 ```
----
+
+
 ## Modes
 
 As of v1.6.3 NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
-- In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. 
-  This is how NullGuard has been working always.
-- In the new [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`.
-  This mode is designed to support the R# nullability analysis, using pessimistic mode.
+
+ * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
+ * In the new [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
 
 If not configured explicitly, NullGuard will auto-detect the mode as follows:
-- Referencing `JetBrains.Annotations` and using `[NotNull]` anywhere will switch to explicit mode.
-- Default to implicit mode if the above criteria is not met.
+
+ * Referencing `JetBrains.Annotations` and using `[NotNull]` anywhere will switch to explicit mode.
+ * Default to implicit mode if the above criteria is not met.
+
 
 ### Implicit Mode
+
 
 #### Your Code
 
@@ -145,9 +148,11 @@ public class SampleOutput
 }
 ```
 
+
 ### Explicit Mode
+
 If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly annotate not null items, 
-null guards will be added only for items that have an explicit `[NotNull]` annotation. 
+null guards will be added only for items that have an explicit `[NotNull]` annotation.
 
 
 ```csharp
@@ -192,14 +197,14 @@ public class Sample
 }
 ```
 
+
 Inheritance of nullability is supported in explicit mode, i.e. if you implement an interface or derive from a base method with `[NotNull]` annotations, 
 null guards will be added to your implementation.
 
-You may use the `[NotNull]` attribute defined in `JetBrains.Anntotations`, or simply define your own. 
-However not referencing `JetBrains.Anntotations` will not auto-detect explicit mode, so you have to set this in the configuration
+You may use the `[NotNull]` attribute defined in `JetBrains.Anntotations`, or simply define your own. However not referencing `JetBrains.Anntotations` will not auto-detect explicit mode, so you have to set this in the configuration.
 
 Also note that using `JetBrains.Anntotations` will require to define [`JETBRAINS_ANNOTATIONS`](https://www.jetbrains.com/help/resharper/Code_Analysis__Annotations_in_Source_Code.html) to include the attributes in the assembly, so NullGuard can find them.
-NullGuard will neither remove those attributes nor the reference to  `JetBrains.Anntotations`. To get rid of the attributes and the reference, you can use [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody). 
+NullGuard will neither remove those attributes nor the reference to  `JetBrains.Anntotations`. To get rid of the attributes and the reference, you can use [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 
 
@@ -284,12 +289,14 @@ You can force the operation mode by setting it to `Explicit` or `Implicit`, if t
 <NullGuard Mode="Explicit" />
 ```
 
+
 ## Contributors
 
   * [Cameron MacFarland](https://github.com/distantcam)
   * [Simon Cropp](https://github.com/simoncropp)
   * [Tim Murphy](https://github.com/TimMurphy)
   * [Tom Englert](https://github.com/tom-englert)
+
 
 ## Icon
 

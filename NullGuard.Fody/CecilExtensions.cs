@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
@@ -167,7 +166,7 @@ public static class CecilExtensions
         return member.EnumerateOverridesAndImplementations().Any(m => m.IsPublicVisible());
     }
 
-    private static bool IsPublicVisible(this MethodDefinition member)
+    static bool IsPublicVisible(this MethodDefinition member)
     {
         var type = member.DeclaringType.Resolve();
 
@@ -175,24 +174,6 @@ public static class CecilExtensions
             return false;
 
         return type.IsInterface || member.IsPublic;
-    }
-
-    public static AssemblyDefinition Resolve(this IAssemblyResolver assemblyResolver, string assemblyName)
-    {
-        return assemblyResolver.Resolve(new AssemblyNameReference(assemblyName, null));
-    }
-
-    public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-    {
-        var index = 0;
-        foreach (var item in source)
-        {
-            if (predicate(item))
-                return index;
-            index++;
-        }
-
-        return -1;
     }
 
     public static void AddRange<T>(this IList<T> collection, IEnumerable<T> values)

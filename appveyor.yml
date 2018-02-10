@@ -11,10 +11,13 @@ build:
   parallel: true
   project: NullGuard.sln
 
+
 test_script:
-  - nunit3-console Tests\bin\Release\net461\Tests.dll --x86 --result=myresults.xml;format=AppVeyor
-  - nunit3-console TestsExplicit\bin\Release\net461\TestsExplicit.dll --x86 --result=myresults.xml;format=AppVeyor
+- ps: >-
+    %xunit20%\xunit.console Tests\bin\Release\net46\Tests.dll
+
+    dotnet test "Tests\Tests.csproj" --framework netcoreapp2.0 --configuration Release --no-build --output bin\Release\netcoreapp2.0
 
 artifacts:
-  - path: NuGetBuild\*.nupkg
+  - path: nugets\*.nupkg
   - path: AssemblyToProcess\bin\Release\*.*

@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <DisableFody>true</DisableFody>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
@@ -18,6 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AssemblyWithAnnotations\AssemblyWithAnnotations.csproj" />
     <ProjectReference Include="..\AssemblyWithExternalAnnotations\AssemblyWithExternalAnnotations.csproj" />
-    <ProjectReference Include="..\ReferenceAssembly\NullGuard.csproj" />
+    <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
 </Project>

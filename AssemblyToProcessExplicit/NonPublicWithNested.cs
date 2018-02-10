@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-internal class NonPublicWithNested
+class NonPublicWithNested
 {
     public class PublicNestedClass
     {

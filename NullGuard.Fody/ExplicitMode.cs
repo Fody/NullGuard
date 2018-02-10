@@ -9,13 +9,13 @@ using Mono.Cecil.Rocks;
 
 public static class ExplicitMode
 {
-    private const string NotNullAttributeTypeName = "NotNullAttribute";
-    private const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
-    private const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
-    private const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
+    const string NotNullAttributeTypeName = "NotNullAttribute";
+    const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
+    const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
+    const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
 
     [Flags]
-    private enum NullabilityAttributes
+    enum NullabilityAttributes
     {
         None = 0,
         CanBeNull = 1,
@@ -24,14 +24,16 @@ public static class ExplicitMode
         ItemCanBeNull = 8
     }
 
-    private static readonly MemberNullabilityCache _memberNullabilityCache = new MemberNullabilityCache();
+    static readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
         // If we are referencing JetBrains.Annotations and using NotNull attributes, use explicit mode as default.
 
         if (moduleDefinition.AssemblyReferences.All(ar => ar.Name != JetBrainsAnnotationsAssemblyName))
+        {
             return NullGuardMode.Implicit;
+        }
 
         foreach (var typeDefinition in moduleDefinition.GetTypes())
         {
@@ -54,26 +56,26 @@ public static class ExplicitMode
 
     public static bool AllowsNull(PropertyDefinition property)
     {
-        var nullability = _memberNullabilityCache.GetOrCreate(property);
+        var nullability = memberNullabilityCache.GetOrCreate(property);
 
         return nullability.AllowsNull;
     }
 
     public static bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
-        var nullability = _memberNullabilityCache.GetOrCreate(method);
+        var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ParameterAllowsNull(parameter.Index);
     }
 
     public static bool AllowsNull(MethodDefinition method)
     {
-        var nullability = _memberNullabilityCache.GetOrCreate(method);
+        var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ReturnValueAllowsNull;
     }
 
-    private static NullabilityAttributes GetNullabilityAttributes(this ICustomAttributeProvider value)
+    static NullabilityAttributes GetNullabilityAttributes(this ICustomAttributeProvider value)
     {
         return value?.CustomAttributes
             .Select(GetNullabilityAttribute)
@@ -81,7 +83,7 @@ public static class ExplicitMode
             .Aggregate((s, a) => s | a) ?? NullabilityAttributes.None;
     }
 
-    private static NullabilityAttributes GetNullabilityAttribute(CustomAttribute attribute)
+    static NullabilityAttributes GetNullabilityAttribute(CustomAttribute attribute)
     {
         switch (attribute.AttributeType.Name)
         {
@@ -109,7 +111,9 @@ public static class ExplicitMode
     public static IEnumerable<MethodDefinition> EnumerateOverridesAndImplementations(this MethodDefinition method)
     {
         if (!method.HasThis)
+        {
             yield break;
+        }
 
         if (method.IsPrivate)
         {
@@ -130,10 +134,14 @@ public static class ExplicitMode
         {
             var interfaceMethod = interfaceType.Find(method);
             if (interfaceMethod == null)
+            {
                 continue;
+            }
 
             if (declaringType.HasExplicitInterfaceImplementation(method))
+            {
                 continue;
+            }
 
             yield return interfaceMethod;
         }
@@ -153,7 +161,9 @@ public static class ExplicitMode
     public static IEnumerable<PropertyDefinition> EnumerateOverridesAndImplementations(this PropertyDefinition property)
     {
         if (!property.HasThis)
+        {
             yield break;
+        }
 
         var propertyOverrides = property.EnumerateOverrides().ToArray();
         if (propertyOverrides.Any())
@@ -211,32 +221,38 @@ public static class ExplicitMode
         return null;
     }
 
-    public static MethodDefinition Find(this TypeReference declaringType, MethodReference reference)
+    static MethodDefinition Find(this TypeReference declaringType, MethodReference reference)
     {
-        return declaringType.Resolve().Methods.FirstOrDefault(method => HasSameSignature(declaringType, method, reference.DeclaringType, reference.Resolve()));
+        return declaringType.Resolve().Methods
+            .FirstOrDefault(method => HasSameSignature(declaringType, method, reference.DeclaringType, reference.Resolve()));
     }
 
     public static PropertyDefinition Find(this TypeReference declaringType, PropertyReference reference)
     {
-        return declaringType.Resolve().Properties.FirstOrDefault(property => HasSameSignature(declaringType, property, reference.DeclaringType, reference.Resolve()));
+        return declaringType.Resolve().Properties
+            .FirstOrDefault(property => HasSameSignature(declaringType, property, reference.DeclaringType, reference.Resolve()));
     }
 
-    private static bool HasSameSignature(TypeReference declaringType1, MethodDefinition method1, TypeReference declaringType2, MethodDefinition method2)
+    static bool HasSameSignature(TypeReference declaringType1, MethodDefinition method1, TypeReference declaringType2, MethodDefinition method2)
     {
+        var resolveGenericParameter1 = method1.ReturnType.ResolveGenericParameter(declaringType1);
+        var resolveGenericParameter2 = method2.ReturnType.ResolveGenericParameter(declaringType2);
+        var areaAllParametersOfSameType = AreaAllParametersOfSameType(declaringType1, method1, declaringType2, method2);
+        var referenceEquals = TypeReferenceEqualityComparer.Default.Equals(resolveGenericParameter1, resolveGenericParameter2);
         return method1.Name == method2.Name
-               && TypeReferenceEqualityComparer.Default.Equals(method1.ReturnType.ResolveGenericParameter(declaringType1), method2.ReturnType.ResolveGenericParameter(declaringType2))
+               && referenceEquals
                && method1.GenericParameters.Count == method2.GenericParameters.Count
-               && AreaAllParametersOfSameType(declaringType1, method1, declaringType2, method2);
+               && areaAllParametersOfSameType;
     }
 
-    private static bool HasSameSignature(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
+    static bool HasSameSignature(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
     {
         return property1.Name == property2.Name
                && TypeReferenceEqualityComparer.Default.Equals(property1.PropertyType.ResolveGenericParameter(declaringType1), property2.PropertyType.ResolveGenericParameter(declaringType2))
                && AreaAllParametersOfSameType(declaringType1, property1, declaringType2, property2);
     }
 
-    private static bool AreaAllParametersOfSameType(TypeReference declaringType1, IMethodSignature method1, TypeReference declaringType2, IMethodSignature method2)
+    static bool AreaAllParametersOfSameType(TypeReference declaringType1, IMethodSignature method1, TypeReference declaringType2, IMethodSignature method2)
     {
         if (!method2.HasParameters)
             return !method1.HasParameters;
@@ -260,7 +276,7 @@ public static class ExplicitMode
         return true;
     }
 
-    private static bool AreaAllParametersOfSameType(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
+    static bool AreaAllParametersOfSameType(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
     {
         if (!property2.HasParameters)
             return !property1.HasParameters;
@@ -284,7 +300,7 @@ public static class ExplicitMode
         return true;
     }
 
-    public static bool HasExplicitInterfaceImplementation(this TypeDefinition type, MethodDefinition method)
+    static bool HasExplicitInterfaceImplementation(this TypeDefinition type, MethodDefinition method)
     {
         if (method == null)
             return false;
@@ -295,12 +311,12 @@ public static class ExplicitMode
             .Any(methodReference => HasSameSignature(type, method, methodReference.DeclaringType, methodReference.Resolve()));
     }
 
-    public static bool HasExplicitInterfaceImplementation(this TypeDefinition type, PropertyDefinition property)
+    static bool HasExplicitInterfaceImplementation(this TypeDefinition type, PropertyDefinition property)
     {
         return type.HasExplicitInterfaceImplementation(property.GetMethod);
     }
 
-    private static PropertyDefinition GetBaseProperty(this PropertyDefinition property)
+    static PropertyDefinition GetBaseProperty(this PropertyDefinition property)
     {
         var getMethod = property.GetMethod;
         var getMethodBase = getMethod?.FindBase();
@@ -315,7 +331,7 @@ public static class ExplicitMode
         return null;
     }
 
-    private static IEnumerable<MethodReference> EnumerateOverrides(this MethodDefinition method)
+    static IEnumerable<MethodReference> EnumerateOverrides(this MethodDefinition method)
     {
         if (method == null)
             yield break;
@@ -330,7 +346,7 @@ public static class ExplicitMode
         }
     }
 
-    private static IEnumerable<PropertyDefinition> EnumerateOverrides(this PropertyDefinition property)
+    static IEnumerable<PropertyDefinition> EnumerateOverrides(this PropertyDefinition property)
     {
         var getMethod = property.GetMethod;
         foreach (var getOverride in getMethod.EnumerateOverrides())
@@ -342,7 +358,7 @@ public static class ExplicitMode
         }
     }
 
-    private static TypeReference ResolveGenericParameter(this TypeReference parameterType, TypeReference declaringType)
+    static TypeReference ResolveGenericParameter(this TypeReference parameterType, TypeReference declaringType)
     {
         if (parameterType.IsGenericParameter && declaringType.IsGenericInstance)
         {
@@ -353,7 +369,7 @@ public static class ExplicitMode
         return parameterType;
     }
 
-    private static TypeReference ResolveGenericArguments(this TypeReference baseType, TypeReference derivedType)
+    static TypeReference ResolveGenericArguments(this TypeReference baseType, TypeReference derivedType)
     {
         if (!baseType.IsGenericInstance)
             return baseType;
@@ -372,7 +388,7 @@ public static class ExplicitMode
         return result;
     }
 
-    private static NullabilityAttributes GetNullabilityAttribute(this XElement element)
+    static NullabilityAttributes GetNullabilityAttribute(this XElement element)
     {
         var value = element.Attribute("ctor")?.Value;
         if (value == null)
@@ -393,7 +409,7 @@ public static class ExplicitMode
         return NullabilityAttributes.None;
     }
 
-    private static NullabilityAttributes GetNullabilityAttributes(this XElement element)
+    static NullabilityAttributes GetNullabilityAttributes(this XElement element)
     {
         return element.Elements("attribute")
             .Select(GetNullabilityAttribute)
@@ -401,27 +417,27 @@ public static class ExplicitMode
             .Aggregate((s, v) => s | v);
     }
 
-    private class MemberNullability
+    class MemberNullability
     {
     }
 
-    private class MethodNullability : MemberNullability
+    class MethodNullability : MemberNullability
     {
-        private readonly MethodDefinition _method;
-        private readonly NullabilityAttributes[] _parameterAttributes;
-        private NullabilityAttributes _returnValueAttributes;
-        private bool _isInheritanceResolved;
+        MethodDefinition method;
+        NullabilityAttributes[] parameterAttributes;
+        NullabilityAttributes returnValueAttributes;
+        bool isInheritanceResolved;
 
         public MethodNullability(MethodDefinition method, XElement externalAnnotation)
         {
-            _method = method;
-            _parameterAttributes = method.Parameters.Select(GetNullabilityAttributes).ToArray();
-            _returnValueAttributes = method.GetNullabilityAttributes();
+            this.method = method;
+            parameterAttributes = method.Parameters.Select(GetNullabilityAttributes).ToArray();
+            returnValueAttributes = method.GetNullabilityAttributes();
 
             if (externalAnnotation == null)
                 return;
 
-            _returnValueAttributes |= externalAnnotation.GetNullabilityAttributes();
+            returnValueAttributes |= externalAnnotation.GetNullabilityAttributes();
 
             foreach (var childElement in externalAnnotation.Elements("parameter"))
             {
@@ -434,7 +450,7 @@ public static class ExplicitMode
                     continue;
 
                 var parameterIndex = parameter.Index;
-                _parameterAttributes[parameterIndex] |= childElement.GetNullabilityAttributes();
+                parameterAttributes[parameterIndex] |= childElement.GetNullabilityAttributes();
             }
         }
 
@@ -444,9 +460,9 @@ public static class ExplicitMode
             {
                 ResolveInheritance();
 
-                var effeciveAttribute = _method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
+                var effectiveAttribute = method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
 
-                return !_returnValueAttributes.HasFlag(effeciveAttribute);
+                return !returnValueAttributes.HasFlag(effectiveAttribute);
             }
         }
 
@@ -454,8 +470,8 @@ public static class ExplicitMode
         {
             ResolveInheritance();
 
-            var attributes = _parameterAttributes[index];
-            var parameter = _method.Parameters[index];
+            var attributes = parameterAttributes[index];
+            var parameter = method.Parameters[index];
 
             if (parameter.IsOut)
                 return !attributes.HasFlag(NullabilityAttributes.NotNull);
@@ -463,34 +479,34 @@ public static class ExplicitMode
             return !attributes.HasFlag(NullabilityAttributes.NotNull) || attributes.HasFlag(NullabilityAttributes.CanBeNull);
         }
 
-        private void MergeFrom(MethodNullability baseMethod)
+        void MergeFrom(MethodNullability baseMethod)
         {
             if (baseMethod == null)
                 return;
 
             baseMethod.ResolveInheritance();
 
-            _returnValueAttributes |= baseMethod._returnValueAttributes;
+            returnValueAttributes |= baseMethod.returnValueAttributes;
 
-            for (var i = 0; i < _parameterAttributes.Length; i++)
+            for (var i = 0; i < parameterAttributes.Length; i++)
             {
-                _parameterAttributes[i] |= baseMethod._parameterAttributes[i];
+                parameterAttributes[i] |= baseMethod.parameterAttributes[i];
             }
         }
 
-        private void ResolveInheritance()
+        void ResolveInheritance()
         {
-            if (_isInheritanceResolved)
+            if (isInheritanceResolved)
                 return;
 
-            _isInheritanceResolved = true;
+            isInheritanceResolved = true;
 
-            if (!_method.HasThis)
+            if (!method.HasThis)
                 return;
 
-            foreach (var method in _method.EnumerateOverridesAndImplementations())
+            foreach (var method in method.EnumerateOverridesAndImplementations())
             {
-                var nullability = _memberNullabilityCache.GetOrCreate(method.Resolve());
+                var nullability = memberNullabilityCache.GetOrCreate(method.Resolve());
 
                 MergeFrom(nullability);
             }
@@ -498,26 +514,26 @@ public static class ExplicitMode
 
         public override string ToString()
         {
-            var parms = string.Join(", ", _parameterAttributes);
-            return $"{_returnValueAttributes} {_method.Name}({parms})";
+            var parms = string.Join(", ", parameterAttributes);
+            return $"{returnValueAttributes} {method.Name}({parms})";
         }
     }
 
-    private class PropertyNullability : MemberNullability
+    class PropertyNullability : MemberNullability
     {
-        private readonly PropertyDefinition _property;
-        private NullabilityAttributes _nullabilityAttributes;
-        private bool _isInheritanceResolved;
+        PropertyDefinition property;
+        NullabilityAttributes nullabilityAttributes;
+        bool isInheritanceResolved;
 
         public PropertyNullability(PropertyDefinition property, XElement externalAnnotation)
         {
-            _property = property;
-            _nullabilityAttributes = property.GetNullabilityAttributes();
+            this.property = property;
+            nullabilityAttributes = property.GetNullabilityAttributes();
 
             if (externalAnnotation == null)
                 return;
 
-            _nullabilityAttributes |= externalAnnotation.GetNullabilityAttributes();
+            nullabilityAttributes |= externalAnnotation.GetNullabilityAttributes();
         }
 
         public bool AllowsNull
@@ -526,33 +542,33 @@ public static class ExplicitMode
             {
                 ResolveInheritance();
 
-                return !_nullabilityAttributes.HasFlag(NullabilityAttributes.NotNull);
+                return !nullabilityAttributes.HasFlag(NullabilityAttributes.NotNull);
             }
         }
 
-        private void MergeFrom(PropertyNullability baseProperty)
+        void MergeFrom(PropertyNullability baseProperty)
         {
             if (baseProperty == null)
                 return;
 
             baseProperty.ResolveInheritance();
 
-            _nullabilityAttributes |= baseProperty._nullabilityAttributes;
+            nullabilityAttributes |= baseProperty.nullabilityAttributes;
         }
 
-        private void ResolveInheritance()
+        void ResolveInheritance()
         {
-            if (_isInheritanceResolved)
+            if (isInheritanceResolved)
                 return;
 
-            _isInheritanceResolved = true;
+            isInheritanceResolved = true;
 
-            if (!_property.HasThis)
+            if (!property.HasThis)
                 return;
 
-            foreach (var property in _property.EnumerateOverridesAndImplementations())
+            foreach (var property in property.EnumerateOverridesAndImplementations())
             {
-                var nullability = _memberNullabilityCache.GetOrCreate(property.Resolve());
+                var nullability = memberNullabilityCache.GetOrCreate(property.Resolve());
 
                 MergeFrom(nullability);
             }
@@ -560,13 +576,13 @@ public static class ExplicitMode
 
         public override string ToString()
         {
-            return $"{_nullabilityAttributes} {_property.Name}";
+            return $"{nullabilityAttributes} {property.Name}";
         }
     }
 
-    private class MemberNullabilityCache
+    class MemberNullabilityCache
     {
-        private readonly Dictionary<string, AssemblyCache> _cache = new Dictionary<string, AssemblyCache>();
+        Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
 
         public MethodNullability GetOrCreate(MethodDefinition method)
         {
@@ -578,37 +594,37 @@ public static class ExplicitMode
             return (PropertyNullability)GetOrCreate(property, externalAnnotation => new PropertyNullability(property, externalAnnotation));
         }
 
-        private MemberNullability GetOrCreate(MemberReference member, Func<XElement, MemberNullability> createNew)
+        MemberNullability GetOrCreate(MemberReference member, Func<XElement, MemberNullability> createNew)
         {
             var module = member.Module;
             var assemblyName = module.Assembly.Name.Name;
 
             var key = DocCommentId.GetDocCommentId((IMemberDefinition)member);
 
-            if (!_cache.TryGetValue(assemblyName, out var assmblyCache))
+            if (!cache.TryGetValue(assemblyName, out var assemblyCache))
             {
-                assmblyCache = new AssemblyCache(module.FileName);
-                _cache.Add(assemblyName, assmblyCache);
+                assemblyCache = new AssemblyCache(module.FileName);
+                cache.Add(assemblyName, assemblyCache);
             }
 
-            return assmblyCache.GetOrCreate(key, createNew);
+            return assemblyCache.GetOrCreate(key, createNew);
         }
 
-        private class AssemblyCache
+        class AssemblyCache
         {
-            private readonly Dictionary<string, MemberNullability> _cache = new Dictionary<string, MemberNullability>();
-            private readonly Dictionary<string, XElement> _externalAnnotations;
+            readonly Dictionary<string, MemberNullability> cache = new Dictionary<string, MemberNullability>();
+            readonly Dictionary<string, XElement> externalAnnotations;
 
             public AssemblyCache(string moduleFileName)
             {
-                var externalAnnotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
+                var annotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
 
-                if (!File.Exists(externalAnnotations))
+                if (!File.Exists(annotations))
                     return;
 
                 try
                 {
-                    _externalAnnotations = XDocument.Load(externalAnnotations)
+                    externalAnnotations = XDocument.Load(annotations)
                         .Element("assembly")?
                         .Elements("member")
                         .ToDictionary(member => member.Attribute("name")?.Value);
@@ -621,15 +637,15 @@ public static class ExplicitMode
 
             public MemberNullability GetOrCreate(string key, Func<XElement, MemberNullability> createNew)
             {
-                if (_cache.TryGetValue(key, out var value))
+                if (cache.TryGetValue(key, out var value))
                     return value;
 
                 XElement externalAnnotation = null;
-                _externalAnnotations?.TryGetValue(key, out externalAnnotation);
+                externalAnnotations?.TryGetValue(key, out externalAnnotation);
 
                 value = createNew(externalAnnotation);
 
-                _cache.Add(key, value);
+                cache.Add(key, value);
 
                 return value;
             }

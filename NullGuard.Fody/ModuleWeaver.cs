@@ -10,9 +10,8 @@ public partial class ModuleWeaver: BaseModuleWeaver
 {
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
-    private bool isDebug;
-    private NullGuardMode nullGuardMode;
-    public IAssemblyResolver AssemblyResolver { get; set; }
+    bool isDebug;
+    NullGuardMode nullGuardMode;
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()

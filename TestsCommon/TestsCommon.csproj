@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-
+    <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.0.13" />
-    <PackageReference Include="ApprovalUtilities" Version="3.0.13" />
-    <PackageReference Include="FodyHelpers" Version="2.4.0" />
+    <PackageReference Include="FodyHelpers" Version="2.4.1" />
     <PackageReference Include="Xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
-    <ProjectReference Include="..\Fody\NullGuard.Fody.csproj" />
+    <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
   </ItemGroup>
 </Project>

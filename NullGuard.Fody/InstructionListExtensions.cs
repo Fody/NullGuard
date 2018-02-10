@@ -39,7 +39,7 @@ public static class InstructionListExtensions
         }
     }
 
-    private static IEnumerable<Action<Instruction>> GetMethodReturnPointReferenceTargetUpdateActions(
+    static IEnumerable<Action<Instruction>> GetMethodReturnPointReferenceTargetUpdateActions(
         Collection<Instruction> instructions,
         Instruction exitPointInstruction)
     {

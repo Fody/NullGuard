@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReferenceAssembly\NullGuard.csproj" />
+    <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
 </Project>

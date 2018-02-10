@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if (NET46)
+using System.Linq;
 using ApprovalTests;
 using Xunit;
 using Fody;
@@ -168,3 +169,4 @@ public class ApprovedTests
         ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 }
+#endif

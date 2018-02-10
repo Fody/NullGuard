@@ -6,6 +6,8 @@ using Fody;
 
 public static class AssemblyWeaver
 {
+    public static Assembly Assembly;
+
     static AssemblyWeaver()
     {
         var weavingTask = new ModuleWeaver
@@ -16,16 +18,13 @@ public static class AssemblyWeaver
             DefineConstants = new List<string> {"DEBUG"} // Always testing the debug weaver
         };
 
-        TestResult = weavingTask.ExecuteTestRun(
-            assemblyPath: "AssemblyToProcessExplicit.dll",
-            ignoreCodes: new[] {"0x80131854", "0x801318DE"});
+        TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",
+            ignoreCodes: new[] {"0x80131854", "0x801318DE", "0x80131205", "0x80131252" });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;
     }
 
     public static string AfterAssemblyPath;
-
-    public static Assembly Assembly;
 
     public static TestResult TestResult;
 }
