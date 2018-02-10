@@ -61,11 +61,19 @@ public class ApprovedTests
         Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
     }
 
+#if (DEBUG)
     [Fact]
-    public void SpecialClass()
+    public void SpecialClass_debug()
     {
         Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
     }
+#else
+    [Fact]
+    public void SpecialClass_release()
+    {
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+    }
+#endif
 
     [Fact]
     public void PublicNestedInsideNonPublic()
