@@ -1,8 +1,8 @@
-skip_tags: true
-
 configuration: Release
 
 image: Visual Studio 2017
+install:
+- cmd: appveyor downloadfile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
 before_build:
   - nuget restore NullGuard.sln
