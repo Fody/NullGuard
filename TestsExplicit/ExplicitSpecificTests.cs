@@ -91,8 +91,7 @@ public class ExplicitSpecificTests
     {
         var type = AssemblyWeaver.Assembly.GetType(className);
         var sample = (dynamic)Activator.CreateInstance(type);
-        string value;
-        var exception = Assert.Throws<InvalidOperationException>(() => value = sample.NotNullProperty);
+        var exception = Assert.Throws<InvalidOperationException>(() => sample.NotNullProperty);
         Assert.Equal($"[NullGuard] Return value of property 'System.String {className}::{interfaceName}NotNullProperty()' is null.", exception.Message);
     }
 

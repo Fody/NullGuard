@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Fody;
 using Mono.Cecil;
 using Xunit;
 #pragma warning disable 618
@@ -11,12 +10,7 @@ public class InheritanceTests
 
     public InheritanceTests()
     {
-        module = ModuleDefinition.ReadModule(
-            fileName: typeof(InheritanceTests).Assembly.Location,
-            parameters: new ReaderParameters
-            {
-                AssemblyResolver = new MockAssemblyResolver()
-            });
+        module = ModuleDefinition.ReadModule(typeof(InheritanceTests).Assembly.Location);
     }
 
     [Fact]

@@ -238,7 +238,7 @@ public static class ExplicitMode
         var resolveGenericParameter1 = method1.ReturnType.ResolveGenericParameter(declaringType1);
         var resolveGenericParameter2 = method2.ReturnType.ResolveGenericParameter(declaringType2);
         var areaAllParametersOfSameType = AreaAllParametersOfSameType(declaringType1, method1, declaringType2, method2);
-        var referenceEquals = TypeReferenceEqualityComparer.Default.Equals(resolveGenericParameter1, resolveGenericParameter2);
+        var referenceEquals = resolveGenericParameter1.FullName==  resolveGenericParameter2.FullName;
         return method1.Name == method2.Name
                && referenceEquals
                && method1.GenericParameters.Count == method2.GenericParameters.Count
@@ -247,8 +247,10 @@ public static class ExplicitMode
 
     static bool HasSameSignature(TypeReference declaringType1, PropertyDefinition property1, TypeReference declaringType2, PropertyDefinition property2)
     {
+        var resolveGenericParameter1 = property1.PropertyType.ResolveGenericParameter(declaringType1);
+        var resolveGenericParameter2 = property2.PropertyType.ResolveGenericParameter(declaringType2);
         return property1.Name == property2.Name
-               && TypeReferenceEqualityComparer.Default.Equals(property1.PropertyType.ResolveGenericParameter(declaringType1), property2.PropertyType.ResolveGenericParameter(declaringType2))
+               && resolveGenericParameter1.FullName == resolveGenericParameter2.FullName
                && AreaAllParametersOfSameType(declaringType1, property1, declaringType2, property2);
     }
 
@@ -269,8 +271,10 @@ public static class ExplicitMode
 
             var p2 = method2.Parameters[i].ParameterType.ResolveGenericParameter(declaringType2);
 
-            if (!TypeReferenceEqualityComparer.Default.Equals(p1, p2))
+            if (p1.FullName != p2.FullName)
+            {
                 return false;
+            }
         }
 
         return true;
@@ -293,8 +297,8 @@ public static class ExplicitMode
 
             var p2 = property2.Parameters[i].ParameterType.ResolveGenericParameter(declaringType2);
 
-            if (!TypeReferenceEqualityComparer.Default.Equals(p1, p2))
-                return false;
+            if (p1.FullName != p2.FullName)
+            { return false;}
         }
 
         return true;
@@ -354,7 +358,9 @@ public static class ExplicitMode
             var typeDefinition = getOverride.DeclaringType.Resolve();
             var ovr = typeDefinition.Properties.FirstOrDefault(p => MemberReferenceEqualityComparer.Default.Equals(p.GetMethod, getOverride));
             if (ovr != null)
+            {
                 yield return ovr;
+            }
         }
     }
 
