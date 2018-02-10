@@ -356,7 +356,7 @@ public static class ExplicitMode
         foreach (var getOverride in getMethod.EnumerateOverrides())
         {
             var typeDefinition = getOverride.DeclaringType.Resolve();
-            var ovr = typeDefinition.Properties.FirstOrDefault(p => MemberReferenceEqualityComparer.Default.Equals(p.GetMethod, getOverride));
+            var ovr = typeDefinition.Properties.FirstOrDefault(p => p.GetMethod == getOverride.Resolve());
             if (ovr != null)
             {
                 yield return ovr;
