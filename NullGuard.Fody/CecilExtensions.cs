@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Mono.Cecil;
 
-public static class CecilExtensions
+static class CecilExtensions
 {
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
@@ -47,10 +47,8 @@ public static class CecilExtensions
         {
             return ExplicitMode.AllowsNull(parameter, method);
         }
-        else
-        {
-            return parameter.ImplicitAllowsNull();
-        }
+
+        return parameter.ImplicitAllowsNull();
     }
 
     public static bool AllowsNull(this PropertyDefinition property, NullGuardMode mode)
@@ -59,10 +57,8 @@ public static class CecilExtensions
         {
             return ExplicitMode.AllowsNull(property);
         }
-        else
-        {
-            return property.ImplicitAllowsNull();
-        }
+
+        return property.ImplicitAllowsNull();
     }
 
     public static bool ImplicitAllowsNull(this ICustomAttributeProvider value)
@@ -77,12 +73,10 @@ public static class CecilExtensions
             // ReSharper uses a *method* attribute for NotNull for the return value
             return ExplicitMode.AllowsNull(methodDefinition);
         }
-        else
-        {
-            return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
-                   // ReSharper uses a *method* attribute for CanBeNull for the return value
-                   methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
-        }
+
+        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+               // ReSharper uses a *method* attribute for CanBeNull for the return value
+               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)

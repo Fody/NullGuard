@@ -4,7 +4,7 @@ using System.Linq;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 
-public static class InstructionListExtensions
+static class InstructionListExtensions
 {
     public static void Prepend(this Collection<Instruction> collection, ICollection<Instruction> instructions)
     {

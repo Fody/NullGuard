@@ -19,5 +19,4 @@ test_script:
     dotnet test "Tests\Tests.csproj" --framework netcoreapp2.0 --configuration Release --no-build --output bin\Release\netcoreapp2.0
 
 artifacts:
-  - path: nugets\*.nupkg
-  - path: AssemblyToProcess\bin\Release\*.*
+- path: nugets\**\*.nupkg
