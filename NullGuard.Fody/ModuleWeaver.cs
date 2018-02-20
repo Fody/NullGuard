@@ -142,7 +142,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
     void ProcessAssembly(List<TypeDefinition> types)
     {
-        this.isDebug = IncludeDebugAssert &&
+        isDebug = IncludeDebugAssert &&
                       DefineConstants.Any(c => c == "DEBUG") &&
                       DebugAssertMethod != null;
 
