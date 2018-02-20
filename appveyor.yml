@@ -7,7 +7,8 @@ install:
 before_build:
 - ps: nuget restore
 build:
-  verbosity: minimal
+- cmd: >-
+    "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe" /build "Release" NullGuard.sln
 test_script:
 - cmd: >-
     %xunit20%\xunit.console Tests\bin\Release\net46\Tests.dll
