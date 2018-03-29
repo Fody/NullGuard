@@ -7,24 +7,48 @@ using System.Xml.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 
-public static class ExplicitMode
+public class ExplicitMode
+{
+    readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
+
+    public bool AllowsNull(PropertyDefinition property)
+    {
+        var nullability = memberNullabilityCache.GetOrCreate(property);
+
+        return nullability.AllowsNull;
+    }
+
+    public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
+    {
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ParameterAllowsNull(parameter.Index);
+    }
+
+    public bool AllowsNull(MethodDefinition method)
+    {
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ReturnValueAllowsNull;
+    }
+}
+
+[Flags]
+enum NullabilityAttributes
+{
+    None = 0,
+    CanBeNull = 1,
+    NotNull = 2,
+    ItemNotNull = 4,
+    ItemCanBeNull = 8
+}
+
+public static class ExplicitModeExtensions
 {
     const string NotNullAttributeTypeName = "NotNullAttribute";
     const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
-
-    [Flags]
-    enum NullabilityAttributes
-    {
-        None = 0,
-        CanBeNull = 1,
-        NotNull = 2,
-        ItemNotNull = 4,
-        ItemCanBeNull = 8
-    }
-
-    static readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
@@ -54,28 +78,7 @@ public static class ExplicitMode
         return NullGuardMode.Implicit;
     }
 
-    public static bool AllowsNull(PropertyDefinition property)
-    {
-        var nullability = memberNullabilityCache.GetOrCreate(property);
-
-        return nullability.AllowsNull;
-    }
-
-    public static bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
-    {
-        var nullability = memberNullabilityCache.GetOrCreate(method);
-
-        return nullability.ParameterAllowsNull(parameter.Index);
-    }
-
-    public static bool AllowsNull(MethodDefinition method)
-    {
-        var nullability = memberNullabilityCache.GetOrCreate(method);
-
-        return nullability.ReturnValueAllowsNull;
-    }
-
-    static NullabilityAttributes GetNullabilityAttributes(this ICustomAttributeProvider value)
+    internal static NullabilityAttributes GetNullabilityAttributes(this ICustomAttributeProvider value)
     {
         return value?.CustomAttributes
             .Select(GetNullabilityAttribute)
@@ -98,7 +101,7 @@ public static class ExplicitMode
         }
     }
 
-    public static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)
+    static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)
     {
         foreach (var implementation in typeDefinition.Interfaces)
         {
@@ -204,7 +207,7 @@ public static class ExplicitMode
         }
     }
 
-    public static MethodReference FindBase(this MethodDefinition method)
+    static MethodReference FindBase(this MethodDefinition method)
     {
         if (!method.IsVirtual || method.IsNewSlot)
             return null;
@@ -227,7 +230,7 @@ public static class ExplicitMode
             .FirstOrDefault(method => HasSameSignature(declaringType, method, reference.DeclaringType, reference.Resolve()));
     }
 
-    public static PropertyDefinition Find(this TypeReference declaringType, PropertyReference reference)
+    static PropertyDefinition Find(this TypeReference declaringType, PropertyReference reference)
     {
         return declaringType.Resolve().Properties
             .FirstOrDefault(property => HasSameSignature(declaringType, property, reference.DeclaringType, reference.Resolve()));
@@ -238,7 +241,7 @@ public static class ExplicitMode
         var resolveGenericParameter1 = method1.ReturnType.ResolveGenericParameter(declaringType1);
         var resolveGenericParameter2 = method2.ReturnType.ResolveGenericParameter(declaringType2);
         var areaAllParametersOfSameType = AreaAllParametersOfSameType(declaringType1, method1, declaringType2, method2);
-        var referenceEquals = resolveGenericParameter1.FullName==  resolveGenericParameter2.FullName;
+        var referenceEquals = resolveGenericParameter1.FullName == resolveGenericParameter2.FullName;
         return method1.Name == method2.Name
                && referenceEquals
                && method1.GenericParameters.Count == method2.GenericParameters.Count
@@ -298,7 +301,7 @@ public static class ExplicitMode
             var p2 = property2.Parameters[i].ParameterType.ResolveGenericParameter(declaringType2);
 
             if (p1.FullName != p2.FullName)
-            { return false;}
+            { return false; }
         }
 
         return true;
@@ -415,246 +418,254 @@ public static class ExplicitMode
         return NullabilityAttributes.None;
     }
 
-    static NullabilityAttributes GetNullabilityAttributes(this XElement element)
+    internal static NullabilityAttributes GetNullabilityAttributes(this XElement element)
     {
         return element.Elements("attribute")
             .Select(GetNullabilityAttribute)
             .DefaultIfEmpty()
             .Aggregate((s, v) => s | v);
     }
+}
 
-    class MemberNullability
+class MemberNullability
+{
+    protected MemberNullabilityCache MemberNullabilityCache { get; }
+
+    public MemberNullability(MemberNullabilityCache memberNullabilityCache)
     {
+        MemberNullabilityCache = memberNullabilityCache;
+    }
+}
+
+class MethodNullability : MemberNullability
+{
+    MethodDefinition method;
+    NullabilityAttributes[] parameterAttributes;
+    NullabilityAttributes returnValueAttributes;
+    bool isInheritanceResolved;
+
+    public MethodNullability(MemberNullabilityCache memberNullabilityCache, MethodDefinition method, XElement externalAnnotation)
+        : base(memberNullabilityCache)
+    {
+        this.method = method;
+        parameterAttributes = method.Parameters.Select(item => item.GetNullabilityAttributes()).ToArray();
+        returnValueAttributes = method.GetNullabilityAttributes();
+
+        if (externalAnnotation == null)
+            return;
+
+        returnValueAttributes |= externalAnnotation.GetNullabilityAttributes();
+
+        foreach (var childElement in externalAnnotation.Elements("parameter"))
+        {
+            var parameterName = childElement.Attribute("name")?.Value;
+            if (parameterName == null)
+                continue;
+
+            var parameter = method.Parameters.FirstOrDefault(p => p.Name == parameterName);
+            if (parameter == null)
+                continue;
+
+            var parameterIndex = parameter.Index;
+            parameterAttributes[parameterIndex] |= childElement.GetNullabilityAttributes();
+        }
     }
 
-    class MethodNullability : MemberNullability
+    public bool ReturnValueAllowsNull
     {
-        MethodDefinition method;
-        NullabilityAttributes[] parameterAttributes;
-        NullabilityAttributes returnValueAttributes;
-        bool isInheritanceResolved;
-
-        public MethodNullability(MethodDefinition method, XElement externalAnnotation)
-        {
-            this.method = method;
-            parameterAttributes = method.Parameters.Select(GetNullabilityAttributes).ToArray();
-            returnValueAttributes = method.GetNullabilityAttributes();
-
-            if (externalAnnotation == null)
-                return;
-
-            returnValueAttributes |= externalAnnotation.GetNullabilityAttributes();
-
-            foreach (var childElement in externalAnnotation.Elements("parameter"))
-            {
-                var parameterName = childElement.Attribute("name")?.Value;
-                if (parameterName == null)
-                    continue;
-
-                var parameter = method.Parameters.FirstOrDefault(p => p.Name == parameterName);
-                if (parameter == null)
-                    continue;
-
-                var parameterIndex = parameter.Index;
-                parameterAttributes[parameterIndex] |= childElement.GetNullabilityAttributes();
-            }
-        }
-
-        public bool ReturnValueAllowsNull
-        {
-            get
-            {
-                ResolveInheritance();
-
-                var effectiveAttribute = method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
-
-                return !returnValueAttributes.HasFlag(effectiveAttribute);
-            }
-        }
-
-        public bool ParameterAllowsNull(int index)
+        get
         {
             ResolveInheritance();
 
-            var attributes = parameterAttributes[index];
-            var parameter = method.Parameters[index];
+            var effectiveAttribute = method.IsAsyncStateMachine() ? NullabilityAttributes.ItemNotNull : NullabilityAttributes.NotNull;
 
-            if (parameter.IsOut)
-                return !attributes.HasFlag(NullabilityAttributes.NotNull);
-
-            return !attributes.HasFlag(NullabilityAttributes.NotNull) || attributes.HasFlag(NullabilityAttributes.CanBeNull);
-        }
-
-        void MergeFrom(MethodNullability baseMethod)
-        {
-            if (baseMethod == null)
-                return;
-
-            baseMethod.ResolveInheritance();
-
-            returnValueAttributes |= baseMethod.returnValueAttributes;
-
-            for (var i = 0; i < parameterAttributes.Length; i++)
-            {
-                parameterAttributes[i] |= baseMethod.parameterAttributes[i];
-            }
-        }
-
-        void ResolveInheritance()
-        {
-            if (isInheritanceResolved)
-                return;
-
-            isInheritanceResolved = true;
-
-            if (!method.HasThis)
-                return;
-
-            foreach (var method in method.EnumerateOverridesAndImplementations())
-            {
-                var nullability = memberNullabilityCache.GetOrCreate(method.Resolve());
-
-                MergeFrom(nullability);
-            }
-        }
-
-        public override string ToString()
-        {
-            var parms = string.Join(", ", parameterAttributes);
-            return $"{returnValueAttributes} {method.Name}({parms})";
+            return !returnValueAttributes.HasFlag(effectiveAttribute);
         }
     }
 
-    class PropertyNullability : MemberNullability
+    public bool ParameterAllowsNull(int index)
     {
-        PropertyDefinition property;
-        NullabilityAttributes nullabilityAttributes;
-        bool isInheritanceResolved;
+        ResolveInheritance();
 
-        public PropertyNullability(PropertyDefinition property, XElement externalAnnotation)
+        var attributes = parameterAttributes[index];
+        var parameter = method.Parameters[index];
+
+        if (parameter.IsOut)
+            return !attributes.HasFlag(NullabilityAttributes.NotNull);
+
+        return !attributes.HasFlag(NullabilityAttributes.NotNull) || attributes.HasFlag(NullabilityAttributes.CanBeNull);
+    }
+
+    void MergeFrom(MethodNullability baseMethod)
+    {
+        if (baseMethod == null)
+            return;
+
+        baseMethod.ResolveInheritance();
+
+        returnValueAttributes |= baseMethod.returnValueAttributes;
+
+        for (var i = 0; i < parameterAttributes.Length; i++)
         {
-            this.property = property;
-            nullabilityAttributes = property.GetNullabilityAttributes();
-
-            if (externalAnnotation == null)
-                return;
-
-            nullabilityAttributes |= externalAnnotation.GetNullabilityAttributes();
-        }
-
-        public bool AllowsNull
-        {
-            get
-            {
-                ResolveInheritance();
-
-                return !nullabilityAttributes.HasFlag(NullabilityAttributes.NotNull);
-            }
-        }
-
-        void MergeFrom(PropertyNullability baseProperty)
-        {
-            if (baseProperty == null)
-                return;
-
-            baseProperty.ResolveInheritance();
-
-            nullabilityAttributes |= baseProperty.nullabilityAttributes;
-        }
-
-        void ResolveInheritance()
-        {
-            if (isInheritanceResolved)
-                return;
-
-            isInheritanceResolved = true;
-
-            if (!property.HasThis)
-                return;
-
-            foreach (var property in property.EnumerateOverridesAndImplementations())
-            {
-                var nullability = memberNullabilityCache.GetOrCreate(property.Resolve());
-
-                MergeFrom(nullability);
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"{nullabilityAttributes} {property.Name}";
+            parameterAttributes[i] |= baseMethod.parameterAttributes[i];
         }
     }
 
-    class MemberNullabilityCache
+    void ResolveInheritance()
     {
-        Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
+        if (isInheritanceResolved)
+            return;
 
-        public MethodNullability GetOrCreate(MethodDefinition method)
+        isInheritanceResolved = true;
+
+        if (!method.HasThis)
+            return;
+
+        foreach (var method in method.EnumerateOverridesAndImplementations())
         {
-            return (MethodNullability)GetOrCreate(method, externalAnnotation => new MethodNullability(method, externalAnnotation));
+            var nullability = MemberNullabilityCache.GetOrCreate(method.Resolve());
+
+            MergeFrom(nullability);
+        }
+    }
+
+    public override string ToString()
+    {
+        var parms = string.Join(", ", parameterAttributes);
+        return $"{returnValueAttributes} {method.Name}({parms})";
+    }
+}
+
+class PropertyNullability : MemberNullability
+{
+    PropertyDefinition property;
+    NullabilityAttributes nullabilityAttributes;
+    bool isInheritanceResolved;
+
+    public PropertyNullability(MemberNullabilityCache memberNullabilityCache, PropertyDefinition property, XElement externalAnnotation)
+        : base(memberNullabilityCache)
+    {
+        this.property = property;
+        nullabilityAttributes = property.GetNullabilityAttributes();
+
+        if (externalAnnotation == null)
+            return;
+
+        nullabilityAttributes |= externalAnnotation.GetNullabilityAttributes();
+    }
+
+    public bool AllowsNull
+    {
+        get
+        {
+            ResolveInheritance();
+
+            return !nullabilityAttributes.HasFlag(NullabilityAttributes.NotNull);
+        }
+    }
+
+    void MergeFrom(PropertyNullability baseProperty)
+    {
+        if (baseProperty == null)
+            return;
+
+        baseProperty.ResolveInheritance();
+
+        nullabilityAttributes |= baseProperty.nullabilityAttributes;
+    }
+
+    void ResolveInheritance()
+    {
+        if (isInheritanceResolved)
+            return;
+
+        isInheritanceResolved = true;
+
+        if (!property.HasThis)
+            return;
+
+        foreach (var property in property.EnumerateOverridesAndImplementations())
+        {
+            var nullability = MemberNullabilityCache.GetOrCreate(property.Resolve());
+
+            MergeFrom(nullability);
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"{nullabilityAttributes} {property.Name}";
+    }
+}
+
+class MemberNullabilityCache
+{
+    Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
+
+    public MethodNullability GetOrCreate(MethodDefinition method)
+    {
+        return (MethodNullability)GetOrCreate(method, externalAnnotation => new MethodNullability(this, method, externalAnnotation));
+    }
+
+    public PropertyNullability GetOrCreate(PropertyDefinition property)
+    {
+        return (PropertyNullability)GetOrCreate(property, externalAnnotation => new PropertyNullability(this, property, externalAnnotation));
+    }
+
+    MemberNullability GetOrCreate(MemberReference member, Func<XElement, MemberNullability> createNew)
+    {
+        var module = member.Module;
+        var assemblyName = module.Assembly.Name.Name;
+
+        var key = DocCommentId.GetDocCommentId((IMemberDefinition)member);
+
+        if (!cache.TryGetValue(assemblyName, out var assemblyCache))
+        {
+            assemblyCache = new AssemblyCache(module.FileName);
+            cache.Add(assemblyName, assemblyCache);
         }
 
-        public PropertyNullability GetOrCreate(PropertyDefinition property)
+        return assemblyCache.GetOrCreate(key, createNew);
+    }
+
+    class AssemblyCache
+    {
+        readonly Dictionary<string, MemberNullability> cache = new Dictionary<string, MemberNullability>();
+        readonly Dictionary<string, XElement> externalAnnotations;
+
+        public AssemblyCache(string moduleFileName)
         {
-            return (PropertyNullability)GetOrCreate(property, externalAnnotation => new PropertyNullability(property, externalAnnotation));
-        }
+            var annotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
 
-        MemberNullability GetOrCreate(MemberReference member, Func<XElement, MemberNullability> createNew)
-        {
-            var module = member.Module;
-            var assemblyName = module.Assembly.Name.Name;
+            if (!File.Exists(annotations))
+                return;
 
-            var key = DocCommentId.GetDocCommentId((IMemberDefinition)member);
-
-            if (!cache.TryGetValue(assemblyName, out var assemblyCache))
+            try
             {
-                assemblyCache = new AssemblyCache(module.FileName);
-                cache.Add(assemblyName, assemblyCache);
+                externalAnnotations = XDocument.Load(annotations)
+                    .Element("assembly")?
+                    .Elements("member")
+                    .ToDictionary(member => member.Attribute("name")?.Value);
             }
-
-            return assemblyCache.GetOrCreate(key, createNew);
+            catch
+            {
+                // invalid file, ignore (TODO: log something?)
+            }
         }
 
-        class AssemblyCache
+        public MemberNullability GetOrCreate(string key, Func<XElement, MemberNullability> createNew)
         {
-            readonly Dictionary<string, MemberNullability> cache = new Dictionary<string, MemberNullability>();
-            readonly Dictionary<string, XElement> externalAnnotations;
-
-            public AssemblyCache(string moduleFileName)
-            {
-                var annotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
-
-                if (!File.Exists(annotations))
-                    return;
-
-                try
-                {
-                    externalAnnotations = XDocument.Load(annotations)
-                        .Element("assembly")?
-                        .Elements("member")
-                        .ToDictionary(member => member.Attribute("name")?.Value);
-                }
-                catch
-                {
-                    // invalid file, ignore (TODO: log something?)
-                }
-            }
-
-            public MemberNullability GetOrCreate(string key, Func<XElement, MemberNullability> createNew)
-            {
-                if (cache.TryGetValue(key, out var value))
-                    return value;
-
-                XElement externalAnnotation = null;
-                externalAnnotations?.TryGetValue(key, out externalAnnotation);
-
-                value = createNew(externalAnnotation);
-
-                cache.Add(key, value);
-
+            if (cache.TryGetValue(key, out var value))
                 return value;
-            }
+
+            XElement externalAnnotation = null;
+            externalAnnotations?.TryGetValue(key, out externalAnnotation);
+
+            value = createNew(externalAnnotation);
+
+            cache.Add(key, value);
+
+            return value;
         }
     }
 }

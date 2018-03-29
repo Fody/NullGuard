@@ -46,7 +46,7 @@ public partial class ModuleWeaver
             return;
         }
 
-        if (property.AllowsNull(nullGuardMode))
+        if (property.AllowsNull(explicitMode))
         {
             return;
         }
@@ -138,7 +138,7 @@ public partial class ModuleWeaver
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
-        if (!valueParameter.MayNotBeNull(setMethod, NullGuardMode.Implicit))
+        if (!valueParameter.MayNotBeNull(setMethod, null))
             return;
 
         var guardInstructions = new List<Instruction>();

@@ -41,21 +41,21 @@ static class CecilExtensions
         return method.Parameters.Last();
     }
 
-    public static bool AllowsNull(this ParameterDefinition parameter, MethodDefinition method, NullGuardMode mode)
+    public static bool AllowsNull(this ParameterDefinition parameter, MethodDefinition method, ExplicitMode explicitMode)
     {
-        if (mode == NullGuardMode.Explicit)
+        if (explicitMode != null)
         {
-            return ExplicitMode.AllowsNull(parameter, method);
+            return explicitMode.AllowsNull(parameter, method);
         }
 
         return parameter.ImplicitAllowsNull();
     }
 
-    public static bool AllowsNull(this PropertyDefinition property, NullGuardMode mode)
+    public static bool AllowsNull(this PropertyDefinition property, ExplicitMode explicitMode)
     {
-        if (mode == NullGuardMode.Explicit)
+        if (explicitMode != null)
         {
-            return ExplicitMode.AllowsNull(property);
+            return explicitMode.AllowsNull(property);
         }
 
         return property.ImplicitAllowsNull();
@@ -66,12 +66,12 @@ static class CecilExtensions
         return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
-    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, NullGuardMode mode)
+    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, ExplicitMode explicitMode)
     {
-        if (mode == NullGuardMode.Explicit)
+        if (explicitMode != null)
         {
             // ReSharper uses a *method* attribute for NotNull for the return value
-            return ExplicitMode.AllowsNull(methodDefinition);
+            return explicitMode.AllowsNull(methodDefinition);
         }
 
         return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
@@ -98,9 +98,9 @@ static class CecilExtensions
         }
     }
 
-    public static bool MayNotBeNull(this ParameterDefinition arg, MethodDefinition method, NullGuardMode mode)
+    public static bool MayNotBeNull(this ParameterDefinition arg, MethodDefinition method, ExplicitMode explicitMode)
     {
-        return !arg.AllowsNull(method, mode) && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
+        return !arg.AllowsNull(method, explicitMode) && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
 
     static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)
