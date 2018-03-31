@@ -12,9 +12,9 @@
     .field private int32 '<>1__state'
     .field private int32 '<>2__current'
     .field private int32 '<>l__initialThreadId'
-    .field private int32 '<i>5__1'
     .field private int32 end
     .field public int32 '<>3__end'
+    .field private int32 '<i>5__2'
     .method public hidebysig specialname rtspecialname 
             instance void  .ctor(int32 '<>1__state') cil managed
     {
@@ -61,11 +61,11 @@
       IL_0012:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
       IL_0017:  ldarg.0
       IL_0018:  ldc.i4.0
-      IL_0019:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+      IL_0019:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__2'
       IL_001e:  br.s       IL_004c
       IL_0020:  ldarg.0
       IL_0021:  ldarg.0
-      IL_0022:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+      IL_0022:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__2'
       IL_0027:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>2__current'
       IL_002c:  ldarg.0
       IL_002d:  ldc.i4.1
@@ -76,15 +76,15 @@
       IL_0036:  ldc.i4.m1
       IL_0037:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
       IL_003c:  ldarg.0
-      IL_003d:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+      IL_003d:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__2'
       IL_0042:  stloc.1
       IL_0043:  ldarg.0
       IL_0044:  ldloc.1
       IL_0045:  ldc.i4.1
       IL_0046:  add
-      IL_0047:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+      IL_0047:  stfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__2'
       IL_004c:  ldarg.0
-      IL_004d:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__1'
+      IL_004d:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<i>5__2'
       IL_0052:  ldarg.0
       IL_0053:  ldfld      int32 SpecialClass/'<CountTo>d__0'::end
       IL_0058:  blt.s      IL_0020
