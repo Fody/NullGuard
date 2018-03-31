@@ -17,10 +17,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Fody" Version="2.4.1" />
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
-    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.0.0" />
-  </ItemGroup>
-
 </Project>
