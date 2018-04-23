@@ -13,6 +13,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
     bool isDebug;
     NullGuardMode nullGuardMode;
     ExplicitMode explicitMode;
+    public bool RegexIsForBaseClass = false;
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
@@ -74,7 +75,21 @@ public partial class ModuleWeaver: BaseModuleWeaver
         {
             return allTypes;
         }
-        return allTypes.Where(x => !ExcludeRegex.IsMatch(x.FullName)).ToList();
+        //return allTypes.Where(x => !ExcludeRegex.IsMatch(x.FullName)).ToList();
+        return allTypes.Where
+        (
+            x =>
+                RegexIsForBaseClass
+                ?
+                    !allTypes.Any
+                    (
+                        bt =>
+                            ExcludeRegex.IsMatch(bt.FullName) &&
+                            x.FromBaseType(bt)
+                    )
+                :
+                !ExcludeRegex.IsMatch(x.FullName)
+        ).ToList();
     }
 
     void ReadConfig()
@@ -87,6 +102,23 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
         ReadMode();
+        ReadExcludeRegexIsForBaseClass();
+    }
+
+    void ReadExcludeRegexIsForBaseClass()
+    {
+        var attribute = Config.Attribute("RegexIsForBaseClass");
+        var baseClassFlag = attribute?.Value;
+        if (!string.IsNullOrWhiteSpace(baseClassFlag))
+        {
+            if (!bool.TryParse(baseClassFlag, out RegexIsForBaseClass))
+            {
+                if (int.TryParse(baseClassFlag, out var flagValue))
+                {
+                    RegexIsForBaseClass = Convert.ToBoolean(Math.Abs(flagValue));
+                }
+            }
+        }
     }
 
     void ReadIncludeDebugAssert()

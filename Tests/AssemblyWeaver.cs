@@ -13,6 +13,7 @@ public static class AssemblyWeaver
         var weavingTask = new ModuleWeaver
         {
             Config = new XElement("NullGuard",
+                new XAttribute("RegexIsForBaseClass", "1"),
                 new XAttribute("IncludeDebugAssert", false),
                 new XAttribute("ExcludeRegex", "^ClassToExclude$")),
             DefineConstants = new List<string> {"DEBUG"} // Always testing the debug weaver

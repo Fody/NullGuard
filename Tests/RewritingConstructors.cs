@@ -41,4 +41,28 @@ public class RewritingConstructors
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");
         Activator.CreateInstance(type, new object[]{ null });
     }
+
+    [Fact]
+    public void AllowsNullWhenBaseClassMatchExcludeRegex()
+    {
+        try
+        {
+            var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");
+            Activator.CreateInstance(type, new object[] { null });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("BaseClass", ex);
+        }
+
+        try
+        {
+            var typeDerived = AssemblyWeaver.Assembly.GetType("ClassToExclude_Derived");
+            Activator.CreateInstance(typeDerived, new object[] { null });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("DerivedClass", ex);
+        }
+    }
 }

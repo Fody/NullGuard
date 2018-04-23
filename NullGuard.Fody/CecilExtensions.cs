@@ -8,6 +8,15 @@ static class CecilExtensions
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
 
+    public static bool FromBaseType(this TypeDefinition type, TypeDefinition baseTypeDefinition)
+    {
+        return
+            type == baseTypeDefinition ||
+            (
+                type.BaseType != null && type.BaseType.Resolve().FromBaseType(baseTypeDefinition)
+            );
+    }
+
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
         return type.Interfaces.Any(i => i.InterfaceType.FullName.Equals(interfaceFullName))
