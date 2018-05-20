@@ -2,10 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard1.4</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard1.4</TargetFrameworks>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
-    <Authors>Simon Cropp, Cameron MacFarland</Authors>
+    <Authors>Simon Cropp, Cameron MacFarland, Tom Englert</Authors>
     <Description>Add null checks.</Description>
     <PackageTags>Null Check, ILWeaving, Fody, Cecil</PackageTags>
   </PropertyGroup>
