@@ -10,4 +10,12 @@
       <Link>ValidationFlags.cs</Link>
     </Compile>
   </ItemGroup>
+  <Target Name="CopyWeaverForSmokeTest" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <CopyTarget>$(TargetDir)$(ProjectName)</CopyTarget>
+    </PropertyGroup>
+    <MakeDir Directories="$(SolutionDir)Tools" />
+    <Copy SourceFiles="$(CopyTarget).dll" DestinationFolder="$(SolutionDir)Tools" />
+    <Copy SourceFiles="$(CopyTarget).pdb" DestinationFolder="$(SolutionDir)Tools" />
+  </Target>
 </Project>
