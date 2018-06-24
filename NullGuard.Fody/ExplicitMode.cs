@@ -531,8 +531,8 @@ class MethodNullability : MemberNullability
 
     public override string ToString()
     {
-        var parms = string.Join(", ", parameterAttributes);
-        return $"{returnValueAttributes} {method.Name}({parms})";
+        var parameters = string.Join(", ", parameterAttributes);
+        return $"{returnValueAttributes} {method.Name}({parameters})";
     }
 }
 

@@ -25,7 +25,7 @@ public class RewritingMethods
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInteralClassWithPublicInterface(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
 #if (NET46)
         Approvals.Verify(exception.Message);
 #endif
@@ -36,7 +36,7 @@ public class RewritingMethods
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (dynamic)Activator.CreateInstance(type);
-        sample.CallInteralClassWithPrivateInterface(null);
+        sample.CallInternalClassWithPrivateInterface(null);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class RewritingMethods
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
         var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInteralClassWithPublicInterface(null));
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
 #if (NET46)
         Approvals.Verify(exception.Message);
 #endif
@@ -66,7 +66,7 @@ public class RewritingMethods
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
         var sample = (dynamic) Activator.CreateInstance(type);
-        sample.CallInteralClassWithPrivateInterface(null);
+        sample.CallInternalClassWithPrivateInterface(null);
     }
 
     [Fact]

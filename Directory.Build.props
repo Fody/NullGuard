@@ -3,5 +3,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <Version>1.8.0</Version>
+    <NoWarn>NU5118</NoWarn>
   </PropertyGroup>
 </Project>

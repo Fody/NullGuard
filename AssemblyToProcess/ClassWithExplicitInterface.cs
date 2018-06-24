@@ -9,12 +9,12 @@ public class ClassWithExplicitInterface : IComparable<string>
         return 0;
     }
 
-    public int CallInteralClassWithPrivateInterface([AllowNull] string other)
+    public int CallInternalClassWithPrivateInterface([AllowNull] string other)
     {
         return ((IPrivate) new ClassWithExplicitPrivateInterface()).CompareTo(other);
     }
 
-    public int CallInteralClassWithPublicInterface([AllowNull] string other)
+    public int CallInternalClassWithPublicInterface([AllowNull] string other)
     {
         return ((IComparable<string>) new ClassWithExplicitPublicInterface()).CompareTo(other);
     }

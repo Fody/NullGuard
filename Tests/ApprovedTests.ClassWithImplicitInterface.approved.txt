@@ -76,7 +76,7 @@
     IL_0014:  ret
   } 
   .method public hidebysig instance int32 
-          CallInteralClassWithPrivateInterface(string other) cil managed
+          CallInternalClassWithPrivateInterface(string other) cil managed
   {
     // Code size       12 (0xc)
     .maxstack  2
@@ -86,7 +86,7 @@
     IL_000b:  ret
   } 
   .method public hidebysig instance int32 
-          CallInteralClassWithPublicInterface(string other) cil managed
+          CallInternalClassWithPublicInterface(string other) cil managed
   {
     // Code size       12 (0xc)
     .maxstack  2
