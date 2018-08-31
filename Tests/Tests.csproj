@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
@@ -11,9 +11,9 @@
     <PackageReference Include="ApprovalTests" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
     <PackageReference Include="ApprovalUtilities" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
     <PackageReference Include="ObjectApproval" Version="2.2.0" Condition="$(TargetFramework) == 'net46'" />
-    <PackageReference Include="FodyHelpers" Version="3.0.0" />
-    <PackageReference Include="Xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="FodyHelpers" Version="3.1.6" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
