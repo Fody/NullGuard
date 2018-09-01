@@ -106,16 +106,18 @@ public partial class ModuleWeaver
 
             var guardInstructions = new List<Instruction>();
 
+            var propertyPropertyType = property.PropertyType;
+
             if (isDebug)
             {
-                DuplicateReturnValue(guardInstructions, property.PropertyType);
+                DuplicateReturnValue(guardInstructions, propertyPropertyType);
 
                 CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
-            DuplicateReturnValue(guardInstructions, property.PropertyType);
+            DuplicateReturnValue(guardInstructions, propertyPropertyType);
 
-            IfNull(guardInstructions, returnInstruction, i =>
+            IfNull(propertyPropertyType, guardInstructions, returnInstruction, i =>
             {
                 // Clean up the stack since we're about to throw up.
                 i.Add(Instruction.Create(OpCodes.Pop));
@@ -152,7 +154,7 @@ public partial class ModuleWeaver
 
         LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-        IfNull(guardInstructions, entry, i =>
+        IfNull(valueParameter.ParameterType, guardInstructions, entry, i =>
         {
             LoadArgumentNullException(i, valueParameter.Name, errorMessage);
 

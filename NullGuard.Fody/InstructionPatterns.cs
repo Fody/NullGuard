@@ -89,10 +89,15 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Newobj, InvalidOperationExceptionConstructor));
     }
 
-    public void IfNull(List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
+    public void IfNull(TypeReference nullableType, List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
     {
         // Branch if value on stack is true, not null or non-zero
         instructions.Add(Instruction.Create(OpCodes.Brtrue_S, returnInstruction));
+
+        if (nullableType.IsGenericInstance || nullableType.IsGenericParameter)
+        {
+
+        }
 
         trueBlock(instructions);
     }
