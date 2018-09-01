@@ -8,9 +8,9 @@
     <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
-    <PackageReference Include="ApprovalUtilities" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
-    <PackageReference Include="ObjectApproval" Version="2.1.0" Condition="$(TargetFramework) == 'net46'" />
+    <PackageReference Include="ApprovalTests" Version="3.*" Condition="$(TargetFramework) == 'NET472'" />
+    <PackageReference Include="ApprovalUtilities" Version="3.*" Condition="$(TargetFramework) == 'NET472'" />
+    <PackageReference Include="ObjectApproval" Version="2.1.0" Condition="$(TargetFramework) == 'NET472'" />
     <PackageReference Include="FodyHelpers" Version="3.1.7" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />

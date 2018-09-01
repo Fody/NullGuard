@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-#if (NET46)
+#if (NET472)
 using ApprovalTests;
 #endif
 using Xunit;
@@ -12,7 +12,7 @@ public class RewritingConstructors
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, null, ""));
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.InnerException.Message);
 #endif
     }
@@ -23,7 +23,7 @@ public class RewritingConstructors
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var args = new object[1];
         var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, args));
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.InnerException.Message);
 #endif
       //  Assert.Equal("Fail: [NullGuard] Out parameter 'nonNullOutArg' is null.", AssemblyWeaver.TestListener.Message);

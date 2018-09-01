@@ -8,9 +8,9 @@
     <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ApprovalTests" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
-    <PackageReference Include="ApprovalUtilities" Version="3.*" Condition="$(TargetFramework) == 'net46'" />
-    <PackageReference Include="ObjectApproval" Version="2.2.0" Condition="$(TargetFramework) == 'net46'" />
+    <PackageReference Include="ApprovalTests" Version="3.*" Condition="$(TargetFramework) == 'NET472'" />
+    <PackageReference Include="ApprovalUtilities" Version="3.*" Condition="$(TargetFramework) == 'NET472'" />
+    <PackageReference Include="ObjectApproval" Version="2.2.0" Condition="$(TargetFramework) == 'NET472'" />
     <PackageReference Include="FodyHelpers" Version="3.1.7" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -18,5 +18,8 @@
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 using System;
-#if (NET46)
+#if (NET472)
 using ApprovalTests;
 #endif
 using Xunit;
@@ -12,7 +12,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: null, nonNullParam2: null] = "value");
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
@@ -23,7 +23,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: null] = "value");
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
@@ -34,7 +34,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = null);
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
@@ -53,7 +53,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: null, nonNullParam2: null]));
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
@@ -64,7 +64,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: "arg 1", nonNullParam2: null]));
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
@@ -83,7 +83,7 @@ public class RewritingIndexers
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
         var exception = Assert.Throws<InvalidOperationException>(() => IgnoreValue(instance[returnValue: null]));
-#if (NET46)
+#if (NET472)
         Approvals.Verify(exception.Message);
 #endif
     }
