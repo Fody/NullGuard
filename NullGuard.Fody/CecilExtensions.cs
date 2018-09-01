@@ -126,6 +126,13 @@ static class CecilExtensions
             return false;
         }
 
+        if (arg is GenericParameter genericParameter &&
+            genericParameter.HasConstraints &&
+            genericParameter.Constraints.All(c => c.IsValueType || c.FullName == "System.ValueType"))
+        {
+            return false;
+        }
+
         return true;
     }
 

@@ -88,8 +88,6 @@ public partial class ModuleWeaver
 
     void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, Document doc)
     {
-        var guardInstructions = new List<Instruction>();
-
         foreach (var parameter in method.Parameters.Reverse())
         {
             if (!parameter.MayNotBeNull(method, explicitMode))
@@ -110,7 +108,7 @@ public partial class ModuleWeaver
             var entry = body.Instructions.First();
             var errorMessage = $"[NullGuard] {parameter.Name} is null.";
 
-            guardInstructions.Clear();
+            var guardInstructions = new List<Instruction>();
 
             if (isDebug)
             {
@@ -137,8 +135,6 @@ public partial class ModuleWeaver
 
     void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, Document doc)
     {
-        var guardInstructions = new List<Instruction>();
-
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
                 .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -171,7 +167,7 @@ public partial class ModuleWeaver
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 
-                        guardInstructions.Clear();
+                        var guardInstructions = new List<Instruction>();
 
                         if (isDebug)
                         {

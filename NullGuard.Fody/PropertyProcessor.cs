@@ -93,8 +93,6 @@ public partial class ModuleWeaver
 
     void InjectPropertyGetterGuard(MethodDefinition getMethod, Document doc, PropertyReference property)
     {
-        var guardInstructions = new List<Instruction>();
-
         var returnPoints = getMethod.Body.Instructions
             .Select((o, i) => new { o, i })
             .Where(a => a.o.OpCode == OpCodes.Ret)
@@ -106,7 +104,7 @@ public partial class ModuleWeaver
             var returnInstruction = getMethod.Body.Instructions[ret];
             var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfPropertyIsNull, property.FullName);
 
-            guardInstructions.Clear();
+            var guardInstructions = new List<Instruction>();
 
             if (isDebug)
             {
