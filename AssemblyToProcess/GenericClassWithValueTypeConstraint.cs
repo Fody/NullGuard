@@ -1,4 +1,4 @@
-// No guards should be added for generic types with value trype constraints
+// No guards should be added for generic types with value type constraints
 
 public class GenericClassWithValueTypeConstraint<T> where T: struct 
 {

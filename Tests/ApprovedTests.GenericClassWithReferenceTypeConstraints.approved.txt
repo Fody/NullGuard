@@ -1,4 +1,4 @@
-﻿.class public auto ansi beforefieldinit GenericClass`1<T>
+﻿.class public auto ansi beforefieldinit GenericClassWithReferenceTypeConstraints`1<class T>
        extends [mscorlib]System.Object
 {
   .field private !T '<NonNullProperty>k__BackingField'
@@ -8,13 +8,13 @@
     // Code size       27 (0x1b)
     .maxstack  2
     IL_0000:  ldarg.0
-    IL_0001:  ldfld      !0 class GenericClass`1<!T>::'<NonNullProperty>k__BackingField'
+    IL_0001:  ldfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
     IL_0006:  dup
     IL_0007:  box        !T
     IL_000c:  brtrue.s   IL_001a
     IL_000e:  pop
     IL_000f:  ldstr      "[NullGuard] Return value of property 'T GenericCla"
-    + "ss`1::NonNullProperty()' is null."
+    + "ssWithReferenceTypeConstraints`1::NonNullProperty()' is null."
     IL_0014:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0019:  throw
     IL_001a:  ret
@@ -29,17 +29,17 @@
     IL_0006:  brtrue.s   IL_0018
     IL_0008:  ldstr      "value"
     IL_000d:  ldstr      "[NullGuard] Cannot set the value of property 'T Ge"
-    + "nericClass`1::NonNullProperty()' to null."
+    + "nericClassWithReferenceTypeConstraints`1::NonNullProperty()' to null."
     IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
                                                                                      string)
     IL_0017:  throw
     IL_0018:  ldarg.0
     IL_0019:  ldarg.1
-    IL_001a:  stfld      !0 class GenericClass`1<!T>::'<NonNullProperty>k__BackingField'
+    IL_001a:  stfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
     IL_001f:  ret
   } 
-  .method public hidebysig instance !!U  GenericMethod<U>(!T t,
-                                                          !!U u) cil managed
+  .method public hidebysig instance !!U  GenericMethod<([mscorlib]System.Collections.IList) U>(!T t,
+                                                                                               !!U u) cil managed
   {
     // Code size       70 (0x46)
     .maxstack  2
@@ -65,7 +65,7 @@
     IL_0037:  brtrue.s   IL_0045
     IL_0039:  pop
     IL_003a:  ldstr      "[NullGuard] Return value of method 'U GenericClass"
-    + "`1::GenericMethod(T,U)' is null."
+    + "WithReferenceTypeConstraints`1::GenericMethod(T,U)' is null."
     IL_003f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_0044:  throw
     IL_0045:  ret

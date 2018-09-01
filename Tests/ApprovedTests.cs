@@ -38,6 +38,12 @@ public class ApprovedTests
     }
 
     [Fact]
+    public void GenericClassWithReferenceTypeConstraints()
+    {
+        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithReferenceTypeConstraints`1"));
+    }
+
+    [Fact]
     public void Indexers()
     {
         Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
