@@ -106,16 +106,16 @@ public partial class ModuleWeaver
 
             var guardInstructions = new List<Instruction>();
 
-            var propertyPropertyType = property.PropertyType;
+            var propertyType = property.PropertyType;
 
             if (isDebug)
             {
-                DuplicateReturnValue(guardInstructions, propertyPropertyType);
+                DuplicateReturnValue(guardInstructions, propertyType);
 
                 CallDebugAssertInstructions(guardInstructions, errorMessage);
             }
 
-            DuplicateReturnValue(guardInstructions, propertyPropertyType);
+            DuplicateReturnValue(guardInstructions, propertyType);
 
             IfNull(guardInstructions, returnInstruction, i =>
             {
