@@ -21,7 +21,7 @@
     IL_0002:  stfld      !0 class GenericClassWithValueTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
     IL_0007:  ret
   } 
-  .method public hidebysig instance !T  NotNullMethod() cil managed
+  .method public hidebysig instance !T  NonNullMethod() cil managed
   {
     // Code size       10 (0xa)
     .maxstack  1

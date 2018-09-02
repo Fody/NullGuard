@@ -7,7 +7,7 @@ public class GenericClassWithReferenceTypeConstraints<T> where T: class
 {
     public T NonNullProperty { get; set; }
 
-    public T NotNullMethod()
+    public T NonNullMethod()
     {
         return default(T);
     }

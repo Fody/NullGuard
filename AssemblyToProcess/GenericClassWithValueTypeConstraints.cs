@@ -6,7 +6,7 @@ public class GenericClassWithValueTypeConstraints<T> where T: struct
 {
     public T NonNullProperty { get; set; }
 
-    public T NotNullMethod()
+    public T NonNullMethod()
     {
         return default(T);
     }

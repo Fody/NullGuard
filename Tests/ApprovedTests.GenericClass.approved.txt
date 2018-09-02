@@ -38,7 +38,7 @@
     IL_001a:  stfld      !0 class GenericClass`1<!T>::'<NonNullProperty>k__BackingField'
     IL_001f:  ret
   } 
-  .method public hidebysig instance !T  NotNullMethod() cil managed
+  .method public hidebysig instance !T  NonNullMethod() cil managed
   {
     // Code size       30 (0x1e)
     .maxstack  2
@@ -51,7 +51,7 @@
     IL_000f:  brtrue.s   IL_001d
     IL_0011:  pop
     IL_0012:  ldstr      "[NullGuard] Return value of method 'T GenericClass"
-    + "`1::NotNullMethod()' is null."
+    + "`1::NonNullMethod()' is null."
     IL_0017:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
     IL_001c:  throw
     IL_001d:  ret
