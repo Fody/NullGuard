@@ -117,7 +117,7 @@ public partial class ModuleWeaver
 
             DuplicateReturnValue(guardInstructions, propertyPropertyType);
 
-            IfNull(propertyPropertyType, guardInstructions, returnInstruction, i =>
+            IfNull(guardInstructions, returnInstruction, i =>
             {
                 // Clean up the stack since we're about to throw up.
                 i.Add(Instruction.Create(OpCodes.Pop));
@@ -154,7 +154,7 @@ public partial class ModuleWeaver
 
         LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-        IfNull(valueParameter.ParameterType, guardInstructions, entry, i =>
+        IfNull(guardInstructions, entry, i =>
         {
             LoadArgumentNullException(i, valueParameter.Name, errorMessage);
 

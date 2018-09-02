@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -32,7 +33,7 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Dup));
 
         if (methodReturnType != null &&
-            methodReturnType.GetElementType().IsGenericParameter)
+            methodReturnType.GetElementType().NeedsBoxing())
         {
             // Generic parameters must be boxed before access
             instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
@@ -44,27 +45,29 @@ public partial class ModuleWeaver
         // Load the argument onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
 
-        var elementType = parameter.ParameterType.GetElementType();
+        var parameterType = parameter.ParameterType;
+        var elementType = parameterType.GetElementType();
 
-        if (parameter.ParameterType.IsByReference)
+        if (parameterType.IsByReference)
         {
-            if (elementType.IsGenericParameter)
+            if (elementType.NeedsBoxing())
             {
                 // Loads an object reference onto the stack
                 instructions.Add(Instruction.Create(OpCodes.Ldobj, elementType));
-
                 // Box the type to an object
                 instructions.Add(Instruction.Create(OpCodes.Box, elementType));
                 return;
             }
+
             // Loads an object reference onto the stack
             instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
             return;
         }
-        if (elementType.IsGenericParameter)
+
+        if (elementType.NeedsBoxing())
         {
             // Box the type to an object
-            instructions.Add(Instruction.Create(OpCodes.Box, parameter.ParameterType));
+            instructions.Add(Instruction.Create(OpCodes.Box, parameterType));
         }
     }
 
@@ -89,15 +92,10 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Newobj, InvalidOperationExceptionConstructor));
     }
 
-    public void IfNull(TypeReference nullableType, List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
+    public void IfNull(List<Instruction> instructions, Instruction returnInstruction, Action<List<Instruction>> trueBlock)
     {
         // Branch if value on stack is true, not null or non-zero
         instructions.Add(Instruction.Create(OpCodes.Brtrue_S, returnInstruction));
-
-        if (nullableType.IsGenericInstance || nullableType.IsGenericParameter)
-        {
-
-        }
 
         trueBlock(instructions);
     }

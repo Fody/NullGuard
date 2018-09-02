@@ -114,24 +114,41 @@ static class CecilExtensions
         {
             return false;
         }
-        if (arg is ByReferenceType byReferenceType &&
-            byReferenceType.ElementType.IsValueType)
+
+        if (arg is ByReferenceType byReferenceType)
         {
-            return false;
+            return IsRefType(byReferenceType.ElementType);
         }
 
-        if (arg is PointerType pointerType &&
-            pointerType.ElementType.IsValueType)
+        if (arg is PointerType pointerType)
         {
-            return false;
+            return IsRefType(pointerType.ElementType);
         }
 
-        if (arg is GenericParameter genericParameter &&
-            genericParameter.HasConstraints &&
-            genericParameter.Constraints.All(c => c.IsValueType || c.FullName == "System.ValueType"))
+        if (arg is GenericParameter genericParameter)
         {
-            return false;
+            return !genericParameter.HasNotNullableValueTypeConstraint;
         }
+
+        return true;
+    }
+
+    public static bool NeedsBoxing(this TypeReference elementType)
+    {
+        if (elementType == null)
+            return false;
+
+        if (!elementType.IsGenericParameter)
+            return false;
+
+        if (!(elementType is GenericParameter genericParameter))
+            return false;
+
+        if (genericParameter.HasNotNullableValueTypeConstraint)
+            return true;
+
+        if (genericParameter.HasReferenceTypeConstraint || genericParameter.HasConstraints)
+            return false;
 
         return true;
     }

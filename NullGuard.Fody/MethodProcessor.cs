@@ -119,7 +119,7 @@ public partial class ModuleWeaver
 
             LoadArgumentOntoStack(guardInstructions, parameter);
 
-            IfNull(parameter.ParameterType, guardInstructions, entry, i =>
+            IfNull(guardInstructions, entry, i =>
             {
                 LoadArgumentNullException(i, parameter.Name, errorMessage);
 
@@ -178,7 +178,7 @@ public partial class ModuleWeaver
 
                         LoadArgumentOntoStack(guardInstructions, parameter);
 
-                        IfNull(parameter.ParameterType, guardInstructions, returnInstruction, i =>
+                        IfNull(guardInstructions, returnInstruction, i =>
                         {
                             LoadInvalidOperationException(i, errorMessage);
 
@@ -258,7 +258,7 @@ public partial class ModuleWeaver
 
         DuplicateReturnValue(guardInstructions, returnType);
 
-        IfNull(returnType, guardInstructions, returnInstruction, i =>
+        IfNull(guardInstructions, returnInstruction, i =>
         {
             // Clean up the stack (important if finalInstructions doesn't throw, e.g. for async methods):
             i.Add(Instruction.Create(OpCodes.Pop));
