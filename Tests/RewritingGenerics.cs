@@ -88,4 +88,17 @@ public class RewritingGenerics
 
         Assert.Equal(expected, signature);
     }
+
+    [Fact]
+    void GenericClassWithAsyncValueTypeLambdaDoesNotThrow()
+    {
+        var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassFactory");
+        var factory = (dynamic)Activator.CreateInstance(factoryType);
+
+        var result = factory.GetThingAsync();
+        Assert.Equal(0, result);
+
+        result = factory.GetThingAsync2();
+        Assert.Equal(0, result);
+    }
 }

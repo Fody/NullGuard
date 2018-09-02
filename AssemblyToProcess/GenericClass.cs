@@ -1,6 +1,8 @@
 // Type checked guards should be added for generic types with no type constraints
 
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using NullGuard;
 
@@ -25,6 +27,16 @@ public class GenericClass<T>
     {
         return u;
     }
+
+    public Task<T> GetThing(Func<T> getThing)
+    {
+        return Task.Run(getThing);
+    }
+
+    public async Task<T> GetThing2(Func<T> getThing)
+    {
+        return await Task.Run(getThing);
+    }
 }
 
 public class GenericClassFactory
@@ -34,4 +46,15 @@ public class GenericClassFactory
     public GenericClass<KeyValuePair<string, string>> Struct => new GenericClass<KeyValuePair<string, string>>();
 
     public GenericClass<object> Object => new GenericClass<object>();
+
+    public int GetThingAsync()
+    {
+        return new GenericClass<int>().GetThing(() => 0).Result;
+    }
+
+    public int GetThingAsync2()
+    {
+        return new GenericClass<int>().GetThing2(() => 0).Result;
+    }
+
 }
