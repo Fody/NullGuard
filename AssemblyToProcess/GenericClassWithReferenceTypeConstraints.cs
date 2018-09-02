@@ -1,26 +1,33 @@
 // Simple guards should be added for generic types with reference type constraints
 
 using System.Collections;
-using System.Collections.Generic;
 
-public class GenericClassWithReferenceTypeConstraints<T> where T: class 
+using NullGuard;
+
+public class GenericClassWithReferenceTypeConstraints<T> where T: class
 {
     public T NonNullProperty { get; set; }
 
+    [CanBeNull]
+    public T CanBeNullProperty { get; set; }
+
     public T NonNullMethod()
     {
-        return default(T);
+        return CanBeNullProperty;
     }
 
     public U GenericMethod<U>(T t, U u) where U: IList
     {
         return default(U);
     }
+
+    public U GenericMethodReturnsParameter<U>(T t, [AllowNull] U u) where U: IList
+    {
+        return u;
+    }
 }
 
-public class GenericClassWithReferenceTypeConstraintFactory
+public class GenericClassWithReferenceTypeConstraintsFactory
 {
     public GenericClassWithReferenceTypeConstraints<object> Object => new GenericClassWithReferenceTypeConstraints<object>();
-
-    public GenericClassWithReferenceTypeConstraints<SimpleClass> Class => new GenericClassWithReferenceTypeConstraints<SimpleClass>();
 }
