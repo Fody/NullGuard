@@ -230,14 +230,14 @@ public partial class ModuleWeaver
         var setExceptionMethod = (MethodReference)setExceptionInstruction.Operand;
 
         var returnPoints = method.Body.Instructions
-                .Select((o, ix) => new { o, ix })
-                .Where(a => a.o.OpCode == OpCodes.Call && IsSetResultMethod(a.o.Operand as MethodReference))
-                .Select(a => a.ix)
-                .OrderByDescending(ix => ix);
+            .Select((instruction, index) => new { returnType = GetReturnTypeFromSetResultMethod(instruction), index })
+            .Where(item => item.returnType != null)
+            .OrderByDescending(item => item.index)
+            .ToArray();
 
-        foreach (var ret in returnPoints)
+        foreach (var returnPoint in returnPoints)
         {
-            AddReturnNullGuard(method, null, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
+            AddReturnNullGuard(method, null, returnPoint.index, returnPoint.returnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
         }
 
         method.Body.OptimizeMacros();
@@ -291,7 +291,7 @@ public partial class ModuleWeaver
             // Checks for throw new ArgumentNullException("x");
             if (newObjectMethodRef.FullName == ArgumentNullExceptionConstructor.FullName &&
                 instructions[i - 1].OpCode == OpCodes.Ldstr &&
-                (string) instructions[i - 1].Operand == parameter.Name)
+                (string)instructions[i - 1].Operand == parameter.Name)
             {
                 return true;
             }
@@ -300,7 +300,7 @@ public partial class ModuleWeaver
             if (newObjectMethodRef.FullName == ArgumentNullExceptionWithMessageConstructor.FullName &&
                 i > 1 &&
                 instructions[i - 2].OpCode == OpCodes.Ldstr &&
-                (string) instructions[i - 2].Operand == parameter.Name)
+                (string)instructions[i - 2].Operand == parameter.Name)
             {
                 return true;
             }
@@ -309,13 +309,28 @@ public partial class ModuleWeaver
         return false;
     }
 
-    static bool IsSetResultMethod(MethodReference methodReference)
+    static TypeReference GetReturnTypeFromSetResultMethod(Instruction instruction)
     {
-        return
-            methodReference != null &&
-            methodReference.Name == "SetResult" &&
-            methodReference.Parameters.Count == 1 &&
-            methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
+        if (instruction.OpCode != OpCodes.Call)
+            return null;
+
+        if (!(instruction.Operand is MethodReference methodReference))
+            return null;
+
+        if (methodReference.Name != "SetResult" ||
+            methodReference.Parameters.Count != 1)
+            return null;
+
+        var declaringType = methodReference.DeclaringType;
+
+        if (!declaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder"))
+            return null;
+        if (!(declaringType is GenericInstanceType genericInstanceType))
+            return null;
+
+        var genericParameter = genericInstanceType.GenericArguments.FirstOrDefault();
+
+        return genericParameter;
     }
 
     static bool IsSetExceptionMethod(MethodReference methodReference)
