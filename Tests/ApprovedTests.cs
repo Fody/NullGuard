@@ -5,7 +5,7 @@ using Fody;
 using Xunit;
 using System.Linq;
 
-public class ApprovedTests
+public class ApprovedTests:TestBase
 {
     [Fact]
     public void ClassWithBadAttributes()
@@ -129,4 +129,5 @@ public class ApprovedTests
         ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 }
+
 #endif
