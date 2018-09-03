@@ -1,10 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text 
 
-# Don't check these into the repo as LF to work around TeamCity bug
 *.xml          -text 
 *.targets      -text
-*.approved.txt -text
+
 
 # Custom for Visual Studio
 *.cs     diff=csharp
@@ -22,3 +21,4 @@
 *.snk binary
 *.pdb binary
 *.svg binary
+*.approved.* binary
