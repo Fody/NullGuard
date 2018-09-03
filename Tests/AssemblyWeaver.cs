@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
-#if (NET472)
-using ApprovalTests.Core;
-using ApprovalTests.Reporters;
-#endif
 using Fody;
 #pragma warning disable 618
 
@@ -14,11 +10,6 @@ public static class AssemblyWeaver
 
     static AssemblyWeaver()
     {
-#if (NET472)
-        //TODO: this works around https://github.com/approvals/ApprovalTests.Net/issues/159
-        var reporters = (IEnvironmentAwareReporter[])FrameworkAssertReporter.INSTANCE.Reporters;
-        reporters[2] = XUnit2Reporter.INSTANCE;
-#endif
         var weavingTask = new ModuleWeaver
         {
             Config = new XElement("NullGuard",

@@ -86,7 +86,7 @@ public class RewritingGenerics
         var messages = exceptions.Select(ex => ex.Message.Replace(Environment.NewLine, "|"));
         var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");
 
-        Assert.Equal(expected, signature);
+        Assert.Equal(expected.Replace("\r\n","\n"), signature.Replace("\r\n", "\n"));
     }
 
     [Fact]
