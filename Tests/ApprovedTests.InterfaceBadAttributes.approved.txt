@@ -1,0 +1,33 @@
+﻿.class interface private abstract auto ansi InterfaceBadAttributes
+{
+  .method public hidebysig newslot abstract virtual 
+          instance void  MethodWithNoNullCheckOnParam(string arg) cil managed
+  {
+  } 
+  .method public hidebysig newslot specialname abstract virtual 
+          instance string  get_PropertyWithNoNullCheckOnSet() cil managed
+  {
+  } 
+  .method public hidebysig newslot specialname abstract virtual 
+          instance void  set_PropertyWithNoNullCheckOnSet(string 'value') cil managed
+  {
+  } 
+  .method public hidebysig newslot specialname abstract virtual 
+          instance string  get_PropertyAllowsNullGetButDoesNotAllowNullSet() cil managed
+  {
+  } 
+  .method public hidebysig newslot specialname abstract virtual 
+          instance void  set_PropertyAllowsNullGetButDoesNotAllowNullSet(string 'value') cil managed
+  {
+  } 
+  .method public hidebysig newslot abstract virtual 
+          instance string  MethodAllowsNullReturnValue() cil managed
+  {
+  } 
+  .property instance string PropertyWithNoNullCheckOnSet()
+  {
+  } 
+  .property instance string PropertyAllowsNullGetButDoesNotAllowNullSet()
+  {
+  } 
+}
