@@ -10,7 +10,7 @@ public class TestBase
 #if (NET472)
         //TODO: this works around https://github.com/approvals/ApprovalTests.Net/issues/159
         var reporters = (IEnvironmentAwareReporter[]) FrameworkAssertReporter.INSTANCE.Reporters;
-        reporters[2] = XUnit2Reporter.INSTANCE;
+        reporters[3] = XUnit2Reporter.INSTANCE;
 #endif
     }
 }
