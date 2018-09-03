@@ -84,7 +84,7 @@ public class RewritingGenerics
 [NullGuard] Return value of method 'U ClassName`1::GenericMethodReturnsParameter(T,U)' is null.";
 
         var messages = exceptions.Select(ex => ex.Message.Replace(Environment.NewLine, "|"));
-        var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");
+        var signature = string.Join("\r\n", messages).Replace(className, "ClassName");
 
         Assert.Equal(expected, signature);
     }
