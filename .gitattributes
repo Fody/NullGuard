@@ -3,6 +3,7 @@
 
 *.xml          -text 
 *.targets      -text
+*.approved.txt -text
 
 
 # Custom for Visual Studio
@@ -21,4 +22,3 @@
 *.snk binary
 *.pdb binary
 *.svg binary
-*.approved.* binary
