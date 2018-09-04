@@ -47,19 +47,17 @@ public partial class ModuleWeaver
 
         var body = method.Body;
 
-        var doc = method.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
-
         body.SimplifyMacros();
 
         if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
         {
-            InjectMethodArgumentGuards(method, body, doc);
+            InjectMethodArgumentGuards(method, body);
         }
 
         if (!method.IsAsyncStateMachine() &&
             !method.IsIteratorStateMachine())
         {
-            InjectMethodReturnGuard(localValidationFlags, method, body, doc);
+            InjectMethodReturnGuard(localValidationFlags, method, body);
         }
 
         if (method.IsAsyncStateMachine())
@@ -86,7 +84,7 @@ public partial class ModuleWeaver
         method.UpdateDebugInfo();
     }
 
-    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body, Document doc)
+    void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body)
     {
         foreach (var parameter in method.Parameters.Reverse())
         {
@@ -127,13 +125,11 @@ public partial class ModuleWeaver
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
-            method.HideLineFromDebugger(guardInstructions[0], doc);
-
             body.Instructions.Prepend(guardInstructions);
         }
     }
 
-    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body, Document doc)
+    void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body)
     {
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
@@ -150,7 +146,7 @@ public partial class ModuleWeaver
                 !method.IsGetter)
             {
                 var errorMessage = string.Format(ReturnValueOfMethodIsNull, method.FullName);
-                AddReturnNullGuard(method, doc, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
+                AddReturnNullGuard(method, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.Arguments))
@@ -185,8 +181,6 @@ public partial class ModuleWeaver
                             // Throw the top item off the stack
                             i.Add(Instruction.Create(OpCodes.Throw));
                         });
-
-                        method.HideLineFromDebugger(guardInstructions[0], doc);
 
                         body.InsertAtMethodReturnPoint(ret, guardInstructions);
                     }
@@ -237,13 +231,13 @@ public partial class ModuleWeaver
 
         foreach (var returnPoint in returnPoints)
         {
-            AddReturnNullGuard(method, null, returnPoint.index, returnPoint.returnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
+            AddReturnNullGuard(method, returnPoint.index, returnPoint.returnType, errorMessage, Instruction.Create(OpCodes.Call, setExceptionMethod), Instruction.Create(OpCodes.Ret));
         }
 
         method.Body.OptimizeMacros();
     }
 
-    void AddReturnNullGuard(MethodDefinition methodDefinition, Document doc, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
+    void AddReturnNullGuard(MethodDefinition methodDefinition, int ret, TypeReference returnType, string errorMessage, params Instruction[] finalInstructions)
     {
         var returnInstruction = methodDefinition.Body.Instructions[ret];
 
@@ -268,8 +262,6 @@ public partial class ModuleWeaver
             i.AddRange(finalInstructions);
         });
 
-        methodDefinition.HideLineFromDebugger(guardInstructions[0], doc);
-
         methodDefinition.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
     }
 
@@ -281,9 +273,8 @@ public partial class ModuleWeaver
             {
                 continue;
             }
-            var newObjectMethodRef = instructions[i].Operand as MethodReference;
 
-            if (newObjectMethodRef == null || instructions[i + 1].OpCode != OpCodes.Throw)
+            if (!(instructions[i].Operand is MethodReference newObjectMethodRef) || instructions[i + 1].OpCode != OpCodes.Throw)
             {
                 continue;
             }
