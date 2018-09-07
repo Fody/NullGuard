@@ -44,8 +44,8 @@
       .override [mscorlib]System.Collections.IEnumerator::MoveNext
       // Code size       92 (0x5c)
       .maxstack  3
-      .locals init ([0] int32 V_0,
-               [1] int32 V_1)
+      .locals init (int32 V_0,
+               int32 V_1)
       IL_0000:  ldarg.0
       IL_0001:  ldfld      int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
       IL_0006:  stloc.0

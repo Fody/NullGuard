@@ -12,7 +12,7 @@ public partial class ModuleWeaver
     const string ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
     const string CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
 
- public void Process(PropertyDefinition property)
+    public void Process(PropertyDefinition property)
     {
         try
         {
@@ -54,16 +54,14 @@ public partial class ModuleWeaver
         var getMethod = property.GetMethod;
         if (getMethod?.Body != null)
         {
-            var doc = getMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
-
             getMethod.Body.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) 
-                || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) 
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic)
+                || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
                 || getMethod.IsOverrideOrImplementationOfPublicMember())
                 && !getMethod.MethodReturnType.ImplicitAllowsNull())
             {
-                InjectPropertyGetterGuard(getMethod, doc, property);
+                InjectPropertyGetterGuard(getMethod, property);
             }
 
             getMethod.Body.InitLocals = true;
@@ -75,15 +73,13 @@ public partial class ModuleWeaver
         {
             var setBody = setMethod.Body;
 
-            var doc = setMethod.DebugInformation.SequencePoints.FirstOrDefault()?.Document;
-
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) 
-                || (setMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic()) 
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic)
+                || (setMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
                 || setMethod.IsOverrideOrImplementationOfPublicMember())
             {
-                InjectPropertySetterGuard(setMethod, doc, property);
+                InjectPropertySetterGuard(setMethod, property);
             }
 
             setBody.InitLocals = true;
@@ -91,7 +87,7 @@ public partial class ModuleWeaver
         }
     }
 
-    void InjectPropertyGetterGuard(MethodDefinition getMethod, Document doc, PropertyReference property)
+    void InjectPropertyGetterGuard(MethodDefinition getMethod, PropertyReference property)
     {
         var returnPoints = getMethod.Body.Instructions
             .Select((o, i) => new { o, i })
@@ -128,13 +124,11 @@ public partial class ModuleWeaver
                 i.Add(Instruction.Create(OpCodes.Throw));
             });
 
-            getMethod.HideLineFromDebugger(guardInstructions[0], doc);
-
             getMethod.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
         }
     }
 
-    void InjectPropertySetterGuard(MethodDefinition setMethod, Document doc, PropertyDefinition property)
+    void InjectPropertySetterGuard(MethodDefinition setMethod, PropertyDefinition property)
     {
         var valueParameter = property.SetMethod.GetPropertySetterValueParameter();
 
@@ -161,8 +155,6 @@ public partial class ModuleWeaver
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));
         });
-
-        setMethod.HideLineFromDebugger(guardInstructions[0], doc);
 
         setMethod.Body.Instructions.Prepend(guardInstructions);
     }
