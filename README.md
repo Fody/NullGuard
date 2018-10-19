@@ -7,13 +7,16 @@
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 
-## The nuget package
+## NuGet installation
 
-https://nuget.org/packages/NullGuard.Fody/
+Install the [NullGuard.Fody NuGet package](https://nuget.org/packages/NullGuard.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
 
 ```powershell
+PM> Install-Package Fody
 PM> Install-Package NullGuard.Fody
 ```
+
+The `Install-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
 
 
 ## Modes
