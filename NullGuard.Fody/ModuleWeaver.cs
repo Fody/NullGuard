@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
+
 using Fody;
 using Mono.Cecil;
 using NullGuard;
@@ -91,16 +93,18 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
     void ReadIncludeDebugAssert()
     {
-        var includeDebugAssertAttribute = Config.Attribute("IncludeDebugAssert");
-        if (includeDebugAssertAttribute == null)
-        {
+        var value = Config?.Attribute("IncludeDebugAssert")?.Value;
+        if (value == null)
             return;
-        }
-        if (bool.TryParse(includeDebugAssertAttribute.Value, out IncludeDebugAssert))
+
+        try
         {
-            return;
+            IncludeDebugAssert = XmlConvert.ToBoolean(value);
         }
-        throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{includeDebugAssertAttribute.Value}'.");
+        catch
+        {
+            throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{value}'.");
+        }
     }
 
     void ReadMode()
