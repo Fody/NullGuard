@@ -99,7 +99,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
         try
         {
-            IncludeDebugAssert = XmlConvert.ToBoolean(value);
+            IncludeDebugAssert = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
         catch
         {
