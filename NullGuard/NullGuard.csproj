@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="3.3.3" PrivateAssets="None" />
-    <PackageReference Include="FodyPackaging" Version="3.3.3" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="3.3.5" PrivateAssets="None" />
+    <PackageReference Include="FodyPackaging" Version="3.3.5" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
