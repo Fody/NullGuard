@@ -14,7 +14,7 @@
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AssemblyWithAnnotations\AssemblyWithAnnotations.csproj" />
