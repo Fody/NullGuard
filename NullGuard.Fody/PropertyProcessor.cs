@@ -52,7 +52,8 @@ public partial class ModuleWeaver
         }
 
         var getMethod = property.GetMethod;
-        if (getMethod?.Body != null)
+        var getBody = getMethod?.Body;
+        if (getBody != null)
         {
             getMethod.Body.SimplifyMacros();
 
@@ -64,15 +65,15 @@ public partial class ModuleWeaver
                 InjectPropertyGetterGuard(getMethod, property);
             }
 
-            getMethod.Body.InitLocals = true;
-            getMethod.Body.OptimizeMacros();
+            getMethod.UpdateDebugInfo();
+            getBody.InitLocals = true;
+            getBody.OptimizeMacros();
         }
 
         var setMethod = property.SetMethod;
-        if (setMethod?.Body != null)
+        var setBody = setMethod?.Body;
+        if (setBody != null)
         {
-            var setBody = setMethod.Body;
-
             setBody.SimplifyMacros();
 
             if (localValidationFlags.HasFlag(ValidationFlags.NonPublic)
@@ -82,6 +83,7 @@ public partial class ModuleWeaver
                 InjectPropertySetterGuard(setMethod, property);
             }
 
+            setMethod.UpdateDebugInfo();
             setBody.InitLocals = true;
             setBody.OptimizeMacros();
         }

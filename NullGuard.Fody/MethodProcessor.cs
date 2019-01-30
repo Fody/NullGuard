@@ -79,9 +79,9 @@ public partial class ModuleWeaver
             }
         }
 
+        method.UpdateDebugInfo();
         body.InitLocals = true;
         body.OptimizeMacros();
-        method.UpdateDebugInfo();
     }
 
     void InjectMethodArgumentGuards(MethodDefinition method, MethodBody body)
