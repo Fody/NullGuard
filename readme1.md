@@ -2,9 +2,9 @@
 [![NuGet Status](http://img.shields.io/nuget/v/NullGuard.Fody.svg?style=flat)](https://www.nuget.org/packages/NullGuard.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/)
+## This is an add-in for [Fody](https://github.com/Fody/Home/)
 
-[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
+See also [Fody usage](https://github.com/Fody/Home/blob/master/pages/usage.md).
 
 
 ## NuGet installation
