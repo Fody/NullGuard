@@ -1,85 +1,82 @@
 ﻿.class public auto ansi beforefieldinit ImplementsInheritedInterface
-       extends [mscorlib]System.Object
-       implements [AssemblyWithAnnotations]AssemblyWithAnnotations.InheritedInterface,
-                  [AssemblyWithAnnotations]AssemblyWithAnnotations.BaseInterfaceWithAttributes
+extends [mscorlib]System.Object
+implements [AssemblyWithAnnotations]AssemblyWithAnnotations.InheritedInterface,
+[AssemblyWithAnnotations]AssemblyWithAnnotations.BaseInterfaceWithAttributes
 {
-  .field private string '<NotNullProperty>k__BackingField'
-  .method public hidebysig newslot virtual final 
-          instance void  MethodWithNotNullParameter(string canBeNull,
-                                                    string arg) cil managed
-  {
-    // Code size       20 (0x14)
-    .maxstack  2
-    IL_0000:  ldarg.2
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "arg"
-    IL_0008:  ldstr      "[NullGuard] arg is null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
-    IL_0013:  ret
-  } 
-  .method public hidebysig newslot virtual final 
-          instance string  MethodWithNotNullReturnValue(string arg) cil managed
-  {
-    // Code size       17 (0x11)
-    .maxstack  2
-    IL_0000:  ldarg.1
-    IL_0001:  dup
-    IL_0002:  brtrue.s   IL_0010
-    IL_0004:  pop
-    IL_0005:  ldstr      "[NullGuard] Return value of method 'System.String "
-    + "ImplementsInheritedInterface::MethodWithNotNullReturnValue"
-    + "(System.String)' is null."
-    IL_000a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_000f:  throw
-    IL_0010:  ret
-  } 
-  .method public hidebysig newslot specialname virtual final 
-          instance string  get_NotNullProperty() cil managed
-  {
-    // Code size       22 (0x16)
-    .maxstack  2
-    IL_0000:  ldarg.0
-    IL_0001:  ldfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
-    IL_0006:  dup
-    IL_0007:  brtrue.s   IL_0015
-    IL_0009:  pop
-    IL_000a:  ldstr      "[NullGuard] Return value of property 'System.Strin"
-    + "g ImplementsInheritedInterface::NotNullProperty()' is null."
-    IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0014:  throw
-    IL_0015:  ret
-  } 
-  .method public hidebysig newslot specialname virtual final 
-          instance void  set_NotNullProperty(string 'value') cil managed
-  {
-    // Code size       27 (0x1b)
-    .maxstack  2
-    IL_0000:  ldarg.1
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "value"
-    IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
-    + "em.String ImplementsInheritedInterface::NotNullProperty()'"
-    + " to null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
-    IL_0013:  ldarg.0
-    IL_0014:  ldarg.1
-    IL_0015:  stfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
-    IL_001a:  ret
-  } 
-  .method public hidebysig specialname rtspecialname 
-          instance void  .ctor() cil managed
-  {
-    // Code size       7 (0x7)
-    .maxstack  1
-    IL_0000:  ldarg.0
-    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-    IL_0006:  ret
-  } 
-  .property instance string NotNullProperty()
-  {
-  } 
+.field private string '<NotNullProperty>k__BackingField'
+.method public hidebysig newslot virtual final
+instance void  MethodWithNotNullParameter(string canBeNull,
+string arg) cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.2
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "arg"
+IL_0008:  ldstr      "[NullGuard] arg is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ret
+}
+.method public hidebysig newslot virtual final
+instance string  MethodWithNotNullReturnValue(string arg) cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  dup
+IL_0002:  brtrue.s   IL_0010
+IL_0004:  pop
+IL_0005:  ldstr      "[NullGuard] Return value of method 'System.String "
++ "ImplementsInheritedInterface::MethodWithNotNullReturnValue"
++ "(System.String)' is null."
+IL_000a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_000f:  throw
+IL_0010:  ret
+}
+.method public hidebysig newslot specialname virtual final
+instance string  get_NotNullProperty() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
+IL_0006:  dup
+IL_0007:  brtrue.s   IL_0015
+IL_0009:  pop
+IL_000a:  ldstr      "[NullGuard] Return value of property 'System.Strin"
++ "g ImplementsInheritedInterface::NotNullProperty()' is null."
+IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ret
+}
+.method public hidebysig newslot specialname virtual final
+instance void  set_NotNullProperty(string 'value') cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "value"
+IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
++ "em.String ImplementsInheritedInterface::NotNullProperty()'"
++ " to null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldarg.0
+IL_0014:  ldarg.1
+IL_0015:  stfld      string ImplementsInheritedInterface::'<NotNullProperty>k__BackingField'
+IL_001a:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+.property instance string NotNullProperty()
+{
+.get instance string ImplementsInheritedInterface::get_NotNullProperty()
+.set instance void ImplementsInheritedInterface::set_NotNullProperty(string)
+}
 }

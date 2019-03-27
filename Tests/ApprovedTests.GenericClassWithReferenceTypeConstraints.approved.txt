@@ -1,145 +1,141 @@
 ﻿.class public auto ansi beforefieldinit GenericClassWithReferenceTypeConstraints`1<class T>
-       extends [mscorlib]System.Object
+extends [mscorlib]System.Object
 {
-  .field private !T '<NonNullProperty>k__BackingField'
-  .field private !T '<CanBeNullProperty>k__BackingField'
-  .method public hidebysig specialname instance !T 
-          get_NonNullProperty() cil managed
-  {
-    // Code size       22 (0x16)
-    .maxstack  2
-    IL_0000:  ldarg.0
-    IL_0001:  ldfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
-    IL_0006:  dup
-    IL_0007:  brtrue.s   IL_0015
-    IL_0009:  pop
-    IL_000a:  ldstr      "[NullGuard] Return value of property 'T GenericCla"
-    + "ssWithReferenceTypeConstraints`1::NonNullProperty()' is null."
-    IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0014:  throw
-    IL_0015:  ret
-  } 
-  .method public hidebysig specialname instance void 
-          set_NonNullProperty(!T 'value') cil managed
-  {
-    // Code size       27 (0x1b)
-    .maxstack  2
-    IL_0000:  ldarg.1
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "value"
-    IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'T Ge"
-    + "nericClassWithReferenceTypeConstraints`1::NonNullProperty()' to null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
-    IL_0013:  ldarg.0
-    IL_0014:  ldarg.1
-    IL_0015:  stfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
-    IL_001a:  ret
-  } 
-  .method public hidebysig specialname instance !T 
-          get_CanBeNullProperty() cil managed
-  {
-    // Code size       7 (0x7)
-    .maxstack  8
-    IL_0000:  ldarg.0
-    IL_0001:  ldfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<CanBeNullProperty>k__BackingField'
-    IL_0006:  ret
-  } 
-  .method public hidebysig specialname instance void 
-          set_CanBeNullProperty(!T 'value') cil managed
-  {
-    // Code size       8 (0x8)
-    .maxstack  8
-    IL_0000:  ldarg.0
-    IL_0001:  ldarg.1
-    IL_0002:  stfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<CanBeNullProperty>k__BackingField'
-    IL_0007:  ret
-  } 
-  .method public hidebysig instance !T  NonNullMethod() cil managed
-  {
-    // Code size       22 (0x16)
-    .maxstack  2
-    IL_0000:  ldarg.0
-    IL_0001:  call       instance !0 class GenericClassWithReferenceTypeConstraints`1<!T>::get_CanBeNullProperty()
-    IL_0006:  dup
-    IL_0007:  brtrue.s   IL_0015
-    IL_0009:  pop
-    IL_000a:  ldstr      "[NullGuard] Return value of method 'T GenericClass"
-    + "WithReferenceTypeConstraints`1::NonNullMethod()' is null."
-    IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0014:  throw
-    IL_0015:  ret
-  } 
-  .method public hidebysig instance !!U  GenericMethod<([mscorlib]System.Collections.IList) U>(!T t,
-                                                                                               !!U u) cil managed
-  {
-    // Code size       63 (0x3f)
-    .maxstack  2
-    .locals init (!!U V_0)
-    IL_0000:  ldarg.1
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "t"
-    IL_0008:  ldstr      "[NullGuard] t is null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
-    IL_0013:  ldarg.2
-    IL_0014:  brtrue.s   IL_0026
-    IL_0016:  ldstr      "u"
-    IL_001b:  ldstr      "[NullGuard] u is null."
-    IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0025:  throw
-    IL_0026:  ldloca.s   V_0
-    IL_0028:  initobj    !!U
-    IL_002e:  ldloc.0
-    IL_002f:  dup
-    IL_0030:  brtrue.s   IL_003e
-    IL_0032:  pop
-    IL_0033:  ldstr      "[NullGuard] Return value of method 'U GenericClass"
-    + "WithReferenceTypeConstraints`1::GenericMethod(T,U)' is null."
-    IL_0038:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_003d:  throw
-    IL_003e:  ret
-  } 
-  .method public hidebysig instance !!U  GenericMethodReturnsParameter<([mscorlib]System.Collections.IList) U>(!T t,
-                                                                                                               !!U u) cil managed
-  {
-    // Code size       36 (0x24)
-    .maxstack  2
-    IL_0000:  ldarg.1
-    IL_0001:  brtrue.s   IL_0013
-    IL_0003:  ldstr      "t"
-    IL_0008:  ldstr      "[NullGuard] t is null."
-    IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-                                                                                     string)
-    IL_0012:  throw
-    IL_0013:  ldarg.2
-    IL_0014:  dup
-    IL_0015:  brtrue.s   IL_0023
-    IL_0017:  pop
-    IL_0018:  ldstr      "[NullGuard] Return value of method 'U GenericClass"
-    + "WithReferenceTypeConstraints`1::GenericMethodReturnsParameter(T,U)' is "
-    + "null."
-    IL_001d:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-    IL_0022:  throw
-    IL_0023:  ret
-  } 
-  .method public hidebysig specialname rtspecialname 
-          instance void  .ctor() cil managed
-  {
-    // Code size       7 (0x7)
-    .maxstack  1
-    IL_0000:  ldarg.0
-    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-    IL_0006:  ret
-  } 
-  .property instance !T NonNullProperty()
-  {
-  } 
-  .property instance !T CanBeNullProperty()
-  {
-    .custom instance void CanBeNullAttribute::.ctor() = ( 01 00 00 00 ) 
-  } 
+.field private !T '<NonNullProperty>k__BackingField'
+.field private !T '<CanBeNullProperty>k__BackingField'
+.method public hidebysig specialname instance !T
+get_NonNullProperty() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
+IL_0006:  dup
+IL_0007:  brtrue.s   IL_0015
+IL_0009:  pop
+IL_000a:  ldstr      "[NullGuard] Return value of property 'T GenericCla"
++ "ssWithReferenceTypeConstraints`1::NonNullProperty()' is null."
+IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ret
+}
+.method public hidebysig specialname instance void
+set_NonNullProperty(!T 'value') cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "value"
+IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'T Ge"
++ "nericClassWithReferenceTypeConstraints`1::NonNullProperty()' to null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldarg.0
+IL_0014:  ldarg.1
+IL_0015:  stfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<NonNullProperty>k__BackingField'
+IL_001a:  ret
+}
+.method public hidebysig specialname instance !T
+get_CanBeNullProperty() cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  ldfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<CanBeNullProperty>k__BackingField'
+IL_0006:  ret
+}
+.method public hidebysig specialname instance void
+set_CanBeNullProperty(!T 'value') cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  ldarg.1
+IL_0002:  stfld      !0 class GenericClassWithReferenceTypeConstraints`1<!T>::'<CanBeNullProperty>k__BackingField'
+IL_0007:  ret
+}
+.method public hidebysig instance !T  NonNullMethod() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  call       instance !0 class GenericClassWithReferenceTypeConstraints`1<!T>::get_CanBeNullProperty()
+IL_0006:  dup
+IL_0007:  brtrue.s   IL_0015
+IL_0009:  pop
+IL_000a:  ldstr      "[NullGuard] Return value of method 'T GenericClass"
++ "WithReferenceTypeConstraints`1::NonNullMethod()' is null."
+IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ret
+}
+.method public hidebysig instance !!U  GenericMethod<([mscorlib]System.Collections.IList) U>(!T t,
+!!U u) cil managed
+{
+.maxstack  2
+.locals init (!!U V_0)
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "t"
+IL_0008:  ldstr      "[NullGuard] t is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldarg.2
+IL_0014:  brtrue.s   IL_0026
+IL_0016:  ldstr      "u"
+IL_001b:  ldstr      "[NullGuard] u is null."
+IL_0020:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0025:  throw
+IL_0026:  ldloca.s   V_0
+IL_0028:  initobj    !!U
+IL_002e:  ldloc.0
+IL_002f:  dup
+IL_0030:  brtrue.s   IL_003e
+IL_0032:  pop
+IL_0033:  ldstr      "[NullGuard] Return value of method 'U GenericClass"
++ "WithReferenceTypeConstraints`1::GenericMethod(T,U)' is null."
+IL_0038:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_003d:  throw
+IL_003e:  ret
+}
+.method public hidebysig instance !!U  GenericMethodReturnsParameter<([mscorlib]System.Collections.IList) U>(!T t,
+!!U u) cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "t"
+IL_0008:  ldstr      "[NullGuard] t is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldarg.2
+IL_0014:  dup
+IL_0015:  brtrue.s   IL_0023
+IL_0017:  pop
+IL_0018:  ldstr      "[NullGuard] Return value of method 'U GenericClass"
++ "WithReferenceTypeConstraints`1::GenericMethodReturnsParameter(T,U)' is "
++ "null."
+IL_001d:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0022:  throw
+IL_0023:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+.property instance !T NonNullProperty()
+{
+.get instance !T GenericClassWithReferenceTypeConstraints`1::get_NonNullProperty()
+.set instance void GenericClassWithReferenceTypeConstraints`1::set_NonNullProperty(!T)
+}
+.property instance !T CanBeNullProperty()
+{
+.custom instance void CanBeNullAttribute::.ctor() = ( 01 00 00 00 )
+.get instance !T GenericClassWithReferenceTypeConstraints`1::get_CanBeNullProperty()
+.set instance void GenericClassWithReferenceTypeConstraints`1::set_CanBeNullProperty(!T)
+}
 }

@@ -1,45 +1,43 @@
 ﻿.class public auto ansi beforefieldinit UnsafeClass
-       extends [mscorlib]System.Object
+extends [mscorlib]System.Object
 {
-  .field private int32* '<NullProperty>k__BackingField'
-  .method public hidebysig instance int32* 
-          MethodWithAmp(int32* 'instance') cil managed
-  {
-    // Code size       3 (0x3)
-    .maxstack  1
-    IL_0000:  ldc.i4.0
-    IL_0001:  conv.u
-    IL_0002:  ret
-  } 
-  .method public hidebysig specialname instance int32* 
-          get_NullProperty() cil managed
-  {
-    // Code size       7 (0x7)
-    .maxstack  8
-    IL_0000:  ldarg.0
-    IL_0001:  ldfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
-    IL_0006:  ret
-  } 
-  .method public hidebysig specialname instance void 
-          set_NullProperty(int32* 'value') cil managed
-  {
-    // Code size       8 (0x8)
-    .maxstack  8
-    IL_0000:  ldarg.0
-    IL_0001:  ldarg.1
-    IL_0002:  stfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
-    IL_0007:  ret
-  } 
-  .method public hidebysig specialname rtspecialname 
-          instance void  .ctor() cil managed
-  {
-    // Code size       7 (0x7)
-    .maxstack  1
-    IL_0000:  ldarg.0
-    IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-    IL_0006:  ret
-  } 
-  .property instance int32* NullProperty()
-  {
-  } 
+.field private int32* '<NullProperty>k__BackingField'
+.method public hidebysig instance int32*
+MethodWithAmp(int32* 'instance') cil managed
+{
+.maxstack  1
+IL_0000:  ldc.i4.0
+IL_0001:  conv.u
+IL_0002:  ret
+}
+.method public hidebysig specialname instance int32*
+get_NullProperty() cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  ldfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
+IL_0006:  ret
+}
+.method public hidebysig specialname instance void
+set_NullProperty(int32* 'value') cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  ldarg.1
+IL_0002:  stfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
+IL_0007:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+.property instance int32* NullProperty()
+{
+.get instance int32* UnsafeClass::get_NullProperty()
+.set instance void UnsafeClass::set_NullProperty(int32*)
+}
 }

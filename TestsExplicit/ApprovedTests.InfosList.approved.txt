@@ -1,4 +1,4 @@
 ﻿[
-  "Mode=Explicit, ValidationFlags=AllPublic",
-  "\tRemoving reference to 'NullGuard.dll'."
+  'Mode=Explicit, ValidationFlags=AllPublic',
+  '\tRemoving reference to \'NullGuard.dll\'.'
 ]
