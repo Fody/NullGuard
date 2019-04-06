@@ -13,6 +13,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{23C29B37-221D-473E-967B-DC423F5F4AB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NullGuard", "NullGuard\NullGuard.csproj", "{B5AEB0E8-28F4-4955-A055-9C200F7113F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcessExplicit", "AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj", "{829F9B12-5087-4DDB-9ECF-237F691DAEC2}"
 EndProject
