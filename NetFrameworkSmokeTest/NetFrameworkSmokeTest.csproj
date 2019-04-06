@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\net46\NullGuard.Fody.dll" />
-    <PackageReference Include="Fody" Version="4.2.1" />
+    <PackageReference Include="Fody" Version="5.0.0-beta.3" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" Condition="$(TargetFramework)=='fake'" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
