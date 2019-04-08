@@ -274,7 +274,6 @@ If you want ArgumentNullException to be thrown for Debug builds then update Fody
 A complete example of `FodyWeavers.xml` looks like this:
 
 ```xml
-<?xml version="1.0" encoding="utf-8" ?>
 <Weavers>
     <NullGuard IncludeDebugAssert="false" />
 </Weavers>
