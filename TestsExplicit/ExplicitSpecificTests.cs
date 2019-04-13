@@ -2,8 +2,10 @@
 using Xunit;
 using System;
 using System.Collections.Generic;
+using Xunit.Abstractions;
 
-public class ExplicitSpecificTests
+public class ExplicitSpecificTests :
+    XunitLoggingBase
 {
     public static IEnumerable<object[]> GetFixtureArgs
     {
@@ -21,7 +23,6 @@ public class ExplicitSpecificTests
             yield return new object[] {"ExternalBase.ImplementsInterface", string.Empty};
             yield return new object[] {"ExternalBase.ImplementsInheritedInterface", string.Empty};
             yield return new object[] {"ExternalBase.ImplementsInterfaceExplicit", "AssemblyWithExternalAnnotations.InterfaceWithAttributes."};
-
         }
     }
 
@@ -103,5 +104,10 @@ public class ExplicitSpecificTests
         var sample = (dynamic) Activator.CreateInstance(type);
         sample.NotNullProperty = "Test";
         string value = sample.NotNullProperty;
+    }
+
+    public ExplicitSpecificTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

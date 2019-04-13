@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 #endif
 
 using Xunit;
+using Xunit.Abstractions;
 
-public class RewritingMethods
+public class RewritingMethods :
+    XunitLoggingBase
 {
     [Fact]
     public void RequiresNonNullArgumentForExplicitInterface()
@@ -263,5 +265,10 @@ public class RewritingMethods
             sample.OutValueChecksWithRetInstructionAsSwitchCase(0, out value);
         });
         Assert.Equal("[NullGuard] Out parameter 'outParam' is null.", exception.Message);
+    }
+
+    public RewritingMethods(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

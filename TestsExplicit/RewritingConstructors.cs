@@ -4,8 +4,10 @@ using System.Reflection;
 using ApprovalTests;
 #endif
 using Xunit;
+using Xunit.Abstractions;
 
-public class RewritingConstructors
+public class RewritingConstructors :
+    XunitLoggingBase
 {
     [Fact]
     public void RequiresNonNullArgument()
@@ -41,5 +43,10 @@ public class RewritingConstructors
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");
         Activator.CreateInstance(type, new object[]{ null });
+    }
+
+    public RewritingConstructors(ITestOutputHelper output) : 
+        base(output)
+    {
     }
 }

@@ -1,4 +1,5 @@
-﻿class DerivedGenericClass1<T> : GenericBaseClass<string, T>
+﻿class DerivedGenericClass1<T> :
+    GenericBaseClass<string, T>
 {
     public override T Method(string param)
     {
