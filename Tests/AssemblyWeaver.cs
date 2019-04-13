@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 using Fody;
-#pragma warning disable 618
 
 public static class AssemblyWeaver
 {
