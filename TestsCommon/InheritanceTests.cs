@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Linq;
+using Fody;
 using Mono.Cecil;
 using Xunit;
-#pragma warning disable 618
+using Xunit.Abstractions;
 
-public class InheritanceTests
+public class InheritanceTests :
+    XunitLoggingBase
 {
     ModuleDefinition module;
 
-    public InheritanceTests()
+    public InheritanceTests(ITestOutputHelper output) :
+        base(output)
     {
         module = ModuleDefinition.ReadModule(typeof(InheritanceTests).Assembly.Location);
     }
@@ -219,5 +222,11 @@ public class InheritanceTests
         var actual = string.Join("|", result);
         var expected = "T1 GenericBaseClass`2::Property()";
         Assert.Equal(expected, actual);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        module.Dispose();
     }
 }

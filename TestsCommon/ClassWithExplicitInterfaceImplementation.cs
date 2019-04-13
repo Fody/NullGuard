@@ -1,6 +1,8 @@
 ﻿using System;
 
-public class ClassWithExplicitInterfaceImplementation : IComparable<string>, IComparable<int>
+public class ClassWithExplicitInterfaceImplementation :
+    IComparable<string>,
+    IComparable<int>
 {
     int IComparable<string>.CompareTo(string other)
     {

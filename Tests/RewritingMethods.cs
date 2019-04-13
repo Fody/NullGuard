@@ -3,17 +3,20 @@ using System;
 using ApprovalTests;
 #endif
 using Xunit;
+using Xunit.Abstractions;
+
 #if (DEBUG)
 using System.Threading.Tasks;
 #endif
 
-public class RewritingMethods
+public class RewritingMethods :
+    XunitLoggingBase
 {
     [Fact]
     public void RequiresNonNullArgumentForExplicitInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
-        var sample = (IComparable<string>)Activator.CreateInstance(type);
+        var sample = (IComparable<string>) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -24,7 +27,7 @@ public class RewritingMethods
     public void RequiresNonNullArgumentForInternalClassWithExplicitPublicInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -35,7 +38,7 @@ public class RewritingMethods
     public void AllowsNullForInternalClassWithExplicitPrivateInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.CallInternalClassWithPrivateInterface(null);
     }
 
@@ -43,7 +46,7 @@ public class RewritingMethods
     public void RequiresNonNullArgumentForImplicitInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
-        var sample = (IComparable<string>)Activator.CreateInstance(type);
+        var sample = (IComparable<string>) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -54,7 +57,7 @@ public class RewritingMethods
     public void RequiresNonNullArgumentForInternalClassWithImplicitPublicInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -73,11 +76,8 @@ public class RewritingMethods
     public void RequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            sample.SomeMethod(null, "");
-        });
+        var sample = (dynamic) Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
         Assert.Equal("nonNullArg", exception.ParamName);
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -88,7 +88,7 @@ public class RewritingMethods
     public void AllowsNullWhenAttributeApplied()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.SomeMethod("", null);
     }
 
@@ -96,7 +96,7 @@ public class RewritingMethods
     public void RequiresNonNullMethodReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -107,7 +107,7 @@ public class RewritingMethods
     public void RequiresNonNullGenericMethodReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
 #if (NET472)
         Approvals.Verify(exception.Message);
@@ -118,7 +118,7 @@ public class RewritingMethods
     public void AllowsNullReturnValueWhenAttributeApplied()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.MethodAllowsNullReturnValue();
     }
 
@@ -126,11 +126,8 @@ public class RewritingMethods
     public void RequiresNonNullOutValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<InvalidOperationException>(() =>
-        {
-            sample.MethodWithOutValue(out string value);
-        });
+        var sample = (dynamic) Activator.CreateInstance(type);
+        var exception = Assert.Throws<InvalidOperationException>(() => { sample.MethodWithOutValue(out string value); });
 #if (NET472)
         Approvals.Verify(exception.Message);
 #endif
@@ -140,7 +137,7 @@ public class RewritingMethods
     public void AllowsNullOutValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         string value;
         sample.MethodWithAllowedNullOutValue(out value);
     }
@@ -149,7 +146,7 @@ public class RewritingMethods
     public void DoesNotRequireNonNullForNonPublicMethod()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.PublicWrapperOfPrivateMethod();
     }
 
@@ -157,7 +154,7 @@ public class RewritingMethods
     public void DoesNotRequireNonNullForOptionalParameter()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.MethodWithOptionalParameter(optional: null);
     }
 
@@ -165,11 +162,8 @@ public class RewritingMethods
     public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null);
-        });
+        var sample = (dynamic) Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => { sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null); });
 #if (NET472)
         Approvals.Verify(exception.Message);
 #endif
@@ -179,7 +173,7 @@ public class RewritingMethods
     public void DoesNotRequireNonNullForOptionalParameterWithNonNullDefaultValueButAllowNullAttribute()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         sample.MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute(optional: null);
     }
 
@@ -187,11 +181,8 @@ public class RewritingMethods
     public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            sample.PublicWrapperOfPrivateMethod();
-        });
+        var sample = (dynamic) Activator.CreateInstance(type);
+        var exception = Assert.Throws<ArgumentNullException>(() => { sample.PublicWrapperOfPrivateMethod(); });
 #if (NET472)
         Approvals.Verify(exception.Message);
 #endif
@@ -201,8 +192,8 @@ public class RewritingMethods
     public void ReturnGuardDoesNotInterfereWithIteratorMethod()
     {
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        Assert.Equal(new[] { 0, 1, 2, 3, 4 }, sample.CountTo(5));
+        var sample = (dynamic) Activator.CreateInstance(type);
+        Assert.Equal(new[] {0, 1, 2, 3, 4}, sample.CountTo(5));
     }
 
 #if (DEBUG)
@@ -284,7 +275,7 @@ public class RewritingMethods
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");
-        var ClassToExclude = (dynamic)Activator.CreateInstance(type, "");
+        var ClassToExclude = (dynamic) Activator.CreateInstance(type, "");
         ClassToExclude.Test(null);
     }
 
@@ -293,7 +284,7 @@ public class RewritingMethods
     {
         // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
+        var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.ReturnValueChecksWithBranchToRetInstruction());
         Assert.Equal("[NullGuard] Return value of method 'System.String SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null.", exception.Message);
     }
@@ -303,11 +294,13 @@ public class RewritingMethods
     {
         // This is a regression test for the "Branch to RET" issue described in https://github.com/Fody/NullGuard/issues/61.
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var sample = (dynamic)Activator.CreateInstance(type);
-        var exception = Assert.Throws<InvalidOperationException>(() =>
-        {
-            sample.OutValueChecksWithRetInstructionAsSwitchCase(0, out string value);
-        });
+        var sample = (dynamic) Activator.CreateInstance(type);
+        var exception = Assert.Throws<InvalidOperationException>(() => { sample.OutValueChecksWithRetInstructionAsSwitchCase(0, out string value); });
         Assert.Equal("[NullGuard] Out parameter 'outParam' is null.", exception.Message);
+    }
+
+    public RewritingMethods(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

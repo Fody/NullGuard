@@ -1,11 +1,14 @@
-﻿#if (NET472)
+﻿
+using Xunit.Abstractions;
+#if (NET472)
 using System.Linq;
 using ApprovalTests;
 using Xunit;
 using Fody;
 using ObjectApproval;
 
-public class ApprovedTests
+public class ApprovedTests :
+    XunitLoggingBase
 {
     [Fact]
     public void ClassWithBadAttributes()
@@ -167,6 +170,11 @@ public class ApprovedTests
     public void ErrorsList()
     {
         ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+    }
+
+    public ApprovedTests(ITestOutputHelper output) : 
+        base(output)
+    {
     }
 }
 #endif
