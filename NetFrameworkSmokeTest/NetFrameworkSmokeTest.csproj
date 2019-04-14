@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\net472\NullGuard.Fody.dll" />
+    <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
     <PackageReference Include="Fody" Version="5.0.0-beta.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
