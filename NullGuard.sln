@@ -35,6 +35,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsCommon", "TestsCommon\TestsCommon.csproj", "{9B26DD0B-4255-428A-A7FB-D1C2142E6A37}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFrameworkSmokeTest", "NetFrameworkSmokeTest\NetFrameworkSmokeTest.csproj", "{09AB176F-9BEA-4A90-818E-2FF49C6199F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
