@@ -21,7 +21,7 @@ The `Install-Package Fody` is required since NuGet always defaults to the oldest
 
 ## Modes
 
-As of v1.6.3 NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
+NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
 
  * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
  * In the new [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
@@ -36,7 +36,6 @@ If not configured explicitly, NullGuard will auto-detect the mode as follows:
 
 
 #### Your Code
-
 
 ```csharp
 public class Sample
@@ -75,12 +74,11 @@ public class Sample
 ```
 
 
-#### What gets compiled 
+#### What gets compiled
 
 ```csharp
 public class SampleOutput
 {
-
     public string NullProperty{get;set}
 
     string nullPropertyOnSet;
@@ -157,7 +155,6 @@ public class SampleOutput
 If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly annotate not null items, 
 null guards will be added only for items that have an explicit `[NotNull]` annotation.
 
-
 ```csharp
 public class Sample
 {
@@ -216,49 +213,95 @@ Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://g
 Where and how injection occurs can be controlled via attributes. The NullGuard.Fody nuget ships with an assembly containing these attributes.
 
 ```csharp
-namespace NullGuard
+/// <summary>
+/// Prevents the injection of null checking.
+/// </summary>
+[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
+public class AllowNullAttribute : Attribute
+{
+}
+
+/// <summary>
+/// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
+/// </summary>
+[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
+public class NullGuardAttribute : Attribute
 {
     /// <summary>
-    /// Prevents the injection of null checking.
+    /// Initializes a new instance of the <see cref="NullGuardAttribute"/> with a <see cref="ValidationFlags"/>.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
-    public class AllowNullAttribute : Attribute
+    /// <param name="flags">The <see cref="ValidationFlags"/> to use for the target this attribute is being applied to.</param>
+    public NullGuardAttribute(ValidationFlags flags)
     {
-    }
-    
-    /// <summary>
-    /// Allow specific categories of members to be targeted for injection. <seealso cref="ValidationFlags"/>
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
-    public class NullGuardAttribute : Attribute
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NullGuardAttribute"/> with a <see cref="ValidationFlags"/>.
-        /// </summary>
-        /// <param name="flags">The <see cref="ValidationFlags"/> to use for the target this attribute is being applied to.</param>
-        public NullGuardAttribute(ValidationFlags flags)
-        {
-        }
-    }
-    
-    /// <summary>
-    /// Used by <see cref="NullGuardAttribute"/> to target specific categories of members.
-    /// </summary>
-    [Flags]
-    public enum ValidationFlags
-    {
-        None = 0,
-        Properties = 1,
-        Arguments = 2,
-        OutValues = 4,
-        ReturnValues = 8,
-        NonPublic = 16,
-        Methods = Arguments | OutValues | ReturnValues,
-        AllPublicArguments = Properties | Arguments,
-        AllPublic = Properties | Methods,
-        All = AllPublic | NonPublic
     }
 }
+
+/// <summary>
+/// Used by <see cref="NullGuardAttribute"/> to target specific categories of members.
+/// </summary>
+[Flags]
+public enum ValidationFlags
+{
+    None = 0,
+    Properties = 1,
+    Arguments = 2,
+    OutValues = 4,
+    ReturnValues = 8,
+    NonPublic = 16,
+    Methods = Arguments | OutValues | ReturnValues,
+    AllPublicArguments = Properties | Arguments,
+    AllPublic = Properties | Methods,
+    All = AllPublic | NonPublic
+}
+```
+
+All NullGuard attributes are removed from the assembly as part of the build.
+
+Attributes are checked locally at the member, and if there are no attributes then the class is checked. If the class has no attributes then the assembly is checked. Finally if there are no attributes at the assembly level then the default value is used.
+
+
+### NullGuardAttribute
+
+`NullGuardAttribute` can be used at the class or assembly level. It takes a `ValidationFlags` parameter.
+
+```csharp
+    [assembly: NullGuard(ValidationFlags.None)] // Sets no guards at the assembly level
+    
+    [NullGuard(ValidationFlags.AllPublicArguments)] // Sets the default guard for class Foo
+    public class Foo { ... }
+```
+
+### ValidationFlags
+
+The `ValidationFlags` determine how much checking NullGuard adds to your assembly.
+
+ * `None` Does nothing.
+ * `Properties` Adds null guard checks to properties getter (cannot return null) and setter (cannot be set to null).
+ * `Arguments` Method arguments are checked to make sure they are not null. This only applies to normal arguments, and the incoming value of a ref argument.
+ * `OutValues` Out and ref arguments of a method are checked for null just before the method returns.
+ * `ReturnValues` Checks the return value of a method for null.
+ * `NonPublic` Applies the other flags to all non-public members as well.
+ * `Methods` Processes all arguments (normal, out and ref) and return values of methods.
+ * `AllPublicArguments` Processes all methods (arguments and return values) and properties.
+ * `AllPublic` Checks everything (properties, all method args and return values).
+
+
+### AllowNullAttribute and CanBeNullAttribute
+
+These attributes allow you to specify which arguments, return values and properties can be set to null. `AllowNullAttribute` comes from the referenced project NullGuard adds. `CanBeNullAttribute` can come from anywhere, but is commonly used by Resharper.
+
+```csharp
+[AllowNull]
+public string NullProperty { get; set; }
+
+public void SomeMethod(string nonNullArg, [AllowNull] string nullArg) { ... }
+
+[return: AllowNull]
+public string MethodAllowsNullReturnValue() { ... }
+
+public string PropertyAllowsNullGetButDoesNotAllowNullSet { [return: AllowNull] get; set; }
+
+public string PropertyAllowsNullSetButDoesNotAllowNullGet { get; [param: AllowNull] set; }
 ```
 
 
@@ -290,14 +333,6 @@ You can force the operation mode by setting it to `Explicit` or `Implicit`, if t
 ```xml
 <NullGuard Mode="Explicit" />
 ```
-
-
-## Contributors
-
-  * [Cameron MacFarland](https://github.com/distantcam)
-  * [Simon Cropp](https://github.com/simoncropp)
-  * [Tim Murphy](https://github.com/TimMurphy)
-  * [Tom Englert](https://github.com/tom-englert)
 
 
 ## Icon
