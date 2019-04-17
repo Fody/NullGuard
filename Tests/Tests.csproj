@@ -18,6 +18,5 @@
     <ProjectReference Include="..\NetFrameworkSmokeTest\NetFrameworkSmokeTest.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>
