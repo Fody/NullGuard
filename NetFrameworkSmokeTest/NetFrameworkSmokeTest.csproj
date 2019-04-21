@@ -1,17 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net40;net452;net472;netstandard1.4;netstandard2.0;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
     <DebugType>portable</DebugType>
   </PropertyGroup>
-
   <ItemGroup>
     <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
-    <PackageReference Include="Fody" Version="5.0.0-beta.11">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Fody" Version="5.0.0-beta.11" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
-
 </Project>

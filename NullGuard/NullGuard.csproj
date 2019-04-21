@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net40;netstandard1.4</TargetFrameworks>
     <SignAssembly>True</SignAssembly>
@@ -9,10 +8,8 @@
     <Description>Add null checks.</Description>
     <PackageTags>Null Check, ILWeaving, Fody, Cecil</PackageTags>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Fody" Version="5.0.0-beta.11" PrivateAssets="None" />
     <PackageReference Include="FodyPackaging" Version="5.0.0-beta.11" PrivateAssets="All" />
   </ItemGroup>
-
 </Project>
