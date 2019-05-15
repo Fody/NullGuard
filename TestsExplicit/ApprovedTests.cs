@@ -1,6 +1,5 @@
-﻿
+﻿#if (NET472)
 using Xunit.Abstractions;
-#if (NET472)
 using System.Linq;
 using ApprovalTests;
 using Xunit;

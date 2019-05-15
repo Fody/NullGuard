@@ -419,7 +419,7 @@ IL_001f:  ret
 .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
 {
 .maxstack  2
-.locals init ([0] !!T __var_0)
+.locals init (!!T V_0)
 IL_0000:  ldarg.1
 IL_0001:  brtrue.s   IL_001d
 IL_0003:  call       !!0 [mscorlib]System.Activator::CreateInstance<!!0>()
@@ -432,7 +432,7 @@ IL_0011:  ldstr      "[NullGuard] Return value of method 'T SimpleClass:"
 IL_0016:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
 IL_001b:  throw
 IL_001c:  ret
-IL_001d:  ldloca.s   __var_0
+IL_001d:  ldloca.s   V_0
 IL_001f:  initobj    !!T
 IL_0025:  ldloc.0
 IL_0026:  dup
@@ -529,7 +529,7 @@ IL_001e:  ret
 ReturnValueChecksWithBranchToRetInstruction() cil managed
 {
 .maxstack  2
-.locals init ([0] string returnValue)
+.locals init (string V_0)
 IL_0000:  ldnull
 IL_0001:  stloc.0
 IL_0002:  ldstr      ""
@@ -576,7 +576,7 @@ IL_002b:  ret
 get_GetterReturnValueChecksWithBranchToRetInstruction() cil managed
 {
 .maxstack  2
-.locals init ([0] string returnValue)
+.locals init (string V_0)
 IL_0000:  ldnull
 IL_0001:  stloc.0
 IL_0002:  ldstr      ""
