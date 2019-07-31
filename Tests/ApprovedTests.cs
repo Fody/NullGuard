@@ -116,19 +116,19 @@ public class ApprovedTests:
     [Fact]
     public void InfosList()
     {
-        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
+        ObjectApprover.Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
     }
 
     [Fact]
     public void WarnsList()
     {
-        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
+        ObjectApprover.Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
     }
 
     [Fact]
     public void ErrorsList()
     {
-        ObjectApprover.VerifyWithJson(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+        ObjectApprover.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 
     public ApprovedTests(ITestOutputHelper output) : 
