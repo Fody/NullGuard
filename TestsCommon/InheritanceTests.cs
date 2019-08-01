@@ -13,7 +13,11 @@ public class InheritanceTests :
     public InheritanceTests(ITestOutputHelper output) :
         base(output)
     {
-        module = ModuleDefinition.ReadModule(typeof(InheritanceTests).Assembly.Location, new ReaderParameters(){AssemblyResolver = new TestAssemblyResolver()});
+        var readerParameters = new ReaderParameters
+        {
+            AssemblyResolver = new TestAssemblyResolver()
+        };
+        module = ModuleDefinition.ReadModule(typeof(InheritanceTests).Assembly.Location, readerParameters);
     }
 
     [Fact]
