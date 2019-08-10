@@ -337,4 +337,4 @@ You can force the operation mode by setting it to `Explicit` or `Implicit`, if t
 
 ## Icon
 
-Icon courtesy of [The Noun Project](http://thenounproject.com)
+Icon courtesy of [The Noun Project](https://thenounproject.com)
