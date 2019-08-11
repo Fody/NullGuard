@@ -1,6 +1,5 @@
 ﻿#if (NET472)
 using Xunit.Abstractions;
-using ObjectApproval;
 using ApprovalTests;
 using Fody;
 using Xunit;

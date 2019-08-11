@@ -4,7 +4,6 @@ using System.Linq;
 using ApprovalTests;
 using Xunit;
 using Fody;
-using ObjectApproval;
 
 public class ApprovedTests :
     XunitLoggingBase
