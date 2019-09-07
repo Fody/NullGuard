@@ -6,7 +6,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class InheritanceTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     ModuleDefinition module;
 

@@ -6,7 +6,7 @@ using Xunit;
 using System.Linq;
 
 public class ApprovedTests:
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void ClassWithBadAttributes()

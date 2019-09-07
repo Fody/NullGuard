@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Xunit.Abstractions;
 
 public class ExplicitSpecificTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     public static IEnumerable<object[]> GetFixtureArgs
     {

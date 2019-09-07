@@ -6,7 +6,7 @@ using Xunit;
 using Fody;
 
 public class ApprovedTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void ClassWithBadAttributes()

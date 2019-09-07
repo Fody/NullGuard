@@ -10,7 +10,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class RewritingMethods :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void RequiresNonNullArgumentForExplicitInterface()

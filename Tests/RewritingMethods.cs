@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 #endif
 
 public class RewritingMethods :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void RequiresNonNullArgumentForExplicitInterface()

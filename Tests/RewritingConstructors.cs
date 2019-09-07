@@ -7,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class RewritingConstructors :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void RequiresNonNullArgument()
