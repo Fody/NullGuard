@@ -3,8 +3,10 @@ using System;
 using ApprovalTests;
 #endif
 using Xunit;
+using Xunit.Abstractions;
 
-public class RewritingIndexers
+public class RewritingIndexers :
+    XunitApprovalBase
 {
     [Fact]
     public void NonNullableIndexerSetterWithFirstArgumentNull()
@@ -114,6 +116,11 @@ public class RewritingIndexers
 
     // ReSharper disable once UnusedParameter.Local
     void IgnoreValue(object value)
+    {
+    }
+
+    public RewritingIndexers(ITestOutputHelper output) : 
+        base(output)
     {
     }
 }

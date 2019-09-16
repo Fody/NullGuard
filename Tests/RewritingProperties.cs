@@ -3,8 +3,10 @@
 using ApprovalTests;
 #endif
 using Xunit;
+using Xunit.Abstractions;
 
-public class RewritingProperties
+public class RewritingProperties :
+    XunitApprovalBase
 {
     [Fact]
     public void PropertySetterRequiresNonNullArgument()
@@ -104,5 +106,10 @@ public class RewritingProperties
         var classToExclude = (dynamic) Activator.CreateInstance(type, "");
         classToExclude.Property = null;
         string result = classToExclude.Property;
+    }
+
+    public RewritingProperties(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

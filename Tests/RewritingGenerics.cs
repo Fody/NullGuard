@@ -73,7 +73,7 @@ public class RewritingGenerics
         Assert.Equal(notNullValue, sample.GenericMethodReturnsParameter<Array>(notNullValue, notNullValue));
         exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethodReturnsParameter<Array>(notNullValue, nullValue)));
 
-        // approvals don't work for [Theorie], just do it inline...
+        // approvals don't work for [Theory], just do it inline...
         var expected = @"[NullGuard] Cannot set the value of property 'T ClassName`1::NonNullProperty()' to null.|Parameter name: value
 [NullGuard] Return value of property 'T ClassName`1::NonNullProperty()' is null.
 [NullGuard] Return value of method 'T ClassName`1::NonNullMethod()' is null.
