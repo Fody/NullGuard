@@ -4,8 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FodyHelpers" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup>
+
     <Compile Include="..\NullGuard\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
     </Compile>

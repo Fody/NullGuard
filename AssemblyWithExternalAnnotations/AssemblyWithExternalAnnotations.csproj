@@ -10,8 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="AssemblyWithExternalAnnotations.ExternalAnnotations.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="AssemblyWithExternalAnnotations.ExternalAnnotations.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
