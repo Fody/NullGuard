@@ -1,7 +1,5 @@
 using System;
-#if (NET472)
 using ApprovalTests;
-#endif
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,9 +16,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (IComparable<string>) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -29,9 +25,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -48,9 +42,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
         var sample = (IComparable<string>) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -59,9 +51,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("ClassWithImplicitInterface");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CallInternalClassWithPublicInterface(null));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -79,9 +69,7 @@ public class RewritingMethods :
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
         Assert.Equal("nonNullArg", exception.ParamName);
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -98,9 +86,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -109,9 +95,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -128,9 +112,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.MethodWithOutValue(out string value); });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -164,9 +146,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null); });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -183,9 +163,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
         var sample = (dynamic) Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.PublicWrapperOfPrivateMethod(); });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -204,9 +182,7 @@ public class RewritingMethods :
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -237,9 +213,7 @@ public class RewritingMethods :
 
         Assert.NotNull(exception);
         Assert.IsType<InvalidOperationException>(exception);
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -254,7 +228,9 @@ public class RewritingMethods :
             .ContinueWith(t =>
             {
                 if (t.IsFaulted)
+                {
                     ex = t.Exception.Flatten().InnerException;
+                }
             })
             .Wait();
 

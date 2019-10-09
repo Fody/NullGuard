@@ -1,7 +1,5 @@
 ﻿using System;
-#if (NET472)
 using ApprovalTests;
-#endif
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,9 +12,7 @@ public class RewritingProperties :
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -31,9 +27,7 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -48,9 +42,7 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -60,9 +52,7 @@ public class RewritingProperties :
         var sample = (dynamic)Activator.CreateInstance(type);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
@@ -78,9 +68,7 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-#if (NET472)
         Approvals.Verify(exception.Message);
-#endif
     }
 
     [Fact]
