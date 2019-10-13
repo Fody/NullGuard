@@ -53,11 +53,12 @@ public class RewritingGenerics
         var factory = (dynamic)Activator.CreateInstance(factoryType);
         var sample = factory.Object;
 
-        var exceptions = new List<Exception>();
-
-        exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = nullValue));
-        exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.NonNullProperty));
-
+        var exceptions = new List<Exception>
+        {
+            Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = nullValue),
+            Assert.Throws<InvalidOperationException>(() => sample.NonNullProperty)
+        };
+        
         sample.NonNullProperty = notNullValue;
         Assert.Equal(notNullValue, sample.NonNullProperty);
 

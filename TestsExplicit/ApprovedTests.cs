@@ -1,5 +1,4 @@
-﻿#if (NET472)
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 using System.Linq;
 using ApprovalTests;
 using Xunit;
@@ -175,4 +174,3 @@ public class ApprovedTests :
     {
     }
 }
-#endif
