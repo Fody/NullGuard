@@ -7,7 +7,7 @@
     <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.0.4" />
+    <PackageReference Include="FodyHelpers" Version="6.0.5" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="ApprovalTests" Version="4.2.2" />
     <PackageReference Include="ObjectApproval" Version="11.2.0" />
