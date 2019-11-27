@@ -1,5 +1,5 @@
 using System;
-using ApprovalTests;
+using VerifyXunit;
 #if (DEBUG)
 using System.Threading.Tasks;
 #endif
@@ -8,19 +8,19 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class RewritingMethods :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void RequiresNonNullArgumentForExplicitInterface()
+    public Task RequiresNonNullArgumentForExplicitInterface()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (IComparable<string>)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void RequiresNonNullArgument()
+    public Task RequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -29,7 +29,7 @@ public class RewritingMethods :
             sample.SomeMethod(null, "");
         });
         Assert.Equal("nonNullArg", exception.ParamName);
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -41,21 +41,21 @@ public class RewritingMethods :
     }
 
     [Fact]
-    public void RequiresNonNullMethodReturnValue()
+    public Task RequiresNonNullMethodReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void RequiresNonNullGenericMethodReturnValue()
+    public Task RequiresNonNullGenericMethodReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithGenericReturn<object>(true));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class RewritingMethods :
     }
 
     [Fact]
-    public void RequiresNonNullOutValue()
+    public Task RequiresNonNullOutValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -76,7 +76,7 @@ public class RewritingMethods :
         {
             sample.MethodWithOutValue(out value);
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class RewritingMethods :
     }
 
     [Fact]
-    public void RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
+    public Task RequiresNonNullForOptionalParameterWithNonNullDefaultValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -113,7 +113,7 @@ public class RewritingMethods :
         {
             sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null);
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class RewritingMethods :
     }
 
     [Fact]
-    public void RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
+    public Task RequiresNonNullForNonPublicMethodWhenAttributeSpecifiesNonPublic()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassWithPrivateMethod");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -133,7 +133,7 @@ public class RewritingMethods :
         {
             sample.PublicWrapperOfPrivateMethod();
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -147,12 +147,12 @@ public class RewritingMethods :
 #if (DEBUG)
 
     [Fact]
-    public void RequiresNonNullArgumentAsync()
+    public Task RequiresNonNullArgumentAsync()
     {
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -164,7 +164,7 @@ public class RewritingMethods :
     }
 
     [Fact]
-    public void RequiresNonNullMethodReturnValueAsync()
+    public Task RequiresNonNullMethodReturnValueAsync()
     {
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -183,7 +183,7 @@ public class RewritingMethods :
 
         Assert.NotNull(exception);
         Assert.IsType<InvalidOperationException>(exception);
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]

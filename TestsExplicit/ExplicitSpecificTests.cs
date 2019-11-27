@@ -2,10 +2,11 @@
 using Xunit;
 using System;
 using System.Collections.Generic;
+using VerifyXunit;
 using Xunit.Abstractions;
 
 public class ExplicitSpecificTests :
-    XunitApprovalBase
+    VerifyBase
 {
     public static IEnumerable<object[]> GetFixtureArgs
     {

@@ -1,22 +1,23 @@
 ﻿using System;
-using ApprovalTests;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class RewritingProperties :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void PropertySetterRequiresNonNullArgument()
+    public Task PropertySetterRequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void PropertyGetterRequiresNonNullReturnValue()
+    public Task PropertyGetterRequiresNonNullReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -27,11 +28,11 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void GenericPropertyGetterRequiresNonNullReturnValue()
+    public Task GenericPropertyGetterRequiresNonNullReturnValue()
     {
         var type = AssemblyWeaver.Assembly.GetType("GenericClass`1");
         var sample = (dynamic)Activator.CreateInstance(type.MakeGenericType(typeof(string)));
@@ -42,21 +43,21 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void PropertyAllowsNullGetButNotSet()
+    public Task PropertyAllowsNullGetButNotSet()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void PropertyAllowsNullSetButNotGet()
+    public Task PropertyAllowsNullSetButNotGet()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
@@ -68,7 +69,7 @@ public class RewritingProperties :
 
             // ReSharper restore UnusedVariable
         });
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]

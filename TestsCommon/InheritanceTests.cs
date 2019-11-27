@@ -2,11 +2,12 @@
 using System.Linq;
 using Fody;
 using Mono.Cecil;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class InheritanceTests :
-    XunitApprovalBase
+    VerifyBase
 {
     ModuleDefinition module;
 

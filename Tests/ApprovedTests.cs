@@ -1,133 +1,134 @@
 ﻿#if (NET472)
 using Xunit.Abstractions;
-using ApprovalTests;
+using VerifyXunit;
 using Fody;
 using Xunit;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class ApprovedTests:
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void ClassWithBadAttributes()
+    public Task ClassWithBadAttributes()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
     }
 
     [Fact]
-    public void ClassWithPrivateMethod()
+    public Task ClassWithPrivateMethod()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
     [Fact]
-    public void ClassWithPrivateMethodNoAssert()
+    public Task ClassWithPrivateMethodNoAssert()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
     [Fact]
-    public void GenericClass()
+    public Task GenericClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
     }
 
     [Fact]
-    public void GenericClassWithValueTypeConstraint()
+    public Task GenericClassWithValueTypeConstraint()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithValueTypeConstraints`1"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithValueTypeConstraints`1"));
     }
 
     [Fact]
-    public void GenericClassWithReferenceTypeConstraints()
+    public Task GenericClassWithReferenceTypeConstraints()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithReferenceTypeConstraints`1"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithReferenceTypeConstraints`1"));
     }
 
     [Fact]
-    public void Indexers()
+    public Task Indexers()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
     }
 
     [Fact]
-    public void InterfaceBadAttributes()
+    public Task InterfaceBadAttributes()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
     }
 
     [Fact]
-    public void SimpleClass()
+    public Task SimpleClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
     [Fact]
-    public void SimpleClassNoAssert()
+    public Task SimpleClassNoAssert()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
     [Fact]
-    public void SkipIXamlMetadataProvider()
+    public Task SkipIXamlMetadataProvider()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
     }
 
 #if (DEBUG)
     [Fact]
-    public void SpecialClass_debug()
+    public Task SpecialClass_debug()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
     }
 #else
     [Fact]
-    public void SpecialClass_release()
+    public Task SpecialClass_release()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
     }
 #endif
 
     [Fact]
-    public void PublicNestedInsideNonPublic()
+    public Task PublicNestedInsideNonPublic()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
     }
 
     [Fact]
-    public void UnsafeClass()
+    public Task UnsafeClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
     }
 
     [Fact]
-    public void ClassWithImplicitInterface()
+    public Task ClassWithImplicitInterface()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
     }
 
     [Fact]
-    public void ClassWithExplicitInterface()
+    public Task ClassWithExplicitInterface()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
     }
 
     [Fact]
-    public void InfosList()
+    public Task InfosList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
     }
 
     [Fact]
-    public void WarnsList()
+    public Task WarnsList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
     }
 
     [Fact]
-    public void ErrorsList()
+    public Task ErrorsList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 
     public ApprovedTests(ITestOutputHelper output) : 

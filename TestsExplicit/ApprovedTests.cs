@@ -1,176 +1,181 @@
 ﻿using Xunit.Abstractions;
 using System.Linq;
-using ApprovalTests;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 using Fody;
 
 public class ApprovedTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void ClassWithBadAttributes()
+    public Task ClassWithBadAttributes()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
     }
 
     [Fact]
-    public void ClassWithPrivateMethod()
+    public Task ClassWithPrivateMethod()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
     [Fact]
-    public void ClassWithPrivateMethodNoAssert()
+    public Task ClassWithPrivateMethodNoAssert()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
     [Fact]
-    public void GenericClass()
+    public Task GenericClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
     }
 
     [Fact]
-    public void Indexers()
+    public Task Indexers()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
     }
 
     [Fact]
-    public void InterfaceBadAttributes()
+    public Task InterfaceBadAttributes()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
     }
 
     [Fact]
-    public void SimpleClass()
+    public Task SimpleClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
     [Fact]
-    public void SimpleClassNoAssert()
+    public Task SimpleClassNoAssert()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
     }
 
     [Fact]
-    public void SkipIXamlMetadataProvider()
+    public Task SkipIXamlMetadataProvider()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
     }
 
     [Fact]
-    public void SpecialClass()
+    public Task SpecialClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
     }
 
     [Fact]
-    public void PublicNestedInsideNonPublic()
+    public Task PublicNestedInsideNonPublic()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
     }
 
     [Fact]
-    public void UnsafeClass()
+    public Task UnsafeClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
     }
 
     [Fact]
-    public void DerivedClass()
+    public Task DerivedClass()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.DerivedClass"), v => v.Replace("InternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.DerivedClass"));
     }
 
     [Fact]
-    public void ImplementsInterface()
+    public Task ImplementsInterface()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterface"), v => v.Replace("InternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterface"));
     }
 
     [Fact]
-    public void ImplementsInheritedInterface()
+    public Task ImplementsInheritedInterface()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInheritedInterface"), v => v.Replace("InternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInheritedInterface"));
     }
 
     [Fact]
-    public void ImplementsInterfaceExplicit()
+    public Task ImplementsInterfaceExplicit()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterfaceExplicit"), v => v.Replace("InternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterfaceExplicit"));
     }
 
     [Fact]
-    public void DerivedClassAssemblyBase()
+    public Task DerivedClassAssemblyBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.DerivedClass"), v => v.Replace("AssemblyBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.DerivedClass"));
     }
 
     [Fact]
-    public void ImplementsInterfaceAssemblyBase()
+    public Task ImplementsInterfaceAssemblyBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterface"), v => v.Replace("AssemblyBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterface"));
     }
 
     [Fact]
-    public void ImplementsInheritedInterfaceAssemblyBase()
+    public Task ImplementsInheritedInterfaceAssemblyBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInheritedInterface"), v => v.Replace("AssemblyBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInheritedInterface"));
     }
 
     [Fact]
-    public void ImplementsInterfaceExplicitAssemblyBase()
+    public Task ImplementsInterfaceExplicitAssemblyBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterfaceExplicit"), v => v.Replace("AssemblyBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterfaceExplicit"));
     }
 
     [Fact]
-    public void DerivedClassExternalBase()
+    public Task DerivedClassExternalBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.DerivedClass"), v => v.Replace("ExternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.DerivedClass"));
     }
 
     [Fact]
-    public void ImplementsInterfaceExternalBase()
+    public Task ImplementsInterfaceExternalBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterface"), v => v.Replace("ExternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterface"));
     }
 
     [Fact]
-    public void ImplementsInheritedInterfaceExternalBase()
+    public Task ImplementsInheritedInterfaceExternalBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInheritedInterface"), v => v.Replace("ExternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInheritedInterface"));
     }
 
     [Fact]
-    public void ImplementsInterfaceExplicitExternalBase()
+    public Task ImplementsInterfaceExplicitExternalBase()
     {
-        Approvals.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterfaceExplicit"), v => v.Replace("ExternalBase.", string.Empty));
+        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterfaceExplicit"));
     }
 
     [Fact]
-    public void InfosList()
+    public Task InfosList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
     }
 
     [Fact]
-    public void WarnsList()
+    public Task WarnsList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
     }
 
     [Fact]
-    public void ErrorsList()
+    public Task ErrorsList()
     {
-        ObjectApprover.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+        return Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 
-    public ApprovedTests(ITestOutputHelper output) : 
+    public ApprovedTests(ITestOutputHelper output) :
         base(output)
     {
+        UniqueForRuntime();
+        AddScrubber(v => v.Replace("InternalBase.", string.Empty));
+        AddScrubber(v => v.Replace("AssemblyBase.", string.Empty));
+        AddScrubber(v => v.Replace("ExternalBase.", string.Empty));
     }
 }

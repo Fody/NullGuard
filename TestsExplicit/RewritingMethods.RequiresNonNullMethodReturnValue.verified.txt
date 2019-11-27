@@ -1,0 +1,1 @@
+[NullGuard] Return value of method 'System.String SimpleClass::MethodWithReturnValue(System.Boolean)' is null.

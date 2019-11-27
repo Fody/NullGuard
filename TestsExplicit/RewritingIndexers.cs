@@ -1,36 +1,37 @@
 using System;
-using ApprovalTests;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class RewritingIndexers:
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void NonNullableIndexerSetterWithFirstArgumentNull()
+    public Task NonNullableIndexerSetterWithFirstArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: null, nonNullParam2: null] = "value");
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void NonNullableIndexerSetterWithSecondArgumentNull()
+    public Task NonNullableIndexerSetterWithSecondArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: null] = "value");
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void NonNullableIndexerSetterWithValueArgumentNull()
+    public Task NonNullableIndexerSetterWithValueArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = null);
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -42,21 +43,21 @@ public class RewritingIndexers:
     }
 
     [Fact]
-    public void NonNullableIndexerGetterWithFirstArgumentNull()
+    public Task NonNullableIndexerGetterWithFirstArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: null, nonNullParam2: null]));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
-    public void NonNullableIndexerGetterWithSecondArgumentNull()
+    public Task NonNullableIndexerGetterWithSecondArgumentNull()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: "arg 1", nonNullParam2: null]));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]
@@ -68,12 +69,12 @@ public class RewritingIndexers:
     }
 
     [Fact]
-    public void PassThroughGetterReturnValueWithNullArgument()
+    public Task PassThroughGetterReturnValueWithNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
         var exception = Assert.Throws<InvalidOperationException>(() => IgnoreValue(instance[returnValue: null]));
-        Approvals.Verify(exception.Message);
+        return Verify(exception.Message);
     }
 
     [Fact]

@@ -1,0 +1,102 @@
+.class public auto ansi beforefieldinit ClassWithExplicitInterface
+extends [mscorlib]System.Object
+implements class [mscorlib]System.IComparable`1<string>
+{
+.class interface abstract auto ansi nested private IPrivate
+{
+.method public hidebysig newslot abstract virtual
+instance int32  CompareTo(string other) cil managed
+{
+}
+}
+.class auto ansi nested private beforefieldinit ClassWithExplicitPrivateInterface
+extends [mscorlib]System.Object
+implements ClassWithExplicitInterface/IPrivate
+{
+.method private hidebysig newslot virtual final
+instance int32  ClassWithExplicitInterface.IPrivate.CompareTo(string other1) cil managed
+{
+.override ClassWithExplicitInterface/IPrivate::CompareTo
+.maxstack  8
+IL_0000:  ldc.i4.0
+IL_0001:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}
+.class auto ansi nested private beforefieldinit ClassWithExplicitPublicInterface
+extends [mscorlib]System.Object
+implements class [mscorlib]System.IComparable`1<string>
+{
+.method private hidebysig newslot virtual final
+instance int32  'System.IComparable<System.String>.CompareTo'(string other1) cil managed
+{
+.override  method instance int32 class [mscorlib]System.IComparable`1<string>::CompareTo(!0)
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "other1"
+IL_0008:  ldstr      "[NullGuard] other1 is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldc.i4.1
+IL_0014:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}
+.method private hidebysig newslot virtual final
+instance int32  'System.IComparable<System.String>.CompareTo'(string other) cil managed
+{
+.override  method instance int32 class [mscorlib]System.IComparable`1<string>::CompareTo(!0)
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "other"
+IL_0008:  ldstr      "[NullGuard] other is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldc.i4.0
+IL_0014:  ret
+}
+.method public hidebysig instance int32
+CallInternalClassWithPrivateInterface(string other) cil managed
+{
+.maxstack  2
+IL_0000:  newobj     instance void ClassWithExplicitInterface/ClassWithExplicitPrivateInterface::.ctor()
+IL_0005:  ldarg.1
+IL_0006:  callvirt   instance int32 ClassWithExplicitInterface/IPrivate::CompareTo(string)
+IL_000b:  ret
+}
+.method public hidebysig instance int32
+CallInternalClassWithPublicInterface(string other) cil managed
+{
+.maxstack  2
+IL_0000:  newobj     instance void ClassWithExplicitInterface/ClassWithExplicitPublicInterface::.ctor()
+IL_0005:  ldarg.1
+IL_0006:  callvirt   instance int32 class [mscorlib]System.IComparable`1<string>::CompareTo(!0)
+IL_000b:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}
