@@ -2,10 +2,7 @@ using System;
 using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
-
-#if (DEBUG)
 using System.Threading.Tasks;
-#endif
 
 public class RewritingMethods :
     VerifyBase

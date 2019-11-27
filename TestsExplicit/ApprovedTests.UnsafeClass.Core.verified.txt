@@ -7,14 +7,9 @@ MethodWithAmp(int32* 'instance') cil managed
 {
 .param [1]
 .maxstack  1
-.locals init (int32* V_0)
-IL_0000:  nop
-IL_0001:  ldc.i4.0
-IL_0002:  conv.u
-IL_0003:  stloc.0
-IL_0004:  br.s       IL_0006
-IL_0006:  ldloc.0
-IL_0007:  ret
+IL_0000:  ldc.i4.0
+IL_0001:  conv.u
+IL_0002:  ret
 }
 .method public hidebysig specialname instance int32*
 get_NullProperty() cil managed
@@ -39,8 +34,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [netstandard]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 .property instance int32* NullProperty()
 {

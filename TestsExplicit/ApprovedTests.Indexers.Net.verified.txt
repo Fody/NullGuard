@@ -66,8 +66,7 @@ IL_002e:  ldstr      "[NullGuard] nonNullParam2 is null."
 IL_0033:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
 string)
 IL_0038:  throw
-IL_0039:  nop
-IL_003a:  ret
+IL_0039:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed
@@ -75,8 +74,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 .property instance string Item(string,
 string)
@@ -112,8 +110,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 .property instance string Item(string)
 {
@@ -131,13 +128,8 @@ valuetype [mscorlib]System.Nullable`1<int32> nullableInt,
 .param [1]
 .param [3] = nullref
 .maxstack  1
-.locals init (string V_0)
-IL_0000:  nop
-IL_0001:  ldnull
-IL_0002:  stloc.0
-IL_0003:  br.s       IL_0005
-IL_0005:  ldloc.0
-IL_0006:  ret
+IL_0000:  ldnull
+IL_0001:  ret
 }
 .method public hidebysig specialname
 instance void  set_Item(string allowNull,
@@ -148,8 +140,7 @@ string 'value') cil managed
 .param [1]
 .param [3] = nullref
 .maxstack  0
-IL_0000:  nop
-IL_0001:  ret
+IL_0000:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed
@@ -157,8 +148,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 .property instance string Item(string,
 valuetype [mscorlib]System.Nullable`1<int32>,
@@ -179,7 +169,6 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 }

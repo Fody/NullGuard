@@ -1,9 +1,6 @@
 using System;
-using VerifyXunit;
-#if (DEBUG)
 using System.Threading.Tasks;
-#endif
-
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 

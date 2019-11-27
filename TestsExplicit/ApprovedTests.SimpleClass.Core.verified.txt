@@ -12,9 +12,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [netstandard]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  nop
-IL_0008:  ret
+IL_0006:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor([out] string& nonNullOutArg) cil managed
@@ -23,18 +21,16 @@ instance void  .ctor([out] string& nonNullOutArg) cil managed
 .maxstack  2
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [netstandard]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  nop
-IL_0008:  ldarg.1
-IL_0009:  ldnull
-IL_000a:  stind.ref
-IL_000b:  ldarg.1
-IL_000c:  ldind.ref
-IL_000d:  brtrue.s   IL_001a
-IL_000f:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
-IL_0014:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0019:  throw
-IL_001a:  ret
+IL_0006:  ldarg.1
+IL_0007:  ldnull
+IL_0008:  stind.ref
+IL_0009:  ldarg.1
+IL_000a:  ldind.ref
+IL_000b:  brtrue.s   IL_0018
+IL_000d:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
+IL_0012:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0017:  throw
+IL_0018:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor(string nonNullArg,
@@ -52,17 +48,14 @@ string)
 IL_0012:  throw
 IL_0013:  ldarg.0
 IL_0014:  call       instance void [netstandard]System.Object::.ctor()
-IL_0019:  nop
-IL_001a:  nop
-IL_001b:  ldarg.1
-IL_001c:  ldstr      " "
-IL_0021:  ldarg.2
-IL_0022:  call       string [netstandard]System.String::Concat(string,
+IL_0019:  ldarg.1
+IL_001a:  ldstr      " "
+IL_001f:  ldarg.2
+IL_0020:  call       string [netstandard]System.String::Concat(string,
 string,
 string)
-IL_0027:  call       void [netstandard]System.Console::WriteLine(string)
-IL_002c:  nop
-IL_002d:  ret
+IL_0025:  call       void [netstandard]System.Console::WriteLine(string)
+IL_002a:  ret
 }
 .method public hidebysig instance void
 SomeMethod(string nonNullArg,
@@ -78,11 +71,9 @@ IL_0008:  ldstr      "[NullGuard] nonNullArg is null."
 IL_000d:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0012:  throw
-IL_0013:  nop
-IL_0014:  ldarg.1
-IL_0015:  call       void [netstandard]System.Console::WriteLine(string)
-IL_001a:  nop
-IL_001b:  ret
+IL_0013:  ldarg.1
+IL_0014:  call       void [netstandard]System.Console::WriteLine(string)
+IL_0019:  ret
 }
 .method public hidebysig specialname instance string
 get_NonNullProperty() cil managed
@@ -204,24 +195,26 @@ IL_0007:  ret
 MethodWithReturnValue(bool returnNull) cil managed
 {
 .maxstack  2
-.locals init (string V_0)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  brtrue.s   IL_000b
-IL_0004:  ldstr      ""
-IL_0009:  br.s       IL_000c
-IL_000b:  ldnull
-IL_000c:  stloc.0
-IL_000d:  br.s       IL_000f
-IL_000f:  ldloc.0
-IL_0010:  dup
-IL_0011:  brtrue.s   IL_001f
-IL_0013:  pop
-IL_0014:  ldstr      "[NullGuard] Return value of method 'System.String "
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0018
+IL_0003:  ldstr      ""
+IL_0008:  dup
+IL_0009:  brtrue.s   IL_0017
+IL_000b:  pop
+IL_000c:  ldstr      "[NullGuard] Return value of method 'System.String "
 + "SimpleClass::MethodWithReturnValue(System.Boolean)' is null."
-IL_0019:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_001e:  throw
-IL_001f:  ret
+IL_0011:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0016:  throw
+IL_0017:  ret
+IL_0018:  ldnull
+IL_0019:  dup
+IL_001a:  brtrue.s   IL_0028
+IL_001c:  pop
+IL_001d:  ldstr      "[NullGuard] Return value of method 'System.String "
++ "SimpleClass::MethodWithReturnValue(System.Boolean)' is null."
+IL_0022:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0027:  throw
+IL_0028:  ret
 }
 .method public hidebysig instance void
 MethodWithRef(object& returnNull) cil managed
@@ -236,8 +229,7 @@ IL_0009:  ldstr      "[NullGuard] returnNull is null."
 IL_000e:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0013:  throw
-IL_0014:  nop
-IL_0015:  ret
+IL_0014:  ret
 }
 .method public hidebysig instance void
 MethodWithGeneric<T>(!!T returnNull) cil managed
@@ -252,8 +244,7 @@ IL_000d:  ldstr      "[NullGuard] returnNull is null."
 IL_0012:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0017:  throw
-IL_0018:  nop
-IL_0019:  ret
+IL_0018:  ret
 }
 .method public hidebysig instance void
 MethodWithGenericRef<T>(!!T& returnNull) cil managed
@@ -269,82 +260,65 @@ IL_0012:  ldstr      "[NullGuard] returnNull is null."
 IL_0017:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_001c:  throw
-IL_001d:  nop
-IL_001e:  ret
+IL_001d:  ret
 }
 .method public hidebysig instance string
 MethodAllowsNullReturnValue() cil managed
 {
 .maxstack  1
-.locals init (string V_0)
-IL_0000:  nop
-IL_0001:  ldnull
-IL_0002:  stloc.0
-IL_0003:  br.s       IL_0005
-IL_0005:  ldloc.0
-IL_0006:  ret
+IL_0000:  ldnull
+IL_0001:  ret
 }
 .method public hidebysig instance string
 MethodWithCanBeNullResult() cil managed
 {
 .maxstack  1
-.locals init (string V_0)
-IL_0000:  nop
-IL_0001:  ldnull
-IL_0002:  stloc.0
-IL_0003:  br.s       IL_0005
-IL_0005:  ldloc.0
-IL_0006:  ret
+IL_0000:  ldnull
+IL_0001:  ret
 }
 .method public hidebysig instance void
 MethodWithOutValue([out] string& nonNullOutArg) cil managed
 {
 .param [1]
 .maxstack  2
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ldarg.1
-IL_0005:  ldind.ref
-IL_0006:  brtrue.s   IL_0013
-IL_0008:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
-IL_000d:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0012:  throw
-IL_0013:  ret
+IL_0000:  ldarg.1
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ldarg.1
+IL_0004:  ldind.ref
+IL_0005:  brtrue.s   IL_0012
+IL_0007:  ldstr      "[NullGuard] Out parameter 'nonNullOutArg' is null."
+IL_000c:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0011:  throw
+IL_0012:  ret
 }
 .method public hidebysig instance void
 MethodWithAllowedNullOutValue([out] string& nonNullOutArg) cil managed
 {
 .param [1]
 .maxstack  2
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ret
+IL_0000:  ldarg.1
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ret
 }
 .method public hidebysig instance void
 PublicWrapperOfPrivateMethod() cil managed
 {
 .maxstack  2
-IL_0000:  nop
-IL_0001:  ldarg.0
-IL_0002:  ldnull
-IL_0003:  call       instance void SimpleClass::SomePrivateMethod(string)
-IL_0008:  nop
-IL_0009:  ret
+IL_0000:  ldarg.0
+IL_0001:  ldnull
+IL_0002:  call       instance void SimpleClass::SomePrivateMethod(string)
+IL_0007:  ret
 }
 .method private hidebysig instance void
 SomePrivateMethod(string x) cil managed
 {
 .param [1]
 .maxstack  8
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  call       void [netstandard]System.Console::WriteLine(string)
-IL_0007:  nop
-IL_0008:  ret
+IL_0000:  ldarg.1
+IL_0001:  call       void [netstandard]System.Console::WriteLine(string)
+IL_0006:  ret
 }
 .method public hidebysig instance void
 MethodWithTwoRefs(string& first,
@@ -369,8 +343,7 @@ IL_001d:  ldstr      "[NullGuard] second is null."
 IL_0022:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0027:  throw
-IL_0028:  nop
-IL_0029:  ret
+IL_0028:  ret
 }
 .method public hidebysig instance void
 MethodWithTwoOuts([out] string& first,
@@ -379,34 +352,32 @@ MethodWithTwoOuts([out] string& first,
 .param [1]
 .param [2]
 .maxstack  2
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ldarg.2
-IL_0005:  ldnull
-IL_0006:  stind.ref
-IL_0007:  ldarg.1
-IL_0008:  ldind.ref
-IL_0009:  brtrue.s   IL_0016
-IL_000b:  ldstr      "[NullGuard] Out parameter 'first' is null."
-IL_0010:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0015:  throw
-IL_0016:  ldarg.2
-IL_0017:  ldind.ref
-IL_0018:  brtrue.s   IL_0025
-IL_001a:  ldstr      "[NullGuard] Out parameter 'second' is null."
-IL_001f:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0024:  throw
-IL_0025:  ret
+IL_0000:  ldarg.1
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ldarg.2
+IL_0004:  ldnull
+IL_0005:  stind.ref
+IL_0006:  ldarg.1
+IL_0007:  ldind.ref
+IL_0008:  brtrue.s   IL_0015
+IL_000a:  ldstr      "[NullGuard] Out parameter 'first' is null."
+IL_000f:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ldarg.2
+IL_0016:  ldind.ref
+IL_0017:  brtrue.s   IL_0024
+IL_0019:  ldstr      "[NullGuard] Out parameter 'second' is null."
+IL_001e:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0023:  throw
+IL_0024:  ret
 }
 .method public hidebysig instance void
 MethodWithOptionalParameter([opt] string optional) cil managed
 {
 .param [1] = nullref
 .maxstack  0
-IL_0000:  nop
-IL_0001:  ret
+IL_0000:  ret
 }
 .method public hidebysig instance void
 MethodWithOptionalParameterWithNonNullDefaultValue([opt] string optional) cil managed
@@ -420,95 +391,89 @@ IL_0008:  ldstr      "[NullGuard] optional is null."
 IL_000d:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0012:  throw
-IL_0013:  nop
-IL_0014:  ret
+IL_0013:  ret
 }
 .method public hidebysig instance void
 MethodWithOptionalParameterWithNonNullDefaultValueButAllowNullAttribute([opt] string optional) cil managed
 {
 .param [1] = "default"
 .maxstack  0
-IL_0000:  nop
-IL_0001:  ret
+IL_0000:  ret
 }
 .method public hidebysig instance void
 MethodWithGenericOut<T>([out] !!T& item) cil managed
 {
 .param [1]
 .maxstack  1
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  initobj    !!T
-IL_0008:  ldarg.1
-IL_0009:  ldobj      !!T
-IL_000e:  box        !!T
-IL_0013:  brtrue.s   IL_0020
-IL_0015:  ldstr      "[NullGuard] Out parameter 'item' is null."
-IL_001a:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_001f:  throw
-IL_0020:  ret
+IL_0000:  ldarg.1
+IL_0001:  initobj    !!T
+IL_0007:  ldarg.1
+IL_0008:  ldobj      !!T
+IL_000d:  box        !!T
+IL_0012:  brtrue.s   IL_001f
+IL_0014:  ldstr      "[NullGuard] Out parameter 'item' is null."
+IL_0019:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_001e:  throw
+IL_001f:  ret
 }
 .method public hidebysig instance !!T  MethodWithGenericReturn<T>(bool returnNull) cil managed
 {
 .maxstack  2
-.locals init (!!T V_0,
-!!T V_1)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  brtrue.s   IL_000b
-IL_0004:  call       !!0 [netstandard]System.Activator::CreateInstance<!!0>()
-IL_0009:  br.s       IL_0014
-IL_000b:  ldloca.s   V_0
-IL_000d:  initobj    !!T
-IL_0013:  ldloc.0
-IL_0014:  stloc.1
-IL_0015:  br.s       IL_0017
-IL_0017:  ldloc.1
-IL_0018:  dup
-IL_0019:  box        !!T
-IL_001e:  brtrue.s   IL_002c
-IL_0020:  pop
-IL_0021:  ldstr      "[NullGuard] Return value of method 'T SimpleClass:"
+.locals init (!!T V_0)
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_001d
+IL_0003:  call       !!0 [netstandard]System.Activator::CreateInstance<!!0>()
+IL_0008:  dup
+IL_0009:  box        !!T
+IL_000e:  brtrue.s   IL_001c
+IL_0010:  pop
+IL_0011:  ldstr      "[NullGuard] Return value of method 'T SimpleClass:"
 + ":MethodWithGenericReturn(System.Boolean)' is null."
-IL_0026:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_002b:  throw
-IL_002c:  ret
+IL_0016:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_001b:  throw
+IL_001c:  ret
+IL_001d:  ldloca.s   V_0
+IL_001f:  initobj    !!T
+IL_0025:  ldloc.0
+IL_0026:  dup
+IL_0027:  box        !!T
+IL_002c:  brtrue.s   IL_003a
+IL_002e:  pop
+IL_002f:  ldstr      "[NullGuard] Return value of method 'T SimpleClass:"
++ ":MethodWithGenericReturn(System.Boolean)' is null."
+IL_0034:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0039:  throw
+IL_003a:  ret
 }
 .method public hidebysig instance object
 MethodWithOutAndReturn([out] string& prefix) cil managed
 {
 .param [1]
 .maxstack  2
-.locals init (object V_0)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ldnull
-IL_0005:  stloc.0
-IL_0006:  br.s       IL_0008
-IL_0008:  ldloc.0
-IL_0009:  ldarg.1
-IL_000a:  ldind.ref
-IL_000b:  brtrue.s   IL_0018
-IL_000d:  ldstr      "[NullGuard] Out parameter 'prefix' is null."
-IL_0012:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0017:  throw
-IL_0018:  dup
-IL_0019:  brtrue.s   IL_0027
-IL_001b:  pop
-IL_001c:  ldstr      "[NullGuard] Return value of method 'System.Object "
+IL_0000:  ldarg.1
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ldnull
+IL_0004:  ldarg.1
+IL_0005:  ldind.ref
+IL_0006:  brtrue.s   IL_0013
+IL_0008:  ldstr      "[NullGuard] Out parameter 'prefix' is null."
+IL_000d:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0012:  throw
+IL_0013:  dup
+IL_0014:  brtrue.s   IL_0022
+IL_0016:  pop
+IL_0017:  ldstr      "[NullGuard] Return value of method 'System.Object "
 + "SimpleClass::MethodWithOutAndReturn(System.String&)' is null."
-IL_0021:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0026:  throw
-IL_0027:  ret
+IL_001c:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0021:  throw
+IL_0022:  ret
 }
 .method public hidebysig instance void
 MethodWithExistingArgumentGuard(string x) cil managed
 {
 .param [1]
 .maxstack  2
-.locals init (bool V_0)
 IL_0000:  ldarg.1
 IL_0001:  brtrue.s   IL_0013
 IL_0003:  ldstr      "x"
@@ -516,158 +481,115 @@ IL_0008:  ldstr      "[NullGuard] x is null."
 IL_000d:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
 IL_0012:  throw
-IL_0013:  nop
-IL_0014:  ldarg.1
-IL_0015:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
-IL_001a:  stloc.0
-IL_001b:  ldloc.0
-IL_001c:  brfalse.s  IL_002e
-IL_001e:  ldstr      "x is null or empty."
-IL_0023:  ldstr      "x"
-IL_0028:  newobj     instance void [netstandard]System.ArgumentException::.ctor(string,
+IL_0013:  ldarg.1
+IL_0014:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
+IL_0019:  brfalse.s  IL_002b
+IL_001b:  ldstr      "x is null or empty."
+IL_0020:  ldstr      "x"
+IL_0025:  newobj     instance void [netstandard]System.ArgumentException::.ctor(string,
 string)
-IL_002d:  throw
-IL_002e:  ldarg.1
-IL_002f:  call       void [netstandard]System.Console::WriteLine(string)
-IL_0034:  nop
-IL_0035:  ret
+IL_002a:  throw
+IL_002b:  ldarg.1
+IL_002c:  call       void [netstandard]System.Console::WriteLine(string)
+IL_0031:  ret
 }
 .method public hidebysig instance void
 MethodWithExistingArgumentNullGuard(string x) cil managed
 {
 .param [1]
 .maxstack  1
-.locals init (bool V_0)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
-IL_0007:  stloc.0
-IL_0008:  ldloc.0
-IL_0009:  brfalse.s  IL_0016
-IL_000b:  ldstr      "x"
-IL_0010:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string)
-IL_0015:  throw
-IL_0016:  ldarg.1
-IL_0017:  call       void [netstandard]System.Console::WriteLine(string)
-IL_001c:  nop
-IL_001d:  ret
+IL_0000:  ldarg.1
+IL_0001:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
+IL_0006:  brfalse.s  IL_0013
+IL_0008:  ldstr      "x"
+IL_000d:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string)
+IL_0012:  throw
+IL_0013:  ldarg.1
+IL_0014:  call       void [netstandard]System.Console::WriteLine(string)
+IL_0019:  ret
 }
 .method public hidebysig instance void
 MethodWithExistingArgumentNullGuardWithMessage(string x) cil managed
 {
 .param [1]
 .maxstack  2
-.locals init (bool V_0)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
-IL_0007:  stloc.0
-IL_0008:  ldloc.0
-IL_0009:  brfalse.s  IL_001b
-IL_000b:  ldstr      "x"
-IL_0010:  ldstr      "x is null or empty."
-IL_0015:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
+IL_0000:  ldarg.1
+IL_0001:  call       bool [netstandard]System.String::IsNullOrEmpty(string)
+IL_0006:  brfalse.s  IL_0018
+IL_0008:  ldstr      "x"
+IL_000d:  ldstr      "x is null or empty."
+IL_0012:  newobj     instance void [netstandard]System.ArgumentNullException::.ctor(string,
 string)
-IL_001a:  throw
-IL_001b:  ldarg.1
-IL_001c:  call       void [netstandard]System.Console::WriteLine(string)
-IL_0021:  nop
-IL_0022:  ret
+IL_0017:  throw
+IL_0018:  ldarg.1
+IL_0019:  call       void [netstandard]System.Console::WriteLine(string)
+IL_001e:  ret
 }
 .method public hidebysig instance string
 ReturnValueChecksWithBranchToRetInstruction() cil managed
 {
-.maxstack  2
-.locals init (string V_0,
-bool V_1,
-string V_2)
-IL_0000:  nop
-IL_0001:  ldnull
-IL_0002:  stloc.0
-IL_0003:  ldstr      ""
-IL_0008:  call       instance int32 [netstandard]System.String::get_Length()
-IL_000d:  ldc.i4.s   42
-IL_000f:  ceq
-IL_0011:  stloc.1
-IL_0012:  ldloc.1
-IL_0013:  brfalse.s  IL_0020
-IL_0015:  ldstr      "Not reachable"
-IL_001a:  newobj     instance void [netstandard]System.Exception::.ctor(string)
-IL_001f:  throw
-IL_0020:  ldloc.0
-IL_0021:  stloc.2
-IL_0022:  br.s       IL_0024
-IL_0024:  ldloc.2
-IL_0025:  dup
-IL_0026:  brtrue.s   IL_0034
-IL_0028:  pop
-IL_0029:  ldstr      "[NullGuard] Return value of method 'System.String "
+.maxstack  3
+IL_0000:  ldnull
+IL_0001:  ldstr      ""
+IL_0006:  call       instance int32 [netstandard]System.String::get_Length()
+IL_000b:  ldc.i4.s   42
+IL_000d:  bne.un.s   IL_001a
+IL_000f:  ldstr      "Not reachable"
+IL_0014:  newobj     instance void [netstandard]System.Exception::.ctor(string)
+IL_0019:  throw
+IL_001a:  dup
+IL_001b:  brtrue.s   IL_0029
+IL_001d:  pop
+IL_001e:  ldstr      "[NullGuard] Return value of method 'System.String "
 + "SimpleClass::ReturnValueChecksWithBranchToRetInstruction()' is null."
-IL_002e:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0033:  throw
-IL_0034:  ret
+IL_0023:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0028:  throw
+IL_0029:  ret
 }
 .method public hidebysig instance void
 OutValueChecksWithBranchToRetInstruction([out] string& outParam) cil managed
 {
 .param [1]
 .maxstack  2
-.locals init (bool V_0)
-IL_0000:  nop
-IL_0001:  ldarg.1
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ldstr      ""
-IL_0009:  call       instance int32 [netstandard]System.String::get_Length()
-IL_000e:  ldc.i4.s   42
-IL_0010:  ceq
-IL_0012:  stloc.0
-IL_0013:  ldloc.0
-IL_0014:  brfalse.s  IL_0021
-IL_0016:  ldstr      "Not reachable"
-IL_001b:  newobj     instance void [netstandard]System.Exception::.ctor(string)
-IL_0020:  throw
-IL_0021:  ldarg.1
-IL_0022:  ldind.ref
-IL_0023:  brtrue.s   IL_0030
-IL_0025:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
-IL_002a:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_002f:  throw
-IL_0030:  ret
+IL_0000:  ldarg.1
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ldstr      ""
+IL_0008:  call       instance int32 [netstandard]System.String::get_Length()
+IL_000d:  ldc.i4.s   42
+IL_000f:  bne.un.s   IL_001c
+IL_0011:  ldstr      "Not reachable"
+IL_0016:  newobj     instance void [netstandard]System.Exception::.ctor(string)
+IL_001b:  throw
+IL_001c:  ldarg.1
+IL_001d:  ldind.ref
+IL_001e:  brtrue.s   IL_002b
+IL_0020:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_0025:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_002a:  throw
+IL_002b:  ret
 }
 .method public hidebysig specialname instance string
 get_GetterReturnValueChecksWithBranchToRetInstruction() cil managed
 {
-.maxstack  2
-.locals init (string V_0,
-bool V_1,
-string V_2)
-IL_0000:  nop
-IL_0001:  ldnull
-IL_0002:  stloc.0
-IL_0003:  ldstr      ""
-IL_0008:  call       instance int32 [netstandard]System.String::get_Length()
-IL_000d:  ldc.i4.s   42
-IL_000f:  ceq
-IL_0011:  stloc.1
-IL_0012:  ldloc.1
-IL_0013:  brfalse.s  IL_0020
-IL_0015:  ldstr      "Not reachable"
-IL_001a:  newobj     instance void [netstandard]System.Exception::.ctor(string)
-IL_001f:  throw
-IL_0020:  ldloc.0
-IL_0021:  stloc.2
-IL_0022:  br.s       IL_0024
-IL_0024:  ldloc.2
-IL_0025:  dup
-IL_0026:  brtrue.s   IL_0034
-IL_0028:  pop
-IL_0029:  ldstr      "[NullGuard] Return value of property 'System.Strin"
+.maxstack  3
+IL_0000:  ldnull
+IL_0001:  ldstr      ""
+IL_0006:  call       instance int32 [netstandard]System.String::get_Length()
+IL_000b:  ldc.i4.s   42
+IL_000d:  bne.un.s   IL_001a
+IL_000f:  ldstr      "Not reachable"
+IL_0014:  newobj     instance void [netstandard]System.Exception::.ctor(string)
+IL_0019:  throw
+IL_001a:  dup
+IL_001b:  brtrue.s   IL_0029
+IL_001d:  pop
+IL_001e:  ldstr      "[NullGuard] Return value of property 'System.Strin"
 + "g SimpleClass::GetterReturnValueChecksWithBranchToRetInstruction()' is "
 + "null."
-IL_002e:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_0033:  throw
-IL_0034:  ret
+IL_0023:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0028:  throw
+IL_0029:  ret
 }
 .method public hidebysig instance void
 OutValueChecksWithRetInstructionAsSwitchCase(int32 i,
@@ -675,40 +597,54 @@ OutValueChecksWithRetInstructionAsSwitchCase(int32 i,
 {
 .param [2]
 .maxstack  2
-.locals init (int32 V_0,
-int32 V_1)
-IL_0000:  nop
-IL_0001:  ldarg.2
-IL_0002:  ldnull
-IL_0003:  stind.ref
-IL_0004:  ldarg.1
-IL_0005:  stloc.1
-IL_0006:  ldloc.1
-IL_0007:  stloc.0
-IL_0008:  ldloc.0
-IL_0009:  switch     (
-IL_0020,
-IL_0022,
-IL_002f,
-IL_0031)
-IL_001e:  br.s       IL_003e
-IL_0020:  br.s       IL_003e
-IL_0022:  ldstr      "1"
-IL_0027:  call       void [netstandard]System.Console::WriteLine(string)
-IL_002c:  nop
-IL_002d:  br.s       IL_003e
-IL_002f:  br.s       IL_003e
-IL_0031:  ldstr      "3"
-IL_0036:  call       void [netstandard]System.Console::WriteLine(string)
-IL_003b:  nop
-IL_003c:  br.s       IL_003e
-IL_003e:  ldarg.2
-IL_003f:  ldind.ref
-IL_0040:  brtrue.s   IL_004d
-IL_0042:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
-IL_0047:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_004c:  throw
-IL_004d:  ret
+IL_0000:  ldarg.2
+IL_0001:  ldnull
+IL_0002:  stind.ref
+IL_0003:  ldarg.1
+IL_0004:  switch     (
+IL_0029,
+IL_0039,
+IL_0053,
+IL_0063)
+IL_0019:  ldarg.2
+IL_001a:  ldind.ref
+IL_001b:  brtrue.s   IL_0028
+IL_001d:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_0022:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0027:  throw
+IL_0028:  ret
+IL_0029:  ldarg.2
+IL_002a:  ldind.ref
+IL_002b:  brtrue.s   IL_0038
+IL_002d:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_0032:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0037:  throw
+IL_0038:  ret
+IL_0039:  ldstr      "1"
+IL_003e:  call       void [netstandard]System.Console::WriteLine(string)
+IL_0043:  ldarg.2
+IL_0044:  ldind.ref
+IL_0045:  brtrue.s   IL_0052
+IL_0047:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_004c:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0051:  throw
+IL_0052:  ret
+IL_0053:  ldarg.2
+IL_0054:  ldind.ref
+IL_0055:  brtrue.s   IL_0062
+IL_0057:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_005c:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_0061:  throw
+IL_0062:  ret
+IL_0063:  ldstr      "3"
+IL_0068:  call       void [netstandard]System.Console::WriteLine(string)
+IL_006d:  ldarg.2
+IL_006e:  ldind.ref
+IL_006f:  brtrue.s   IL_007c
+IL_0071:  ldstr      "[NullGuard] Out parameter 'outParam' is null."
+IL_0076:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_007b:  throw
+IL_007c:  ret
 }
 .property instance string NonNullProperty()
 {

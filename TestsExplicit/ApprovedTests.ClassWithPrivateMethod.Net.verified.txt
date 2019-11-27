@@ -6,12 +6,10 @@ extends [mscorlib]System.Object
 PublicWrapperOfPrivateMethod() cil managed
 {
 .maxstack  2
-IL_0000:  nop
-IL_0001:  ldarg.0
-IL_0002:  ldnull
-IL_0003:  call       instance void ClassWithPrivateMethod::SomePrivateMethod(string)
-IL_0008:  nop
-IL_0009:  ret
+IL_0000:  ldarg.0
+IL_0001:  ldnull
+IL_0002:  call       instance void ClassWithPrivateMethod::SomePrivateMethod(string)
+IL_0007:  ret
 }
 .method private hidebysig instance void
 SomePrivateMethod(string x) cil managed
@@ -25,8 +23,7 @@ IL_0008:  ldstr      "[NullGuard] x is null."
 IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
 string)
 IL_0012:  throw
-IL_0013:  nop
-IL_0014:  ret
+IL_0013:  ret
 }
 .method public hidebysig specialname instance string
 get_SomeProperty() cil managed
@@ -51,8 +48,7 @@ instance void  .ctor() cil managed
 .maxstack  1
 IL_0000:  ldarg.0
 IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
-IL_0006:  nop
-IL_0007:  ret
+IL_0006:  ret
 }
 .property instance string SomeProperty()
 {
