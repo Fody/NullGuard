@@ -174,6 +174,7 @@ public class ApprovedTests :
         base(output)
     {
         UniqueForRuntime();
+        UniqueForAssemblyConfiguration();
         AddScrubber(v => v.Replace("InternalBase.", string.Empty));
         AddScrubber(v => v.Replace("AssemblyBase.", string.Empty));
         AddScrubber(v => v.Replace("ExternalBase.", string.Empty));
