@@ -23,7 +23,7 @@ The `Install-Package Fody` is required since NuGet always defaults to the oldest
 
 NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
 
- * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
+ * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always. C# 8 nullable reference types are also used to determine if a type may be null.
  * In the new [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
 
 If not configured explicitly, NullGuard will auto-detect the mode as follows:
@@ -50,6 +50,11 @@ public class Sample
         // arg may be null here
     }
 
+    public void AndAnotherMethod(string? arg)
+    {
+        // arg may be null here
+    }
+
     public string MethodWithReturn()
     {
         return SomeOtherClass.SomeMethod();
@@ -57,6 +62,11 @@ public class Sample
 
     [return: AllowNull]
     public string MethodAllowsNullReturnValue()
+    {
+        return null;
+    }
+
+    public string? MethodAlsoAllowsNullReturnValue()
     {
         return null;
     }
@@ -104,6 +114,11 @@ public class SampleOutput
         return null;
     }
 
+    public string MethodAlsoAllowsNullReturnValue()
+    {
+        return null;
+    }
+
     string someProperty;
     public string SomeProperty
     {
@@ -126,6 +141,10 @@ public class SampleOutput
     }
 
     public void AnotherMethod(string arg)
+    {
+    }
+
+    public void AndAnotherMethod(string arg)
     {
     }
 
