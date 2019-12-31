@@ -8,6 +8,12 @@ static class CecilExtensions
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
 
+    // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
+    const string NullableContextAttributeTypeName = "NullableContextAttribute";
+    const string NullableAttributeTypeName = "NullableAttribute";
+    const byte NullableAnnotated = 2;
+    private const string SystemByteFullTypeName = "System.Byte";
+
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
         return type.Interfaces.Any(i => i.InterfaceType.FullName.Equals(interfaceFullName))
@@ -61,9 +67,18 @@ static class CecilExtensions
         return property.ImplicitAllowsNull();
     }
 
+    static bool HasNullableReferenceType(this Mono.Collections.Generic.Collection<CustomAttribute> value, string attributeTypeName) 
+        => value.Where(a => a.AttributeType.Name == attributeTypeName)
+            .SelectMany(a => a.ConstructorArguments)
+                .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
+                .Where(ca => (byte)ca.Value == NullableAnnotated)
+                .Any();
+
     public static bool ImplicitAllowsNull(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName || a.AttributeType.Name == CanBeNullAttributeTypeName);
+        return value.CustomAttributes.HasNullableReferenceType(NullableAttributeTypeName) ||
+            value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName ||
+                a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
     public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, ExplicitMode explicitMode)
@@ -74,9 +89,10 @@ static class CecilExtensions
             return explicitMode.AllowsNull(methodDefinition);
         }
 
-        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
-               // ReSharper uses a *method* attribute for CanBeNull for the return value
-               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        return methodDefinition.CustomAttributes.HasNullableReferenceType(NullableContextAttributeTypeName) ||
+            methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+            // ReSharper uses a *method* attribute for CanBeNull for the return value
+            methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
