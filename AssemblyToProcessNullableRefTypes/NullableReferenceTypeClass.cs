@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-#nullable enable
 public class NullableReferenceTypeClass
 {
     /*
@@ -20,9 +15,7 @@ public class NullableReferenceTypeClass
 
     public string MethodWithReturnValue(bool returnNull)
     {
-#pragma warning disable CS8603 // Possible null reference return.
-        return returnNull ? null : "";
-#pragma warning restore CS8603 // Possible null reference return.
+        return (returnNull ? null : "")!;
     }
 
     /*
@@ -37,4 +30,3 @@ public class NullableReferenceTypeClass
         return null;
     }
 }
-#nullable disable
