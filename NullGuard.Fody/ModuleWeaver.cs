@@ -32,9 +32,15 @@ public partial class ModuleWeaver: BaseModuleWeaver
             nullGuardMode = ModuleDefinition.AutoDetectMode();
         }
 
-        if (nullGuardMode == NullGuardMode.Explicit)
+        switch (nullGuardMode)
         {
-            nullabilityAnalyzer = new ExplicitMode();
+            case NullGuardMode.Explicit:
+                nullabilityAnalyzer = new ExplicitMode();
+                break;
+
+            case NullGuardMode.NullableReferenceTypes:
+                nullabilityAnalyzer = new NullableReferenceTypesMode();
+                break;
         }
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
