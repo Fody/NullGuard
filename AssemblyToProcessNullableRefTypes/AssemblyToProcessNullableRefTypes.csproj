@@ -6,6 +6,7 @@
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <DisableFody>true</DisableFody>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
