@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 
-public class ExplicitMode
+public class ExplicitMode : INullabilityAnalyzer
 {
     readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
@@ -25,11 +25,21 @@ public class ExplicitMode
         return nullability.ParameterAllowsNull(parameter.Index);
     }
 
-    public bool AllowsNull(MethodDefinition method)
+    public bool AllowsNullReturnValue(MethodDefinition method)
     {
         var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ReturnValueAllowsNull;
+    }
+
+    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodReturnType getMethod)
+    {
+        return getMethod.ImplicitAllowsNull();
+    }
+
+    public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
+    {
+        return valueParameter.ImplicitAllowsNull();
     }
 }
 
