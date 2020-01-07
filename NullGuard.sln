@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 16.0.29201.188
@@ -37,6 +38,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFrameworkSmokeTest", "Ne
 	ProjectSection(ProjectDependencies) = postProject
 		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcessNullableRefTypes", "AssemblyToProcessNullableRefTypes\AssemblyToProcessNullableRefTypes.csproj", "{0DDC6841-2CC6-4437-8080-BA828C731A1D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsNullableRefTypes", "TestsNullableRefTypes\TestsNullableRefTypes.csproj", "{6388AD66-C283-4185-8833-6E9E9693E821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +89,14 @@ Global
 		{09AB176F-9BEA-4A90-818E-2FF49C6199F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09AB176F-9BEA-4A90-818E-2FF49C6199F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09AB176F-9BEA-4A90-818E-2FF49C6199F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DDC6841-2CC6-4437-8080-BA828C731A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDC6841-2CC6-4437-8080-BA828C731A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDC6841-2CC6-4437-8080-BA828C731A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDC6841-2CC6-4437-8080-BA828C731A1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6388AD66-C283-4185-8833-6E9E9693E821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6388AD66-C283-4185-8833-6E9E9693E821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6388AD66-C283-4185-8833-6E9E9693E821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6388AD66-C283-4185-8833-6E9E9693E821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
