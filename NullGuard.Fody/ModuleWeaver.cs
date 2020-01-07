@@ -14,7 +14,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public bool IncludeDebugAssert = true;
     bool isDebug;
     NullGuardMode nullGuardMode;
-    ExplicitMode explicitMode;
+    INullabilityAnalyzer nullabilityAnalyzer = new ImplicitMode();
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
@@ -34,7 +34,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
         if (nullGuardMode == NullGuardMode.Explicit)
         {
-            explicitMode = new ExplicitMode();
+            nullabilityAnalyzer = new ExplicitMode();
         }
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
