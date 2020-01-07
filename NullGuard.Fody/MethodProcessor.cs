@@ -71,7 +71,7 @@ public partial class ModuleWeaver
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue(explicitMode) &&
+                !nullabilityAnalyzer.AllowsNullReturnValue(method) &&
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {
@@ -88,12 +88,17 @@ public partial class ModuleWeaver
     {
         foreach (var parameter in method.Parameters.Reverse())
         {
-            if (!parameter.MayNotBeNull(method, explicitMode))
+            if (!parameter.MayNotBeNull())
             {
                 continue;
             }
 
             if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
+            {
+                continue;
+            }
+
+            if (nullabilityAnalyzer.AllowsNull(parameter, method))
             {
                 continue;
             }
@@ -140,7 +145,7 @@ public partial class ModuleWeaver
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue(explicitMode) &&
+                !nullabilityAnalyzer.AllowsNullReturnValue(method) &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter)
@@ -159,7 +164,7 @@ public partial class ModuleWeaver
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
                         parameter.IsOut &&
                         parameter.ParameterType.IsRefType() &&
-                        !parameter.AllowsNull(method, explicitMode))
+                        !nullabilityAnalyzer.AllowsNull(parameter, method))
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 
