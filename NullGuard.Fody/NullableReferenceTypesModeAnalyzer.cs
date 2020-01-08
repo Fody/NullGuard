@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Mono.Cecil;
 
-public class NullableReferenceTypesMode : INullabilityAnalyzer
+public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 {
     // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
     const string NullableContextAttributeTypeName = "NullableContextAttribute";
