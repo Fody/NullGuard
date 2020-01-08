@@ -162,6 +162,8 @@ public partial class ModuleWeaver: BaseModuleWeaver
                       DefineConstants.Any(c => c == "DEBUG") &&
                       DebugAssertMethod != null;
 
+        LogInfo("Debug=" + isDebug);
+
         foreach (var type in types)
         {
             if (type.IsInterface ||
