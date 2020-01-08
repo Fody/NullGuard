@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-public class ImplicitMode : INullabilityAnalyzer
+public class ImplicitModeAnalyzer : INullabilityAnalyzer
 {
     public bool AllowsNull(PropertyDefinition property)
     {

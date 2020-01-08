@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 
-public class ExplicitMode : INullabilityAnalyzer
+public class ExplicitModeAnalyzer : INullabilityAnalyzer
 {
     readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
@@ -103,17 +103,13 @@ public static class ExplicitModeExtensions
 
     static NullabilityAttributes GetNullabilityAttribute(CustomAttribute attribute)
     {
-        switch (attribute.AttributeType.Name)
+        return attribute.AttributeType.Name switch
         {
-            case CanBeNullAttributeTypeName:
-                return NullabilityAttributes.CanBeNull;
-            case NotNullAttributeTypeName:
-                return NullabilityAttributes.NotNull;
-            case ItemNotNullAttributeTypeName:
-                return NullabilityAttributes.ItemNotNull;
-            default:
-                return NullabilityAttributes.None;
-        }
+            CanBeNullAttributeTypeName => NullabilityAttributes.CanBeNull,
+            NotNullAttributeTypeName => NullabilityAttributes.NotNull,
+            ItemNotNullAttributeTypeName => NullabilityAttributes.ItemNotNull,
+            _ => NullabilityAttributes.None,
+        };
     }
 
     static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)
@@ -454,8 +450,8 @@ class MemberNullability
 
 class MethodNullability : MemberNullability
 {
-    MethodDefinition method;
-    NullabilityAttributes[] parameterAttributes;
+    readonly MethodDefinition method;
+    readonly NullabilityAttributes[] parameterAttributes;
     NullabilityAttributes returnValueAttributes;
     bool isInheritanceResolved;
 
@@ -553,7 +549,7 @@ class MethodNullability : MemberNullability
 
 class PropertyNullability : MemberNullability
 {
-    PropertyDefinition property;
+    readonly PropertyDefinition property;
     NullabilityAttributes nullabilityAttributes;
     bool isInheritanceResolved;
 
@@ -615,7 +611,7 @@ class PropertyNullability : MemberNullability
 
 class MemberNullabilityCache
 {
-    Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
+    readonly Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
 
     public MethodNullability GetOrCreate(MethodDefinition method)
     {
