@@ -5,10 +5,11 @@
     <Optimize>true</Optimize>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DisableFody>true</DisableFody>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
+    <PackageReference Include="Fody" Version="6.0.6" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
 </Project>
