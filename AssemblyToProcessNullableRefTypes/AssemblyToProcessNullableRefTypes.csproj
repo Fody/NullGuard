@@ -6,6 +6,7 @@
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <Nullable>enable</Nullable>
+    <!--<DisableFody>true</DisableFody>-->
   </PropertyGroup>
   <ItemGroup>
     <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
