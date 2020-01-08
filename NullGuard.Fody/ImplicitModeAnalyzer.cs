@@ -17,9 +17,9 @@ public class ImplicitModeAnalyzer : INullabilityAnalyzer
         return method.AllowsNullReturnValue();
     }
 
-    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodReturnType getMethod)
+    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
-        return getMethod.ImplicitAllowsNull();
+        return getMethod.MethodReturnType.ImplicitAllowsNull();
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
