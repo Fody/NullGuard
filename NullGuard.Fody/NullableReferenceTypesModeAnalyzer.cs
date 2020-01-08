@@ -5,8 +5,8 @@ using Mono.Cecil;
 public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 {
     // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
-    const string NullableContextAttributeTypeName = "NullableContextAttribute";
-    const string NullableAttributeTypeName = "NullableAttribute";
+    const string NullableContextAttributeTypeName = "System.Runtime.CompilerServices.NullableContextAttribute";
+    const string NullableAttributeTypeName = "System.Runtime.CompilerServices.NullableAttribute";
     const byte NullableOblivious = 0;
     const byte NullableNotAnnotated = 1;
     const byte NullableAnnotated = 2;
@@ -17,7 +17,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         // For now we don't enforce not-null on properties, as it is legal when using nullable reference types
         // to allow constructor to assign default! to a non-null property
         var typeHasNullableContextAttribute = property.DeclaringType.CustomAttributes
-            .Any(a => a.AttributeType.Name == NullableContextAttributeTypeName);
+            .Any(a => a.AttributeType.FullName == NullableContextAttributeTypeName);
 
         return typeHasNullableContextAttribute;
     }
@@ -51,7 +51,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         var value = customAttributeProvider.CustomAttributes;
 
         return value
-            .Where(a => a.AttributeType.Name == attributeTypeName)
+            .Where(a => a.AttributeType.FullName == attributeTypeName)
             .SelectMany(a => a.ConstructorArguments)
             .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
             .Any(ca => annotations.Contains((byte)ca.Value));
@@ -63,7 +63,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         var defaultNullable = HasNullableReferenceTypeAnnotation(member.DeclaringType, NullableContextAttributeTypeName, NullableOblivious, NullableAnnotated);
 
         var nullableContextAttributes = member.CustomAttributes
-            .Where(ca => ca.AttributeType.Name == NullableContextAttributeTypeName)
+            .Where(ca => ca.AttributeType.FullName == NullableContextAttributeTypeName)
             .SelectMany(a => a.ConstructorArguments)
             .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
             .ToList();
