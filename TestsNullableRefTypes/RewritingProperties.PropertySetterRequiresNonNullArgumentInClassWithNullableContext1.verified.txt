@@ -1,0 +1,2 @@
+[NullGuard] Cannot set the value of property 'System.String ClassWithNullableContext1::NonNullProperty()' to null.
+Parameter name: value
