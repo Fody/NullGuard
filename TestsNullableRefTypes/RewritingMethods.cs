@@ -86,7 +86,7 @@ public class RewritingMethods :
     public void AllowsNullReturnValueWhenNullableReferenceTypeUsedInClassWithNullableReferenceMethod()
     {
         var sample = new ClassWithNullableReferenceMethod();
-        sample.MethodAllowsNullReturnValue("");
+        Assert.Null(sample.MethodAllowsNullReturnValue(""));
     }
 
     [Fact]

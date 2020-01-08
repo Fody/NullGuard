@@ -7,10 +7,12 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
     const string NullableContextAttributeTypeName = "System.Runtime.CompilerServices.NullableContextAttribute";
     const string NullableAttributeTypeName = "System.Runtime.CompilerServices.NullableAttribute";
-    const byte NullableOblivious = 0;
-    const byte NullableNotAnnotated = 1;
-    const byte NullableAnnotated = 2;
+    const int NullableUnknown = -1;
+    const int NullableOblivious = 0;
+    const int NullableNotAnnotated = 1;
+    const int NullableAnnotated = 2;
     const string SystemByteFullTypeName = "System.Byte";
+    static readonly int[] NullableMemberArgs = { NullableOblivious, NullableAnnotated };
 
     public bool AllowsNull(PropertyDefinition property)
     {
@@ -25,16 +27,16 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
         return GetDefaultNullableContext(method)
-            || HasNullableReferenceTypeAnnotation(parameter, NullableAttributeTypeName, NullableAnnotated);
+            || GetNullableAnnotation(parameter, NullableAttributeTypeName) == NullableAnnotated;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
         return GetDefaultNullableContext(method)
-            || HasNullableReferenceTypeAnnotation(method.MethodReturnType, NullableAttributeTypeName, NullableAnnotated);
+            || GetNullableAnnotation(method.MethodReturnType, NullableAttributeTypeName) == NullableAnnotated;
     }
 
-    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodReturnType getMethod)
+    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
         // TODO: check MaybeNullAttribute
         return false;
@@ -46,41 +48,41 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return false;
     }
 
-    static bool HasNullableReferenceTypeAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, params byte[] annotations)
+    static int GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
     {
-        var value = customAttributeProvider.CustomAttributes;
-
-        return value
-            .Where(a => a.AttributeType.FullName == attributeTypeName)
+        return customAttributeProvider.CustomAttributes.Where(a => a.AttributeType.FullName == attributeTypeName)
             .SelectMany(a => a.ConstructorArguments)
             .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
-            .Any(ca => annotations.Contains((byte)ca.Value));
+            .Select(ca => (int)(byte)ca.Value)
+            .DefaultIfEmpty(NullableUnknown)
+            .Single();
     }
 
     static bool GetDefaultNullableContext(IMemberDefinition member)
     {
-        // Class's nullable context is 0 or 2
-        var defaultNullable = HasNullableReferenceTypeAnnotation(member.DeclaringType, NullableContextAttributeTypeName, NullableOblivious, NullableAnnotated);
+        var nullableContext = GetNullableAnnotation(member, NullableContextAttributeTypeName);
 
-        var nullableContextAttributes = member.CustomAttributes
-            .Where(ca => ca.AttributeType.FullName == NullableContextAttributeTypeName)
-            .SelectMany(a => a.ConstructorArguments)
-            .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
-            .ToList();
-
-        // Method's nullable context is 0 or 2
-        defaultNullable |= nullableContextAttributes
-            .Select(ca => (byte)ca.Value)
-            .Any(value => value == NullableOblivious || value == NullableAnnotated);
-
-        // Method's nullable context is 1, so force false
-        if (nullableContextAttributes
-            .Any(ca => (byte)ca.Value == NullableNotAnnotated))
+        switch (nullableContext)
         {
-            defaultNullable = false;
+            case NullableNotAnnotated:
+                return false;
+            case NullableAnnotated:
+            case NullableOblivious:
+                return true;
         }
 
-        return defaultNullable;
+        var defaultContext = GetNullableAnnotation(member.DeclaringType, NullableContextAttributeTypeName);
+
+        switch (defaultContext)
+        {
+            case NullableNotAnnotated:
+                return false;
+            case NullableAnnotated:
+            case NullableOblivious:
+                return true;
+        }
+
+        return true;
     }
 }
 

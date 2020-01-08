@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-/// <summary>
+﻿/// <summary>
 /// This class does not get annotated with NullableContext, but the method does.
 /// </summary>
 public class ClassWithNullableReferenceMethod

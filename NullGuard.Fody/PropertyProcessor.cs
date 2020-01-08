@@ -60,7 +60,7 @@ public partial class ModuleWeaver
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic)
                 || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
                 || getMethod.IsOverrideOrImplementationOfPublicMember())
-                && !nullabilityAnalyzer.AllowsGetMethodToReturnNull(property, getMethod.MethodReturnType))
+                && !nullabilityAnalyzer.AllowsGetMethodToReturnNull(property, getMethod))
             {
                 InjectPropertyGetterGuard(getMethod, property);
             }
