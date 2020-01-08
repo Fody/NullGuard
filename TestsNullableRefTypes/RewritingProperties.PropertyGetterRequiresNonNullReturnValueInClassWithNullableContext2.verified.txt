@@ -1,1 +1,0 @@
-[NullGuard] Return value of property 'System.String ClassWithNullableContext2::NonNullProperty()' is null.
