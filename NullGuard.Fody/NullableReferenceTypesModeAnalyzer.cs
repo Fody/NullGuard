@@ -7,28 +7,32 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
     const string NullableContextAttributeTypeName = "System.Runtime.CompilerServices.NullableContextAttribute";
     const string NullableAttributeTypeName = "System.Runtime.CompilerServices.NullableAttribute";
-    const int NullableUnknown = -1;
-    const int NullableOblivious = 0;
-    const int NullableNotAnnotated = 1;
-    const int NullableAnnotated = 2;
     const string SystemByteFullTypeName = "System.Byte";
+
+    enum Nullable
+    {
+        Unknown = -1,
+        Oblivious = 0,
+        NotAnnotated = 1,
+        Annotated = 2
+    }
 
     public bool AllowsNull(PropertyDefinition property)
     {
         // => do all checks for get/set method
-        return false; 
+        return false;
     }
 
     public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
         return GetDefaultNullableContext(method)
-            || GetNullableAnnotation(parameter, NullableAttributeTypeName) == NullableAnnotated;
+            || GetNullableAnnotation(parameter, NullableAttributeTypeName) == Nullable.Annotated;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
         return GetDefaultNullableContext(method)
-            || GetNullableAnnotation(method.MethodReturnType, NullableAttributeTypeName) == NullableAnnotated;
+            || GetNullableAnnotation(method.MethodReturnType, NullableAttributeTypeName) == Nullable.Annotated;
     }
 
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
@@ -43,13 +47,13 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return GetDefaultNullableContext(setMethod);
     }
 
-    static int GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
+    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
     {
         return customAttributeProvider.CustomAttributes.Where(a => a.AttributeType.FullName == attributeTypeName)
             .SelectMany(a => a.ConstructorArguments)
             .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
-            .Select(ca => (int)(byte)ca.Value)
-            .DefaultIfEmpty(NullableUnknown)
+            .Select(ca => (Nullable)(byte)ca.Value)
+            .DefaultIfEmpty(Nullable.Unknown)
             .Single();
     }
 
@@ -59,10 +63,10 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         switch (nullableContext)
         {
-            case NullableNotAnnotated:
+            case Nullable.NotAnnotated:
                 return false;
-            case NullableAnnotated:
-            case NullableOblivious:
+            case Nullable.Annotated:
+            case Nullable.Oblivious:
                 return true;
         }
 
@@ -70,10 +74,10 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         switch (defaultContext)
         {
-            case NullableNotAnnotated:
+            case Nullable.NotAnnotated:
                 return false;
-            case NullableAnnotated:
-            case NullableOblivious:
+            case Nullable.Annotated:
+            case Nullable.Oblivious:
                 return true;
         }
 
