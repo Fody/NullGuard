@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
+using System;
 
 // Roslyn compiler adds [NullableContext(2)] because majority of methods use nullable reference types
 
@@ -49,11 +51,17 @@ public class ClassWithNullableContext2
 
     public string? NullProperty { get; set; }
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
     // [Nullable(1)]
     // public string NonNullProperty { [NullableContext(1)] get; [NullableContext(1)] set; }
     public string NonNullProperty { get; set; }
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
+    // [Nullable(new byte[] {2, 2, 1})]
+    // public Tuple<string, string> MixedNullProperty { [return: Nullable(new byte[] {2, 2, 1})] get; [param: Nullable(new byte[] {2, 2, 1})] set; }
+    public Tuple<string?, string>? MixedNullProperty { get; set; }
+
+    // [Nullable(new byte[] {1, 2, 1})]
+    // public Tuple<string, string> MixedNotNullProperty { [return: Nullable(new byte[] {1, 2, 1})] get; [param: Nullable(new byte[] {1, 2, 1})] set; }
+    public Tuple<string?, string> MixedNonNullProperty { get; set; }
 
 #nullable disable
     // [NullableContext(0)]
