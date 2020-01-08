@@ -1,7 +1,5 @@
 ﻿using System;
 
-#nullable enable
-
 // Roslyn compiler adds [NullableContext(1)] because majority of methods do not use nullable reference types
 
 // [NullableContext(1)]
@@ -26,6 +24,7 @@ public class ClassWithNullableContext1
         return null;
     }
 
+    //   [return: Nullable(2)]
     public static string? StaticMethodAllowsNullReturnValue(string nonNullArg)
     {
         return null;
@@ -42,22 +41,9 @@ public class ClassWithNullableContext1
     }
 
     /*
-        [Nullable(2)]
-        public string NullProperty
-        {
-            [NullableContext(2), CompilerGenerated]
-            get
-            {
-                return this.\u003CNullableProperty\u003Ek__BackingField;
-            }
-            [NullableContext(2), CompilerGenerated]
-            set
-            {
-                this.\u003CNullableProperty\u003Ek__BackingField = value;
-            }
-        }
+    [Nullable(2)]
+    public string NullProperty { [NullableContext(2)] get; [NullableContext(2)] set; }
     */
-
     public string? NullProperty { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
