@@ -12,16 +12,11 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     const int NullableNotAnnotated = 1;
     const int NullableAnnotated = 2;
     const string SystemByteFullTypeName = "System.Byte";
-    static readonly int[] NullableMemberArgs = { NullableOblivious, NullableAnnotated };
 
     public bool AllowsNull(PropertyDefinition property)
     {
-        // For now we don't enforce not-null on properties, as it is legal when using nullable reference types
-        // to allow constructor to assign default! to a non-null property
-        var typeHasNullableContextAttribute = property.DeclaringType.CustomAttributes
-            .Any(a => a.AttributeType.FullName == NullableContextAttributeTypeName);
-
-        return typeHasNullableContextAttribute;
+        // => do all checks for get/set method
+        return false; 
     }
 
     public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
@@ -39,13 +34,13 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
         // TODO: check MaybeNullAttribute
-        return false;
+        return GetDefaultNullableContext(getMethod);
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
     {
         // TODO: check AllowNullAttribute
-        return false;
+        return GetDefaultNullableContext(setMethod);
     }
 
     static int GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
