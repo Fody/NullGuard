@@ -1,4 +1,8 @@
-﻿using System;
+﻿// ReSharper disable PossibleNullReferenceException
+// ReSharper disable AssignNullToNotNullAttribute
+#nullable enable
+
+using System;
 using System.Linq;
 
 using Mono.Cecil;
@@ -25,58 +29,50 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
-        return GetAllowsNull(parameter, NullableAttributeTypeName)
-            ?? GetAllowsNull(method, NullableContextAttributeTypeName)
-            ?? GetAllowsNull(method.DeclaringType, NullableContextAttributeTypeName)
-            ?? true;
+        return GetItemAllowsNull(parameter)
+               ?? GetContextAllowsNull(method)
+               ?? true;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
-        return GetAllowsNull(method.MethodReturnType, NullableAttributeTypeName)
-            ?? GetAllowsNull(method, NullableContextAttributeTypeName)
-            ?? GetAllowsNull(method.DeclaringType, NullableContextAttributeTypeName)
-            ?? true;
+        return GetItemAllowsNull(method.MethodReturnType)
+               ?? GetContextAllowsNull(method)
+               ?? true;
     }
 
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
-        return GetAllowsNull(getMethod.MethodReturnType, NullableAttributeTypeName)
-            ?? GetAllowsNull(getMethod, NullableContextAttributeTypeName)
-            ?? GetAllowsNull(getMethod.DeclaringType, NullableContextAttributeTypeName)
-            ?? true;
+        return GetItemAllowsNull(getMethod.MethodReturnType)
+               ?? GetContextAllowsNull(getMethod)
+               ?? true;
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
     {
-        return GetAllowsNull(valueParameter, NullableAttributeTypeName)
-            ?? GetAllowsNull(setMethod, NullableContextAttributeTypeName)
-            ?? GetAllowsNull(setMethod.DeclaringType, NullableContextAttributeTypeName)
-            ?? true;
+        return GetItemAllowsNull(valueParameter)
+               ?? GetContextAllowsNull(setMethod)
+               ?? true;
     }
 
-    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
+    static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider)
     {
-        return customAttributeProvider.CustomAttributes.Where(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1)
-            .Select(a => a.ConstructorArguments[0])
-            .Select(GetConstructorArgumentValue)
-            .DefaultIfEmpty(Nullable.Unknown)
-            .Single();
+        return GetAllowsNull(customAttributeProvider, NullableAttributeTypeName);
     }
 
-    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index = 0)
+    static bool? GetContextAllowsNull(MethodDefinition method)
     {
-        switch (arg.Type.FullName)
-        {
-            case "System.Byte":
-                return (Nullable)(byte)arg.Value;
+        return GetAllowsNull(method, NullableContextAttributeTypeName)
+               ?? GetContextAllowsNull(method.DeclaringType);
+    }
 
-            case "System.Byte[]":
-                return (Nullable)(byte)((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value;
+    static bool? GetContextAllowsNull(TypeDefinition type)
+    {
+        if (type == null)
+            return null;
 
-            default:
-                throw new InvalidOperationException("unexpected type: " + arg.Type.FullName);
-        }
+        return GetAllowsNull(type, NullableContextAttributeTypeName)
+               ?? GetContextAllowsNull(type.DeclaringType);
     }
 
     static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
@@ -92,5 +88,25 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
             _ => default(bool?)
         };
     }
-}
 
+    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
+    {
+        return (customAttributeProvider.CustomAttributes.Where(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1)
+            .Select(a => a.ConstructorArguments[0])
+            .Select(GetConstructorArgumentValue)
+            .DefaultIfEmpty(Nullable.Unknown)
+            .Single());
+    }
+
+    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index = 0)
+    {
+        var value = arg.Type.FullName switch
+        {
+            "System.Byte" => (byte)arg.Value,
+            "System.Byte[]" => (byte)(((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value),
+            _ => throw new InvalidOperationException("unexpected type: " + arg.Type.FullName)
+        };
+
+        return (Nullable)value;
+    }
+}
