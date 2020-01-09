@@ -25,60 +25,34 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
     {
-        switch (GetNullableAnnotation(parameter, NullableAttributeTypeName))
-        {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        return GetDefaultNullableContext(method);
+        return GetAllowsNull(parameter, NullableAttributeTypeName)
+            ?? GetAllowsNull(method, NullableContextAttributeTypeName)
+            ?? GetAllowsNull(method.DeclaringType, NullableContextAttributeTypeName)
+            ?? true;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
-        switch (GetNullableAnnotation(method.MethodReturnType, NullableAttributeTypeName))
-        {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        return GetDefaultNullableContext(method);
+        return GetAllowsNull(method.MethodReturnType, NullableAttributeTypeName)
+            ?? GetAllowsNull(method, NullableContextAttributeTypeName)
+            ?? GetAllowsNull(method.DeclaringType, NullableContextAttributeTypeName)
+            ?? true;
     }
 
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
-        switch (GetNullableAnnotation(getMethod.MethodReturnType, NullableAttributeTypeName))
-        {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        // TODO: check MaybeNullAttribute
-        return GetDefaultNullableContext(getMethod);
+        return GetAllowsNull(getMethod.MethodReturnType, NullableAttributeTypeName)
+            ?? GetAllowsNull(getMethod, NullableContextAttributeTypeName)
+            ?? GetAllowsNull(getMethod.DeclaringType, NullableContextAttributeTypeName)
+            ?? true;
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
     {
-        switch (GetNullableAnnotation(valueParameter, NullableAttributeTypeName))
-        {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        // TODO: check AllowNullAttribute
-        return GetDefaultNullableContext(setMethod);
+        return GetAllowsNull(valueParameter, NullableAttributeTypeName)
+            ?? GetAllowsNull(setMethod, NullableContextAttributeTypeName)
+            ?? GetAllowsNull(setMethod.DeclaringType, NullableContextAttributeTypeName)
+            ?? true;
     }
 
     static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
@@ -90,7 +64,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
             .Single();
     }
 
-    private static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg)
+    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index = 0)
     {
         switch (arg.Type.FullName)
         {
@@ -98,38 +72,25 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
                 return (Nullable)(byte)arg.Value;
 
             case "System.Byte[]":
-                return (Nullable)(byte)((CustomAttributeArgument[])arg.Value)[0].Value;
+                return (Nullable)(byte)((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value;
 
             default:
                 throw new InvalidOperationException("unexpected type: " + arg.Type.FullName);
         }
     }
 
-    static bool GetDefaultNullableContext(IMemberDefinition member)
+    static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
     {
-        var nullableContext = GetNullableAnnotation(member, NullableContextAttributeTypeName);
+        var nullable = GetNullableAnnotation(customAttributeProvider, attributeTypeName);
 
-        switch (nullableContext)
+        return nullable switch
         {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        var defaultContext = GetNullableAnnotation(member.DeclaringType, NullableContextAttributeTypeName);
-
-        switch (defaultContext)
-        {
-            case Nullable.NotAnnotated:
-                return false;
-            case Nullable.Annotated:
-            case Nullable.Oblivious:
-                return true;
-        }
-
-        return true;
+            Nullable.NotAnnotated => false,
+            Nullable.Annotated => true,
+            Nullable.Oblivious => true,
+            // compiler bug? => omitting the "(bool?)" makes everything fail.
+            _ => default(bool?)
+        };
     }
 }
 
