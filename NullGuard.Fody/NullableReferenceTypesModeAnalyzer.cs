@@ -13,6 +13,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     const string NullableContextAttributeTypeName = "System.Runtime.CompilerServices.NullableContextAttribute";
     const string NullableAttributeTypeName = "System.Runtime.CompilerServices.NullableAttribute";
 
+
     enum Nullable
     {
         Unknown = -1,
@@ -27,7 +28,14 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return false;
     }
 
-    public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
+    public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
+    {
+        return GetItemAllowsNull(parameter)
+               ?? GetContextAllowsNull(method)
+               ?? true;
+    }
+
+    public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
     {
         return GetItemAllowsNull(parameter)
                ?? GetContextAllowsNull(method)

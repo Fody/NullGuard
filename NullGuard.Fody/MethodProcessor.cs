@@ -98,7 +98,7 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            if (nullabilityAnalyzer.AllowsNull(parameter, method))
+            if (nullabilityAnalyzer.AllowsNullInput(parameter, method))
             {
                 continue;
             }
@@ -162,9 +162,9 @@ public partial class ModuleWeaver
                     var returnInstruction = body.Instructions[ret];
 
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
-                        parameter.IsOut &&
+                        !parameter.IsIn &&
                         parameter.ParameterType.IsRefType() &&
-                        !nullabilityAnalyzer.AllowsNull(parameter, method))
+                        !nullabilityAnalyzer.AllowsNullOutput(parameter, method))
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 
