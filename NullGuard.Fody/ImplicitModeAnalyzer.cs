@@ -7,8 +7,17 @@ public class ImplicitModeAnalyzer : INullabilityAnalyzer
         return property.ImplicitAllowsNull();
     }
 
-    public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
+    public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
     {
+        return parameter.ImplicitAllowsNull();
+    }
+
+    public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
+    {
+        // Maintain legacy behavior in non-NRT modes which does not check ref output values
+        if (!parameter.IsOut)
+            return true;
+
         return parameter.ImplicitAllowsNull();
     }
 

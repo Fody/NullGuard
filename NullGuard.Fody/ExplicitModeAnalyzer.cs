@@ -18,8 +18,19 @@ public class ExplicitModeAnalyzer : INullabilityAnalyzer
         return nullability.AllowsNull;
     }
 
-    public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
+    public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
     {
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ParameterAllowsNull(parameter.Index);
+    }
+
+    public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
+    {
+        // Maintain legacy behavior in non-NRT modes which does not check ref output values
+        if (!parameter.IsOut)
+            return true;
+
         var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ParameterAllowsNull(parameter.Index);
