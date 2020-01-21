@@ -86,10 +86,10 @@ public class ClassWithNullableContext2
     public class NestedUnconstrained<T>
     {
         [DisallowNull]
-        public T NullPropertyWithDisallowNull { get; set; }
+        public T PossiblyNullPropertyWithDisallowNull { get; set; }
 
         [NotNull]
-        public T NullPropertyWithNotNull { get; set; }
+        public T PossiblyNullPropertyWithNotNull { get; set; }
 
         public void DisallowedNullAndNotNullRefValue([DisallowNull][NotNull]ref T nonNullArg)
         {
