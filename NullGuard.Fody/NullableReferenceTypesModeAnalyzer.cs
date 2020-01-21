@@ -48,41 +48,56 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
     {
+        var contextAllowsNull = GetContextAllowsNull(method);
+
         return GetItemPreconditionAllowsNull(parameter)
+               ?? GetGenericTypeAllowsNull(parameter.ParameterType, contextAllowsNull)
                ?? GetItemAllowsNull(parameter)
-               ?? GetContextAllowsNull(method)
+               ?? contextAllowsNull
                ?? true;
     }
 
     public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
     {
+        var contextAllowsNull = GetContextAllowsNull(method);
+
         return GetItemPostconditionAllowsNull(parameter)
+               ?? GetGenericTypeAllowsNull(parameter.ParameterType, contextAllowsNull)
                ?? GetItemAllowsNull(parameter)
-               ?? GetContextAllowsNull(method)
+               ?? contextAllowsNull
                ?? true;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
+        var contextAllowsNull = GetContextAllowsNull(method);
+
         return GetItemPostconditionAllowsNull(method.MethodReturnType)
+               ?? GetGenericTypeAllowsNull(method.ReturnType, contextAllowsNull)
                ?? GetItemAllowsNull(method.MethodReturnType)
-               ?? GetContextAllowsNull(method)
+               ?? contextAllowsNull
                ?? true;
     }
 
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
+        var contextAllowsNull = GetContextAllowsNull(getMethod);
+
         return GetItemPostconditionAllowsNull(getMethod.MethodReturnType)
+               ?? GetGenericTypeAllowsNull(getMethod.ReturnType, contextAllowsNull)
                ?? GetItemAllowsNull(getMethod.MethodReturnType)
-               ?? GetContextAllowsNull(getMethod)
+               ?? contextAllowsNull
                ?? true;
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
     {
+        var contextAllowsNull = GetContextAllowsNull(setMethod);
+
         return GetItemPreconditionAllowsNull(valueParameter)
+               ?? GetGenericTypeAllowsNull(valueParameter.ParameterType, contextAllowsNull)
                ?? GetItemAllowsNull(valueParameter)
-               ?? GetContextAllowsNull(setMethod)
+               ?? contextAllowsNull
                ?? true;
     }
 
@@ -98,6 +113,19 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return ContainsAnyAttribute(customAttributeProvider, MaybeNullAttributeTypeName, MaybeNullWhenAttributeTypeName) ? true :
                ContainsAttribute(customAttributeProvider, NotNullAttributeTypeName) ? false :
                (bool?) null;
+    }
+
+    static bool? GetGenericTypeAllowsNull(TypeReference typeReference, bool? contextAllowsNull)
+    {
+        // Only return true or null from this method, because if the type allows null we can stop here, otherwise
+        // we want to continue checking if the actual parameter/return value allows null.
+
+        if (typeReference is GenericParameter genericParameter && (GetItemAllowsNull(genericParameter) ?? contextAllowsNull == true))
+        {
+            return true;
+        }
+
+        return null;
     }
 
     static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider)
