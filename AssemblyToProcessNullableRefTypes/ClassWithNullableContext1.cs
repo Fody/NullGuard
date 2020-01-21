@@ -42,6 +42,16 @@ public class ClassWithNullableContext1
 
     }
 
+    public T UnconstrainedGeneric<T>(T value)
+    {
+        return default!;
+    }
+
+    public T NotNullGeneric<T>(T nonNullArg) where T : notnull
+    {
+        return default!;
+    }
+
     // [Nullable(2)]
     // public string NullProperty { [NullableContext(2)] get; [NullableContext(2)] set; }
     public string? NullProperty { get; set; }
