@@ -162,8 +162,9 @@ public partial class ModuleWeaver
                     var returnInstruction = body.Instructions[ret];
 
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
-                        !parameter.IsIn &&
                         parameter.ParameterType.IsRefType() &&
+                        parameter.ParameterType.IsByReference &&
+                        !parameter.IsIn &&
                         !nullabilityAnalyzer.AllowsNullOutput(parameter, method))
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
