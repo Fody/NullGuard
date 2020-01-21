@@ -16,9 +16,39 @@ public class RewritingMethods :
     }
 
     [Fact]
+    public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
+    {
+        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        var ret = sample.MaybeNullOutValueWhenFalse(out var result);
+        Assert.False(ret);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void RequiresNotNullForNestedGenericDisallowNullRefArgument()
+    {
+        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        var exception = Assert.Throws<ArgumentNullException>(() => {
+            string value = null;
+            sample.DisallowedNullAndNotNullRefValue(ref value);
+        });
+        Assert.Equal("nonNullArg", exception.ParamName);
+    }
+
+    [Fact]
+    public void RequiresNotNullForNestedGenericNotNullRefArgument()
+    {
+        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        var exception = Assert.Throws<InvalidOperationException>(() => {
+            var value = "";
+            sample.DisallowedNullAndNotNullRefValue(ref value);
+        });
+    }
+
+    [Fact]
     public void AllowsNullReturnValueForMaybeNullGenericReturnValue()
     {
-        var sample = new ClassWithNullableContext2();
+        var sample = new ClassWithNullableContext1();
         var result = sample.GenericMaybeNullReturnValue<string>();
         Assert.Null(result);
     }
@@ -103,7 +133,7 @@ public class RewritingMethods :
     public void AllowsNullWithoutAttributeWhenNullableReferenceTypeUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        sample.AnotherMethod(null);
+        sample.MethodWillNullableArg(null);
     }
 
     [Fact]
