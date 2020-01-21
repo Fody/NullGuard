@@ -13,6 +13,24 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     const string NullableContextAttributeTypeName = "System.Runtime.CompilerServices.NullableContextAttribute";
     const string NullableAttributeTypeName = "System.Runtime.CompilerServices.NullableAttribute";
 
+    // Input Preconditions:
+
+    const string AllowNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.AllowNullAttribute";
+    const string DisallowNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.DisallowNullAttribute";
+
+    // Output Postconditions:
+
+    // Ignore the following attributes since they are conditional and thus the value may still be null under some
+    // circumstances but we eventually want to add checks for these as well:
+    // - System.Diagnostics.CodeAnalysis.NotNullIfNotNull
+    // - System.Diagnostics.CodeAnalysis.NotNullWhen
+
+    const string NotNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.NotNull";
+
+    // Treat all MaybeNull attributes as marking the type as nullable:
+
+    const string MaybeNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNull";
+    const string MaybeNullWhenAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullWhen";
 
     enum Nullable
     {
@@ -30,37 +48,56 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
     {
-        return GetItemAllowsNull(parameter)
+        return GetItemPreconditionAllowsNull(parameter)
+               ?? GetItemAllowsNull(parameter)
                ?? GetContextAllowsNull(method)
                ?? true;
     }
 
     public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
     {
-        return GetItemAllowsNull(parameter)
+        return GetItemPostconditionAllowsNull(parameter)
+               ?? GetItemAllowsNull(parameter)
                ?? GetContextAllowsNull(method)
                ?? true;
     }
 
     public bool AllowsNullReturnValue(MethodDefinition method)
     {
-        return GetItemAllowsNull(method.MethodReturnType)
+        return GetItemPostconditionAllowsNull(method.MethodReturnType)
+               ?? GetItemAllowsNull(method.MethodReturnType)
                ?? GetContextAllowsNull(method)
                ?? true;
     }
 
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
-        return GetItemAllowsNull(getMethod.MethodReturnType)
+        return GetItemPostconditionAllowsNull(getMethod.MethodReturnType)
+               ?? GetItemAllowsNull(getMethod.MethodReturnType)
                ?? GetContextAllowsNull(getMethod)
                ?? true;
     }
 
     public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
     {
-        return GetItemAllowsNull(valueParameter)
+        return GetItemPreconditionAllowsNull(valueParameter)
+               ?? GetItemAllowsNull(valueParameter)
                ?? GetContextAllowsNull(setMethod)
                ?? true;
+    }
+
+    static bool? GetItemPreconditionAllowsNull(ICustomAttributeProvider customAttributeProvider)
+    {
+        return ContainsAttribute(customAttributeProvider, AllowNullAttributeTypeName) ? true :
+               ContainsAttribute(customAttributeProvider, DisallowNullAttributeTypeName) ? false :
+               (bool?)null;
+    }
+
+    static bool? GetItemPostconditionAllowsNull(ICustomAttributeProvider customAttributeProvider)
+    {
+        return ContainsAnyAttribute(customAttributeProvider, MaybeNullAttributeTypeName, MaybeNullWhenAttributeTypeName) ? true :
+               ContainsAttribute(customAttributeProvider, NotNullAttributeTypeName) ? false :
+               (bool?) null;
     }
 
     static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider)
@@ -81,6 +118,16 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetAllowsNull(type, NullableContextAttributeTypeName)
                ?? GetContextAllowsNull(type.DeclaringType);
+    }
+
+    static bool ContainsAttribute(ICustomAttributeProvider customAttributeProvider, string fullName)
+    {
+        return customAttributeProvider.CustomAttributes.Any(a => a.AttributeType.FullName == fullName);
+    }
+
+    static bool ContainsAnyAttribute(ICustomAttributeProvider customAttributeProvider, params string[] fullNames)
+    {
+        return fullNames.Any(n => ContainsAttribute(customAttributeProvider, n));
     }
 
     static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
