@@ -14,6 +14,56 @@ public class RewritingProperties :
     }
 
     [Fact]
+    public void PropertySetterThrowForNestedGenericWithDisallowNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        Assert.Throws<ArgumentNullException>(() => sample.PossiblyNullPropertyWithDisallowNull = null);
+    }
+
+    [Fact]
+    public void PropertyGetterThrowsOnNullReturnForNestedGenericWithNotNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            var dummy = sample.PossiblyNullPropertyWithNotNull;
+        });
+    }
+
+    [Fact]
+    public void PropertySetterAllowsNullArgumentForNestedNotNullGenericWithAllowNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        sample.NotNullPropertyWithAllowNull = null;
+    }
+
+    [Fact]
+    public void PropertyGetterThrowsOnNullReturnForNestedNotNullGenericWithAllowNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            var dummy = sample.NotNullPropertyWithAllowNull;
+        });
+    }
+
+    [Fact]
+    public void PropertyGetterAllowsNullReturnForNestedNotNullGenericWithMaybeNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        var value = sample.NotNullPropertyWithMaybeNull;
+        Assert.Null(value);
+    }
+
+    [Fact]
+    public void PropertySetterThrowsOnNullArgumentForNestedNotNullGenericWithMaybeNull()
+    {
+        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        Assert.Throws<ArgumentNullException>(() => sample.NotNullPropertyWithMaybeNull = null);
+    }
+
+
+    [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();

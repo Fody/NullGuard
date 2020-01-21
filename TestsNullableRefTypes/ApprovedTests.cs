@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 public class ApprovedTests:
     VerifyBase
 {
-    public ApprovedTests(ITestOutputHelper output) : 
+    public ApprovedTests(ITestOutputHelper output) :
         base(output)
     {
     }
