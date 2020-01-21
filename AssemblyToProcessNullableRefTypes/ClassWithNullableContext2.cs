@@ -1,6 +1,9 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 // Roslyn compiler adds [NullableContext(2)] because majority of methods use nullable reference types
 
@@ -25,6 +28,28 @@ public class ClassWithNullableContext2
     public string? MethodAllowsNullReturnValue()
     {
         return null;
+    }
+
+    [return: MaybeNull]
+    public T GenericMaybeNullReturnValue<T>() where T : notnull
+    {
+        return default!;
+    }
+
+    [return: NotNull]
+    public T GenericNotNullReturnValue<T>()
+    {
+        return default!;
+    }
+
+    public T? GenericClassWithNullableParam<T>(T? value) where T : class
+    {
+        return null;
+    }
+
+    public T GenericNullableClassWithNotNullableParam<T>(T value) where T : class?
+    {
+        return null!;
     }
 
     // [NullableContext(1)]
