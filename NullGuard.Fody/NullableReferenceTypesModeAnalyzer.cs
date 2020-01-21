@@ -25,12 +25,12 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     // - System.Diagnostics.CodeAnalysis.NotNullIfNotNull
     // - System.Diagnostics.CodeAnalysis.NotNullWhen
 
-    const string NotNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.NotNull";
+    const string NotNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.NotNullAttribute";
 
     // Treat all MaybeNull attributes as marking the type as nullable:
 
-    const string MaybeNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNull";
-    const string MaybeNullWhenAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullWhen";
+    const string MaybeNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullAttribute";
+    const string MaybeNullWhenAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute";
 
     enum Nullable
     {
@@ -139,8 +139,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
             Nullable.NotAnnotated => false,
             Nullable.Annotated => true,
             Nullable.Oblivious => true,
-            // compiler bug? => omitting the "(bool?)" makes everything fail.
-            _ => default(bool?)
+            _ => null
         };
     }
 
