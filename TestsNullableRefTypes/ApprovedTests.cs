@@ -29,15 +29,21 @@ public class ApprovedTests:
     }
 
     [Fact]
+    public Task ClassWithNullableReferenceMethod()
+    {
+        return Verify(Decompile<ClassWithNullableReferenceMethod>());
+    }
+
+    [Fact]
     public Task ClassWithGenericNestedClass()
     {
         return Verify(Decompile<ClassWithGenericNestedClass>());
     }
 
     [Fact]
-    public Task ClassWithNullableReferenceMethod()
+    public Task ClassWithAsyncMethods()
     {
-        return Verify(Decompile<ClassWithNullableReferenceMethod>());
+        return Verify(Decompile<ClassWithAsyncMethods>());
     }
 
     string Decompile<T>()
