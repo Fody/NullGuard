@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NullGuard
+namespace NullGuard.CodeAnalysis
 {
     /// <summary>
     /// Prevents injection of null checking on task result values when return value checks are enabled.

@@ -65,7 +65,9 @@ static class CecilExtensions
     {
         var customAttributes = definition.CustomAttributes;
 
-        var attributes = customAttributes.Where(x => x.AttributeType.Namespace == "NullGuard").ToArray();
+        var attributes = customAttributes
+            .Where(x => x.AttributeType.Namespace == "NullGuard" || x.AttributeType.Namespace == "NullGuard.CodeAnalysis")
+            .ToArray();
 
         foreach (var attribute in attributes)
         {

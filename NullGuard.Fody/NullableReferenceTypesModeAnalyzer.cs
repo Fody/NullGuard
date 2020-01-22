@@ -32,7 +32,9 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     const string MaybeNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullAttribute";
     const string MaybeNullWhenAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute";
 
-    const string MaybeNullTaskResultAttributeTypeName = "NullGuard.MaybeNullTaskResultAttribute";
+    // Special NullGuard attribute allow proper handling of nullable task results in all cases.
+
+    const string MaybeNullTaskResultAttributeTypeName = "NullGuard.CodeAnalysis.MaybeNullTaskResultAttribute";
 
     enum Nullable
     {
