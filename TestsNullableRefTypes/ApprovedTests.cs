@@ -29,6 +29,12 @@ public class ApprovedTests:
     }
 
     [Fact]
+    public Task ClassWithGenericNestedClass()
+    {
+        return Verify(Decompile<ClassWithGenericNestedClass>());
+    }
+
+    [Fact]
     public Task ClassWithNullableReferenceMethod()
     {
         return Verify(Decompile<ClassWithNullableReferenceMethod>());
