@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using NullGuard;
 
 public class ClassWithAsyncMethods
 {
@@ -22,6 +23,12 @@ public class ClassWithAsyncMethods
     public static async Task<T> GetNonNullAsyncWithDelay<T>() where T : notnull
     {
         await Task.Delay(1);
+        return default!;
+    }
+
+    [return: MaybeNullTaskResult]
+    public static async Task<T> GetMaybeNullAsync<T>() where T : notnull
+    {
         return default!;
     }
 
