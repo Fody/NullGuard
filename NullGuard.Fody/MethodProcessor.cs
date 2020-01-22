@@ -71,7 +71,7 @@ public partial class ModuleWeaver
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !nullabilityAnalyzer.AllowsNullReturnValue(method) &&
+                !nullabilityAnalyzer.AllowsNullAsyncTaskResult(method, returnType) &&
                 returnType.IsRefType() &&
                 returnType.FullName != typeof(void).FullName)
             {

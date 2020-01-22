@@ -26,6 +26,11 @@ public class ImplicitModeAnalyzer : INullabilityAnalyzer
         return method.AllowsNullReturnValue();
     }
 
+    public bool AllowsNullAsyncTaskResult(MethodDefinition method, TypeReference resultType)
+    {
+        return method.AllowsNullReturnValue();
+    }
+
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
         return getMethod.MethodReturnType.ImplicitAllowsNull();
