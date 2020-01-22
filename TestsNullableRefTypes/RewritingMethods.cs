@@ -18,7 +18,7 @@ public class RewritingMethods :
     [Fact]
     public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
     {
-        var sample = new ClassWithNullableContext2.NestedNotNull<string>();
+        var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
         var ret = sample.MaybeNullOutValueWhenFalse(out var result);
         Assert.False(ret);
         Assert.Null(result);
@@ -27,7 +27,7 @@ public class RewritingMethods :
     [Fact]
     public void RequiresNotNullForNestedGenericDisallowNullRefArgument()
     {
-        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
         var exception = Assert.Throws<ArgumentNullException>(() => {
             string value = null;
             sample.DisallowedNullAndNotNullRefValue(ref value);
@@ -38,7 +38,7 @@ public class RewritingMethods :
     [Fact]
     public void RequiresNotNullForNestedGenericNotNullRefArgument()
     {
-        var sample = new ClassWithNullableContext2.NestedUnconstrained<string>();
+        var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
         var exception = Assert.Throws<InvalidOperationException>(() => {
             var value = "";
             sample.DisallowedNullAndNotNullRefValue(ref value);

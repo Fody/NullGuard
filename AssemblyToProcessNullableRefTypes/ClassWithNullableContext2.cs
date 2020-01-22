@@ -68,7 +68,6 @@ public class ClassWithNullableContext2
 
 #nullable enable
 
-
     public string? NullProperty { get; set; }
 
     // [Nullable(1)]
@@ -83,35 +82,6 @@ public class ClassWithNullableContext2
     // public Tuple<string, string> MixedNotNullProperty { [return: Nullable(new byte[] {1, 2, 1})] get; [param: Nullable(new byte[] {1, 2, 1})] set; }
     public Tuple<string?, string> MixedNonNullProperty { get; set; }
 
-    public class NestedUnconstrained<T>
-    {
-        [DisallowNull]
-        public T PossiblyNullPropertyWithDisallowNull { get; set; }
-
-        [NotNull]
-        public T PossiblyNullPropertyWithNotNull { get; set; }
-
-        public void DisallowedNullAndNotNullRefValue([DisallowNull][NotNull]ref T nonNullArg)
-        {
-            nonNullArg = default!;
-        }
-    }
-
-    public class NestedNotNull<T> where T : notnull
-    {
-        [AllowNull]
-        public T NotNullPropertyWithAllowNull { get; set; }
-
-        [MaybeNull]
-        public T NotNullPropertyWithMaybeNull { get; set; }
-
-        public bool MaybeNullOutValueWhenFalse([MaybeNullWhen(false)] out T maybeNullWhenFalseArg)
-        {
-            maybeNullWhenFalseArg = default!;
-            return false;
-        }
-    }
-
     #region Filler Methods
 
     // These force [NullableContext(2)] on the type. More can be added if needed.
@@ -119,10 +89,6 @@ public class ClassWithNullableContext2
     public void FillerMethod1(string? value) { }
     public void FillerMethod2(string? value) { }
     public void FillerMethod3(string? value) { }
-    public void FillerMethod4(string? value) { }
-    public void FillerMethod5(string? value) { }
-    public void FillerMethod6(string? value) { }
-    public void FillerMethod7(string? value) { }
 
     #endregion
 }
