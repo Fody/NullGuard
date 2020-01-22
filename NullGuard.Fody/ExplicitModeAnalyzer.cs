@@ -43,6 +43,13 @@ public class ExplicitModeAnalyzer : INullabilityAnalyzer
         return nullability.ReturnValueAllowsNull;
     }
 
+    public bool AllowsNullAsyncTaskResult(MethodDefinition method, TypeReference resultType)
+    {
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ReturnValueAllowsNull;
+    }
+
     public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
     {
         return getMethod.MethodReturnType.ImplicitAllowsNull();

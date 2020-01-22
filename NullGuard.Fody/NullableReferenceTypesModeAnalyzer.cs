@@ -52,8 +52,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetItemPreconditionAllowsNull(parameter)
                ?? GetGenericTypeAllowsNull(parameter.ParameterType, contextAllowsNull)
-               ?? GetItemAllowsNull(parameter)
-               ?? contextAllowsNull
+               ?? GetItemAllowsNull(parameter, contextAllowsNull)
                ?? true;
     }
 
@@ -63,8 +62,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetItemPostconditionAllowsNull(parameter)
                ?? GetGenericTypeAllowsNull(parameter.ParameterType, contextAllowsNull)
-               ?? GetItemAllowsNull(parameter)
-               ?? contextAllowsNull
+               ?? GetItemAllowsNull(parameter, contextAllowsNull)
                ?? true;
     }
 
@@ -74,8 +72,16 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetItemPostconditionAllowsNull(method.MethodReturnType)
                ?? GetGenericTypeAllowsNull(method.ReturnType, contextAllowsNull)
-               ?? GetItemAllowsNull(method.MethodReturnType)
-               ?? contextAllowsNull
+               ?? GetItemAllowsNull(method.MethodReturnType, contextAllowsNull)
+               ?? true;
+    }
+
+    public bool AllowsNullAsyncTaskResult(MethodDefinition method, TypeReference resultType)
+    {
+        var contextAllowsNull = GetContextAllowsNull(method);
+
+        return GetGenericTypeAllowsNull(resultType, contextAllowsNull)
+               ?? GetItemAllowsNull(method.MethodReturnType, contextAllowsNull, 1)
                ?? true;
     }
 
@@ -85,8 +91,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetItemPostconditionAllowsNull(getMethod.MethodReturnType)
                ?? GetGenericTypeAllowsNull(getMethod.ReturnType, contextAllowsNull)
-               ?? GetItemAllowsNull(getMethod.MethodReturnType)
-               ?? contextAllowsNull
+               ?? GetItemAllowsNull(getMethod.MethodReturnType, contextAllowsNull)
                ?? true;
     }
 
@@ -96,8 +101,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
         return GetItemPreconditionAllowsNull(valueParameter)
                ?? GetGenericTypeAllowsNull(valueParameter.ParameterType, contextAllowsNull)
-               ?? GetItemAllowsNull(valueParameter)
-               ?? contextAllowsNull
+               ?? GetItemAllowsNull(valueParameter, contextAllowsNull)
                ?? true;
     }
 
@@ -120,7 +124,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         // Only return true or null from this method, because if the type allows null we can stop here, otherwise
         // we want to continue checking if the actual parameter/return value allows null.
 
-        if (typeReference is GenericParameter genericParameter && (GetItemAllowsNull(genericParameter) ?? contextAllowsNull == true))
+        if (typeReference is GenericParameter genericParameter && GetItemAllowsNull(genericParameter, contextAllowsNull) == true)
         {
             return true;
         }
@@ -128,9 +132,9 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return null;
     }
 
-    static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider)
+    static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider, bool? contextAllowsNull, int index = 0)
     {
-        return GetAllowsNull(customAttributeProvider, NullableAttributeTypeName);
+        return GetAllowsNull(customAttributeProvider, NullableAttributeTypeName, index) ?? contextAllowsNull;
     }
 
     static bool? GetContextAllowsNull(MethodDefinition method)
@@ -158,9 +162,9 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         return fullNames.Any(n => ContainsAttribute(customAttributeProvider, n));
     }
 
-    static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
+    static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index = 0)
     {
-        var nullable = GetNullableAnnotation(customAttributeProvider, attributeTypeName);
+        var nullable = GetNullableAnnotation(customAttributeProvider, attributeTypeName, index);
 
         return nullable switch
         {
@@ -171,21 +175,21 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         };
     }
 
-    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName)
+    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index)
     {
-        return (customAttributeProvider.CustomAttributes.Where(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1)
-            .Select(a => a.ConstructorArguments[0])
-            .Select(GetConstructorArgumentValue)
-            .DefaultIfEmpty(Nullable.Unknown)
-            .Single());
+        var attribute = customAttributeProvider.CustomAttributes
+            .Where(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1)
+            .SingleOrDefault();
+
+        return attribute != null ? GetConstructorArgumentValue(attribute.ConstructorArguments[0], index) : Nullable.Unknown;
     }
 
-    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index = 0)
+    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index)
     {
         var value = arg.Type.FullName switch
         {
             "System.Byte" => (byte)arg.Value,
-            "System.Byte[]" => (byte)(((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value),
+            "System.Byte[]" => (byte)((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value,
             _ => throw new InvalidOperationException("unexpected type: " + arg.Type.FullName)
         };
 
