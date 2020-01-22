@@ -34,6 +34,13 @@ public class RewritingAsyncMethods : VerifyBase
     }
 
     [Fact]
+    public async void AllowsMaybeNullGenericTypeAsync()
+    {
+        var result = await ClassWithAsyncMethods.GetMaybeNullAsync<string>();
+        Assert.Null(result);
+    }
+
+    [Fact]
     public async void AllowsNullGenericTypeAsyncWithDelay()
     {
         var result = await ClassWithAsyncMethods.GetNullAsyncWithDelay<string>();
