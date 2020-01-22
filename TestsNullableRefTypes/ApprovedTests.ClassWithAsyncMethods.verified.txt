@@ -244,7 +244,7 @@ IL_0007:  call       instance void valuetype [mscorlib]System.Runtime.CompilerSe
 IL_000c:  ret
 }
 }
-.class auto ansi sealed nested private beforefieldinit '<GetNullAsyncWithDelay>d__7`1'<class T>
+.class auto ansi sealed nested private beforefieldinit '<GetMaybeNullAsync>d__7`1'<T>
 extends [mscorlib]System.ValueType
 implements [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
 {
@@ -253,82 +253,43 @@ implements [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
 .field public int32 '<>1__state'
 .field public valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T> '<>t__builder'
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
-.field private valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter '<>u__1'
 .method private hidebysig newslot virtual final
 instance void  MoveNext() cil managed
 {
 .override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::MoveNext
-.maxstack  3
+.maxstack  2
 .locals init (int32 V_0,
 !T V_1,
-valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter V_2,
-class [mscorlib]System.Exception V_3)
+class [mscorlib]System.Exception V_2)
 IL_0000:  ldarg.0
-IL_0001:  ldfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>1__state'
+IL_0001:  ldfld      int32 valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>1__state'
 IL_0006:  stloc.0
 .try
 {
-IL_0007:  ldloc.0
-IL_0008:  brfalse.s  IL_003f
-IL_000a:  ldc.i4.1
-IL_000b:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Delay(int32)
-IL_0010:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
-IL_0015:  stloc.2
-IL_0016:  ldloca.s   V_2
-IL_0018:  call       instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::get_IsCompleted()
-IL_001d:  brtrue.s   IL_005b
-IL_001f:  ldarg.0
-IL_0020:  ldc.i4.0
-IL_0021:  dup
-IL_0022:  stloc.0
-IL_0023:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>1__state'
-IL_0028:  ldarg.0
-IL_0029:  ldloc.2
-IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>u__1'
-IL_002f:  ldarg.0
-IL_0030:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>t__builder'
-IL_0035:  ldloca.s   V_2
-IL_0037:  ldarg.0
-IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::AwaitUnsafeOnCompleted<valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter,valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!0>>(!!0&,
-!!1&)
-IL_003d:  leave.s    IL_0097
-IL_003f:  ldarg.0
-IL_0040:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>u__1'
-IL_0045:  stloc.2
-IL_0046:  ldarg.0
-IL_0047:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>u__1'
-IL_004c:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
-IL_0052:  ldarg.0
-IL_0053:  ldc.i4.m1
-IL_0054:  dup
-IL_0055:  stloc.0
-IL_0056:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>1__state'
-IL_005b:  ldloca.s   V_2
-IL_005d:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
-IL_0062:  ldloca.s   V_1
-IL_0064:  initobj    !T
-IL_006a:  leave.s    IL_0083
+IL_0007:  ldloca.s   V_1
+IL_0009:  initobj    !T
+IL_000f:  leave.s    IL_0028
 }  // end .try
 catch [mscorlib]System.Exception
 {
-IL_006c:  stloc.3
-IL_006d:  ldarg.0
-IL_006e:  ldc.i4.s   -2
-IL_0070:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>1__state'
-IL_0075:  ldarg.0
-IL_0076:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>t__builder'
-IL_007b:  ldloc.3
-IL_007c:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetException(class [mscorlib]System.Exception)
-IL_0081:  leave.s    IL_0097
+IL_0011:  stloc.2
+IL_0012:  ldarg.0
+IL_0013:  ldc.i4.s   -2
+IL_0015:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>1__state'
+IL_001a:  ldarg.0
+IL_001b:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>t__builder'
+IL_0020:  ldloc.2
+IL_0021:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetException(class [mscorlib]System.Exception)
+IL_0026:  leave.s    IL_003c
 }  // end handler
-IL_0083:  ldarg.0
-IL_0084:  ldc.i4.s   -2
-IL_0086:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>1__state'
-IL_008b:  ldarg.0
-IL_008c:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>t__builder'
-IL_0091:  ldloc.1
-IL_0092:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetResult(!0)
-IL_0097:  ret
+IL_0028:  ldarg.0
+IL_0029:  ldc.i4.s   -2
+IL_002b:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>1__state'
+IL_0030:  ldarg.0
+IL_0031:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>t__builder'
+IL_0036:  ldloc.1
+IL_0037:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetResult(!0)
+IL_003c:  ret
 }
 .method private hidebysig newslot virtual final
 instance void  SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine stateMachine) cil managed
@@ -338,13 +299,13 @@ instance void  SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.I
 .override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine
 .maxstack  8
 IL_0000:  ldarg.0
-IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!T>::'<>t__builder'
+IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!T>::'<>t__builder'
 IL_0006:  ldarg.1
 IL_0007:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)
 IL_000c:  ret
 }
 }
-.class auto ansi sealed nested private beforefieldinit '<GetNullAsyncWithDelay2>d__8`1'<class T>
+.class auto ansi sealed nested private beforefieldinit '<GetNullAsyncWithDelay>d__8`1'<class T>
 extends [mscorlib]System.ValueType
 implements [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
 {
@@ -364,7 +325,7 @@ instance void  MoveNext() cil managed
 valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter V_2,
 class [mscorlib]System.Exception V_3)
 IL_0000:  ldarg.0
-IL_0001:  ldfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>1__state'
+IL_0001:  ldfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>1__state'
 IL_0006:  stloc.0
 .try
 {
@@ -381,28 +342,28 @@ IL_001f:  ldarg.0
 IL_0020:  ldc.i4.0
 IL_0021:  dup
 IL_0022:  stloc.0
-IL_0023:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>1__state'
+IL_0023:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>1__state'
 IL_0028:  ldarg.0
 IL_0029:  ldloc.2
-IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>u__1'
+IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>u__1'
 IL_002f:  ldarg.0
-IL_0030:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>t__builder'
+IL_0030:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>t__builder'
 IL_0035:  ldloca.s   V_2
 IL_0037:  ldarg.0
-IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::AwaitUnsafeOnCompleted<valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter,valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!0>>(!!0&,
+IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::AwaitUnsafeOnCompleted<valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter,valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!0>>(!!0&,
 !!1&)
 IL_003d:  leave.s    IL_0097
 IL_003f:  ldarg.0
-IL_0040:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>u__1'
+IL_0040:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>u__1'
 IL_0045:  stloc.2
 IL_0046:  ldarg.0
-IL_0047:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>u__1'
+IL_0047:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>u__1'
 IL_004c:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
 IL_0052:  ldarg.0
 IL_0053:  ldc.i4.m1
 IL_0054:  dup
 IL_0055:  stloc.0
-IL_0056:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>1__state'
+IL_0056:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>1__state'
 IL_005b:  ldloca.s   V_2
 IL_005d:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
 IL_0062:  ldloca.s   V_1
@@ -414,18 +375,18 @@ catch [mscorlib]System.Exception
 IL_006c:  stloc.3
 IL_006d:  ldarg.0
 IL_006e:  ldc.i4.s   -2
-IL_0070:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>1__state'
+IL_0070:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>1__state'
 IL_0075:  ldarg.0
-IL_0076:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>t__builder'
+IL_0076:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>t__builder'
 IL_007b:  ldloc.3
 IL_007c:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetException(class [mscorlib]System.Exception)
 IL_0081:  leave.s    IL_0097
 }  // end handler
 IL_0083:  ldarg.0
 IL_0084:  ldc.i4.s   -2
-IL_0086:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>1__state'
+IL_0086:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>1__state'
 IL_008b:  ldarg.0
-IL_008c:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>t__builder'
+IL_008c:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>t__builder'
 IL_0091:  ldloc.1
 IL_0092:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetResult(!0)
 IL_0097:  ret
@@ -438,7 +399,107 @@ instance void  SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.I
 .override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine
 .maxstack  8
 IL_0000:  ldarg.0
-IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!T>::'<>t__builder'
+IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!T>::'<>t__builder'
+IL_0006:  ldarg.1
+IL_0007:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)
+IL_000c:  ret
+}
+}
+.class auto ansi sealed nested private beforefieldinit '<GetNullAsyncWithDelay2>d__9`1'<class T>
+extends [mscorlib]System.ValueType
+implements [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
+{
+.interfaceimpl type [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.field public int32 '<>1__state'
+.field public valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T> '<>t__builder'
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.field private valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter '<>u__1'
+.method private hidebysig newslot virtual final
+instance void  MoveNext() cil managed
+{
+.override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::MoveNext
+.maxstack  3
+.locals init (int32 V_0,
+!T V_1,
+valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter V_2,
+class [mscorlib]System.Exception V_3)
+IL_0000:  ldarg.0
+IL_0001:  ldfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>1__state'
+IL_0006:  stloc.0
+.try
+{
+IL_0007:  ldloc.0
+IL_0008:  brfalse.s  IL_003f
+IL_000a:  ldc.i4.1
+IL_000b:  call       class [mscorlib]System.Threading.Tasks.Task [mscorlib]System.Threading.Tasks.Task::Delay(int32)
+IL_0010:  callvirt   instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
+IL_0015:  stloc.2
+IL_0016:  ldloca.s   V_2
+IL_0018:  call       instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::get_IsCompleted()
+IL_001d:  brtrue.s   IL_005b
+IL_001f:  ldarg.0
+IL_0020:  ldc.i4.0
+IL_0021:  dup
+IL_0022:  stloc.0
+IL_0023:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>1__state'
+IL_0028:  ldarg.0
+IL_0029:  ldloc.2
+IL_002a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>u__1'
+IL_002f:  ldarg.0
+IL_0030:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>t__builder'
+IL_0035:  ldloca.s   V_2
+IL_0037:  ldarg.0
+IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::AwaitUnsafeOnCompleted<valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter,valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!0>>(!!0&,
+!!1&)
+IL_003d:  leave.s    IL_0097
+IL_003f:  ldarg.0
+IL_0040:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>u__1'
+IL_0045:  stloc.2
+IL_0046:  ldarg.0
+IL_0047:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>u__1'
+IL_004c:  initobj    [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
+IL_0052:  ldarg.0
+IL_0053:  ldc.i4.m1
+IL_0054:  dup
+IL_0055:  stloc.0
+IL_0056:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>1__state'
+IL_005b:  ldloca.s   V_2
+IL_005d:  call       instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
+IL_0062:  ldloca.s   V_1
+IL_0064:  initobj    !T
+IL_006a:  leave.s    IL_0083
+}  // end .try
+catch [mscorlib]System.Exception
+{
+IL_006c:  stloc.3
+IL_006d:  ldarg.0
+IL_006e:  ldc.i4.s   -2
+IL_0070:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>1__state'
+IL_0075:  ldarg.0
+IL_0076:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>t__builder'
+IL_007b:  ldloc.3
+IL_007c:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetException(class [mscorlib]System.Exception)
+IL_0081:  leave.s    IL_0097
+}  // end handler
+IL_0083:  ldarg.0
+IL_0084:  ldc.i4.s   -2
+IL_0086:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>1__state'
+IL_008b:  ldarg.0
+IL_008c:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>t__builder'
+IL_0091:  ldloc.1
+IL_0092:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetResult(!0)
+IL_0097:  ret
+}
+.method private hidebysig newslot virtual final
+instance void  SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine stateMachine) cil managed
+{
+.param [1]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.override [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine
+.maxstack  8
+IL_0000:  ldarg.0
+IL_0001:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!T>::'<>t__builder'
 IL_0006:  ldarg.1
 IL_0007:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::SetStateMachine(class [mscorlib]System.Runtime.CompilerServices.IAsyncStateMachine)
 IL_000c:  ret
@@ -544,30 +605,56 @@ IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> 
 IL_0030:  ret
 }
 .method public hidebysig static class [mscorlib]System.Threading.Tasks.Task`1<!!T>
+GetMaybeNullAsync<T>() cil managed
+{
+63 4D 65 74 68 6F 64 73 2B 3C 47 65 74 4D 61 79   // cMethods+<GetMay
+62 65 4E 75 6C 6C 41 73 79 6E 63 3E 64 5F 5F 37   // beNullAsync>d__7
+60 31 00 00 )                                     // `1..
+.maxstack  2
+.locals init (valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!T> V_0,
+valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T> V_1)
+IL_0000:  ldloca.s   V_0
+IL_0002:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::Create()
+IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!T>::'<>t__builder'
+IL_000c:  ldloca.s   V_0
+IL_000e:  ldc.i4.m1
+IL_000f:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!T>::'<>1__state'
+IL_0014:  ldloc.0
+IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!T>::'<>t__builder'
+IL_001a:  stloc.1
+IL_001b:  ldloca.s   V_1
+IL_001d:  ldloca.s   V_0
+IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!0>::Start<valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!0>>(!!0&)
+IL_0024:  ldloca.s   V_0
+IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetMaybeNullAsync>d__7`1'<!!T>::'<>t__builder'
+IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::get_Task()
+IL_0030:  ret
+}
+.method public hidebysig static class [mscorlib]System.Threading.Tasks.Task`1<!!T>
 GetNullAsyncWithDelay<class T>() cil managed
 {
 63 4D 65 74 68 6F 64 73 2B 3C 47 65 74 4E 75 6C   // cMethods+<GetNul
 6C 41 73 79 6E 63 57 69 74 68 44 65 6C 61 79 3E   // lAsyncWithDelay>
-64 5F 5F 37 60 31 00 00 )                         // d__7`1..
+64 5F 5F 38 60 31 00 00 )                         // d__8`1..
 .param [0]
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 02 00 00 00 01 02 00 00 )
 .maxstack  2
-.locals init (valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!T> V_0,
+.locals init (valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!T> V_0,
 valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T> V_1)
 IL_0000:  ldloca.s   V_0
 IL_0002:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::Create()
-IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!T>::'<>t__builder'
+IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!T>::'<>t__builder'
 IL_000c:  ldloca.s   V_0
 IL_000e:  ldc.i4.m1
-IL_000f:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!T>::'<>1__state'
+IL_000f:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!T>::'<>1__state'
 IL_0014:  ldloc.0
-IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!T>::'<>t__builder'
+IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!T>::'<>t__builder'
 IL_001a:  stloc.1
 IL_001b:  ldloca.s   V_1
 IL_001d:  ldloca.s   V_0
-IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!0>::Start<valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!0>>(!!0&)
+IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!0>::Start<valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!0>>(!!0&)
 IL_0024:  ldloca.s   V_0
-IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__7`1'<!!T>::'<>t__builder'
+IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay>d__8`1'<!!T>::'<>t__builder'
 IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::get_Task()
 IL_0030:  ret
 }
@@ -576,26 +663,26 @@ GetNullAsyncWithDelay2<class T>() cil managed
 {
 63 4D 65 74 68 6F 64 73 2B 3C 47 65 74 4E 75 6C   // cMethods+<GetNul
 6C 41 73 79 6E 63 57 69 74 68 44 65 6C 61 79 32   // lAsyncWithDelay2
-3E 64 5F 5F 38 60 31 00 00 )                      // >d__8`1..
+3E 64 5F 5F 39 60 31 00 00 )                      // >d__9`1..
 .param type T
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
 .maxstack  2
-.locals init (valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!T> V_0,
+.locals init (valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!T> V_0,
 valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T> V_1)
 IL_0000:  ldloca.s   V_0
 IL_0002:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::Create()
-IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!T>::'<>t__builder'
+IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!T>::'<>t__builder'
 IL_000c:  ldloca.s   V_0
 IL_000e:  ldc.i4.m1
-IL_000f:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!T>::'<>1__state'
+IL_000f:  stfld      int32 valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!T>::'<>1__state'
 IL_0014:  ldloc.0
-IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!T>::'<>t__builder'
+IL_0015:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!T>::'<>t__builder'
 IL_001a:  stloc.1
 IL_001b:  ldloca.s   V_1
 IL_001d:  ldloca.s   V_0
-IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!0>::Start<valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!0>>(!!0&)
+IL_001f:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!0>::Start<valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!0>>(!!0&)
 IL_0024:  ldloca.s   V_0
-IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__8`1'<!!T>::'<>t__builder'
+IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype ClassWithAsyncMethods/'<GetNullAsyncWithDelay2>d__9`1'<!!T>::'<>t__builder'
 IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::get_Task()
 IL_0030:  ret
 }

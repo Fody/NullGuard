@@ -71,9 +71,9 @@ public partial class ModuleWeaver
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !nullabilityAnalyzer.AllowsNullAsyncTaskResult(method, returnType) &&
                 returnType.IsRefType() &&
-                returnType.FullName != typeof(void).FullName)
+                returnType.FullName != typeof(void).FullName &&
+                !nullabilityAnalyzer.AllowsNullAsyncTaskResult(method, returnType))
             {
                 InjectMethodReturnGuardAsync(body, string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName), method.FullName);
             }
@@ -145,10 +145,10 @@ public partial class ModuleWeaver
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !nullabilityAnalyzer.AllowsNullReturnValue(method) &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
-                !method.IsGetter)
+                !method.IsGetter &&
+                !nullabilityAnalyzer.AllowsNullReturnValue(method))
             {
                 var errorMessage = string.Format(ReturnValueOfMethodIsNull, method.FullName);
                 AddReturnNullGuard(method, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));

@@ -32,6 +32,8 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     const string MaybeNullAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullAttribute";
     const string MaybeNullWhenAttributeTypeName = "System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute";
 
+    const string MaybeNullTaskResultAttributeTypeName = "NullGuard.MaybeNullTaskResultAttribute";
+
     enum Nullable
     {
         Unknown = -1,
@@ -81,6 +83,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         var contextAllowsNull = GetContextAllowsNull(method);
 
         return GetGenericTypeAllowsNull(resultType, contextAllowsNull)
+               ?? GetReturnTypeAllowsNullTaskResult(method.MethodReturnType)
                ?? GetItemAllowsNull(method.MethodReturnType, contextAllowsNull, 1)
                ?? true;
     }
@@ -130,6 +133,11 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         }
 
         return null;
+    }
+
+    bool? GetReturnTypeAllowsNullTaskResult(MethodReturnType methodReturnType)
+    {
+        return ContainsAttribute(methodReturnType, MaybeNullTaskResultAttributeTypeName) ? true : (bool?)null;
     }
 
     static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider, bool? contextAllowsNull, int index = 0)
