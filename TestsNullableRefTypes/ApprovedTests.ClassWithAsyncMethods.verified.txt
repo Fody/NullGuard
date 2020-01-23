@@ -686,6 +686,30 @@ IL_0026:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTa
 IL_002b:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!!T>::get_Task()
 IL_0030:  ret
 }
+.method public hidebysig static class [mscorlib]System.Threading.Tasks.Task`1<string>
+GetNullTask() cil managed
+{
+.param [0]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 02 00 00 00 02 01 00 00 )
+.maxstack  1
+IL_0000:  ldnull
+IL_0001:  ret
+}
+.method public hidebysig static class [mscorlib]System.Threading.Tasks.Task`1<string>
+GetNonNullTask() cil managed
+{
+.maxstack  2
+IL_0000:  ldnull
+IL_0001:  dup
+IL_0002:  brtrue.s   IL_0010
+IL_0004:  pop
+IL_0005:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
++ "ng.Tasks.Task`1<System.String> ClassWithAsyncMethods::GetNonNullTask()'"
++ " is null."
+IL_000a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_000f:  throw
+IL_0010:  ret
+}
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed
 {

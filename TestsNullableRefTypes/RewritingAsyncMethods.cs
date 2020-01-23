@@ -53,4 +53,17 @@ public class RewritingAsyncMethods : VerifyBase
         var result = await ClassWithAsyncMethods.GetNullAsyncWithDelay2<string>();
         Assert.Null(result);
     }
+
+    [Fact]
+    public void AllowsNullTask()
+    {
+        var result = ClassWithAsyncMethods.GetNullTask();
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void RequiresNonNullTask()
+    {
+        Assert.Throws<InvalidOperationException>(new Action(() => ClassWithAsyncMethods.GetNonNullTask()));
+    }
 }
