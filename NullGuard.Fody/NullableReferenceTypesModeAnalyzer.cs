@@ -121,13 +121,18 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     {
         return ContainsAnyAttribute(customAttributeProvider, MaybeNullAttributeTypeName, MaybeNullWhenAttributeTypeName) ? true :
                ContainsAttribute(customAttributeProvider, NotNullAttributeTypeName) ? false :
-               (bool?) null;
+               (bool?)null;
     }
 
     static bool? GetGenericTypeAllowsNull(TypeReference typeReference, bool? contextAllowsNull)
     {
         // Only return true or null from this method, because if the type allows null we can stop here, otherwise
         // we want to continue checking if the actual parameter/return value allows null.
+
+        if (typeReference.IsByReference)
+        {
+            typeReference = typeReference.GetElementType();
+        }
 
         if (typeReference is GenericParameter genericParameter && GetItemAllowsNull(genericParameter, contextAllowsNull) == true)
         {

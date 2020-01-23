@@ -32,11 +32,19 @@ public partial class ModuleWeaver
         // Duplicate the stack (this should be the return value)
         instructions.Add(Instruction.Create(OpCodes.Dup));
 
-        if (methodReturnType != null &&
-            methodReturnType.GetElementType().NeedsBoxing())
+        if (methodReturnType != null)
         {
-            // Generic parameters must be boxed before access
-            instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
+            if (methodReturnType.IsByReference)
+            {
+                instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+                methodReturnType = methodReturnType.GetElementType();
+            }
+
+            if (methodReturnType.GetElementType().NeedsBoxing())
+            {
+                // Generic parameters must be boxed before access
+                instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
+            }
         }
     }
 
