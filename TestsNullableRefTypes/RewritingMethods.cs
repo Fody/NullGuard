@@ -16,6 +16,29 @@ public class RewritingMethods :
     }
 
     [Fact]
+    public void AllowsNullRefReturnValueFromUnconstainedGeneric()
+    {
+        var sample = new ClassWithRefReturns<string>();
+        var ret = sample.GetMaybeNullUnconstrainedRef();
+        Assert.Null(ret);
+    }
+
+    [Fact]
+    public void AllowsNullRefReturnValue()
+    {
+        var sample = new ClassWithRefReturns();
+        var ret = sample.GetNullRef();
+        Assert.Null(ret);
+    }
+
+    [Fact]
+    public void RequiresNonNullRefReturnValue()
+    {
+        var sample = new ClassWithRefReturns();
+        var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
+    }
+
+    [Fact]
     public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
