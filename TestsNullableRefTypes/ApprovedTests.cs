@@ -8,7 +8,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ApprovedTests:
+public class ApprovedTests :
     VerifyBase
 {
     public ApprovedTests(ITestOutputHelper output) :
@@ -50,12 +50,6 @@ public class ApprovedTests:
     public Task ClassWithRefReturns()
     {
         return Verify(Decompile<ClassWithRefReturns>());
-    }
-
-    [Fact]
-    public Task ClassWithGenericRefReturns()
-    {
-        return Verify(Decompile<ClassWithRefReturns<string>>());
     }
 
     string Decompile<T>()
