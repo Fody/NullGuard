@@ -46,6 +46,18 @@ public class ApprovedTests:
         return Verify(Decompile<ClassWithAsyncMethods>());
     }
 
+    [Fact]
+    public Task ClassWithRefReturns()
+    {
+        return Verify(Decompile<ClassWithRefReturns>());
+    }
+
+    [Fact]
+    public Task ClassWithGenericRefReturns()
+    {
+        return Verify(Decompile<ClassWithRefReturns<string>>());
+    }
+
     string Decompile<T>()
     {
         return Ildasm.Decompile(typeof(T).Assembly.Location, typeof(T).Name)
