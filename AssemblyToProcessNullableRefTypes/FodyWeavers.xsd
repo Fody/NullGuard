@@ -32,6 +32,11 @@
                       <xs:documentation>In explicit mode everything is assumed to be nullable, unless attributed with [NotNull].</xs:documentation>
                     </xs:annotation>
                   </xs:enumeration>
+                  <xs:enumeration value="NullableReferenceTypes">
+                    <xs:annotation>
+                      <xs:documentation>Use C# 8 nullable reference type annotations.</xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
                 </xs:restriction>
               </xs:simpleType>
             </xs:attribute>
