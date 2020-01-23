@@ -41,4 +41,14 @@ public class ClassWithAsyncMethods
         await Task.Delay(1);
         return default!;
     }
+
+    public static Task<string>? GetNullTask()
+    {
+        return null;
+    }
+
+    public static Task<string> GetNonNullTask()
+    {
+        return null!;
+    }
 }
