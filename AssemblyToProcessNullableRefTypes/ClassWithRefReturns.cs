@@ -13,14 +13,25 @@ public class ClassWithRefReturns
     {
         return ref _value;
     }
-}
 
-public class ClassWithRefReturns<T>
-{
-    private T _value = default!;
-
-    public ref T GetMaybeNullUnconstrainedRef()
+    public class Generic<T>
     {
-        return ref _value;
+        private T _value = default!;
+
+        public ref T GetMaybeNullUnconstrainedRef()
+        {
+            return ref _value;
+        }
+    }
+
+    public class GenericNonNull<T> where T : notnull
+    {
+        private T _value = default!;
+
+        public ref T GetNonNullRef()
+        {
+            return ref _value;
+        }
     }
 }
+
