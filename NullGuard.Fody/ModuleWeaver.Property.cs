@@ -9,9 +9,6 @@ using NullGuard;
 
 public partial class ModuleWeaver
 {
-    const string ReturnValueOfPropertyIsNull = "[NullGuard] Return value of property '{0}' is null.";
-    const string CannotSetTheValueOfPropertyToNull = "[NullGuard] Cannot set the value of property '{0}' to null.";
-
     public void Process(PropertyDefinition property)
     {
         try
@@ -100,7 +97,7 @@ public partial class ModuleWeaver
         foreach (var ret in returnPoints)
         {
             var returnInstruction = getMethod.Body.Instructions[ret];
-            var errorMessage = string.Format(CultureInfo.InvariantCulture, ReturnValueOfPropertyIsNull, property.FullName);
+            var errorMessage = $"[NullGuard] Return value of property '{property.FullName}' is null.";
 
             var guardInstructions = new List<Instruction>();
 
@@ -140,21 +137,23 @@ public partial class ModuleWeaver
             return;
 
         var guardInstructions = new List<Instruction>();
-        var errorMessage = string.Format(CultureInfo.InvariantCulture, CannotSetTheValueOfPropertyToNull, property.FullName);
         var entry = setMethod.Body.Instructions.First();
+
+        string errorMessage = null;
+        string GetErrorMessage() => errorMessage ??= $"[NullGuard] Cannot set the value of property '{property.FullName}' to null.";
 
         if (isDebug)
         {
             LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-            CallDebugAssertInstructions(guardInstructions, errorMessage);
+            CallDebugAssertInstructions(guardInstructions, GetErrorMessage());
         }
 
         LoadArgumentOntoStack(guardInstructions, valueParameter);
 
         IfNull(guardInstructions, entry, i =>
         {
-            LoadArgumentNullException(i, valueParameter.Name, errorMessage);
+            LoadArgumentNullException(i, valueParameter.Name, useSystemNullArgumentMessage ? null : GetErrorMessage());
 
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));

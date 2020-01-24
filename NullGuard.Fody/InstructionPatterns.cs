@@ -84,11 +84,19 @@ public partial class ModuleWeaver
         // Load the name of the argument onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldstr, valueName));
 
-        // Load the exception text onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
+        if (errorString != null)
+        {
+            // Load the exception text onto the stack
+            instructions.Add(Instruction.Create(OpCodes.Ldstr, errorString));
 
-        // Load the ArgumentNullException onto the stack
-        instructions.Add(Instruction.Create(OpCodes.Newobj, ArgumentNullExceptionWithMessageConstructor));
+            // Load the ArgumentNullException onto the stack
+            instructions.Add(Instruction.Create(OpCodes.Newobj, ArgumentNullExceptionWithMessageConstructor));
+        }
+        else
+        {
+            // Load the ArgumentNullException onto the stack
+            instructions.Add(Instruction.Create(OpCodes.Newobj, ArgumentNullExceptionConstructor));
+        }
     }
 
     public void LoadInvalidOperationException(List<Instruction> instructions, string errorString)

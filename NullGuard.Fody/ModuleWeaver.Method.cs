@@ -109,7 +109,9 @@ public partial class ModuleWeaver
             }
 
             var entry = body.Instructions.First();
-            var errorMessage = $"[NullGuard] {parameter.Name} is null.";
+
+            string errorMessage = null;
+            string GetErrorMessage() => errorMessage ??= $"[NullGuard] {parameter.Name} is null.";
 
             var guardInstructions = new List<Instruction>();
 
@@ -117,14 +119,14 @@ public partial class ModuleWeaver
             {
                 LoadArgumentOntoStack(guardInstructions, parameter);
 
-                CallDebugAssertInstructions(guardInstructions, errorMessage);
+                CallDebugAssertInstructions(guardInstructions, GetErrorMessage());
             }
 
             LoadArgumentOntoStack(guardInstructions, parameter);
 
             IfNull(guardInstructions, entry, i =>
             {
-                LoadArgumentNullException(i, parameter.Name, errorMessage);
+                LoadArgumentNullException(i, parameter.Name, useSystemNullArgumentMessage ? null : GetErrorMessage());
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));

@@ -7,16 +7,14 @@ MethodAllowsNullReturnValue(string nonNullArg) cil managed
 .custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
 .param [0]
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
-.maxstack  2
+.maxstack  1
 IL_0000:  ldarg.1
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "nonNullArg"
-IL_0008:  ldstr      "[NullGuard] nonNullArg is null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldnull
-IL_0014:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldnull
+IL_000f:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed

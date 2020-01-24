@@ -13,8 +13,11 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
     bool isDebug;
+    bool useSystemNullArgumentMessage;
+
     NullGuardMode nullGuardMode;
-    INullabilityAnalyzer nullabilityAnalyzer = new ImplicitModeAnalyzer();
+    INullabilityAnalyzer nullabilityAnalyzer;
+
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
@@ -32,16 +35,12 @@ public partial class ModuleWeaver: BaseModuleWeaver
             nullGuardMode = ModuleDefinition.AutoDetectMode();
         }
 
-        switch (nullGuardMode)
+        nullabilityAnalyzer = nullGuardMode switch
         {
-            case NullGuardMode.Explicit:
-                nullabilityAnalyzer = new ExplicitModeAnalyzer();
-                break;
-
-            case NullGuardMode.NullableReferenceTypes:
-                nullabilityAnalyzer = new NullableReferenceTypesModeAnalyzer();
-                break;
-        }
+            NullGuardMode.Implicit => new ImplicitModeAnalyzer(),
+            NullGuardMode.Explicit => new ExplicitModeAnalyzer(),
+            _ => new NullableReferenceTypesModeAnalyzer(),
+        };
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
@@ -95,6 +94,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
         ReadMode();
+        ReadSystemNullMessage();
     }
 
     void ReadIncludeDebugAssert()
@@ -110,6 +110,22 @@ public partial class ModuleWeaver: BaseModuleWeaver
         catch
         {
             throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{value}'.");
+        }
+    }
+
+    void ReadSystemNullMessage()
+    {
+        var value = Config?.Attribute("UseSystemNullArgumentMessage")?.Value;
+        if (value == null)
+            return;
+
+        try
+        {
+            useSystemNullArgumentMessage = XmlConvert.ToBoolean(value.ToLowerInvariant());
+        }
+        catch
+        {
+            throw new WeavingException($"Could not parse 'UseSystemNullArgumentMessage' from '{value}'.");
         }
     }
 

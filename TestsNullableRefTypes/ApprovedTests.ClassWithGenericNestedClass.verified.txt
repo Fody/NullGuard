@@ -26,18 +26,14 @@ instance void  set_PossiblyNullPropertyWithDisallowNull(!T 'value') cil managed
 .maxstack  2
 IL_0000:  ldarg.1
 IL_0001:  box        !T
-IL_0006:  brtrue.s   IL_0018
+IL_0006:  brtrue.s   IL_0013
 IL_0008:  ldstr      "value"
-IL_000d:  ldstr      "[NullGuard] Cannot set the value of property 'T Cl"
-+ "assWithGenericNestedClass/NestedUnconstrained`1::PossiblyNullPropertyWi"
-+ "thDisallowNull()' to null."
-IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0017:  throw
-IL_0018:  ldarg.0
-IL_0019:  ldarg.1
-IL_001a:  stfld      !0 class ClassWithGenericNestedClass/NestedUnconstrained`1<!T>::'<PossiblyNullPropertyWithDisallowNull>k__BackingField'
-IL_001f:  ret
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_0012:  throw
+IL_0013:  ldarg.0
+IL_0014:  ldarg.1
+IL_0015:  stfld      !0 class ClassWithGenericNestedClass/NestedUnconstrained`1<!T>::'<PossiblyNullPropertyWithDisallowNull>k__BackingField'
+IL_001a:  ret
 }
 .method public hidebysig specialname
 instance !T  get_PossiblyNullPropertyWithNotNull() cil managed
@@ -70,26 +66,24 @@ IL_0007:  ret
 DisallowedNullAndNotNullRefValue(!T& nonNullArg) cil managed
 {
 .param [1]
-.maxstack  2
+.maxstack  1
 IL_0000:  ldarg.1
 IL_0001:  ldobj      !T
 IL_0006:  box        !T
-IL_000b:  brtrue.s   IL_001d
+IL_000b:  brtrue.s   IL_0018
 IL_000d:  ldstr      "nonNullArg"
-IL_0012:  ldstr      "[NullGuard] nonNullArg is null."
-IL_0017:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_001c:  throw
-IL_001d:  ldarg.1
-IL_001e:  initobj    !T
-IL_0024:  ldarg.1
-IL_0025:  ldobj      !T
-IL_002a:  box        !T
-IL_002f:  brtrue.s   IL_003c
-IL_0031:  ldstr      "[NullGuard] Out parameter 'nonNullArg' is null."
-IL_0036:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
-IL_003b:  throw
-IL_003c:  ret
+IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_0017:  throw
+IL_0018:  ldarg.1
+IL_0019:  initobj    !T
+IL_001f:  ldarg.1
+IL_0020:  ldobj      !T
+IL_0025:  box        !T
+IL_002a:  brtrue.s   IL_0037
+IL_002c:  ldstr      "[NullGuard] Out parameter 'nonNullArg' is null."
+IL_0031:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0036:  throw
+IL_0037:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed
@@ -158,18 +152,14 @@ instance void  set_NotNullPropertyWithMaybeNull(!T 'value') cil managed
 .maxstack  2
 IL_0000:  ldarg.1
 IL_0001:  box        !T
-IL_0006:  brtrue.s   IL_0018
+IL_0006:  brtrue.s   IL_0013
 IL_0008:  ldstr      "value"
-IL_000d:  ldstr      "[NullGuard] Cannot set the value of property 'T Cl"
-+ "assWithGenericNestedClass/NestedNotNull`1::NotNullPropertyWithMaybeNull"
-+ "()' to null."
-IL_0012:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0017:  throw
-IL_0018:  ldarg.0
-IL_0019:  ldarg.1
-IL_001a:  stfld      !0 class ClassWithGenericNestedClass/NestedNotNull`1<!T>::'<NotNullPropertyWithMaybeNull>k__BackingField'
-IL_001f:  ret
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_0012:  throw
+IL_0013:  ldarg.0
+IL_0014:  ldarg.1
+IL_0015:  stfld      !0 class ClassWithGenericNestedClass/NestedNotNull`1<!T>::'<NotNullPropertyWithMaybeNull>k__BackingField'
+IL_001a:  ret
 }
 .method public hidebysig instance bool
 MaybeNullOutValueWhenFalse([out] !T& maybeNullWhenFalseArg) cil managed
@@ -221,17 +211,14 @@ set_Value(string 'value') cil managed
 {
 .maxstack  2
 IL_0000:  ldarg.1
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "value"
-IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
-+ "em.String ClassWithGenericNestedClass::Value()' to null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldarg.0
-IL_0014:  ldarg.1
-IL_0015:  stfld      string ClassWithGenericNestedClass::'<Value>k__BackingField'
-IL_001a:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.0
+IL_000f:  ldarg.1
+IL_0010:  stfld      string ClassWithGenericNestedClass::'<Value>k__BackingField'
+IL_0015:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed

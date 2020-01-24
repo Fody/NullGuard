@@ -17,17 +17,15 @@ string nullArg) cil managed
 .custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
 .param [2]
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
-.maxstack  2
+.maxstack  1
 IL_0000:  ldarg.1
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "nonNullArg"
-IL_0008:  ldstr      "[NullGuard] nonNullArg is null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldarg.1
-IL_0014:  call       void [mscorlib]System.Console::WriteLine(string)
-IL_0019:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.1
+IL_000f:  call       void [mscorlib]System.Console::WriteLine(string)
+IL_0014:  ret
 }
 .method public hidebysig instance string
 MethodWithReturnValue(bool returnNull) cil managed
@@ -120,16 +118,14 @@ StaticMethodAllowsNullReturnValue(string nonNullArg) cil managed
 .custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
 .param [0]
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
-.maxstack  2
+.maxstack  1
 IL_0000:  ldarg.0
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "nonNullArg"
-IL_0008:  ldstr      "[NullGuard] nonNullArg is null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldnull
-IL_0014:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldnull
+IL_000f:  ret
 }
 .method public hidebysig instance string
 MethodWithNullableContext0() cil managed
@@ -178,17 +174,14 @@ set_NonNullProperty(string 'value') cil managed
 .custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
 .maxstack  2
 IL_0000:  ldarg.1
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "value"
-IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
-+ "em.String ClassWithNullableContext2::NonNullProperty()' to null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldarg.0
-IL_0014:  ldarg.1
-IL_0015:  stfld      string ClassWithNullableContext2::'<NonNullProperty>k__BackingField'
-IL_001a:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.0
+IL_000f:  ldarg.1
+IL_0010:  stfld      string ClassWithNullableContext2::'<NonNullProperty>k__BackingField'
+IL_0015:  ret
 }
 .method public hidebysig specialname instance class [mscorlib]System.Tuple`2<string,string>
 get_MixedNullProperty() cil managed
@@ -236,18 +229,14 @@ set_MixedNonNullProperty(class [mscorlib]System.Tuple`2<string,string> 'value') 
 .custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 01 02 01 00 00 )
 .maxstack  2
 IL_0000:  ldarg.1
-IL_0001:  brtrue.s   IL_0013
+IL_0001:  brtrue.s   IL_000e
 IL_0003:  ldstr      "value"
-IL_0008:  ldstr      "[NullGuard] Cannot set the value of property 'Syst"
-+ "em.Tuple`2<System.String,System.String> ClassWithNullableContext2::Mixe"
-+ "dNonNullProperty()' to null."
-IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
-string)
-IL_0012:  throw
-IL_0013:  ldarg.0
-IL_0014:  ldarg.1
-IL_0015:  stfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext2::'<MixedNonNullProperty>k__BackingField'
-IL_001a:  ret
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.0
+IL_000f:  ldarg.1
+IL_0010:  stfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext2::'<MixedNonNullProperty>k__BackingField'
+IL_0015:  ret
 }
 .method public hidebysig instance void
 FillerMethod1(string 'value') cil managed
