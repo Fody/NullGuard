@@ -153,7 +153,7 @@ public partial class ModuleWeaver
 
         IfNull(guardInstructions, entry, i =>
         {
-            LoadArgumentNullException(i, valueParameter.Name, useSystemNullArgumentMessage ? null : GetErrorMessage());
+            LoadArgumentNullException(i, valueParameter.Name, useSystemArgumentNullMessage ? null : GetErrorMessage());
 
             // Throw the top item off the stack
             i.Add(Instruction.Create(OpCodes.Throw));

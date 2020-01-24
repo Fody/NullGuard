@@ -13,7 +13,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
     bool isDebug;
-    bool useSystemNullArgumentMessage;
+    bool useSystemArgumentNullMessage;
 
     NullGuardMode nullGuardMode;
     INullabilityAnalyzer nullabilityAnalyzer;
@@ -115,17 +115,17 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
     void ReadSystemNullMessage()
     {
-        var value = Config?.Attribute("UseSystemNullArgumentMessage")?.Value;
+        var value = Config?.Attribute("UseSystemArgumentNullMessage")?.Value;
         if (value == null)
             return;
 
         try
         {
-            useSystemNullArgumentMessage = XmlConvert.ToBoolean(value.ToLowerInvariant());
+            useSystemArgumentNullMessage = XmlConvert.ToBoolean(value.ToLowerInvariant());
         }
         catch
         {
-            throw new WeavingException($"Could not parse 'UseSystemNullArgumentMessage' from '{value}'.");
+            throw new WeavingException($"Could not parse 'UseSystemArgumentNullMessage' from '{value}'.");
         }
     }
 

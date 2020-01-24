@@ -5,7 +5,7 @@
       <xs:documentation>Used to control whether asserts are added into debug builds or not.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
-  <xs:attribute name="UseSystemNullArgumentMessage" type="xs:boolean">
+  <xs:attribute name="UseSystemArgumentNullMessage" type="xs:boolean">
     <xs:annotation>
       <xs:documentation>Used to control whether to use the custom NullGuard or built in system ArgumentNullException message.</xs:documentation>
     </xs:annotation>
