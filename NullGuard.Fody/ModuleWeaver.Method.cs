@@ -71,9 +71,9 @@ public partial class ModuleWeaver
             }
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue(explicitMode) &&
                 returnType.IsRefType() &&
-                returnType.FullName != typeof(void).FullName)
+                returnType.FullName != typeof(void).FullName &&
+                !nullabilityAnalyzer.AllowsNullAsyncTaskResult(method, returnType))
             {
                 InjectMethodReturnGuardAsync(body, string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName), method.FullName);
             }
@@ -88,12 +88,17 @@ public partial class ModuleWeaver
     {
         foreach (var parameter in method.Parameters.Reverse())
         {
-            if (!parameter.MayNotBeNull(method, explicitMode))
+            if (!parameter.MayNotBeNull())
             {
                 continue;
             }
 
             if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
+            {
+                continue;
+            }
+
+            if (nullabilityAnalyzer.AllowsNullInput(parameter, method))
             {
                 continue;
             }
@@ -104,7 +109,9 @@ public partial class ModuleWeaver
             }
 
             var entry = body.Instructions.First();
-            var errorMessage = $"[NullGuard] {parameter.Name} is null.";
+
+            string errorMessage = null;
+            string GetErrorMessage() => errorMessage ??= $"[NullGuard] {parameter.Name} is null.";
 
             var guardInstructions = new List<Instruction>();
 
@@ -112,14 +119,14 @@ public partial class ModuleWeaver
             {
                 LoadArgumentOntoStack(guardInstructions, parameter);
 
-                CallDebugAssertInstructions(guardInstructions, errorMessage);
+                CallDebugAssertInstructions(guardInstructions, GetErrorMessage());
             }
 
             LoadArgumentOntoStack(guardInstructions, parameter);
 
             IfNull(guardInstructions, entry, i =>
             {
-                LoadArgumentNullException(i, parameter.Name, errorMessage);
+                LoadArgumentNullException(i, parameter.Name, useSystemArgumentNullMessage ? null : GetErrorMessage());
 
                 // Throw the top item off the stack
                 i.Add(Instruction.Create(OpCodes.Throw));
@@ -140,10 +147,10 @@ public partial class ModuleWeaver
         foreach (var ret in returnPoints)
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
-                !method.AllowsNullReturnValue(explicitMode) &&
                 method.ReturnType.IsRefType() &&
                 method.ReturnType.FullName != typeof(void).FullName &&
-                !method.IsGetter)
+                !method.IsGetter &&
+                !nullabilityAnalyzer.AllowsNullReturnValue(method))
             {
                 var errorMessage = string.Format(ReturnValueOfMethodIsNull, method.FullName);
                 AddReturnNullGuard(method, ret, method.ReturnType, errorMessage, Instruction.Create(OpCodes.Throw));
@@ -157,9 +164,10 @@ public partial class ModuleWeaver
                     var returnInstruction = body.Instructions[ret];
 
                     if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
-                        parameter.IsOut &&
                         parameter.ParameterType.IsRefType() &&
-                        !parameter.AllowsNull(method, explicitMode))
+                        parameter.ParameterType.IsByReference &&
+                        !parameter.IsIn &&
+                        !nullabilityAnalyzer.AllowsNullOutput(parameter, method))
                     {
                         var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 

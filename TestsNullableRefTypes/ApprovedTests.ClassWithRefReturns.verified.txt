@@ -1,0 +1,96 @@
+.class public auto ansi beforefieldinit ClassWithRefReturns
+extends [mscorlib]System.Object
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.class auto ansi nested public beforefieldinit Generic`1<T>
+extends [mscorlib]System.Object
+{
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.param type T
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.field private !T _value
+.method public hidebysig instance !T&
+GetMaybeNullUnconstrainedRef() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  ldflda     !0 class ClassWithRefReturns/Generic`1<!T>::_value
+IL_0006:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}
+.class auto ansi nested public beforefieldinit GenericNonNull`1<T>
+extends [mscorlib]System.Object
+{
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.field private !T _value
+.method public hidebysig instance !T&
+GetNonNullRef() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldflda     !0 class ClassWithRefReturns/GenericNonNull`1<!T>::_value
+IL_0006:  dup
+IL_0007:  ldind.ref
+IL_0008:  box        !T
+IL_000d:  brtrue.s   IL_001b
+IL_000f:  pop
+IL_0010:  ldstr      "[NullGuard] Return value of method 'T& ClassWithRe"
++ "fReturns/GenericNonNull`1::GetNonNullRef()' is null."
+IL_0015:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_001a:  throw
+IL_001b:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}
+.field private string _value
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.method public hidebysig instance string&
+GetNonNullRef() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldflda     string ClassWithRefReturns::_value
+IL_0006:  dup
+IL_0007:  ldind.ref
+IL_0008:  brtrue.s   IL_0016
+IL_000a:  pop
+IL_000b:  ldstr      "[NullGuard] Return value of method 'System.String&"
++ " ClassWithRefReturns::GetNonNullRef()' is null."
+IL_0010:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0015:  throw
+IL_0016:  ret
+}
+.method public hidebysig instance string&
+GetNullRef() cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  ldflda     string ClassWithRefReturns::_value
+IL_0006:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}

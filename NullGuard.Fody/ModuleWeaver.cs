@@ -13,8 +13,11 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public ValidationFlags ValidationFlags { get; set; }
     public bool IncludeDebugAssert = true;
     bool isDebug;
+    bool useSystemArgumentNullMessage;
+
     NullGuardMode nullGuardMode;
-    ExplicitMode explicitMode;
+    INullabilityAnalyzer nullabilityAnalyzer;
+
     public Regex ExcludeRegex { get; set; }
 
     public ModuleWeaver()
@@ -32,10 +35,12 @@ public partial class ModuleWeaver: BaseModuleWeaver
             nullGuardMode = ModuleDefinition.AutoDetectMode();
         }
 
-        if (nullGuardMode == NullGuardMode.Explicit)
+        nullabilityAnalyzer = nullGuardMode switch
         {
-            explicitMode = new ExplicitMode();
-        }
+            NullGuardMode.Implicit => new ImplicitModeAnalyzer(),
+            NullGuardMode.Explicit => new ExplicitModeAnalyzer(),
+            _ => new NullableReferenceTypesModeAnalyzer(),
+        };
 
         var nullGuardAttribute = ModuleDefinition.GetNullGuardAttribute();
 
@@ -89,6 +94,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
         ReadMode();
+        ReadSystemNullMessage();
     }
 
     void ReadIncludeDebugAssert()
@@ -104,6 +110,22 @@ public partial class ModuleWeaver: BaseModuleWeaver
         catch
         {
             throw new WeavingException($"Could not parse 'IncludeDebugAssert' from '{value}'.");
+        }
+    }
+
+    void ReadSystemNullMessage()
+    {
+        var value = Config?.Attribute("UseSystemArgumentNullMessage")?.Value;
+        if (value == null)
+            return;
+
+        try
+        {
+            useSystemArgumentNullMessage = XmlConvert.ToBoolean(value.ToLowerInvariant());
+        }
+        catch
+        {
+            throw new WeavingException($"Could not parse 'UseSystemArgumentNullMessage' from '{value}'.");
         }
     }
 
@@ -155,6 +177,8 @@ public partial class ModuleWeaver: BaseModuleWeaver
         isDebug = IncludeDebugAssert &&
                       DefineConstants.Any(c => c == "DEBUG") &&
                       DebugAssertMethod != null;
+
+        LogInfo("Debug=" + isDebug);
 
         foreach (var type in types)
         {

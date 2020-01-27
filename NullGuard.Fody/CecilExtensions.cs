@@ -8,12 +8,6 @@ static class CecilExtensions
     const string AllowNullAttributeTypeName = "AllowNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
 
-    // https://github.com/dotnet/roslyn/blob/master/docs/features/nullable-metadata.md
-    const string NullableContextAttributeTypeName = "NullableContextAttribute";
-    const string NullableAttributeTypeName = "NullableAttribute";
-    const byte NullableAnnotated = 2;
-    private const string SystemByteFullTypeName = "System.Byte";
-
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
         return type.Interfaces.Any(i => i.InterfaceType.FullName.Equals(interfaceFullName))
@@ -47,52 +41,17 @@ static class CecilExtensions
         return method.Parameters.Last();
     }
 
-    public static bool AllowsNull(this ParameterDefinition parameter, MethodDefinition method, ExplicitMode explicitMode)
-    {
-        if (explicitMode != null)
-        {
-            return explicitMode.AllowsNull(parameter, method);
-        }
-
-        return parameter.ImplicitAllowsNull();
-    }
-
-    public static bool AllowsNull(this PropertyDefinition property, ExplicitMode explicitMode)
-    {
-        if (explicitMode != null)
-        {
-            return explicitMode.AllowsNull(property);
-        }
-
-        return property.ImplicitAllowsNull();
-    }
-
-    static bool HasNullableReferenceType(this Mono.Collections.Generic.Collection<CustomAttribute> value, string attributeTypeName) 
-        => value.Where(a => a.AttributeType.Name == attributeTypeName)
-            .SelectMany(a => a.ConstructorArguments)
-                .Where(ca => ca.Type.FullName == SystemByteFullTypeName)
-                .Where(ca => (byte)ca.Value == NullableAnnotated)
-                .Any();
-
     public static bool ImplicitAllowsNull(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.HasNullableReferenceType(NullableAttributeTypeName) ||
-            value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName ||
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName ||
                 a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
-    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition, ExplicitMode explicitMode)
+    public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition)
     {
-        if (explicitMode != null)
-        {
-            // ReSharper uses a *method* attribute for NotNull for the return value
-            return explicitMode.AllowsNull(methodDefinition);
-        }
-
-        return methodDefinition.CustomAttributes.HasNullableReferenceType(NullableContextAttributeTypeName) ||
-            methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
-            // ReSharper uses a *method* attribute for CanBeNull for the return value
-            methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
+        return methodDefinition.MethodReturnType.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName) ||
+               // ReSharper uses a *method* attribute for CanBeNull for the return value
+               methodDefinition.CustomAttributes.Any(a => a.AttributeType.Name == CanBeNullAttributeTypeName);
     }
 
     public static bool ContainsAllowNullAttribute(this ICustomAttributeProvider definition)
@@ -106,7 +65,9 @@ static class CecilExtensions
     {
         var customAttributes = definition.CustomAttributes;
 
-        var attributes = customAttributes.Where(x => x.AttributeType.Namespace == "NullGuard").ToArray();
+        var attributes = customAttributes
+            .Where(x => x.AttributeType.Namespace == "NullGuard" || x.AttributeType.Namespace == "NullGuard.CodeAnalysis")
+            .ToArray();
 
         foreach (var attribute in attributes)
         {
@@ -114,9 +75,9 @@ static class CecilExtensions
         }
     }
 
-    public static bool MayNotBeNull(this ParameterDefinition arg, MethodDefinition method, ExplicitMode explicitMode)
+    public static bool MayNotBeNull(this ParameterDefinition arg)
     {
-        return !arg.AllowsNull(method, explicitMode) && !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
+        return !arg.IsOptionalArgumentWithNullDefaultValue() && arg.ParameterType.IsRefType() && !arg.IsOut;
     }
 
     static bool IsOptionalArgumentWithNullDefaultValue(this ParameterDefinition arg)

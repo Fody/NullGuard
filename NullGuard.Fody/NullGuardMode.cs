@@ -8,5 +8,9 @@
     /// <summary>
     /// Not null must be set explicit, allow null is implicit.
     /// </summary>
-    Explicit
+    Explicit,
+    /// <summary>
+    /// C#8 nullable reference types
+    /// </summary>
+    NullableReferenceTypes
 }

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Nullable>enable</Nullable>
+    <!--<DisableFody>true</DisableFody>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
+    <PackageReference Include="Fody" Version="6.0.8" />
+    <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
+  </ItemGroup>
+</Project>

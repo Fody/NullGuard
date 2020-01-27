@@ -1,0 +1,296 @@
+.class public auto ansi beforefieldinit ClassWithNullableContext1
+extends [mscorlib]System.Object
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.field private string '<NullProperty>k__BackingField'
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.field private string '<NonNullProperty>k__BackingField'
+.field private class [mscorlib]System.Tuple`2<string,string> '<MixedNullProperty>k__BackingField'
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 02 02 01 00 00 )
+.field private class [mscorlib]System.Tuple`2<string,string> '<MixedNonNullProperty>k__BackingField'
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 01 02 01 00 00 )
+.method public hidebysig instance void
+SomeMethod(string nonNullArg,
+string nullArg) cil managed
+{
+.param [2]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "nonNullArg"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.1
+IL_000f:  call       void [mscorlib]System.Console::WriteLine(string)
+IL_0014:  ret
+}
+.method public hidebysig instance string
+MethodWithReturnValue(bool returnNull) cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_0018
+IL_0003:  ldstr      ""
+IL_0008:  dup
+IL_0009:  brtrue.s   IL_0017
+IL_000b:  pop
+IL_000c:  ldstr      "[NullGuard] Return value of method 'System.String "
++ "ClassWithNullableContext1::MethodWithReturnValue(System.Boolean)' is nu"
++ "ll."
+IL_0011:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0016:  throw
+IL_0017:  ret
+IL_0018:  ldnull
+IL_0019:  dup
+IL_001a:  brtrue.s   IL_0028
+IL_001c:  pop
+IL_001d:  ldstr      "[NullGuard] Return value of method 'System.String "
++ "ClassWithNullableContext1::MethodWithReturnValue(System.Boolean)' is nu"
++ "ll."
+IL_0022:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0027:  throw
+IL_0028:  ret
+}
+.method public hidebysig instance string
+MethodAllowsNullReturnValue() cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldnull
+IL_0001:  ret
+}
+.method public hidebysig static string
+StaticMethodAllowsNullReturnValue(string nonNullArg) cil managed
+{
+.param [0]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "nonNullArg"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldnull
+IL_000f:  ret
+}
+.method public hidebysig instance string
+AnotherMethod(string nonNullArg) cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "nonNullArg"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.1
+IL_000f:  dup
+IL_0010:  brtrue.s   IL_001e
+IL_0012:  pop
+IL_0013:  ldstr      "[NullGuard] Return value of method 'System.String "
++ "ClassWithNullableContext1::AnotherMethod(System.String)' is null."
+IL_0018:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_001d:  throw
+IL_001e:  ret
+}
+.method public hidebysig instance void
+AndAnotherMethod(string nonNullArg) cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "nonNullArg"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ret
+}
+.method public hidebysig instance !!T  GenericMaybeNullReturnValue<T>() cil managed
+{
+.param [0]
+.maxstack  1
+.locals init (!!T V_0)
+IL_0000:  ldloca.s   V_0
+IL_0002:  initobj    !!T
+IL_0008:  ldloc.0
+IL_0009:  ret
+}
+.method public hidebysig instance !!T  UnconstrainedGeneric<T>(!!T 'value') cil managed
+{
+.param type T
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+.locals init (!!T V_0)
+IL_0000:  ldloca.s   V_0
+IL_0002:  initobj    !!T
+IL_0008:  ldloc.0
+IL_0009:  ret
+}
+.method public hidebysig instance !!T  NotNullGeneric<T>(!!T nonNullArg) cil managed
+{
+.maxstack  2
+.locals init (!!T V_0)
+IL_0000:  ldarg.1
+IL_0001:  box        !!T
+IL_0006:  brtrue.s   IL_0013
+IL_0008:  ldstr      "nonNullArg"
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_0012:  throw
+IL_0013:  ldloca.s   V_0
+IL_0015:  initobj    !!T
+IL_001b:  ldloc.0
+IL_001c:  dup
+IL_001d:  box        !!T
+IL_0022:  brtrue.s   IL_0030
+IL_0024:  pop
+IL_0025:  ldstr      "[NullGuard] Return value of method 'T ClassWithNul"
++ "lableContext1::NotNullGeneric(T)' is null."
+IL_002a:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_002f:  throw
+IL_0030:  ret
+}
+.method public hidebysig specialname instance string
+get_NullProperty() cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  ldfld      string ClassWithNullableContext1::'<NullProperty>k__BackingField'
+IL_0006:  ret
+}
+.method public hidebysig specialname instance void
+set_NullProperty(string 'value') cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldarg.1
+IL_0002:  stfld      string ClassWithNullableContext1::'<NullProperty>k__BackingField'
+IL_0007:  ret
+}
+.method public hidebysig specialname instance string
+get_NonNullProperty() cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldfld      string ClassWithNullableContext1::'<NonNullProperty>k__BackingField'
+IL_0006:  dup
+IL_0007:  brtrue.s   IL_0015
+IL_0009:  pop
+IL_000a:  ldstr      "[NullGuard] Return value of property 'System.Strin"
++ "g ClassWithNullableContext1::NonNullProperty()' is null."
+IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ret
+}
+.method public hidebysig specialname instance void
+set_NonNullProperty(string 'value') cil managed
+{
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "value"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.0
+IL_000f:  ldarg.1
+IL_0010:  stfld      string ClassWithNullableContext1::'<NonNullProperty>k__BackingField'
+IL_0015:  ret
+}
+.method public hidebysig specialname instance class [mscorlib]System.Tuple`2<string,string>
+get_MixedNullProperty() cil managed
+{
+.param [0]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 02 02 01 00 00 )
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  ldfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::'<MixedNullProperty>k__BackingField'
+IL_0006:  ret
+}
+.method public hidebysig specialname instance void
+set_MixedNullProperty(class [mscorlib]System.Tuple`2<string,string> 'value') cil managed
+{
+.param [1]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 02 02 01 00 00 )
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldarg.1
+IL_0002:  stfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::'<MixedNullProperty>k__BackingField'
+IL_0007:  ret
+}
+.method public hidebysig specialname instance class [mscorlib]System.Tuple`2<string,string>
+get_MixedNonNullProperty() cil managed
+{
+.param [0]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 01 02 01 00 00 )
+.maxstack  2
+IL_0000:  ldarg.0
+IL_0001:  ldfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::'<MixedNonNullProperty>k__BackingField'
+IL_0006:  dup
+IL_0007:  brtrue.s   IL_0015
+IL_0009:  pop
+IL_000a:  ldstr      "[NullGuard] Return value of property 'System.Tuple"
++ "`2<System.String,System.String> ClassWithNullableContext1::MixedNonNull"
++ "Property()' is null."
+IL_000f:  newobj     instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0014:  throw
+IL_0015:  ret
+}
+.method public hidebysig specialname instance void
+set_MixedNonNullProperty(class [mscorlib]System.Tuple`2<string,string> 'value') cil managed
+{
+.param [1]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 01 02 01 00 00 )
+.maxstack  2
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "value"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldarg.0
+IL_000f:  ldarg.1
+IL_0010:  stfld      class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::'<MixedNonNullProperty>k__BackingField'
+IL_0015:  ret
+}
+.method public hidebysig instance string
+MethodWithNullableContext0() cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 00 00 00 )
+.maxstack  1
+IL_0000:  ldnull
+IL_0001:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+.property instance string NullProperty()
+{
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.get instance string ClassWithNullableContext1::get_NullProperty()
+.set instance void ClassWithNullableContext1::set_NullProperty(string)
+}
+.property instance string NonNullProperty()
+{
+.get instance string ClassWithNullableContext1::get_NonNullProperty()
+.set instance void ClassWithNullableContext1::set_NonNullProperty(string)
+}
+.property instance class [mscorlib]System.Tuple`2<string,string>
+MixedNullProperty()
+{
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 02 02 01 00 00 )
+.get instance class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::get_MixedNullProperty()
+.set instance void ClassWithNullableContext1::set_MixedNullProperty(class [mscorlib]System.Tuple`2<string,string>)
+}
+.property instance class [mscorlib]System.Tuple`2<string,string>
+MixedNonNullProperty()
+{
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8[]) = ( 01 00 03 00 00 00 01 02 01 00 00 )
+.get instance class [mscorlib]System.Tuple`2<string,string> ClassWithNullableContext1::get_MixedNonNullProperty()
+.set instance void ClassWithNullableContext1::set_MixedNonNullProperty(class [mscorlib]System.Tuple`2<string,string>)
+}
+}

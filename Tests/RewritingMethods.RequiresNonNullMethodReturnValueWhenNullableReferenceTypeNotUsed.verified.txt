@@ -1,1 +1,0 @@
-[NullGuard] Return value of method 'System.String NullableReferenceTypeClass::MethodWithReturnValue(System.Boolean)' is null.

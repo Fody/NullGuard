@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Rocks;
 
-public class ExplicitMode
+public class ExplicitModeAnalyzer : INullabilityAnalyzer
 {
     readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
@@ -18,18 +18,46 @@ public class ExplicitMode
         return nullability.AllowsNull;
     }
 
-    public bool AllowsNull(ParameterDefinition parameter, MethodDefinition method)
+    public bool AllowsNullInput(ParameterDefinition parameter, MethodDefinition method)
     {
         var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ParameterAllowsNull(parameter.Index);
     }
 
-    public bool AllowsNull(MethodDefinition method)
+    public bool AllowsNullOutput(ParameterDefinition parameter, MethodDefinition method)
+    {
+        // Maintain legacy behavior in non-NRT modes which does not check ref output values
+        if (!parameter.IsOut)
+            return true;
+
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ParameterAllowsNull(parameter.Index);
+    }
+
+    public bool AllowsNullReturnValue(MethodDefinition method)
     {
         var nullability = memberNullabilityCache.GetOrCreate(method);
 
         return nullability.ReturnValueAllowsNull;
+    }
+
+    public bool AllowsNullAsyncTaskResult(MethodDefinition method, TypeReference resultType)
+    {
+        var nullability = memberNullabilityCache.GetOrCreate(method);
+
+        return nullability.ReturnValueAllowsNull;
+    }
+
+    public bool AllowsGetMethodToReturnNull(PropertyDefinition property, MethodDefinition getMethod)
+    {
+        return getMethod.MethodReturnType.ImplicitAllowsNull();
+    }
+
+    public bool AllowsSetMethodToAcceptNull(PropertyDefinition property, MethodDefinition setMethod, ParameterDefinition valueParameter)
+    {
+        return valueParameter.ImplicitAllowsNull();
     }
 }
 
@@ -49,11 +77,16 @@ public static class ExplicitModeExtensions
     const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
+    const string NullableAttributeFullName = "System.Runtime.CompilerServices.NullableAttribute";
 
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
-        // If we are referencing JetBrains.Annotations and using NotNull attributes, use explicit mode as default.
+        if (moduleDefinition.GetTypes().Any(typeDefinition => typeDefinition.CustomAttributes.Any(attr => attr.AttributeType.FullName == NullableAttributeFullName)))
+        {
+            return NullGuardMode.NullableReferenceTypes;
+        }
 
+        // If we are referencing JetBrains.Annotations and using NotNull attributes, use explicit mode as default.
         if (moduleDefinition.AssemblyReferences.All(ar => ar.Name != JetBrainsAnnotationsAssemblyName))
         {
             return NullGuardMode.Implicit;
@@ -88,17 +121,13 @@ public static class ExplicitModeExtensions
 
     static NullabilityAttributes GetNullabilityAttribute(CustomAttribute attribute)
     {
-        switch (attribute.AttributeType.Name)
+        return attribute.AttributeType.Name switch
         {
-            case CanBeNullAttributeTypeName:
-                return NullabilityAttributes.CanBeNull;
-            case NotNullAttributeTypeName:
-                return NullabilityAttributes.NotNull;
-            case ItemNotNullAttributeTypeName:
-                return NullabilityAttributes.ItemNotNull;
-            default:
-                return NullabilityAttributes.None;
-        }
+            CanBeNullAttributeTypeName => NullabilityAttributes.CanBeNull,
+            NotNullAttributeTypeName => NullabilityAttributes.NotNull,
+            ItemNotNullAttributeTypeName => NullabilityAttributes.ItemNotNull,
+            _ => NullabilityAttributes.None,
+        };
     }
 
     static IEnumerable<TypeReference> EnumerateInterfaces(this TypeDefinition typeDefinition, TypeReference typeReference)
@@ -439,8 +468,8 @@ class MemberNullability
 
 class MethodNullability : MemberNullability
 {
-    MethodDefinition method;
-    NullabilityAttributes[] parameterAttributes;
+    readonly MethodDefinition method;
+    readonly NullabilityAttributes[] parameterAttributes;
     NullabilityAttributes returnValueAttributes;
     bool isInheritanceResolved;
 
@@ -538,7 +567,7 @@ class MethodNullability : MemberNullability
 
 class PropertyNullability : MemberNullability
 {
-    PropertyDefinition property;
+    readonly PropertyDefinition property;
     NullabilityAttributes nullabilityAttributes;
     bool isInheritanceResolved;
 
@@ -600,7 +629,7 @@ class PropertyNullability : MemberNullability
 
 class MemberNullabilityCache
 {
-    Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
+    readonly Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
 
     public MethodNullability GetOrCreate(MethodDefinition method)
     {

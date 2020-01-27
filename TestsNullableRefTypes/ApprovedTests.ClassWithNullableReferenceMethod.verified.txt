@@ -1,0 +1,27 @@
+.class public auto ansi beforefieldinit ClassWithNullableReferenceMethod
+extends [mscorlib]System.Object
+{
+.method public hidebysig instance string
+MethodAllowsNullReturnValue(string nonNullArg) cil managed
+{
+.custom instance void System.Runtime.CompilerServices.NullableContextAttribute::.ctor(uint8) = ( 01 00 01 00 00 )
+.param [0]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  1
+IL_0000:  ldarg.1
+IL_0001:  brtrue.s   IL_000e
+IL_0003:  ldstr      "nonNullArg"
+IL_0008:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string)
+IL_000d:  throw
+IL_000e:  ldnull
+IL_000f:  ret
+}
+.method public hidebysig specialname rtspecialname
+instance void  .ctor() cil managed
+{
+.maxstack  1
+IL_0000:  ldarg.0
+IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+IL_0006:  ret
+}
+}

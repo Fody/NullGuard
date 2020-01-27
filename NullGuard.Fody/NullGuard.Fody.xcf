@@ -5,6 +5,11 @@
       <xs:documentation>Used to control whether asserts are added into debug builds or not.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
+  <xs:attribute name="UseSystemArgumentNullMessage" type="xs:boolean">
+    <xs:annotation>
+      <xs:documentation>Used to control whether to use the custom NullGuard or built in system ArgumentNullException message.</xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
   <xs:attribute name="Mode">
     <xs:annotation>
       <xs:documentation>The operation mode of NullGuard.</xs:documentation>
@@ -24,6 +29,11 @@
         <xs:enumeration value="Explicit">
           <xs:annotation>
             <xs:documentation>In explicit mode everything is assumed to be nullable, unless attributed with [NotNull].</xs:documentation>
+          </xs:annotation>
+        </xs:enumeration>
+        <xs:enumeration value="NullableReferenceTypes">
+          <xs:annotation>
+            <xs:documentation>Use C# 8 nullable reference type annotations.</xs:documentation>
           </xs:annotation>
         </xs:enumeration>
       </xs:restriction>
