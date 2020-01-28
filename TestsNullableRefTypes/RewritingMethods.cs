@@ -16,6 +16,21 @@ public class RewritingMethods :
     }
 
     [Fact]
+    public void HandlesMethodsWithManyParameters()
+    {
+        var sample = new ClassWithNullableContext1();
+
+        var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", null, "", ""));
+        Assert.Equal("nonNullArg2", exception.ParamName);
+
+        exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", "", "", null));
+        Assert.Equal("nonNullArg4", exception.ParamName);
+
+        sample.MethodWithManyParameters(null, "", "", "");
+        sample.MethodWithManyParameters("", "", null, "");
+    }
+
+    [Fact]
     public void AllowsNullRefReturnValueFromUnconstainedGeneric()
     {
         var sample = new ClassWithRefReturns.Generic<string>();
