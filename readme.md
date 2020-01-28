@@ -311,10 +311,18 @@ Where and how injection occurs can be controlled via attributes. The NullGuard.F
 
 ```csharp
 /// <summary>
-/// Prevents the injection of null checking.
+/// Prevents the injection of null checking (implicit mode only).
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property)]
 public class AllowNullAttribute : Attribute
+{
+}
+
+/// <summary>
+/// Prevents injection of null checking on task result values when return value checks are enabled (NRT mode only).
+/// </summary>
+[AttributeUsage(AttributeTargets.ReturnValue)]
+public class MaybeNullTaskResultAttribute : Attribute
 {
 }
 
