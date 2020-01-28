@@ -11,6 +11,10 @@ public class ExplicitModeAnalyzer : INullabilityAnalyzer
 {
     readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
 
+    public void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError)
+    {
+    }
+
     public bool AllowsNull(PropertyDefinition property)
     {
         var nullability = memberNullabilityCache.GetOrCreate(property);
