@@ -59,6 +59,11 @@ public class ClassWithNullableContext1
         return default!;
     }
 
+    public void MethodWithManyParameters(string? nullArg1, string nonNullArg2, string? nullArg3, string nonNullArg4)
+    {
+
+    }
+
     // [Nullable(2)]
     // public string NullProperty { [NullableContext(2)] get; [NullableContext(2)] set; }
     public string? NullProperty { get; set; }
