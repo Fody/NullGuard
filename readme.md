@@ -30,7 +30,7 @@ The `Install-Package Fody` is required since NuGet always defaults to the oldest
 
 NullGuard supports three modes of operations, [*implicit*](#implicit-mode), [*explicit*](#explicit-mode) and [*nullable reference types*](#nrt-mode).
 
- * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always. C# 8 nullable reference types are also used to determine if a type may be null.
+ * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
  * In [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
  * In the new [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type annotations are used to determine if a type may be null.
 
