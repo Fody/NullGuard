@@ -278,6 +278,8 @@ public class Sample
 
 ```
 
+See https://docs.microsoft.com/en-us/dotnet/csharp/nullable-attributes for more information on the available nullable reference type attributes.
+
 ### Attributes
 
 Where and how injection occurs can be controlled via attributes. The NullGuard.Fody nuget ships with an assembly containing these attributes.
