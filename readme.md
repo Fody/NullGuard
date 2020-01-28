@@ -237,7 +237,7 @@ Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://g
 
 ### Nullable Reference Types Mode
 
-Standard NRT annotations and attributes are used to determine the nullability of a type. Conditional postcondition attributes (ie. `[MaybeNullWhenAttribute]`) that indicate the value may sometimes be null causes the postcondition null check to be skipped.
+Standard NRT annotations and attributes are used to determine the nullability of a type. Conditional postcondition attributes (ie. `[MaybeNullWhenAttribute]`) that indicate the value may sometimes be null causes the postcondition null check to be omitted.
 
 ```csharp
 public class Sample
