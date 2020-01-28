@@ -32,7 +32,7 @@ NullGuard supports three modes of operations, [*implicit*](#implicit-mode), [*ex
 
  * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
  * In [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
- * In the new [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type annotations are used to determine if a type may be null.
+ * In the new [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type (NRT) annotations are used to determine if a type may be null.
 
 If not configured explicitly, NullGuard will auto-detect the mode as follows:
 
@@ -235,6 +235,7 @@ Also note that using `JetBrains.Anntotations` will require to define [`JETBRAINS
 NullGuard will neither remove those attributes nor the reference to  `JetBrains.Anntotations`. To get rid of the attributes and the reference, you can use [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 
+
 ### Nullable Reference Types Mode
 
 Standard NRT annotations and attributes are used to determine the nullability of a type. Conditional postcondition attributes (ie. `[MaybeNullWhenAttribute]`) that indicate the value may sometimes be null causes the postcondition null check to be omitted.
@@ -250,6 +251,18 @@ public class Sample
 
     // Throws InvalidOperationException since return value is not nullable
     public string MustReturnValue()
+    {
+        return null;
+    }
+
+    // Throws InvalidOperationException for task results that violate nullability as well
+    public async Task<string> GetValueAsync()
+    {
+        return null;
+    }
+
+    // Allows null task result
+    public async Task<string?> GetValueAsync()
     {
         return null;
     }
@@ -279,6 +292,18 @@ public class Sample
 ```
 
 See https://docs.microsoft.com/en-us/dotnet/csharp/nullable-attributes for more information on the available nullable reference type attributes.
+
+NullGuard adds a special annotation `[MaybeNullTaskResultAttribute]` for this mode that can be used to control whether a Task result value might be null in situations where this currently isn't possible with NRTs:
+
+```c#
+// Throws InvalidOperationException for reference typed T unless the return value 
+// is marked with [MaybeNullTaskResult].
+[return: MaybeNullTaskResult]
+public async Task<T> TryGetValueAsync<T>() where T : notnull
+{
+    return default(T);
+}
+```
 
 ### Attributes
 
