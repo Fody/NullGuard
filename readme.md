@@ -28,13 +28,15 @@ The `Install-Package Fody` is required since NuGet always defaults to the oldest
 
 ### Modes
 
-NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
+NullGuard supports three modes of operations, [*implicit*](#implicit-mode), [*explicit*](#explicit-mode) and [*nullable reference types*](#nrt-mode).
 
  * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always. C# 8 nullable reference types are also used to determine if a type may be null.
- * In the new [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
+ * In [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
+ * In the new [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type annotations are used to determine if a type may be null.
 
 If not configured explicitly, NullGuard will auto-detect the mode as follows:
 
+ * If C# 8 nullable attributes are detected then nullable reference types mode is used.
  * Referencing `JetBrains.Annotations` and using `[NotNull]` anywhere will switch to explicit mode.
  * Default to implicit mode if the above criteria is not met.
 
@@ -233,6 +235,48 @@ Also note that using `JetBrains.Anntotations` will require to define [`JETBRAINS
 NullGuard will neither remove those attributes nor the reference to  `JetBrains.Anntotations`. To get rid of the attributes and the reference, you can use [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 
+### Nullable Reference Types Mode
+
+Standard NRT annotations and attributes are used to determine the nullability of a type. Conditional postcondition attributes (ie. `[MaybeNullWhenAttribute]`) that indicate the value may sometimes be null causes the postcondition null check to be skipped.
+
+```csharp
+public class Sample
+{
+    // Allows null return values
+    public string? MaybeGetValue()
+    {
+        return null;
+    }
+
+    // Throws InvalidOperationException since return value is not nullable
+    public string MustReturnValue()
+    {
+        return null;
+    }
+
+    public void WriteValue(string arg)
+    {
+        // throws ArgumentNullException if arg is null.
+    }
+
+    public void WriteValue(string? arg) 
+    {
+        // arg may be null here
+    }
+
+    public void GenericMethod<T>(T arg) where T : notnull
+    {
+        // throws ArgumentNullException if arg is null.
+    }
+
+    public bool TryGetValue<T>(string key, [MaybeNullWhen(false)] out T value)
+    {
+        // throws ArgumentNullException if key is null.
+        // out value is not checked.
+    }
+}
+
+```
 
 ### Attributes
 
@@ -354,7 +398,7 @@ You can also use RegEx to specify the name of a class to exclude from NullGuard.
 <NullGuard ExcludeRegex="^ClassToExclude$" />
 ```
 
-You can force the operation mode by setting it to `Explicit` or `Implicit`, if the default `AutoDetect` does not detect the usage correctly.
+You can force the operation mode by setting it to `Explicit`, `Implicit` or `NullableReferenceTypes`, if the default `AutoDetect` does not detect the usage correctly.
 
 ```xml
 <NullGuard Mode="Explicit" />
