@@ -1,7 +1,30 @@
-﻿using Mono.Cecil;
+﻿using System;
+using System.Collections.Generic;
+using Mono.Cecil;
 
 public class ImplicitModeAnalyzer : INullabilityAnalyzer
 {
+    public void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError)
+    {
+        foreach (var typeDefinition in types)
+        {
+            foreach (var method in typeDefinition.AbstractMethods())
+            {
+                if (method.ContainsAllowNullAttribute())
+                {
+                    logError($"Method '{method.FullName}' is abstract but has an [AllowNullAttribute]. Remove this attribute.");
+                }
+                foreach (var parameter in method.Parameters)
+                {
+                    if (parameter.ContainsAllowNullAttribute())
+                    {
+                        logError($"Method '{method.FullName}' is abstract but has an [AllowNullAttribute]. Remove this attribute.");
+                    }
+                }
+            }
+        }
+    }
+
     public bool AllowsNull(PropertyDefinition property)
     {
         return property.ImplicitAllowsNull();

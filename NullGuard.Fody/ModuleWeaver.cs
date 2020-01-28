@@ -60,7 +60,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         FindReferences();
         var types = GetTypesToProcess();
 
-        CheckForBadAttributes(types);
+        nullabilityAnalyzer.CheckForBadAttributes(types, LogError);
         ProcessAssembly(types);
         RemoveAttributes(types);
         RemoveReference();
@@ -132,27 +132,6 @@ public partial class ModuleWeaver: BaseModuleWeaver
         if(!string.IsNullOrWhiteSpace(regex))
         {
             ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        }
-    }
-
-    void CheckForBadAttributes(List<TypeDefinition> types)
-    {
-        foreach (var typeDefinition in types)
-        {
-            foreach (var method in typeDefinition.AbstractMethods())
-            {
-                if (method.ContainsAllowNullAttribute())
-                {
-                    WriteError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
-                }
-                foreach (var parameter in method.Parameters)
-                {
-                    if (parameter.ContainsAllowNullAttribute())
-                    {
-                        WriteError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
-                    }
-                }
-            }
         }
     }
 

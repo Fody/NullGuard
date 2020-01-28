@@ -3,6 +3,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Mono.Cecil;
@@ -36,12 +37,39 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     const string MaybeNullTaskResultAttributeTypeName = "NullGuard.CodeAnalysis.MaybeNullTaskResultAttribute";
 
+    // Implicit mode specific NullGuard AllowNull attribute which shouldn't be used in NRT mode
+
+    const string NullGuardAllowNullAttributeTypeName = "NullGuard.AllowNullAttribute";
+
     enum Nullable
     {
         Unknown = -1,
         Oblivious = 0,
         NotAnnotated = 1,
         Annotated = 2
+    }
+
+    public void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError)
+    {
+        // Ensure user did not accidentally use NullGuard AllowNullAttribute instead of NRT attribute
+
+        foreach (var typeDefinition in types)
+        {
+            foreach (var method in typeDefinition.Methods)
+            {
+                if (ContainsAttribute(method, NullGuardAllowNullAttributeTypeName))
+                {
+                    logError($"Method '{method.FullName}' has implicit mode NullGuard [AllowNullAttribute]. Use NRT attributes instead.");
+                }
+                foreach (var parameter in method.Parameters)
+                {
+                    if (ContainsAttribute(parameter, NullGuardAllowNullAttributeTypeName))
+                    {
+                        logError($"Method '{method.FullName}' has implicit mode NullGuard [AllowNullAttribute]. Use NRT attributes instead.");
+                    }
+                }
+            }
+        }
     }
 
     public bool AllowsNull(PropertyDefinition property)
