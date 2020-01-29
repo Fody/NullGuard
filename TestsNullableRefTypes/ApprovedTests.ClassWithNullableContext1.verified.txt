@@ -159,6 +159,33 @@ IL_002f:  newobj     instance void [mscorlib]System.InvalidOperationException::.
 IL_0034:  throw
 IL_0035:  ret
 }
+.method public hidebysig instance void
+MethodWithManyParameters(string nullArg1,
+string nonNullArg2,
+string nullArg3,
+string nonNullArg4) cil managed
+{
+.param [1]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.param [3]
+.custom instance void System.Runtime.CompilerServices.NullableAttribute::.ctor(uint8) = ( 01 00 02 00 00 )
+.maxstack  2
+IL_0000:  ldarg.2
+IL_0001:  brtrue.s   IL_0013
+IL_0003:  ldstr      "nonNullArg2"
+IL_0008:  ldstr      "[NullGuard] nonNullArg2 is null."
+IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0012:  throw
+IL_0013:  ldarg.s    nonNullArg4
+IL_0015:  brtrue.s   IL_0027
+IL_0017:  ldstr      "nonNullArg4"
+IL_001c:  ldstr      "[NullGuard] nonNullArg4 is null."
+IL_0021:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor(string,
+string)
+IL_0026:  throw
+IL_0027:  ret
+}
 .method public hidebysig specialname instance string
 get_NullProperty() cil managed
 {
