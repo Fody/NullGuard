@@ -3,8 +3,14 @@ skip_commits:
   message: /doco|Merge pull request.*/
 build_script:
 - cmd: dotnet build --configuration Release
-test:
-  assemblies:
-    - '**\*Tests.dll'
+# test:
+#   assemblies:
+#     only:
+# #      - '**\Tests*.dll'
+#       - '**\TestsNullableRefTypes.dll'
+
+test_script:
+  - ps: .\tests.ps1 Release
+
 artifacts:
 - path: nugets\**\*.nupkg
