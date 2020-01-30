@@ -1,13 +1,20 @@
+# <img src="/package_icon.png" height="30px"> NullGuard.Fody
+
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg)](https://gitter.im/Fody)
 [![NuGet Status](https://img.shields.io/nuget/v/NullGuard.Fody.svg)](https://www.nuget.org/packages/NullGuard.Fody/)
 
 
 ## This is an add-in for [Fody](https://github.com/Fody/Home/)
 
+**It is expected that all developers using Fody either [become a Patron on OpenCollective](https://opencollective.com/fody/), or have a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-fody?utm_source=nuget-fody&utm_medium=referral&utm_campaign=enterprise).**
+
+
+## Usage
+
 See also [Fody usage](https://github.com/Fody/Home/blob/master/pages/usage.md).
 
 
-## NuGet installation
+### NuGet installation
 
 Install the [NullGuard.Fody NuGet package](https://nuget.org/packages/NullGuard.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
 
@@ -19,7 +26,7 @@ PM> Install-Package NullGuard.Fody
 The `Install-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
 
 
-## Modes
+### Modes
 
 NullGuard supports two modes of operations, [*implicit*](#implicit-mode) and [*explicit*](#explicit-mode).
 
@@ -32,10 +39,10 @@ If not configured explicitly, NullGuard will auto-detect the mode as follows:
  * Default to implicit mode if the above criteria is not met.
 
 
-### Implicit Mode
+#### Implicit Mode
 
 
-#### Your Code
+##### Your Code
 
 ```csharp
 public class Sample
@@ -84,7 +91,7 @@ public class Sample
 ```
 
 
-#### What gets compiled
+##### What gets compiled
 
 ```csharp
 public class SampleOutput
@@ -169,7 +176,7 @@ public class SampleOutput
 ```
 
 
-### Explicit Mode
+#### Explicit Mode
 
 If you are (already) using R#'s `[NotNull]` attribute in your code to explicitly annotate not null items, 
 null guards will be added only for items that have an explicit `[NotNull]` annotation.
@@ -227,7 +234,7 @@ NullGuard will neither remove those attributes nor the reference to  `JetBrains.
 Just make sure NullGuard will run prior to [JetBrainsAnnotations.Fody](https://github.com/tom-englert/JetBrainsAnnotations.Fody).
 
 
-## Attributes
+### Attributes
 
 Where and how injection occurs can be controlled via attributes. The NullGuard.Fody nuget ships with an assembly containing these attributes.
 
@@ -279,7 +286,7 @@ All NullGuard attributes are removed from the assembly as part of the build.
 Attributes are checked locally at the member, and if there are no attributes then the class is checked. If the class has no attributes then the assembly is checked. Finally if there are no attributes at the assembly level then the default value is used.
 
 
-### NullGuardAttribute
+#### NullGuardAttribute
 
 `NullGuardAttribute` can be used at the class or assembly level. It takes a `ValidationFlags` parameter.
 
@@ -290,7 +297,7 @@ Attributes are checked locally at the member, and if there are no attributes the
     public class Foo { ... }
 ```
 
-### ValidationFlags
+#### ValidationFlags
 
 The `ValidationFlags` determine how much checking NullGuard adds to your assembly.
 
@@ -305,7 +312,7 @@ The `ValidationFlags` determine how much checking NullGuard adds to your assembl
  * `AllPublic` Checks everything (properties, all method args and return values).
 
 
-### AllowNullAttribute and CanBeNullAttribute
+#### AllowNullAttribute and CanBeNullAttribute
 
 These attributes allow you to specify which arguments, return values and properties can be set to null. `AllowNullAttribute` comes from the referenced project NullGuard adds. `CanBeNullAttribute` can come from anywhere, but is commonly used by Resharper.
 
@@ -324,7 +331,7 @@ public string PropertyAllowsNullSetButDoesNotAllowNullGet { get; [param: AllowNu
 ```
 
 
-## Configuration
+### Configuration
 
 For Release builds NullGuard will weave code that throws `ArgumentNullException`. For Debug builds NullGuard weaves `Debug.Assert`. 
 If you want ArgumentNullException to be thrown for Debug builds then update FodyWeavers.xml to include:
