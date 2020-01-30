@@ -4,7 +4,7 @@
 [![NuGet Status](https://img.shields.io/nuget/v/NullGuard.Fody.svg)](https://www.nuget.org/packages/NullGuard.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Home/)
+### This is an add-in for [Fody](https://github.com/Fody/Home/)
 
 **It is expected that all developers using Fody either [become a Patron on OpenCollective](https://opencollective.com/fody/), or have a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-fody?utm_source=nuget-fody&utm_medium=referral&utm_campaign=enterprise).**
 
