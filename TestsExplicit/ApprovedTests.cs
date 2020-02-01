@@ -12,145 +12,145 @@ public class ApprovedTests :
     [Fact]
     public Task ClassWithBadAttributes()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"), settings);
+        return Verify(Decompile("ClassWithBadAttributes"), settings);
     }
 
     [Fact]
     public Task ClassWithPrivateMethod()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"), settings);
+        return Verify(Decompile("ClassWithPrivateMethod"), settings);
     }
 
     [Fact]
     public Task ClassWithPrivateMethodNoAssert()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"), settings);
+        return Verify(Decompile("ClassWithPrivateMethod"), settings);
     }
 
     [Fact]
     public Task GenericClass()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"), settings);
+        return Verify(Decompile("GenericClass`1"), settings);
     }
 
     [Fact]
     public Task Indexers()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"), settings);
+        return Verify(Decompile("Indexers"), settings);
     }
 
     [Fact]
     public Task InterfaceBadAttributes()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"), settings);
+        return Verify(Decompile("InterfaceBadAttributes"), settings);
     }
 
     [Fact]
     public Task SimpleClass()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"), settings);
+        return Verify(Decompile("SimpleClass"), settings);
     }
 
     [Fact]
     public Task SimpleClassNoAssert()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"), settings);
+        return Verify(Decompile("SimpleClass"), settings);
     }
 
     [Fact]
     public Task SkipIXamlMetadataProvider()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"), settings);
+        return Verify(Decompile("XamlMetadataProvider"), settings);
     }
 
     [Fact]
     public Task SpecialClass()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"), settings);
+        return Verify(Decompile("SpecialClass"), settings);
     }
 
     [Fact]
     public Task PublicNestedInsideNonPublic()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"), settings);
+        return Verify(Decompile("NonPublicWithNested"), settings);
     }
 
     [Fact]
     public Task UnsafeClass()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"), settings);
+        return Verify(Decompile("UnsafeClass"), settings);
     }
 
     [Fact]
     public Task DerivedClass()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.DerivedClass"), settings);
+        return Verify(Decompile("InternalBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterface()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterface"), settings);
+        return Verify(Decompile("InternalBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterface()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInheritedInterface"), settings);
+        return Verify(Decompile("InternalBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicit()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InternalBase.ImplementsInterfaceExplicit"), settings);
+        return Verify(Decompile("InternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
     public Task DerivedClassAssemblyBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.DerivedClass"), settings);
+        return Verify(Decompile("AssemblyBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceAssemblyBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterface"), settings);
+        return Verify(Decompile("AssemblyBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterfaceAssemblyBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInheritedInterface"), settings);
+        return Verify(Decompile("AssemblyBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicitAssemblyBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "AssemblyBase.ImplementsInterfaceExplicit"), settings);
+        return Verify(Decompile("AssemblyBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
     public Task DerivedClassExternalBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.DerivedClass"), settings);
+        return Verify(Decompile("ExternalBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExternalBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterface"), settings);
+        return Verify(Decompile("ExternalBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterfaceExternalBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInheritedInterface"), settings);
+        return Verify(Decompile("ExternalBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicitExternalBase()
     {
-        return Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ExternalBase.ImplementsInterfaceExplicit"), settings);
+        return Verify(Decompile("ExternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
@@ -182,5 +182,11 @@ public class ApprovedTests :
         settings.AddScrubber(v => v.Replace("InternalBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("AssemblyBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("ExternalBase.", string.Empty));
+    }
+
+    private string Decompile(string item)
+    {
+        return Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, item)
+            .Replace("[System.Private.CoreLib]", "[netstandard]");
     }
 }
