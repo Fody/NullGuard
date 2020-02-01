@@ -17,7 +17,7 @@ public static class AssemblyWeaver
 
         TestResult = weavingTask.ExecuteTestRun(
             assemblyPath: "AssemblyToProcessExplicit.dll",
-            ignoreCodes: new[] {"0x80131854", "0x801318DE", "0x80131252" });
+            ignoreCodes: new[] {"0x80131854", "0x801318DE", "0x80131252", "0x80131869" });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;
     }
