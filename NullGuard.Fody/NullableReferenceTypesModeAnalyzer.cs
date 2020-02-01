@@ -221,8 +221,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index)
     {
         var attribute = customAttributeProvider.CustomAttributes
-            .Where(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1)
-            .SingleOrDefault();
+            .SingleOrDefault(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1);
 
         return attribute != null ? GetConstructorArgumentValue(attribute.ConstructorArguments[0], index) : Nullable.Unknown;
     }

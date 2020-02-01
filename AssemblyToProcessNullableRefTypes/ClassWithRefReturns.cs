@@ -24,6 +24,7 @@ public class ClassWithRefReturns
         }
     }
 
+    #if NETSTANDARD2_1
     public class GenericNonNull<T> where T : notnull
     {
         private T _value = default!;
@@ -33,5 +34,6 @@ public class ClassWithRefReturns
             return ref _value;
         }
     }
+    #endif
 }
 
