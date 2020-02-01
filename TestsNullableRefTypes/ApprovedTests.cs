@@ -1,7 +1,8 @@
-﻿#if (!xNET472)
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Fody;
+
+using Verify;
 
 using VerifyXunit;
 
@@ -11,6 +12,14 @@ using Xunit.Abstractions;
 public class ApprovedTests :
     VerifyBase
 {
+    private static readonly VerifySettings _uniqueForRuntime;
+
+    static ApprovedTests()
+    {
+        _uniqueForRuntime = new VerifySettings();
+        _uniqueForRuntime.UniqueForRuntime();
+    }
+
     public ApprovedTests(ITestOutputHelper output) :
         base(output)
     {
@@ -19,13 +28,13 @@ public class ApprovedTests :
     [Fact]
     public Task ClassWithNullableContext1()
     {
-        return Verify(Decompile<ClassWithNullableContext1>());
+        return Verify(Decompile<ClassWithNullableContext1>(), _uniqueForRuntime);
     }
 
     [Fact]
     public Task ClassWithNullableContext2()
     {
-        return Verify(Decompile<ClassWithNullableContext2>());
+        return Verify(Decompile<ClassWithNullableContext2>(), _uniqueForRuntime);
     }
 
     [Fact]
@@ -37,7 +46,7 @@ public class ApprovedTests :
     [Fact]
     public Task ClassWithGenericNestedClass()
     {
-        return Verify(Decompile<ClassWithGenericNestedClass>());
+        return Verify(Decompile<ClassWithGenericNestedClass>(), _uniqueForRuntime);
     }
 
     [Fact]
@@ -49,7 +58,7 @@ public class ApprovedTests :
     [Fact]
     public Task ClassWithRefReturns()
     {
-        return Verify(Decompile<ClassWithRefReturns>());
+        return Verify(Decompile<ClassWithRefReturns>(), _uniqueForRuntime);
     }
 
     string Decompile<T>()
@@ -58,5 +67,3 @@ public class ApprovedTests :
             .Replace("[netstandard]", "[mscorlib]");
     }
 }
-
-#endif
