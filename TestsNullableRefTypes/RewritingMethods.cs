@@ -53,12 +53,14 @@ public class RewritingMethods :
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
 
+    #if NETCOREAPP
     [Fact]
     public void RequiresNonNullRefReturnValueFromNonNullGeneric()
     {
         var sample = new ClassWithRefReturns.GenericNonNull<string>();
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
+    #endif
 
     [Fact]
     public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
