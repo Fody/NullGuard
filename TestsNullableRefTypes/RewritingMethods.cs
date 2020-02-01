@@ -53,7 +53,7 @@ public class RewritingMethods :
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
 
-    #if NETCOREAPP
+    #if NETCOREAPP // TODO: Reenable this test when ClassWithRefReturns.GenericNonNull<string>() passes PEVerify
     [Fact]
     public void RequiresNonNullRefReturnValueFromNonNullGeneric()
     {

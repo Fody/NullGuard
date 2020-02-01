@@ -24,7 +24,7 @@ public class ClassWithRefReturns
         }
     }
 
-    #if NETSTANDARD2_1
+    #if NETSTANDARD2_1 // TODO: Check why this causes PEVerify to fail on Net472
     public class GenericNonNull<T> where T : notnull
     {
         private T _value = default!;
