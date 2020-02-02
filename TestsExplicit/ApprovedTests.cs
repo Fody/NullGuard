@@ -186,7 +186,6 @@ public class ApprovedTests :
 
     private string Decompile(string item)
     {
-        return Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, item)
-            .Replace("[System.Private.CoreLib]", "[netstandard]");
+        return Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, item);
     }
 }
