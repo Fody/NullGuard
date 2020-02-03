@@ -49,7 +49,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
             ValidationFlags = (ValidationFlags)nullGuardAttribute.ConstructorArguments[0].Value;
         }
 
-        LogInfo($"Mode={nullGuardMode}, ValidationFlags={ValidationFlags}");
+        WriteInfo($"Mode={nullGuardMode}, ValidationFlags={ValidationFlags}");
 
         FindReferences();
         var types = GetTypesToProcess();
@@ -137,13 +137,13 @@ public partial class ModuleWeaver: BaseModuleWeaver
             {
                 if (method.ContainsAllowNullAttribute())
                 {
-                    LogError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
+                    WriteError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
                 }
                 foreach (var parameter in method.Parameters)
                 {
                     if (parameter.ContainsAllowNullAttribute())
                     {
-                        LogError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
+                        WriteError($"Method '{method.FullName}' is abstract but has a [AllowNullAttribute]. Remove this attribute.");
                     }
                 }
             }
@@ -208,11 +208,11 @@ public partial class ModuleWeaver: BaseModuleWeaver
         var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "NullGuard");
         if (referenceToRemove == null)
         {
-            LogInfo("\tNo reference to 'NullGuard.dll' found. References not modified.");
+            WriteInfo("\tNo reference to 'NullGuard.dll' found. References not modified.");
             return;
         }
 
         ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
-        LogInfo("\tRemoving reference to 'NullGuard.dll'.");
+        WriteInfo("\tRemoving reference to 'NullGuard.dll'.");
     }
 }

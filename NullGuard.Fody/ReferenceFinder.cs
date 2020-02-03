@@ -10,7 +10,7 @@ public partial class ModuleWeaver
 
     public void FindReferences()
     {
-        var argumentNullException = FindType("ArgumentNullException");
+        var argumentNullException = FindTypeDefinition("ArgumentNullException");
         ArgumentNullExceptionConstructor = ModuleDefinition.ImportReference(
             argumentNullException.Methods.First(x =>
                 x.IsConstructor &&
@@ -23,7 +23,7 @@ public partial class ModuleWeaver
                 x.Parameters[0].ParameterType.Name == "String" &&
                 x.Parameters[1].ParameterType.Name == "String"));
 
-        var invalidOperationException = FindType("InvalidOperationException");
+        var invalidOperationException = FindTypeDefinition("InvalidOperationException");
         InvalidOperationExceptionConstructor = ModuleDefinition.ImportReference(
             invalidOperationException.Methods.First(x =>
                 x.IsConstructor &&
@@ -31,7 +31,7 @@ public partial class ModuleWeaver
                 x.Parameters[0].ParameterType.Name == "String"));
 
 
-        var debug = FindType("Debug");
+        var debug = FindTypeDefinition("Debug");
         DebugAssertMethod = ModuleDefinition.ImportReference(
             debug.Methods.First(x =>
                 x.IsStatic &&
