@@ -34,17 +34,7 @@ public partial class ModuleWeaver
 
         if (methodReturnType != null)
         {
-            if (methodReturnType.IsByReference)
-            {
-                instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-                methodReturnType = methodReturnType.GetElementType();
-            }
-
-            if (methodReturnType.GetElementType().NeedsBoxing())
-            {
-                // Generic parameters must be boxed before access
-                instructions.Add(Instruction.Create(OpCodes.Box, methodReturnType));
-            }
+            PrepareStackValue(instructions, methodReturnType);
         }
     }
 
@@ -53,30 +43,7 @@ public partial class ModuleWeaver
         // Load the argument onto the stack
         instructions.Add(Instruction.Create(OpCodes.Ldarg, parameter));
 
-        var parameterType = parameter.ParameterType;
-        var elementType = parameterType.GetElementType();
-
-        if (parameterType.IsByReference)
-        {
-            if (elementType.NeedsBoxing())
-            {
-                // Loads an object reference onto the stack
-                instructions.Add(Instruction.Create(OpCodes.Ldobj, elementType));
-                // Box the type to an object
-                instructions.Add(Instruction.Create(OpCodes.Box, elementType));
-                return;
-            }
-
-            // Loads an object reference onto the stack
-            instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
-            return;
-        }
-
-        if (elementType.NeedsBoxing())
-        {
-            // Box the type to an object
-            instructions.Add(Instruction.Create(OpCodes.Box, parameterType));
-        }
+        PrepareStackValue(instructions, parameter.ParameterType);
     }
 
     public void LoadArgumentNullException(List<Instruction> instructions, string valueName, string errorString)
@@ -106,5 +73,32 @@ public partial class ModuleWeaver
         instructions.Add(Instruction.Create(OpCodes.Brtrue_S, returnInstruction));
 
         trueBlock(instructions);
+    }
+
+    private static void PrepareStackValue(List<Instruction> instructions, TypeReference valueType)
+    {
+        var elementType = valueType.GetElementType();
+
+        if (valueType.IsByReference)
+        {
+            if (elementType.NeedsBoxing())
+            {
+                // Loads an object reference onto the stack
+                instructions.Add(Instruction.Create(OpCodes.Ldobj, elementType));
+                // Box the type to an object
+                instructions.Add(Instruction.Create(OpCodes.Box, elementType));
+                return;
+            }
+
+            // Loads an object reference onto the stack
+            instructions.Add(Instruction.Create(OpCodes.Ldind_Ref));
+            return;
+        }
+
+        if (elementType.NeedsBoxing())
+        {
+            // Box the type to an object
+            instructions.Add(Instruction.Create(OpCodes.Box, valueType));
+        }
     }
 }

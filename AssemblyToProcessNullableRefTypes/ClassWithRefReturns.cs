@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 public class ClassWithRefReturns
 {
@@ -24,16 +25,19 @@ public class ClassWithRefReturns
         }
     }
 
-    #if NETSTANDARD2_1 // TODO: Check why this causes PEVerify to fail on Net472
     public class GenericNonNull<T> where T : notnull
     {
         private T _value = default!;
+
+        public GenericNonNull([AllowNull] T value)
+        {
+            _value = value;
+        }
 
         public ref T GetNonNullRef()
         {
             return ref _value;
         }
     }
-    #endif
 }
 

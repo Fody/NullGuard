@@ -53,14 +53,19 @@ public class RewritingMethods :
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
 
-    #if NETCOREAPP // TODO: Reenable this test when ClassWithRefReturns.GenericNonNull<string>() passes PEVerify
     [Fact]
     public void RequiresNonNullRefReturnValueFromNonNullGeneric()
     {
-        var sample = new ClassWithRefReturns.GenericNonNull<string>();
+        var sample = new ClassWithRefReturns.GenericNonNull<string>(null);
         var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
-    #endif
+
+    [Fact]
+    public void AllowsNonNullRefReturnValueFromNonNullGeneric()
+    {
+        var sample = new ClassWithRefReturns.GenericNonNull<string>(string.Empty);
+        sample.GetNonNullRef();
+    }
 
     [Fact]
     public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
