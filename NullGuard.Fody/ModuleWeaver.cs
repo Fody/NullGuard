@@ -60,7 +60,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         FindReferences();
         var types = GetTypesToProcess();
 
-        nullabilityAnalyzer.CheckForBadAttributes(types, LogError);
+        nullabilityAnalyzer.CheckForBadAttributes(types, WriteError);
         ProcessAssembly(types);
         RemoveAttributes(types);
         RemoveReference();
@@ -141,7 +141,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
                       DefineConstants.Any(c => c == "DEBUG") &&
                       DebugAssertMethod != null;
 
-        LogInfo("Debug=" + isDebug);
+        WriteInfo("Debug=" + isDebug);
 
         foreach (var type in types)
         {
