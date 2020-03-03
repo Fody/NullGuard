@@ -13,7 +13,6 @@ $failed = $false
 # Find each test project and run tests and upload results to AppVeyor
 Get-ChildItem .\**\*.csproj -Recurse | 
     Where-Object { $_.Name.StartsWith("Tests") } |
-    Where-Object { $_.BaseName -ne "TestsExplicit" } |
     ForEach-Object { 
 
         # Run dotnet test on the project and output the results in mstest format (also works for other frameworks like nunit)
