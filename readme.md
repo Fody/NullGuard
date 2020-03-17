@@ -291,7 +291,7 @@ public class Sample
 
 ```
 
-See https://docs.microsoft.com/en-us/dotnet/csharp/nullable-attributes for more information on the available nullable reference type attributes.
+See [the documentation](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-attributes) for more information on the available nullable reference type attributes.
 
 NullGuard adds a special annotation `[MaybeNullTaskResultAttribute]` for this mode that can be used to control whether a Task result value might be null in situations where this currently isn't possible with NRTs:
 
