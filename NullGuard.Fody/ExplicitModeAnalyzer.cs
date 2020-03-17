@@ -81,11 +81,11 @@ public static class ExplicitModeExtensions
     const string ItemNotNullAttributeTypeName = "ItemNotNullAttribute";
     const string CanBeNullAttributeTypeName = "CanBeNullAttribute";
     const string JetBrainsAnnotationsAssemblyName = "JetBrains.Annotations";
-    const string NullableAttributeFullName = "System.Runtime.CompilerServices.NullableAttribute";
+    const string NullableContextAttributeFullName = "System.Runtime.CompilerServices.NullableContextAttribute";
 
     public static NullGuardMode AutoDetectMode(this ModuleDefinition moduleDefinition)
     {
-        if (moduleDefinition.GetTypes().Any(typeDefinition => typeDefinition.CustomAttributes.Any(attr => attr.AttributeType.FullName == NullableAttributeFullName)))
+        if (moduleDefinition.GetTypes().Any(typeDefinition => typeDefinition.CustomAttributes.Any(attr => attr.AttributeType.FullName == NullableContextAttributeFullName)))
         {
             return NullGuardMode.NullableReferenceTypes;
         }
