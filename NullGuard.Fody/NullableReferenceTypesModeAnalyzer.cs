@@ -186,7 +186,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
                ?? GetContextAllowsNull(method.DeclaringType);
     }
 
-    static bool? GetContextAllowsNull(TypeDefinition type)
+    static bool? GetContextAllowsNull(TypeDefinition? type)
     {
         if (type == null)
             return null;
@@ -197,11 +197,17 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     static bool ContainsAttribute(ICustomAttributeProvider customAttributeProvider, string fullName)
     {
+        if (!customAttributeProvider.HasCustomAttributes)
+            return false;
+
         return customAttributeProvider.CustomAttributes.Any(a => a.AttributeType.FullName == fullName);
     }
 
     static bool ContainsAnyAttribute(ICustomAttributeProvider customAttributeProvider, params string[] fullNames)
     {
+        if (!customAttributeProvider.HasCustomAttributes)
+            return false;
+
         return fullNames.Any(n => ContainsAttribute(customAttributeProvider, n));
     }
 
@@ -220,6 +226,9 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index)
     {
+        if (!customAttributeProvider.HasCustomAttributes)
+            return Nullable.Unknown;
+
         var attribute = customAttributeProvider.CustomAttributes
             .SingleOrDefault(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1);
 

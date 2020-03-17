@@ -31,7 +31,7 @@ public class ClassWithRefReturns
 
         public GenericNonNull([AllowNull] T value)
         {
-            _value = value;
+            _value = value!;
         }
 
         public ref T GetNonNullRef()
