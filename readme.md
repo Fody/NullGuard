@@ -32,7 +32,7 @@ NullGuard supports three modes of operations, [*implicit*](#implicit-mode), [*ex
 
  * In [*implicit*](#implicit-mode) mode everything is assumed to be not-null, unless attributed with `[AllowNull]`. This is how NullGuard has been working always.
  * In [*explicit*](#explicit-mode) mode everything is assumed to be nullable, unless attributed with `[NotNull]`. This mode is designed to support the R# nullability analysis, using pessimistic mode.
- * In the new [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type (NRT) annotations are used to determine if a type may be null.
+ * In [*nullable reference types*](#nrt-mode) mode the C# 8 nullable reference type (NRT) annotations are used to determine if a type may be null.
 
 If not configured explicitly, NullGuard will auto-detect the mode as follows:
 
