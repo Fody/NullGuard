@@ -1,18 +1,8 @@
 ﻿using System;
-
-using VerifyXunit;
-
 using Xunit;
-using Xunit.Abstractions;
 
-public class RewritingProperties :
-    VerifyBase
+public class RewritingProperties
 {
-    public RewritingProperties(ITestOutputHelper output) :
-        base(output)
-    {
-    }
-
     [Fact]
     public void PropertySetterThrowForNestedGenericWithDisallowNull()
     {
@@ -144,14 +134,8 @@ public class RewritingProperties :
     }
 }
 
-public class RewritingProperties2 :
-    VerifyBase
+public class RewritingProperties2
 {
-    public RewritingProperties2(ITestOutputHelper output) :
-        base(output)
-    {
-    }
-
     [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {

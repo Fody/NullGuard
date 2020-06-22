@@ -1,9 +1,6 @@
 ﻿#pragma warning disable CS8618
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 public class ClassWithGenericNestedClass
 {

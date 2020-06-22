@@ -2,17 +2,14 @@
 using System.Linq;
 using Fody;
 using Mono.Cecil;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 public class InheritanceTests :
-    VerifyBase
+    IDisposable
 {
     ModuleDefinition module;
 
-    public InheritanceTests(ITestOutputHelper output) :
-        base(output)
+    public InheritanceTests()
     {
         var readerParameters = new ReaderParameters
         {
@@ -229,9 +226,8 @@ public class InheritanceTests :
         Assert.Equal(expected, actual);
     }
 
-    public override void Dispose()
+    public void Dispose()
     {
-        base.Dispose();
         module.Dispose();
     }
 }

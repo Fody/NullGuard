@@ -1,20 +1,11 @@
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 using VerifyXunit;
-
 using Xunit;
-using Xunit.Abstractions;
 
-public class RewritingMethods :
-    VerifyBase
+[UsesVerify]
+public class RewritingMethods
 {
-    public RewritingMethods(ITestOutputHelper output) :
-         base(output)
-    {
-    }
-
     [Fact]
     public void HandlesMethodsWithManyParameters()
     {
@@ -193,7 +184,7 @@ public class RewritingMethods :
     {
         var sample = new ClassWithNullableContext1();
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -201,7 +192,7 @@ public class RewritingMethods :
     {
         var sample = new ClassWithNullableContext2();
         var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]

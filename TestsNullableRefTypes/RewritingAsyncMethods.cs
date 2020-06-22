@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using VerifyXunit;
-
 using Xunit;
-using Xunit.Abstractions;
 
-public class RewritingAsyncMethods : VerifyBase
+public class RewritingAsyncMethods
 {
-    public RewritingAsyncMethods(ITestOutputHelper output) :
-         base(output)
-    {
-    }
-
     [Fact]
     public async void RequiresNonNullConcreteTypeAsync()
     {

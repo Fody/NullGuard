@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class RewritingProperties:
-    VerifyBase
+[UsesVerify]
+public class RewritingProperties
 {
     [Fact]
     public Task PropertySetterRequiresNonNullArgument()
@@ -13,7 +12,7 @@ public class RewritingProperties:
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -28,7 +27,7 @@ public class RewritingProperties:
 
             // ReSharper restore UnusedVariable
         });
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -43,7 +42,7 @@ public class RewritingProperties:
 
             // ReSharper restore UnusedVariable
         });
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -53,7 +52,7 @@ public class RewritingProperties:
         var sample = (dynamic)Activator.CreateInstance(type);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -69,7 +68,7 @@ public class RewritingProperties:
 
             // ReSharper restore UnusedVariable
         });
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -95,10 +94,5 @@ public class RewritingProperties:
         var classToExclude = (dynamic) Activator.CreateInstance(type, "");
         classToExclude.Property = null;
         string result = classToExclude.Property;
-    }
-
-    public RewritingProperties(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

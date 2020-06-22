@@ -281,7 +281,7 @@ IL_006a:  ldloca.s   V_2
 IL_006c:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::AwaitUnsafeOnCompleted<valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter,class SpecialClass/'<SomeMethodAsync>d__1'>(!!0&,
 !!1&)
 IL_0071:  nop
-IL_0072:  leave.s    IL_00c6
+IL_0072:  leave.s    IL_00d4
 IL_0074:  ldarg.0
 IL_0075:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter SpecialClass/'<SomeMethodAsync>d__1'::'<>u__1'
 IL_007a:  stloc.1
@@ -296,7 +296,7 @@ IL_008b:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
 IL_0090:  ldloca.s   V_1
 IL_0092:  call       instance void [netstandard]System.Runtime.CompilerServices.TaskAwaiter::GetResult()
 IL_0097:  nop
-IL_0098:  leave.s    IL_00b2
+IL_0098:  leave.s    IL_00b9
 }  // end .try
 catch [netstandard]System.Exception
 {
@@ -305,20 +305,26 @@ IL_009b:  ldarg.0
 IL_009c:  ldc.i4.s   -2
 IL_009e:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
 IL_00a3:  ldarg.0
-IL_00a4:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
-IL_00a9:  ldloc.3
-IL_00aa:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetException(class [netstandard]System.Exception)
-IL_00af:  nop
-IL_00b0:  leave.s    IL_00c6
+IL_00a4:  ldnull
+IL_00a5:  stfld      class SpecialClass/'<>c__DisplayClass1_0' SpecialClass/'<SomeMethodAsync>d__1'::'<>8__1'
+IL_00aa:  ldarg.0
+IL_00ab:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_00b0:  ldloc.3
+IL_00b1:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetException(class [netstandard]System.Exception)
+IL_00b6:  nop
+IL_00b7:  leave.s    IL_00d4
 }  // end handler
-IL_00b2:  ldarg.0
-IL_00b3:  ldc.i4.s   -2
-IL_00b5:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
-IL_00ba:  ldarg.0
-IL_00bb:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
-IL_00c0:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetResult()
-IL_00c5:  nop
-IL_00c6:  ret
+IL_00b9:  ldarg.0
+IL_00ba:  ldc.i4.s   -2
+IL_00bc:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
+IL_00c1:  ldarg.0
+IL_00c2:  ldnull
+IL_00c3:  stfld      class SpecialClass/'<>c__DisplayClass1_0' SpecialClass/'<SomeMethodAsync>d__1'::'<>8__1'
+IL_00c8:  ldarg.0
+IL_00c9:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_00ce:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::SetResult()
+IL_00d3:  nop
+IL_00d4:  ret
 }
 .method private hidebysig newslot virtual final
 instance void  SetStateMachine(class [netstandard]System.Runtime.CompilerServices.IAsyncStateMachine stateMachine) cil managed
@@ -392,7 +398,7 @@ IL_0006:  stloc.0
 IL_0007:  ldloc.0
 IL_0008:  brfalse.s  IL_000c
 IL_000a:  br.s       IL_000e
-IL_000c:  br.s       IL_0074
+IL_000c:  br.s       IL_0077
 IL_000e:  ldarg.0
 IL_000f:  newobj     instance void SpecialClass/'<>c__DisplayClass2_0'::.ctor()
 IL_0014:  stfld      class SpecialClass/'<>c__DisplayClass2_0' SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>8__1'
@@ -412,7 +418,7 @@ IL_0041:  callvirt   instance valuetype [netstandard]System.Runtime.CompilerServ
 IL_0046:  stloc.2
 IL_0047:  ldloca.s   V_2
 IL_0049:  call       instance bool valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>::get_IsCompleted()
-IL_004e:  brtrue.s   IL_0090
+IL_004e:  brtrue.s   IL_0093
 IL_0050:  ldarg.0
 IL_0051:  ldc.i4.0
 IL_0052:  dup
@@ -430,58 +436,64 @@ IL_006a:  ldloca.s   V_3
 IL_006c:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::AwaitUnsafeOnCompleted<valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>,class SpecialClass/'<MethodWithReturnValueAsync>d__2'>(!!0&,
 !!1&)
 IL_0071:  nop
-IL_0072:  leave.s    IL_00e9
-IL_0074:  ldarg.0
-IL_0075:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>u__1'
-IL_007a:  stloc.2
-IL_007b:  ldarg.0
-IL_007c:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>u__1'
-IL_0081:  initobj    valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>
-IL_0087:  ldarg.0
-IL_0088:  ldc.i4.m1
-IL_0089:  dup
-IL_008a:  stloc.0
-IL_008b:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
-IL_0090:  ldarg.0
-IL_0091:  ldloca.s   V_2
-IL_0093:  call       instance !0 valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>::GetResult()
-IL_0098:  stfld      string SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>s__2'
-IL_009d:  ldarg.0
-IL_009e:  ldfld      string SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>s__2'
-IL_00a3:  stloc.1
-IL_00a4:  leave.s    IL_00c0
+IL_0072:  leave      IL_00fa
+IL_0077:  ldarg.0
+IL_0078:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>u__1'
+IL_007d:  stloc.2
+IL_007e:  ldarg.0
+IL_007f:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>u__1'
+IL_0084:  initobj    valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>
+IL_008a:  ldarg.0
+IL_008b:  ldc.i4.m1
+IL_008c:  dup
+IL_008d:  stloc.0
+IL_008e:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
+IL_0093:  ldarg.0
+IL_0094:  ldloca.s   V_2
+IL_0096:  call       instance !0 valuetype [netstandard]System.Runtime.CompilerServices.TaskAwaiter`1<string>::GetResult()
+IL_009b:  stfld      string SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>s__2'
+IL_00a0:  ldarg.0
+IL_00a1:  ldfld      string SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>s__2'
+IL_00a6:  stloc.1
+IL_00a7:  leave.s    IL_00ca
 }  // end .try
 catch [netstandard]System.Exception
 {
-IL_00a6:  stloc.s    V_4
-IL_00a8:  ldarg.0
-IL_00a9:  ldc.i4.s   -2
-IL_00ab:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
-IL_00b0:  ldarg.0
-IL_00b1:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
-IL_00b6:  ldloc.s    V_4
-IL_00b8:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [netstandard]System.Exception)
-IL_00bd:  nop
-IL_00be:  leave.s    IL_00e9
+IL_00a9:  stloc.s    V_4
+IL_00ab:  ldarg.0
+IL_00ac:  ldc.i4.s   -2
+IL_00ae:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
+IL_00b3:  ldarg.0
+IL_00b4:  ldnull
+IL_00b5:  stfld      class SpecialClass/'<>c__DisplayClass2_0' SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>8__1'
+IL_00ba:  ldarg.0
+IL_00bb:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_00c0:  ldloc.s    V_4
+IL_00c2:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [netstandard]System.Exception)
+IL_00c7:  nop
+IL_00c8:  leave.s    IL_00fa
 }  // end handler
-IL_00c0:  ldarg.0
-IL_00c1:  ldc.i4.s   -2
-IL_00c3:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
-IL_00c8:  ldarg.0
-IL_00c9:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
-IL_00ce:  ldloc.1
-IL_00cf:  dup
-IL_00d0:  brtrue.s   IL_00e3
-IL_00d2:  pop
-IL_00d3:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
+IL_00ca:  ldarg.0
+IL_00cb:  ldc.i4.s   -2
+IL_00cd:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
+IL_00d2:  ldarg.0
+IL_00d3:  ldnull
+IL_00d4:  stfld      class SpecialClass/'<>c__DisplayClass2_0' SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>8__1'
+IL_00d9:  ldarg.0
+IL_00da:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_00df:  ldloc.1
+IL_00e0:  dup
+IL_00e1:  brtrue.s   IL_00f4
+IL_00e3:  pop
+IL_00e4:  ldstr      "[NullGuard] Return value of method 'System.Threadi"
 + "ng.Tasks.Task`1<System.String> SpecialClass::MethodWithReturnValueAsync"
 + "(System.Boolean)' is null."
-IL_00d8:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
-IL_00dd:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [netstandard]System.Exception)
-IL_00e2:  ret
-IL_00e3:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetResult(!0)
-IL_00e8:  nop
-IL_00e9:  ret
+IL_00e9:  newobj     instance void [netstandard]System.InvalidOperationException::.ctor(string)
+IL_00ee:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetException(class [netstandard]System.Exception)
+IL_00f3:  ret
+IL_00f4:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::SetResult(!0)
+IL_00f9:  nop
+IL_00fa:  ret
 }
 .method private hidebysig newslot virtual final
 instance void  SetStateMachine(class [netstandard]System.Runtime.CompilerServices.IAsyncStateMachine stateMachine) cil managed
@@ -691,8 +703,7 @@ string nullArg) cil managed
 .param [1]
 .param [2]
 .maxstack  2
-.locals init (class SpecialClass/'<SomeMethodAsync>d__1' V_0,
-valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder V_1)
+.locals init (class SpecialClass/'<SomeMethodAsync>d__1' V_0)
 IL_0000:  ldarg.1
 IL_0001:  brtrue.s   IL_0013
 IL_0003:  ldstr      "nonNullArg"
@@ -718,15 +729,13 @@ IL_0039:  ldloc.0
 IL_003a:  ldc.i4.m1
 IL_003b:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
 IL_0040:  ldloc.0
-IL_0041:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
-IL_0046:  stloc.1
-IL_0047:  ldloca.s   V_1
-IL_0049:  ldloca.s   V_0
-IL_004b:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Start<class SpecialClass/'<SomeMethodAsync>d__1'>(!!0&)
-IL_0050:  ldloc.0
-IL_0051:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
-IL_0056:  call       instance class [netstandard]System.Threading.Tasks.Task [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::get_Task()
-IL_005b:  ret
+IL_0041:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_0046:  ldloca.s   V_0
+IL_0048:  call       instance void [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Start<class SpecialClass/'<SomeMethodAsync>d__1'>(!!0&)
+IL_004d:  ldloc.0
+IL_004e:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_0053:  call       instance class [netstandard]System.Threading.Tasks.Task [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::get_Task()
+IL_0058:  ret
 }
 .method public hidebysig instance class [netstandard]System.Threading.Tasks.Task`1<string>
 MethodWithReturnValueAsync(bool returnNull) cil managed
@@ -735,8 +744,7 @@ MethodWithReturnValueAsync(bool returnNull) cil managed
 6E 56 61 6C 75 65 41 73 79 6E 63 3E 64 5F 5F 32   // nValueAsync>d__2
 00 00 )
 .maxstack  2
-.locals init (class SpecialClass/'<MethodWithReturnValueAsync>d__2' V_0,
-valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
+.locals init (class SpecialClass/'<MethodWithReturnValueAsync>d__2' V_0)
 IL_0000:  newobj     instance void SpecialClass/'<MethodWithReturnValueAsync>d__2'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
@@ -752,15 +760,13 @@ IL_001f:  ldloc.0
 IL_0020:  ldc.i4.m1
 IL_0021:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
 IL_0026:  ldloc.0
-IL_0027:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
-IL_002c:  stloc.1
-IL_002d:  ldloca.s   V_1
-IL_002f:  ldloca.s   V_0
-IL_0031:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<class SpecialClass/'<MethodWithReturnValueAsync>d__2'>(!!0&)
-IL_0036:  ldloc.0
-IL_0037:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
-IL_003c:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
-IL_0041:  ret
+IL_0027:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_002c:  ldloca.s   V_0
+IL_002e:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<class SpecialClass/'<MethodWithReturnValueAsync>d__2'>(!!0&)
+IL_0033:  ldloc.0
+IL_0034:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_0039:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
+IL_003e:  ret
 }
 .method public hidebysig instance class [netstandard]System.Threading.Tasks.Task`1<string>
 MethodAllowsNullReturnValueAsync() cil managed
@@ -769,8 +775,7 @@ MethodAllowsNullReturnValueAsync() cil managed
 6C 52 65 74 75 72 6E 56 61 6C 75 65 41 73 79 6E   // lReturnValueAsyn
 63 3E 64 5F 5F 33 00 00 )                         // c>d__3..
 .maxstack  2
-.locals init (class SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3' V_0,
-valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> V_1)
+.locals init (class SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3' V_0)
 IL_0000:  newobj     instance void SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
@@ -783,15 +788,13 @@ IL_0018:  ldloc.0
 IL_0019:  ldc.i4.m1
 IL_001a:  stfld      int32 SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>1__state'
 IL_001f:  ldloc.0
-IL_0020:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
-IL_0025:  stloc.1
-IL_0026:  ldloca.s   V_1
-IL_0028:  ldloca.s   V_0
-IL_002a:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<class SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'>(!!0&)
-IL_002f:  ldloc.0
-IL_0030:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
-IL_0035:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
-IL_003a:  ret
+IL_0020:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
+IL_0025:  ldloca.s   V_0
+IL_0027:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Start<class SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'>(!!0&)
+IL_002c:  ldloc.0
+IL_002d:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
+IL_0032:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::get_Task()
+IL_0037:  ret
 }
 .method public hidebysig instance class [netstandard]System.Threading.Tasks.Task`1<int32>
 NoAwaitCode() cil managed
@@ -799,8 +802,7 @@ NoAwaitCode() cil managed
 3C 4E 6F 41 77 61 69 74 43 6F 64 65 3E 64 5F 5F   // <NoAwaitCode>d__
 34 00 00 )                                        // 4..
 .maxstack  2
-.locals init (class SpecialClass/'<NoAwaitCode>d__4' V_0,
-valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> V_1)
+.locals init (class SpecialClass/'<NoAwaitCode>d__4' V_0)
 IL_0000:  newobj     instance void SpecialClass/'<NoAwaitCode>d__4'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
@@ -813,15 +815,13 @@ IL_0018:  ldloc.0
 IL_0019:  ldc.i4.m1
 IL_001a:  stfld      int32 SpecialClass/'<NoAwaitCode>d__4'::'<>1__state'
 IL_001f:  ldloc.0
-IL_0020:  ldfld      valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
-IL_0025:  stloc.1
-IL_0026:  ldloca.s   V_1
-IL_0028:  ldloca.s   V_0
-IL_002a:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Start<class SpecialClass/'<NoAwaitCode>d__4'>(!!0&)
-IL_002f:  ldloc.0
-IL_0030:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
-IL_0035:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::get_Task()
-IL_003a:  ret
+IL_0020:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
+IL_0025:  ldloca.s   V_0
+IL_0027:  call       instance void valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Start<class SpecialClass/'<NoAwaitCode>d__4'>(!!0&)
+IL_002c:  ldloc.0
+IL_002d:  ldflda     valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
+IL_0032:  call       instance class [netstandard]System.Threading.Tasks.Task`1<!0> valuetype [netstandard]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::get_Task()
+IL_0037:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed

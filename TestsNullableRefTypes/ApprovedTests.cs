@@ -1,64 +1,54 @@
 ﻿using System.Threading.Tasks;
-
 using Fody;
-
-using Verify;
-
+using VerifyTests;
 using VerifyXunit;
-
 using Xunit;
-using Xunit.Abstractions;
 
-public class ApprovedTests :
-    VerifyBase
+[UsesVerify]
+public class ApprovedTests
 {
-    private static readonly VerifySettings _uniqueForRuntime;
+    static VerifySettings uniqueForRuntime;
 
     static ApprovedTests()
     {
-        _uniqueForRuntime = new VerifySettings();
-        _uniqueForRuntime.UniqueForRuntime();
-    }
-
-    public ApprovedTests(ITestOutputHelper output) :
-        base(output)
-    {
+        uniqueForRuntime = new VerifySettings();
+        uniqueForRuntime.UniqueForRuntime();
     }
 
     [Fact]
     public Task ClassWithNullableContext1()
     {
-        return Verify(Decompile<ClassWithNullableContext1>(), _uniqueForRuntime);
+        return Verifier.Verify(Decompile<ClassWithNullableContext1>(), uniqueForRuntime);
     }
 
     [Fact]
     public Task ClassWithNullableContext2()
     {
-        return Verify(Decompile<ClassWithNullableContext2>(), _uniqueForRuntime);
+        return Verifier.Verify(Decompile<ClassWithNullableContext2>(), uniqueForRuntime);
     }
 
     [Fact]
     public Task ClassWithNullableReferenceMethod()
     {
-        return Verify(Decompile<ClassWithNullableReferenceMethod>());
+        return Verifier.Verify(Decompile<ClassWithNullableReferenceMethod>());
     }
 
     [Fact]
     public Task ClassWithGenericNestedClass()
     {
-        return Verify(Decompile<ClassWithGenericNestedClass>(), _uniqueForRuntime);
+        return Verifier.Verify(Decompile<ClassWithGenericNestedClass>(), uniqueForRuntime);
     }
 
     [Fact]
     public Task ClassWithAsyncMethods()
     {
-        return Verify(Decompile<ClassWithAsyncMethods>());
+        return Verifier.Verify(Decompile<ClassWithAsyncMethods>());
     }
 
     [Fact]
     public Task ClassWithRefReturns()
     {
-        return Verify(Decompile<ClassWithRefReturns>(), _uniqueForRuntime);
+        return Verifier.Verify(Decompile<ClassWithRefReturns>(), uniqueForRuntime);
     }
 
     string Decompile<T>()

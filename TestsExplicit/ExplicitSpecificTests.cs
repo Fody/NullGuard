@@ -2,11 +2,8 @@
 using Xunit;
 using System;
 using System.Collections.Generic;
-using VerifyXunit;
-using Xunit.Abstractions;
 
-public class ExplicitSpecificTests :
-    VerifyBase
+public class ExplicitSpecificTests
 {
     public static IEnumerable<object[]> GetFixtureArgs
     {
@@ -105,10 +102,5 @@ public class ExplicitSpecificTests :
         var sample = (dynamic) Activator.CreateInstance(type);
         sample.NotNullProperty = "Test";
         string value = sample.NotNullProperty;
-    }
-
-    public ExplicitSpecificTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

@@ -2,10 +2,9 @@ using System;
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class RewritingIndexers :
-    VerifyBase
+[UsesVerify]
+public class RewritingIndexers
 {
     [Fact]
     public Task NonNullableIndexerSetterWithFirstArgumentNull()
@@ -13,7 +12,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: null, nonNullParam2: null] = "value");
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -22,7 +21,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: null] = "value");
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -31,7 +30,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => instance[nonNullParam1: "arg 1", nonNullParam2: "arg 2"] = null);
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -48,7 +47,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: null, nonNullParam2: null]));
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -57,7 +56,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("NonNullable"));
         var exception = Assert.Throws<ArgumentNullException>(() => IgnoreValue(instance[nonNullParam1: "arg 1", nonNullParam2: null]));
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -74,7 +73,7 @@ public class RewritingIndexers :
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("PassThroughGetterReturnValue"));
         var exception = Assert.Throws<InvalidOperationException>(() => IgnoreValue(instance[returnValue: null]));
-        return Verify(exception.Message);
+        return Verifier.Verify(exception.Message);
     }
 
     [Fact]
@@ -103,11 +102,6 @@ public class RewritingIndexers :
 
     // ReSharper disable once UnusedParameter.Local
     void IgnoreValue(object value)
-    {
-    }
-
-    public RewritingIndexers(ITestOutputHelper output) : 
-        base(output)
     {
     }
 }

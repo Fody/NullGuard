@@ -262,8 +262,7 @@ GetThing2(class [mscorlib]System.Func`1<!T> getThing) cil managed
 31 2B 3C 47 65 74 54 68 69 6E 67 32 3E 64 5F 5F   // 1+<GetThing2>d__
 31 32 00 00 )                                     // 12..
 .maxstack  2
-.locals init (valuetype GenericClass`1/'<GetThing2>d__12'<!T> V_0,
-valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T> V_1)
+.locals init (valuetype GenericClass`1/'<GetThing2>d__12'<!T> V_0)
 IL_0000:  ldarg.1
 IL_0001:  brtrue.s   IL_0013
 IL_0003:  ldstr      "getThing"
@@ -280,16 +279,14 @@ IL_0022:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTa
 IL_0027:  ldloca.s   V_0
 IL_0029:  ldc.i4.m1
 IL_002a:  stfld      int32 valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>1__state'
-IL_002f:  ldloc.0
-IL_0030:  ldfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
-IL_0035:  stloc.1
-IL_0036:  ldloca.s   V_1
-IL_0038:  ldloca.s   V_0
-IL_003a:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::Start<valuetype GenericClass`1/'<GetThing2>d__12'<!0>>(!!0&)
-IL_003f:  ldloca.s   V_0
-IL_0041:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
-IL_0046:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::get_Task()
-IL_004b:  ret
+IL_002f:  ldloca.s   V_0
+IL_0031:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
+IL_0036:  ldloca.s   V_0
+IL_0038:  call       instance void valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::Start<valuetype GenericClass`1/'<GetThing2>d__12'<!0>>(!!0&)
+IL_003d:  ldloca.s   V_0
+IL_003f:  ldflda     valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
+IL_0044:  call       instance class [mscorlib]System.Threading.Tasks.Task`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::get_Task()
+IL_0049:  ret
 }
 .method public hidebysig specialname rtspecialname
 instance void  .ctor() cil managed
