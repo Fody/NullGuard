@@ -124,7 +124,7 @@ static class CecilExtensions
         if (genericParameter.HasNotNullableValueTypeConstraint)
             return true;
 
-        if (genericParameter.HasReferenceTypeConstraint || genericParameter.HasConstraints)
+        if (genericParameter.HasReferenceTypeConstraint)
             return false;
 
         return true;
