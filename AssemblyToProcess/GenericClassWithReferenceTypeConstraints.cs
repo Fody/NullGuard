@@ -21,6 +21,10 @@ public class GenericClassWithReferenceTypeConstraints<T> where T: class
         return default(U);
     }
 
+    public void GenericMethodVoid<U>(T t, U u) where U: IList
+    {
+    }
+
     public U GenericMethodReturnsParameter<U>(T t, [AllowNull] U u) where U: IList
     {
         return u;

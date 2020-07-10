@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 using Xunit;
@@ -58,7 +59,7 @@ public class RewritingGenerics
             Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = nullValue),
             Assert.Throws<InvalidOperationException>(() => sample.NonNullProperty)
         };
-        
+
         sample.NonNullProperty = notNullValue;
         Assert.Equal(notNullValue, sample.NonNullProperty);
 
@@ -87,7 +88,7 @@ public class RewritingGenerics
         var messages = exceptions.Select(ex => ex.Message.Replace(Environment.NewLine, "|"));
         var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");
 
-        Assert.Equal(expected.Replace("\r\n","\n"), signature.Replace("\r\n", "\n"));
+        Assert.Equal(expected.Replace("\r\n", "\n"), signature.Replace("\r\n", "\n"));
     }
 
     [Fact]
@@ -101,5 +102,26 @@ public class RewritingGenerics
 
         result = factory.GetThingAsync2();
         Assert.Equal(0, result);
+    }
+
+    [Fact]
+    void GenericClassWithTypeConstraintDoesNotThrow()
+    {
+        var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassWithReferenceTypeConstraintsFactory");
+        var factory = (dynamic)Activator.CreateInstance(factoryType);
+        var sample = factory.Object;
+
+        sample.GenericMethodVoid("test", Array.Empty<string>());
+        sample.GenericMethodVoid("test", ImmutableArray<string>.Empty);
+    }
+
+    [Fact]
+    void GenericClassWithValueTypeConstraintDoesNotThrow()
+    {
+        var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassWithValueTypeConstraintsFactory");
+        var factory = (dynamic)Activator.CreateInstance(factoryType);
+        var sample = factory.Integer;
+
+        sample.GenericMethod(42, 42m);
     }
 }
