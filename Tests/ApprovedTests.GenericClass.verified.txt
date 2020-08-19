@@ -271,11 +271,11 @@ IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor
 string)
 IL_0012:  throw
 IL_0013:  ldloca.s   V_0
-IL_0015:  ldarg.1
-IL_0016:  stfld      class [mscorlib]System.Func`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::getThing
-IL_001b:  ldloca.s   V_0
-IL_001d:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::Create()
-IL_0022:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
+IL_0015:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!T>::Create()
+IL_001a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>t__builder'
+IL_001f:  ldloca.s   V_0
+IL_0021:  ldarg.1
+IL_0022:  stfld      class [mscorlib]System.Func`1<!0> valuetype GenericClass`1/'<GetThing2>d__12'<!T>::getThing
 IL_0027:  ldloca.s   V_0
 IL_0029:  ldc.i4.m1
 IL_002a:  stfld      int32 valuetype GenericClass`1/'<GetThing2>d__12'<!T>::'<>1__state'
