@@ -1,5 +1,5 @@
 [
   'Mode=Explicit, ValidationFlags=AllPublic',
   'Debug=False',
-  '\tRemoving reference to \'NullGuard.dll\'.'
+  "\tRemoving reference to 'NullGuard.dll'."
 ]

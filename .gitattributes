@@ -1,9 +1,8 @@
 # Auto detect text files and perform LF normalization
-* text 
+* text
 
-*.xml          -text 
+*.xml          -text
 *.targets      -text
-*.approved.txt -text
 
 
 # Custom for Visual Studio
