@@ -61,12 +61,13 @@ public class ApprovedTests
     {
         return Verifier.Verify(Decompile("XamlMetadataProvider"), settings);
     }
-
+#if DEBUG
     [Fact]
     public Task SpecialClass()
     {
         return Verifier.Verify(Decompile("SpecialClass"), settings);
     }
+#endif
 
     [Fact]
     public Task PublicNestedInsideNonPublic()
