@@ -26,11 +26,13 @@ public class ApprovedTests
         return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
     }
 
+#if DEBUG
     [Fact]
     public Task GenericClass()
     {
         return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
     }
+#endif
 
     [Fact]
     public Task GenericClassWithValueTypeConstraint()
