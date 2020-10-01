@@ -714,17 +714,17 @@ IL_0012:  throw
 IL_0013:  newobj     instance void SpecialClass/'<SomeMethodAsync>d__1'::.ctor()
 IL_0018:  stloc.0
 IL_0019:  ldloc.0
-IL_001a:  ldarg.0
-IL_001b:  stfld      class SpecialClass SpecialClass/'<SomeMethodAsync>d__1'::'<>4__this'
-IL_0020:  ldloc.0
-IL_0021:  ldarg.1
-IL_0022:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nonNullArg
-IL_0027:  ldloc.0
-IL_0028:  ldarg.2
-IL_0029:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nullArg
-IL_002e:  ldloc.0
-IL_002f:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Create()
-IL_0034:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_001a:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Create()
+IL_001f:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_0024:  ldloc.0
+IL_0025:  ldarg.0
+IL_0026:  stfld      class SpecialClass SpecialClass/'<SomeMethodAsync>d__1'::'<>4__this'
+IL_002b:  ldloc.0
+IL_002c:  ldarg.1
+IL_002d:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nonNullArg
+IL_0032:  ldloc.0
+IL_0033:  ldarg.2
+IL_0034:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nullArg
 IL_0039:  ldloc.0
 IL_003a:  ldc.i4.m1
 IL_003b:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
@@ -748,14 +748,14 @@ MethodWithReturnValueAsync(bool returnNull) cil managed
 IL_0000:  newobj     instance void SpecialClass/'<MethodWithReturnValueAsync>d__2'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
-IL_0007:  ldarg.0
-IL_0008:  stfld      class SpecialClass SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>4__this'
-IL_000d:  ldloc.0
-IL_000e:  ldarg.1
-IL_000f:  stfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__2'::returnNull
-IL_0014:  ldloc.0
-IL_0015:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
-IL_001a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_0007:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
+IL_000c:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_0011:  ldloc.0
+IL_0012:  ldarg.0
+IL_0013:  stfld      class SpecialClass SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>4__this'
+IL_0018:  ldloc.0
+IL_0019:  ldarg.1
+IL_001a:  stfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__2'::returnNull
 IL_001f:  ldloc.0
 IL_0020:  ldc.i4.m1
 IL_0021:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'
@@ -779,11 +779,11 @@ MethodAllowsNullReturnValueAsync() cil managed
 IL_0000:  newobj     instance void SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
-IL_0007:  ldarg.0
-IL_0008:  stfld      class SpecialClass SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>4__this'
-IL_000d:  ldloc.0
-IL_000e:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
-IL_0013:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
+IL_0007:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
+IL_000c:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>t__builder'
+IL_0011:  ldloc.0
+IL_0012:  ldarg.0
+IL_0013:  stfld      class SpecialClass SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>4__this'
 IL_0018:  ldloc.0
 IL_0019:  ldc.i4.m1
 IL_001a:  stfld      int32 SpecialClass/'<MethodAllowsNullReturnValueAsync>d__3'::'<>1__state'
@@ -806,11 +806,11 @@ NoAwaitCode() cil managed
 IL_0000:  newobj     instance void SpecialClass/'<NoAwaitCode>d__4'::.ctor()
 IL_0005:  stloc.0
 IL_0006:  ldloc.0
-IL_0007:  ldarg.0
-IL_0008:  stfld      class SpecialClass SpecialClass/'<NoAwaitCode>d__4'::'<>4__this'
-IL_000d:  ldloc.0
-IL_000e:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Create()
-IL_0013:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
+IL_0007:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32>::Create()
+IL_000c:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<int32> SpecialClass/'<NoAwaitCode>d__4'::'<>t__builder'
+IL_0011:  ldloc.0
+IL_0012:  ldarg.0
+IL_0013:  stfld      class SpecialClass SpecialClass/'<NoAwaitCode>d__4'::'<>4__this'
 IL_0018:  ldloc.0
 IL_0019:  ldc.i4.m1
 IL_001a:  stfld      int32 SpecialClass/'<NoAwaitCode>d__4'::'<>1__state'

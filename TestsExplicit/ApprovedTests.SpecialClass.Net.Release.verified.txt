@@ -599,11 +599,11 @@ IL_000d:  newobj     instance void [mscorlib]System.ArgumentNullException::.ctor
 string)
 IL_0012:  throw
 IL_0013:  ldloca.s   V_0
-IL_0015:  ldarg.1
-IL_0016:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nonNullArg
-IL_001b:  ldloca.s   V_0
-IL_001d:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Create()
-IL_0022:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_0015:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder::Create()
+IL_001a:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder SpecialClass/'<SomeMethodAsync>d__1'::'<>t__builder'
+IL_001f:  ldloca.s   V_0
+IL_0021:  ldarg.1
+IL_0022:  stfld      string SpecialClass/'<SomeMethodAsync>d__1'::nonNullArg
 IL_0027:  ldloca.s   V_0
 IL_0029:  ldc.i4.m1
 IL_002a:  stfld      int32 SpecialClass/'<SomeMethodAsync>d__1'::'<>1__state'
@@ -625,11 +625,11 @@ MethodWithReturnValueAsync(bool returnNull) cil managed
 .maxstack  2
 .locals init (valuetype SpecialClass/'<MethodWithReturnValueAsync>d__2' V_0)
 IL_0000:  ldloca.s   V_0
-IL_0002:  ldarg.1
-IL_0003:  stfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__2'::returnNull
-IL_0008:  ldloca.s   V_0
-IL_000a:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
-IL_000f:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_0002:  call       valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<!0> valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>::Create()
+IL_0007:  stfld      valuetype [mscorlib]System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string> SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>t__builder'
+IL_000c:  ldloca.s   V_0
+IL_000e:  ldarg.1
+IL_000f:  stfld      bool SpecialClass/'<MethodWithReturnValueAsync>d__2'::returnNull
 IL_0014:  ldloca.s   V_0
 IL_0016:  ldc.i4.m1
 IL_0017:  stfld      int32 SpecialClass/'<MethodWithReturnValueAsync>d__2'::'<>1__state'

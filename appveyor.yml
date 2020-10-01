@@ -8,3 +8,5 @@ test:
     - '**\Tests*.dll'
 artifacts:
 - path: nugets\**\*.nupkg
+on_failure:
+  - ps: Get-ChildItem *.received.* -recurse | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
