@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.2.6" />
+    <PackageReference Include="FodyHelpers" Version="6.3.0" />
 
     <Compile Include="..\NullGuard\ValidationFlags.cs">
       <Link>ValidationFlags.cs</Link>
