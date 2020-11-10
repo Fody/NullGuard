@@ -9,7 +9,7 @@
     <PackageReference Include="Verify.Xunit" Version="8.0.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
     <ProjectReference Include="..\NetFrameworkSmokeTest\NetFrameworkSmokeTest.csproj" />
