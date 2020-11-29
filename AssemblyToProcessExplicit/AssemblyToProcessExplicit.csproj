@@ -11,7 +11,7 @@
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
     <ProjectReference Include="..\AssemblyWithAnnotations\AssemblyWithAnnotations.csproj" />
     <ProjectReference Include="..\AssemblyWithExternalAnnotations\AssemblyWithExternalAnnotations.csproj" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
