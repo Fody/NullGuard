@@ -9,7 +9,7 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="Verify.Xunit" Version="10.6.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
