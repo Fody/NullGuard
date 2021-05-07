@@ -17,6 +17,8 @@ public partial class ModuleWeaver: BaseModuleWeaver
     INullabilityAnalyzer nullabilityAnalyzer = new ImplicitModeAnalyzer();
     public Regex ExcludeRegex { get; set; }
 
+    public override bool ShouldCleanReference => true;
+
     public ModuleWeaver()
     {
         ValidationFlags = ValidationFlags.AllPublic;
@@ -63,7 +65,6 @@ public partial class ModuleWeaver: BaseModuleWeaver
         nullabilityAnalyzer.CheckForBadAttributes(types, WriteError);
         ProcessAssembly(types);
         RemoveAttributes(types);
-        RemoveReference();
     }
 
     public override IEnumerable<string> GetAssembliesForScanning()
@@ -188,18 +189,5 @@ public partial class ModuleWeaver: BaseModuleWeaver
                 property.RemoveAllNullGuardAttributes();
             }
         }
-    }
-
-    void RemoveReference()
-    {
-        var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "NullGuard");
-        if (referenceToRemove == null)
-        {
-            WriteInfo("\tNo reference to 'NullGuard.dll' found. References not modified.");
-            return;
-        }
-
-        ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
-        WriteInfo("\tRemoving reference to 'NullGuard.dll'.");
     }
 }

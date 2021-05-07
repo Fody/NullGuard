@@ -1,5 +1,5 @@
 [
   Mode=Explicit, ValidationFlags=AllPublic,
   Debug=False,
-  	Removing reference to 'NullGuard.dll'.
+  	Removing reference to 'NullGuard'.
 ]
