@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <WeaverFiles Include="$(SolutionDir)NullGuard.Fody\bin\$(Configuration)\netstandard2.0\NullGuard.Fody.dll" />
-    <PackageReference Include="Fody" Version="6.5.5" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="All" />
     <ProjectReference Include="..\NullGuard\NullGuard.csproj" />
   </ItemGroup>
 </Project>
