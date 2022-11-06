@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 public class RewritingAsyncMethods
@@ -51,8 +52,8 @@ public class RewritingAsyncMethods
     }
 
     [Fact]
-    public void RequiresNonNullTask()
+    public async Task RequiresNonNullTask()
     {
-        Assert.Throws<InvalidOperationException>(new Action(() => ClassWithAsyncMethods.GetNonNullTask()));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await ClassWithAsyncMethods.GetNonNullTask());
     }
 }
