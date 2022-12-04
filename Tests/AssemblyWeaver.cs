@@ -18,7 +18,12 @@ public static class AssemblyWeaver
         };
 
         TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",
-            ignoreCodes: new[] {"0x80131854", "0x801318DE", "0x80131205", "0x80131252" });
+            ignoreCodes: new[]
+            {
+                "0x80131854", // Unexpected type on the stack (related to 0x801318DE)
+                "0x801318DE", // Unmanaged pointers are not a verifiable type
+                "0x80131869", // Unable to resolve token.
+            });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;
     }

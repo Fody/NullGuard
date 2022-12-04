@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using TestsCommon;
 using VerifyXunit;
 using Xunit;
 
@@ -12,7 +13,7 @@ public class RewritingConstructors
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, null, ""));
-        return Verifier.Verify(exception.InnerException.Message);
+        return Verifier.Verify(exception.InnerException.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]

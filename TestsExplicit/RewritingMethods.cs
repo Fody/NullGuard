@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using TestsCommon;
 using VerifyXunit;
 using Xunit;
 
@@ -12,7 +13,7 @@ public class RewritingMethods
         var type = AssemblyWeaver.Assembly.GetType("ClassWithExplicitInterface");
         var sample = (IComparable<string>)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.CompareTo(null));
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public class RewritingMethods
             sample.SomeMethod(null, "");
         });
         Assert.Equal("nonNullArg", exception.ParamName);
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
@@ -109,7 +110,7 @@ public class RewritingMethods
         {
             sample.MethodWithOptionalParameterWithNonNullDefaultValue(optional: null);
         });
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
@@ -129,7 +130,7 @@ public class RewritingMethods
         {
             sample.PublicWrapperOfPrivateMethod();
         });
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]

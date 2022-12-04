@@ -16,5 +16,6 @@
     <Reference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
+    <ProjectReference Include="..\TestsCommon\TestsCommon.csproj" />
   </ItemGroup>
 </Project>

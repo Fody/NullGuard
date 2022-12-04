@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-
+using TestsCommon;
 using Xunit;
 
 public class RewritingGenerics
@@ -85,7 +85,7 @@ public class RewritingGenerics
 [NullGuard] Return value of method 'U ClassName`1::GenericMethod(T,U)' is null.
 [NullGuard] Return value of method 'U ClassName`1::GenericMethodReturnsParameter(T,U)' is null.";
 
-        var messages = exceptions.Select(ex => ex.Message.Replace(Environment.NewLine, "|"));
+        var messages = exceptions.Select(ex => Shared.NormalizeArgumentExceptionText(ex.Message).Replace(Environment.NewLine, "|"));
         var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");
 
         Assert.Equal(expected.Replace("\r\n", "\n"), signature.Replace("\r\n", "\n"));

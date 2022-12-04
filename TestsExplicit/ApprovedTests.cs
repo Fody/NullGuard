@@ -181,6 +181,7 @@ public class ApprovedTests
         settings.AddScrubber(v => v.Replace("InternalBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("AssemblyBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("ExternalBase.", string.Empty));
+        settings.AddScrubber(v => v.Replace("[System.Private.CoreLib]", "[netstandard]"));
     }
 
     private string Decompile(string item)
