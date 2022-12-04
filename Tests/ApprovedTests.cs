@@ -1,4 +1,5 @@
-﻿#if (NET472)
+﻿#if NETFRAMEWORK
+
 using VerifyXunit;
 using Fody;
 using Xunit;
@@ -11,107 +12,107 @@ public class ApprovedTests
     [Fact]
     public Task ClassWithBadAttributes()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithBadAttributes"));
+        return Verifier.Verify(Decompile("ClassWithBadAttributes"));
     }
 
     [Fact]
     public Task ClassWithPrivateMethod()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verifier.Verify(Decompile("ClassWithPrivateMethod"));
     }
 
     [Fact]
     public Task ClassWithPrivateMethodNoAssert()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithPrivateMethod"));
+        return Verifier.Verify(Decompile("ClassWithPrivateMethod"));
     }
 
 #if DEBUG
     [Fact]
     public Task GenericClass()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClass`1"));
+        return Verifier.Verify(Decompile("GenericClass`1"));
     }
 #endif
 
     [Fact]
     public Task GenericClassWithValueTypeConstraint()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithValueTypeConstraints`1"));
+        return Verifier.Verify(Decompile("GenericClassWithValueTypeConstraints`1"));
     }
 
     [Fact]
     public Task GenericClassWithReferenceTypeConstraints()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "GenericClassWithReferenceTypeConstraints`1"));
+        return Verifier.Verify(Decompile("GenericClassWithReferenceTypeConstraints`1"));
     }
 
     [Fact]
     public Task Indexers()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "Indexers"));
+        return Verifier.Verify(Decompile("Indexers"));
     }
 
     [Fact]
     public Task InterfaceBadAttributes()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "InterfaceBadAttributes"));
+        return Verifier.Verify(Decompile("InterfaceBadAttributes"));
     }
 
     [Fact]
     public Task SimpleClass()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verifier.Verify(Decompile("SimpleClass"));
     }
 
     [Fact]
     public Task SimpleClassNoAssert()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SimpleClass"));
+        return Verifier.Verify(Decompile("SimpleClass"));
     }
 
     [Fact]
     public Task SkipIXamlMetadataProvider()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "XamlMetadataProvider"));
+        return Verifier.Verify(Decompile("XamlMetadataProvider"));
     }
 
 #if (DEBUG)
     [Fact]
     public Task SpecialClass_debug()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        return Verifier.Verify(Decompile("SpecialClass"));
     }
 #else
     [Fact]
     public Task SpecialClass_release()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "SpecialClass"));
+        return Verifier.Verify(Decompile("SpecialClass"));
     }
 #endif
 
     [Fact]
     public Task PublicNestedInsideNonPublic()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "NonPublicWithNested"));
+        return Verifier.Verify(Decompile("NonPublicWithNested"));
     }
 
     [Fact]
     public Task UnsafeClass()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "UnsafeClass"));
+        return Verifier.Verify(Decompile("UnsafeClass"));
     }
 
     [Fact]
     public Task ClassWithImplicitInterface()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithImplicitInterface"));
+        return Verifier.Verify(Decompile("ClassWithImplicitInterface"));
     }
 
     [Fact]
     public Task ClassWithExplicitInterface()
     {
-        return Verifier.Verify(Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, "ClassWithExplicitInterface"));
+        return Verifier.Verify(Decompile("ClassWithExplicitInterface"));
     }
 
     [Fact]
@@ -130,6 +131,11 @@ public class ApprovedTests
     public Task ErrorsList()
     {
         return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+    }
+
+    private string Decompile(string item)
+    {
+        return Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, item);
     }
 }
 
