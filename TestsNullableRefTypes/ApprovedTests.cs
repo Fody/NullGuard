@@ -1,20 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Fody;
+using DiffEngine;
+using ICSharpCode.Decompiler.Metadata;
 using VerifyTests;
+using VerifyTests.ICSharpCode.Decompiler;
 using VerifyXunit;
 using Xunit;
 
 [UsesVerify]
 public class ApprovedTests
 {
-    static VerifySettings uniqueForRuntime;
-
-    static ApprovedTests()
-    {
-        uniqueForRuntime = new VerifySettings();
-        uniqueForRuntime.UniqueForRuntime();
-    }
-
     [Fact]
     public Task ClassWithNullableContext1()
     {
@@ -51,9 +45,23 @@ public class ApprovedTests
         return Verifier.Verify(Decompile<ClassWithRefReturns>(), uniqueForRuntime);
     }
 
-    string Decompile<T>()
+    static VerifySettings settings;
+    static VerifySettings uniqueForRuntime;
+
+    static ApprovedTests()
     {
-        return Ildasm.Decompile(typeof(T).Assembly.Location, typeof(T).Name)
-            .Replace("[netstandard]", "[mscorlib]");
+        VerifyICSharpCodeDecompiler.Enable();
+        DiffRunner.MaxInstancesToLaunch(100);
+
+        settings = new VerifySettings();
+        settings.AddScrubber(v => v.Replace("[netstandard]", "[mscorlib]"));
+
+        uniqueForRuntime = new VerifySettings(settings);
+        uniqueForRuntime.UniqueForRuntime();
+    }
+
+    private TypeToDisassemble Decompile<T>()
+    {
+        return new TypeToDisassemble(new PEFile(typeof(T).Assembly.Location), typeof(T).Name);
     }
 }

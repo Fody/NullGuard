@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
+using DiffEngine;
 using Fody;
+using ICSharpCode.Decompiler.Metadata;
 
 public static class AssemblyWeaver
 {
     static AssemblyWeaver()
     {
+        VerifyTests.VerifyICSharpCodeDecompiler.Enable();
+        DiffRunner.MaxInstancesToLaunch(100);
+
         var weavingTask = new ModuleWeaver
         {
             Config = new XElement("NullGuard",
@@ -25,7 +30,10 @@ public static class AssemblyWeaver
             });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;
+        PeFile = new PEFile(AfterAssemblyPath);
     }
+
+    public static PEFile PeFile;
 
     public static string AfterAssemblyPath;
 

@@ -1,44 +1,87 @@
 .class public auto ansi beforefieldinit UnsafeClass
-extends [netstandard]System.Object
+	extends [netstandard]System.Object
 {
-.field private int32* '<NullProperty>k__BackingField'
-.method public hidebysig instance int32*
-MethodWithAmp(int32* 'instance') cil managed
-{
-.param [1]
-.maxstack  1
-IL_0000:  ldc.i4.0
-IL_0001:  conv.u
-IL_0002:  ret
-}
-.method public hidebysig specialname instance int32*
-get_NullProperty() cil managed
-{
-.maxstack  8
-IL_0000:  ldarg.0
-IL_0001:  ldfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
-IL_0006:  ret
-}
-.method public hidebysig specialname instance void
-set_NullProperty(int32* 'value') cil managed
-{
-.maxstack  8
-IL_0000:  ldarg.0
-IL_0001:  ldarg.1
-IL_0002:  stfld      int32* UnsafeClass::'<NullProperty>k__BackingField'
-IL_0007:  ret
-}
-.method public hidebysig specialname rtspecialname
-instance void  .ctor() cil managed
-{
-.maxstack  1
-IL_0000:  ldarg.0
-IL_0001:  call       instance void [netstandard]System.Object::.ctor()
-IL_0006:  ret
-}
-.property instance int32* NullProperty()
-{
-.get instance int32* UnsafeClass::get_NullProperty()
-.set instance void UnsafeClass::set_NullProperty(int32*)
-}
-}
+	// Fields
+	.field private int32* '<NullProperty>k__BackingField'
+	.custom instance void [netstandard]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = (
+		01 00 00 00
+	)
+
+	// Methods
+	.method public hidebysig specialname rtspecialname 
+		instance void .ctor () cil managed 
+	{
+		// Header size: 12
+		// Code size: 7 (0x7)
+		.maxstack 1
+
+		IL_0000: ldarg.0
+		IL_0001: call instance void [netstandard]System.Object::.ctor()
+		IL_0006: ret
+	} // end of method UnsafeClass::.ctor
+
+	.method public hidebysig specialname 
+		instance int32* get_NullProperty () cil managed 
+	{
+		.custom instance void [netstandard]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = (
+			01 00 00 00
+		)
+		// Header size: 1
+		// Code size: 7 (0x7)
+		.maxstack 8
+
+		IL_0000: ldarg.0
+		IL_0001: ldfld int32* UnsafeClass::'<NullProperty>k__BackingField'
+		IL_0006: ret
+	} // end of method UnsafeClass::get_NullProperty
+
+	.method public hidebysig 
+		instance int32* MethodWithAmp (
+			int32* 'instance'
+		) cil managed 
+	{
+		.custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = (
+			01 00 00 00
+		)
+		.param [1]
+			.custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = (
+				01 00 00 00
+			)
+		// Header size: 12
+		// Code size: 3 (0x3)
+		.maxstack 1
+
+		IL_0000: ldc.i4.0
+		IL_0001: conv.u
+		IL_0002: ret
+	} // end of method UnsafeClass::MethodWithAmp
+
+	.method public hidebysig specialname 
+		instance void set_NullProperty (
+			int32* 'value'
+		) cil managed 
+	{
+		.custom instance void [netstandard]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor() = (
+			01 00 00 00
+		)
+		// Header size: 1
+		// Code size: 8 (0x8)
+		.maxstack 8
+
+		IL_0000: ldarg.0
+		IL_0001: ldarg.1
+		IL_0002: stfld int32* UnsafeClass::'<NullProperty>k__BackingField'
+		IL_0007: ret
+	} // end of method UnsafeClass::set_NullProperty
+
+	// Properties
+	.property instance int32* NullProperty()
+	{
+		.custom instance void [JetBrains.Annotations]JetBrains.Annotations.NotNullAttribute::.ctor() = (
+			01 00 00 00
+		)
+		.get instance int32* UnsafeClass::get_NullProperty()
+		.set instance void UnsafeClass::set_NullProperty(int32*)
+	}
+
+} // end of class UnsafeClass
