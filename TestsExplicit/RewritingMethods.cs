@@ -149,7 +149,7 @@ public class RewritingMethods
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.SomeMethodAsync(null, ""));
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
