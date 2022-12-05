@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
 using Fody;
+using TestsCommon;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
 
@@ -185,8 +186,8 @@ public class ApprovedTests
         settings.AddScrubber(v => v.Replace("[System.Private.CoreLib]", "[netstandard]"));
     }
 
-    private TypeToDisassemble GetType(string item)
+    private static TypeToDisassemble GetType(string typeName)
     {
-        return new TypeToDisassemble(AssemblyWeaver.PeFile, item.Replace('.', '/'));
+        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName);
     }
 }

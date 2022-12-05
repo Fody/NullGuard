@@ -18,5 +18,12 @@ namespace TestsCommon
         {
             return NormalizeArgumentExceptionTextRegex.Replace(value, "\r\nParameter name: $1");
         }
+
+        public static VerifySettings With(this VerifySettings settings, Action<VerifySettings> action)
+        {
+            var clone = new VerifySettings(settings);
+            action(clone);
+            return clone;
+        }
     }
 }

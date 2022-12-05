@@ -134,9 +134,9 @@ public class ApprovedTests
         return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 
-    private TypeToDisassemble GetType(string typeName)
+    private static TypeToDisassemble GetType(string typeName)
     {
-        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName.Replace("`1", string.Empty));
+        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName);
     }
 }
 
