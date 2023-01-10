@@ -95,4 +95,12 @@ public class RewritingProperties
         classToExclude.Property = null;
         string result = classToExclude.Property;
     }
+
+    [Fact]
+    public void CorrectlyHandlesModreq()
+    {
+        var type = AssemblyWeaver.Assembly.GetType("SimpleRecord");
+        var sample = (dynamic)Activator.CreateInstance(type);
+        sample.InitPropertyWithBackingField = 42;
+    }
 }
