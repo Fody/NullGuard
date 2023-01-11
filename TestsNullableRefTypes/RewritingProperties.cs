@@ -215,4 +215,12 @@ public class RewritingProperties2
         sample.MixedNonNullProperty = value;
         Assert.Equal(value, sample.MixedNonNullProperty);
     }
+
+
+    [Fact]
+    public void CorrectlyHandlesModreq()
+    {
+        var sample = new SimpleRecord { InitPropertyWithBackingField = 42 };
+        Assert.NotNull(sample);
+    }
 }
