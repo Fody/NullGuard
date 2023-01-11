@@ -2,6 +2,7 @@
 using Xunit;
 using System;
 using System.Collections.Generic;
+using TestsCommon;
 
 public class ExplicitSpecificTests
 {
@@ -34,7 +35,7 @@ public class ExplicitSpecificTests
         {
             sample.MethodWithNotNullParameter((string) null, (string) null);
         });
-        Assert.Equal("[NullGuard] arg is null.\r\nParameter name: arg", exception.Message);
+        Assert.Equal("[NullGuard] arg is null.\r\nParameter name: arg", exception.NormalizedArgumentExceptionMessage());
     }
 
     [Theory]
@@ -72,7 +73,7 @@ public class ExplicitSpecificTests
         var type = AssemblyWeaver.Assembly.GetType(className);
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => sample.NotNullProperty = (string)null);
-        Assert.Equal($"[NullGuard] Cannot set the value of property 'System.String {className}::{interfaceName}NotNullProperty()' to null.\r\nParameter name: value", exception.Message);
+        Assert.Equal($"[NullGuard] Cannot set the value of property 'System.String {className}::{interfaceName}NotNullProperty()' to null.\r\nParameter name: value", exception.NormalizedArgumentExceptionMessage());
     }
 
     [Theory]

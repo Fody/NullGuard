@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
 using Fody;
+using TestsCommon;
 using VerifyTests;
+using VerifyTests.ICSharpCode.Decompiler;
 
 [UsesVerify]
 public class ApprovedTests
@@ -11,146 +13,146 @@ public class ApprovedTests
     [Fact]
     public Task ClassWithBadAttributes()
     {
-        return Verifier.Verify(Decompile("ClassWithBadAttributes"), settings);
+        return Verifier.Verify(GetType("ClassWithBadAttributes"), settings);
     }
 
     [Fact]
     public Task ClassWithPrivateMethod()
     {
-        return Verifier.Verify(Decompile("ClassWithPrivateMethod"), settings);
+        return Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
     }
 
     [Fact]
     public Task ClassWithPrivateMethodNoAssert()
     {
-        return Verifier.Verify(Decompile("ClassWithPrivateMethod"), settings);
+        return Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
     }
 
     [Fact]
     public Task GenericClass()
     {
-        return Verifier.Verify(Decompile("GenericClass`1"), settings);
+        return Verifier.Verify(GetType("GenericClass`1"), settings);
     }
 
     [Fact]
     public Task Indexers()
     {
-        return Verifier.Verify(Decompile("Indexers"), settings);
+        return Verifier.Verify(GetType("Indexers"), settings);
     }
 
     [Fact]
     public Task InterfaceBadAttributes()
     {
-        return Verifier.Verify(Decompile("InterfaceBadAttributes"), settings);
+        return Verifier.Verify(GetType("InterfaceBadAttributes"), settings);
     }
 
     [Fact]
     public Task SimpleClass()
     {
-        return Verifier.Verify(Decompile("SimpleClass"), settings);
+        return Verifier.Verify(GetType("SimpleClass"), settings);
     }
 
     [Fact]
     public Task SimpleClassNoAssert()
     {
-        return Verifier.Verify(Decompile("SimpleClass"), settings);
+        return Verifier.Verify(GetType("SimpleClass"), settings);
     }
 
     [Fact]
     public Task SkipIXamlMetadataProvider()
     {
-        return Verifier.Verify(Decompile("XamlMetadataProvider"), settings);
+        return Verifier.Verify(GetType("XamlMetadataProvider"), settings);
     }
 #if DEBUG
     [Fact]
     public Task SpecialClass()
     {
-        return Verifier.Verify(Decompile("SpecialClass"), settings);
+        return Verifier.Verify(GetType("SpecialClass"), settings);
     }
 #endif
 
     [Fact]
     public Task PublicNestedInsideNonPublic()
     {
-        return Verifier.Verify(Decompile("NonPublicWithNested"), settings);
+        return Verifier.Verify(GetType("NonPublicWithNested"), settings);
     }
 
     [Fact]
     public Task UnsafeClass()
     {
-        return Verifier.Verify(Decompile("UnsafeClass"), settings);
+        return Verifier.Verify(GetType("UnsafeClass"), settings);
     }
 
     [Fact]
     public Task DerivedClass()
     {
-        return Verifier.Verify(Decompile("InternalBase.DerivedClass"), settings);
+        return Verifier.Verify(GetType("InternalBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterface()
     {
-        return Verifier.Verify(Decompile("InternalBase.ImplementsInterface"), settings);
+        return Verifier.Verify(GetType("InternalBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterface()
     {
-        return Verifier.Verify(Decompile("InternalBase.ImplementsInheritedInterface"), settings);
+        return Verifier.Verify(GetType("InternalBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicit()
     {
-        return Verifier.Verify(Decompile("InternalBase.ImplementsInterfaceExplicit"), settings);
+        return Verifier.Verify(GetType("InternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
     public Task DerivedClassAssemblyBase()
     {
-        return Verifier.Verify(Decompile("AssemblyBase.DerivedClass"), settings);
+        return Verifier.Verify(GetType("AssemblyBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceAssemblyBase()
     {
-        return Verifier.Verify(Decompile("AssemblyBase.ImplementsInterface"), settings);
+        return Verifier.Verify(GetType("AssemblyBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterfaceAssemblyBase()
     {
-        return Verifier.Verify(Decompile("AssemblyBase.ImplementsInheritedInterface"), settings);
+        return Verifier.Verify(GetType("AssemblyBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicitAssemblyBase()
     {
-        return Verifier.Verify(Decompile("AssemblyBase.ImplementsInterfaceExplicit"), settings);
+        return Verifier.Verify(GetType("AssemblyBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
     public Task DerivedClassExternalBase()
     {
-        return Verifier.Verify(Decompile("ExternalBase.DerivedClass"), settings);
+        return Verifier.Verify(GetType("ExternalBase.DerivedClass"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExternalBase()
     {
-        return Verifier.Verify(Decompile("ExternalBase.ImplementsInterface"), settings);
+        return Verifier.Verify(GetType("ExternalBase.ImplementsInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInheritedInterfaceExternalBase()
     {
-        return Verifier.Verify(Decompile("ExternalBase.ImplementsInheritedInterface"), settings);
+        return Verifier.Verify(GetType("ExternalBase.ImplementsInheritedInterface"), settings);
     }
 
     [Fact]
     public Task ImplementsInterfaceExplicitExternalBase()
     {
-        return Verifier.Verify(Decompile("ExternalBase.ImplementsInterfaceExplicit"), settings);
+        return Verifier.Verify(GetType("ExternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
     [Fact]
@@ -181,10 +183,11 @@ public class ApprovedTests
         settings.AddScrubber(v => v.Replace("InternalBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("AssemblyBase.", string.Empty));
         settings.AddScrubber(v => v.Replace("ExternalBase.", string.Empty));
+        settings.AddScrubber(v => v.Replace("[System.Private.CoreLib]", "[netstandard]"));
     }
 
-    private string Decompile(string item)
+    private static TypeToDisassemble GetType(string typeName)
     {
-        return Ildasm.Decompile(AssemblyWeaver.AfterAssemblyPath, item);
+        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName);
     }
 }

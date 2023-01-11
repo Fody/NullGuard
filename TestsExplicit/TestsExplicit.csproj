@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net472;net7.0</TargetFrameworks>
     <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
@@ -9,6 +9,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <PackageReference Include="FodyHelpers" Version="6.6.4" />
+    <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.2.1" />
     <PackageReference Include="Verify.Xunit" Version="19.5.0" />
     <PackageReference Include="xunit" Version="*" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
@@ -16,5 +17,6 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
+    <ProjectReference Include="..\TestsCommon\TestsCommon.csproj" />
   </ItemGroup>
 </Project>
