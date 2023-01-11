@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TestsCommon;
 using VerifyXunit;
 using Xunit;
 
@@ -12,7 +13,7 @@ public class RewritingProperties
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var sample = (dynamic)Activator.CreateInstance(type);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
@@ -52,7 +53,7 @@ public class RewritingProperties
         var sample = (dynamic)Activator.CreateInstance(type);
         Assert.Null(sample.PropertyAllowsNullGetButDoesNotAllowNullSet);
         var exception = Assert.Throws<ArgumentNullException>(() => { sample.NonNullProperty = null; });
-        return Verifier.Verify(exception.Message);
+        return Verifier.Verify(exception.NormalizedArgumentExceptionMessage());
     }
 
     [Fact]
