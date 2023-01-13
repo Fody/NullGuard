@@ -72,7 +72,6 @@ public partial class ModuleWeaver
 
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 returnType.IsRefType() &&
-                returnType.FullName != typeof(void).FullName &&
                 !nullabilityAnalyzer.AllowsNullAsyncTaskResult(method, returnType))
             {
                 InjectMethodReturnGuardAsync(body, string.Format(CultureInfo.InvariantCulture, ReturnValueOfMethodIsNull, method.FullName), method.FullName);
@@ -146,7 +145,6 @@ public partial class ModuleWeaver
         {
             if (localValidationFlags.HasFlag(ValidationFlags.ReturnValues) &&
                 method.ReturnType.IsRefType() &&
-                method.ReturnType.FullName != typeof(void).FullName &&
                 !method.IsGetter &&
                 !nullabilityAnalyzer.AllowsNullReturnValue(method))
             {

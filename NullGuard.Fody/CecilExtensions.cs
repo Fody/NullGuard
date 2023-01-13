@@ -92,19 +92,19 @@ static class CecilExtensions
             return false;
         }
 
-        if (arg is ByReferenceType byReferenceType)
+        if (arg is ByReferenceType or PointerType or RequiredModifierType or OptionalModifierType)
         {
-            return IsRefType(byReferenceType.ElementType);
-        }
-
-        if (arg is PointerType pointerType)
-        {
-            return IsRefType(pointerType.ElementType);
+            return IsRefType(((TypeSpecification)arg).ElementType);
         }
 
         if (arg is GenericParameter genericParameter)
         {
             return !genericParameter.HasNotNullableValueTypeConstraint;
+        }
+
+        if (arg.MetadataType == MetadataType.Void)
+        {
+            return false;
         }
 
         return true;
