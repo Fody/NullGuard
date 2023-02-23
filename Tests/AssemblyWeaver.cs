@@ -12,7 +12,7 @@ public static class AssemblyWeaver
 
     static AssemblyWeaver()
     {
-        VerifyTests.VerifyICSharpCodeDecompiler.Enable();
+        VerifyTests.VerifyICSharpCodeDecompiler.Initialize();
         DiffRunner.MaxInstancesToLaunch(100);
 
         var weavingTask = new ModuleWeaver

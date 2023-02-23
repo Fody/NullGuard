@@ -1,1 +1,1 @@
-[NullGuard] Return value of method 'System.String ClassWithNullableContext2::MethodWithReturnValue(System.Boolean)' is null.
+﻿[NullGuard] Return value of method 'System.String ClassWithNullableContext2::MethodWithReturnValue(System.Boolean)' is null.

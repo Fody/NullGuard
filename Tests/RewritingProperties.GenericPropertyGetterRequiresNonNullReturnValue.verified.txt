@@ -1,1 +1,1 @@
-[NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.
+﻿[NullGuard] Return value of property 'T GenericClass`1::NonNullProperty()' is null.

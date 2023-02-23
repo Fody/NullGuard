@@ -1,1 +1,1 @@
-[NullGuard] Out parameter 'nonNullOutArg' is null.
+﻿[NullGuard] Out parameter 'nonNullOutArg' is null.

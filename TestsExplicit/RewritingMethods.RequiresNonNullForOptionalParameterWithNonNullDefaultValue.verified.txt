@@ -1,2 +1,2 @@
-[NullGuard] optional is null.
+﻿[NullGuard] optional is null.
 Parameter name: optional

@@ -1,2 +1,2 @@
-[NullGuard] other is null.
+﻿[NullGuard] other is null.
 Parameter name: other

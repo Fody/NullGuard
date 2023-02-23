@@ -51,7 +51,7 @@ public class ApprovedTests
 
     static ApprovedTests()
     {
-        VerifyICSharpCodeDecompiler.Enable();
+        VerifyICSharpCodeDecompiler.Initialize();
         DiffRunner.MaxInstancesToLaunch(100);
 
         var settings = new VerifySettings();

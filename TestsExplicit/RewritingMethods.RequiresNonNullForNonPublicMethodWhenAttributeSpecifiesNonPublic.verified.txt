@@ -1,2 +1,2 @@
-[NullGuard] x is null.
+﻿[NullGuard] x is null.
 Parameter name: x

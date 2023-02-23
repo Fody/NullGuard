@@ -1,2 +1,2 @@
-[NullGuard] nonNullArg is null.
+﻿[NullGuard] nonNullArg is null.
 Parameter name: nonNullArg

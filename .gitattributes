@@ -4,6 +4,8 @@
 *.xml          -text
 *.targets      -text
 
+*.verified.txt text eol=lf
+*.verified.il text eol=lf
 
 # Custom for Visual Studio
 *.cs     diff=csharp

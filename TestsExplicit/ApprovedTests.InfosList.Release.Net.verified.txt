@@ -1,5 +1,0 @@
-[
-  Mode=Explicit, ValidationFlags=AllPublic,
-  Debug=False,
-  Removing reference to 'NullGuard'.
-]
