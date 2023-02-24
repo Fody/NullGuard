@@ -21,7 +21,7 @@ public static class AssemblyWeaver
         };
 
         TestResult = weavingTask.ExecuteTestRun(
-            assemblyPath: "AssemblyToProcessExplicit.dll", 
+            assemblyPath: "AssemblyToProcessExplicit.dll",
             ignoreCodes: new[]
             {
                 "0x80131854", // Unexpected type on the stack (related to 0x801318DE)
