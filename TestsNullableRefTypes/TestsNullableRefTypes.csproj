@@ -4,7 +4,7 @@
     <DisableFody>true</DisableFody>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.7.0" />
+    <PackageReference Include="FodyHelpers" Version="6.8.0" />
     <PackageReference Include="xunit" Version="*" />
     <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
