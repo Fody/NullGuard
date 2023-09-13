@@ -22,7 +22,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsExplicitImplementedInterfaceMethods()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithExplicitInterfaceImplementation));
-        var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
+        var methods = type.Methods.Where(_ => _.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
         Assert.Equal(2, methods.Length);
 
         var result = methods.SelectMany(method => method.EnumerateOverridesAndImplementations());
@@ -36,7 +36,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsImplicitImplementedInterfaceMethods()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithImplicitInterfaceImplementation));
-        var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
+        var methods = type.Methods.Where(_ => _.Name.EndsWith(nameof(IComparable.CompareTo))).ToArray();
         Assert.Equal(2, methods.Length);
 
         var result = methods.SelectMany(method => method.EnumerateOverridesAndImplementations());
@@ -50,7 +50,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsCorrectImplementedInterfaceMethodsWhenClassHasBothExplicitAndImplicitImplementations()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithExplicitAndImplicitInterfaceImplementation));
-        var methods = type.Methods.Where(m => m.Name.EndsWith(nameof(IComparable.CompareTo))).ToList();
+        var methods = type.Methods.Where(_ => _.Name.EndsWith(nameof(IComparable.CompareTo))).ToList();
         Assert.Equal(3, methods.Count);
 
         var interfaceMethods = methods.SelectMany(method => method.EnumerateOverridesAndImplementations()).ToList();
@@ -67,7 +67,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodOnClassWithMixedGenericInterfaces()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces));
-        var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces.Method)) && m.ReturnType == module.TypeSystem.Boolean);
+        var method = type.Methods.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces.Method)) && m.ReturnType == module.TypeSystem.Boolean);
 
         var result = method.EnumerateOverridesAndImplementations();
 
@@ -82,7 +82,7 @@ public class InheritanceTests :
         var type = module.GetTypes().Single(t => t.Name == nameof(DerivedClassClassWithMixedGenericInterfaces));
         var methods = type.Methods.Where(m => !m.IsSpecialName);
 
-        var result = methods.SelectMany(m => m.EnumerateOverridesAndImplementations());
+        var result = methods.SelectMany(_ => _.EnumerateOverridesAndImplementations());
 
         var actual = string.Join("|", result);
         var expected = "System.Int32 BaseClassWithMixedGenericInterfaces::Method(System.Boolean)|T2 IGenericBaseInterface`2::Method(T1)";
@@ -95,7 +95,7 @@ public class InheritanceTests :
         var type = module.GetTypes().Single(t => t.Name == nameof(DerivedClassClassWithMixedGenericInterfaces));
         var methods = type.Properties;
 
-        var result = methods.SelectMany(m => m.EnumerateOverridesAndImplementations());
+        var result = methods.SelectMany(_ => _.EnumerateOverridesAndImplementations());
 
         var actual = string.Join("|", result);
         var expected = "System.Boolean BaseClassWithMixedGenericInterfaces::Property()";
@@ -106,7 +106,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodFromBaseInterfaceOnClassWithMixedGenericInterfaces()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces));
-        var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces.Method)) && m.ReturnType == module.TypeSystem.Int32);
+        var method = type.Methods.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces.Method)) && m.ReturnType == module.TypeSystem.Int32);
 
         var result = method.EnumerateOverridesAndImplementations();
 
@@ -119,7 +119,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodOnClassWithMixedGenericInterfaces2()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces2));
-        var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces2.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.Int32);
+        var method = type.Methods.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces2.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.Int32);
 
         var result = method.EnumerateOverridesAndImplementations();
 
@@ -132,7 +132,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsCorrectMethodFromBaseInterfaceOnClassWithMixedGenericInterfaces2()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces2));
-        var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces2.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.String);
+        var method = type.Methods.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces2.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.String);
 
         var result = method.EnumerateOverridesAndImplementations();
 
@@ -145,7 +145,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsNoMethodFromBaseInterfaceOnClassWithMixedGenericInterfacesWhenExplicitImplementationExists()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces3));
-        var method = type.Methods.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.String);
+        var method = type.Methods.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Method)) && m.Parameters[0].ParameterType == module.TypeSystem.String);
 
         var result = method.EnumerateOverridesAndImplementations();
         Assert.Empty(result);
@@ -155,7 +155,7 @@ public class InheritanceTests :
     public void EnumerateOverridesAndImplementationsFindsNoPropertyFromBaseInterfaceOnClassWithMixedGenericInterfacesWhenExplicitImplementationExists()
     {
         var type = module.GetTypes().Single(t => t.Name == nameof(ClassWithMixedGenericInterfaces3));
-        var property = type.Properties.Single(m => m.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Property)));
+        var property = type.Properties.Single(_ => _.Name.Equals(nameof(ClassWithMixedGenericInterfaces3.Property)));
 
         var result = property.EnumerateOverridesAndImplementations();
         Assert.Empty(result);

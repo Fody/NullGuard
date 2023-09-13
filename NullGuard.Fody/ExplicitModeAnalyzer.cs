@@ -346,8 +346,8 @@ public static class ExplicitModeExtensions
             return false;
 
         return method.DeclaringType.Methods
-            .Where(m => m != method && m.HasOverrides)
-            .SelectMany(m => m.Overrides)
+            .Where(_ => _ != method && m.HasOverrides)
+            .SelectMany(_ => _.Overrides)
             .Any(methodReference => HasSameSignature(type, method, methodReference.DeclaringType, methodReference.Resolve()));
     }
 
@@ -363,7 +363,7 @@ public static class ExplicitModeExtensions
 
         if (getMethodBase != null)
         {
-            var baseProperty = getMethodBase.DeclaringType.Resolve().Properties.FirstOrDefault(p => p.GetMethod == getMethodBase);
+            var baseProperty = getMethodBase.DeclaringType.Resolve().Properties.FirstOrDefault(_ => _.GetMethod == getMethodBase);
             if (baseProperty != null)
                 return baseProperty;
         }
@@ -392,7 +392,7 @@ public static class ExplicitModeExtensions
         foreach (var getOverride in getMethod.EnumerateOverrides())
         {
             var typeDefinition = getOverride.DeclaringType.Resolve();
-            var ovr = typeDefinition.Properties.FirstOrDefault(p => p.GetMethod == getOverride.Resolve());
+            var ovr = typeDefinition.Properties.FirstOrDefault(_ => _.GetMethod == getOverride.Resolve());
             if (ovr != null)
             {
                 yield return ovr;
@@ -495,7 +495,7 @@ class MethodNullability : MemberNullability
             if (parameterName == null)
                 continue;
 
-            var parameter = method.Parameters.FirstOrDefault(p => p.Name == parameterName);
+            var parameter = method.Parameters.FirstOrDefault(_ => _.Name == parameterName);
             if (parameter == null)
                 continue;
 

@@ -95,7 +95,7 @@ public partial class ModuleWeaver
             .Select((o, i) => new { o, i })
             .Where(a => a.o.OpCode == OpCodes.Ret)
             .Select(a => a.i)
-            .OrderByDescending(i => i);
+            .OrderByDescending(_ => _);
 
         foreach (var ret in returnPoints)
         {

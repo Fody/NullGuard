@@ -158,19 +158,19 @@ public class ApprovedTests
     [Fact]
     public Task InfosList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(x => x.Text), settings);
+        return Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(_ => _.Text), settings);
     }
 
     [Fact]
     public Task WarnsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(x => x.Text), settings);
+        return Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(_ => _.Text), settings);
     }
 
     [Fact]
     public Task ErrorsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(x => x.Text), settings);
+        return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(_ => _.Text), settings);
     }
 
     VerifySettings settings;

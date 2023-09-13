@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>11</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Version>3.1.1</Version>
     <NoWarn>NU5118</NoWarn>
   </PropertyGroup>

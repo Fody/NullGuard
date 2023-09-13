@@ -204,7 +204,7 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            var moveNext = resolve.Methods.First(x => x.Name == "MoveNext");
+            var moveNext = resolve.Methods.First(_ => _.Name == "MoveNext");
 
             InjectMethodReturnGuardAsyncIntoMoveNext(moveNext, errorMessage, methodName);
         }
@@ -215,7 +215,7 @@ public partial class ModuleWeaver
         method.Body.SimplifyMacros();
 
         var setExceptionInstruction = method.Body.Instructions
-            .FirstOrDefault(x => x.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference));
+            .FirstOrDefault(_ => _.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference));
 
         if (setExceptionInstruction == null)
         {

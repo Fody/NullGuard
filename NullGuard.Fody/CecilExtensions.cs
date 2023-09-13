@@ -10,18 +10,18 @@ static class CecilExtensions
 
     public static bool HasInterface(this TypeDefinition type, string interfaceFullName)
     {
-        return type.Interfaces.Any(i => i.InterfaceType.FullName.Equals(interfaceFullName))
+        return type.Interfaces.Any(_ => _.InterfaceType.FullName.Equals(interfaceFullName))
                || type.BaseType != null && type.BaseType.Resolve().HasInterface(interfaceFullName);
     }
 
     public static IEnumerable<MethodDefinition> AbstractMethods(this TypeDefinition type)
     {
-        return type.Methods.Where(x => x.IsAbstract);
+        return type.Methods.Where(_ => _.IsAbstract);
     }
 
     public static IEnumerable<MethodDefinition> MethodsWithBody(this TypeDefinition type)
     {
-        return type.Methods.Where(x => x.Body != null);
+        return type.Methods.Where(_ => _.Body != null);
     }
 
     public static IEnumerable<PropertyDefinition> ConcreteProperties(this TypeDefinition type)
@@ -58,7 +58,7 @@ static class CecilExtensions
     {
         var customAttributes = definition.CustomAttributes;
 
-        return customAttributes.Any(x => x.AttributeType.Name == AllowNullAttributeTypeName);
+        return customAttributes.Any(_ => _.AttributeType.Name == AllowNullAttributeTypeName);
     }
 
     public static void RemoveAllNullGuardAttributes(this ICustomAttributeProvider definition)
@@ -66,7 +66,7 @@ static class CecilExtensions
         var customAttributes = definition.CustomAttributes;
 
         var attributes = customAttributes
-            .Where(x => x.AttributeType.Namespace == "NullGuard" || x.AttributeType.Namespace == "NullGuard.CodeAnalysis")
+            .Where(_ => _.AttributeType.Namespace == "NullGuard" || x.AttributeType.Namespace == "NullGuard.CodeAnalysis")
             .ToArray();
 
         foreach (var attribute in attributes)
@@ -148,7 +148,7 @@ static class CecilExtensions
 
     public static bool IsIAsyncStateMachine(this TypeDefinition typeDefinition)
     {
-        return typeDefinition.Interfaces.Any(x => x.InterfaceType.Name == "IAsyncStateMachine");
+        return typeDefinition.Interfaces.Any(_ => _.InterfaceType.Name == "IAsyncStateMachine");
     }
 
     public static bool IsPublicOrNestedPublic(this TypeDefinition arg)
@@ -158,7 +158,7 @@ static class CecilExtensions
 
     public static bool IsOverrideOrImplementationOfPublicMember(this MethodDefinition member)
     {
-        return member.EnumerateOverridesAndImplementations().Any(m => m.IsPublicVisible());
+        return member.EnumerateOverridesAndImplementations().Any(_ => _.IsPublicVisible());
     }
 
     static bool IsPublicVisible(this MethodDefinition member)
