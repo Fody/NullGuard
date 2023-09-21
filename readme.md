@@ -4,6 +4,8 @@
 [![NuGet Status](https://img.shields.io/nuget/v/NullGuard.Fody.svg)](https://www.nuget.org/packages/NullGuard.Fody/)
 
 
+**See [Milestones](../../milestones?state=closed) for release notes.**
+
 ### This is an add-in for [Fody](https://github.com/Fody/Home/)
 
 **It is expected that all developers using Fody [become a Patron on OpenCollective](https://opencollective.com/fody/contribute/patron-3059). [See Licensing/Patron FAQ](https://github.com/Fody/Home/blob/master/pages/licensing-patron-faq.md) for more information.**
