@@ -215,7 +215,8 @@ public partial class ModuleWeaver
         method.Body.SimplifyMacros();
 
         var setExceptionInstruction = method.Body.Instructions
-            .FirstOrDefault(_ => _.OpCode == OpCodes.Call && IsSetExceptionMethod(x.Operand as MethodReference));
+            .FirstOrDefault(_ => _.OpCode == OpCodes.Call &&
+                                 IsSetExceptionMethod(_.Operand as MethodReference));
 
         if (setExceptionInstruction == null)
         {

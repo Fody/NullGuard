@@ -346,7 +346,7 @@ public static class ExplicitModeExtensions
             return false;
 
         return method.DeclaringType.Methods
-            .Where(_ => _ != method && m.HasOverrides)
+            .Where(_ => _ != method && _.HasOverrides)
             .SelectMany(_ => _.Overrides)
             .Any(methodReference => HasSameSignature(type, method, methodReference.DeclaringType, methodReference.Resolve()));
     }
