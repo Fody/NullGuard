@@ -161,45 +161,20 @@ public class RewritingMethods
     }
 
     [Fact]
-    public Task RequiresNonNullMethodReturnValueAsync()
+    public async Task RequiresNonNullMethodReturnValueAsync()
     {
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
-
-        Exception exception = null;
-
-        ((Task<string>)sample.MethodWithReturnValueAsync(true))
-            .ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                {
-                    exception = t.Exception.Flatten().InnerException;
-                }
-            })
-            .Wait();
-
-        Assert.NotNull(exception);
-        Assert.IsType<InvalidOperationException>(exception);
-        return Verifier.Verify(exception.Message);
+        await Verifier.ThrowsTask(() => sample.MethodWithReturnValueAsync(true))
+            .IgnoreStackTrace();
     }
 
     [Fact]
-    public void AllowsNullReturnValueWhenAttributeAppliedAsync()
+    public Task AllowsNullReturnValueWhenAttributeAppliedAsync()
     {
         var type = AssemblyWeaver.Assembly.GetType("SpecialClass");
         var sample = (dynamic)Activator.CreateInstance(type);
-
-        Exception ex = null;
-
-        ((Task<string>)sample.MethodAllowsNullReturnValueAsync())
-            .ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                    ex = t.Exception.Flatten().InnerException;
-            })
-            .Wait();
-
-        Assert.Null(ex);
+        return sample.MethodAllowsNullReturnValueAsync();
     }
 
     [Fact]
@@ -216,8 +191,8 @@ public class RewritingMethods
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");
-        var ClassToExclude = (dynamic)Activator.CreateInstance(type, "");
-        ClassToExclude.Test(null);
+        var instance = (dynamic)Activator.CreateInstance(type, "");
+        instance.Test(null);
     }
 
     [Fact]
