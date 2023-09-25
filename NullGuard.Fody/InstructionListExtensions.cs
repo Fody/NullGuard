@@ -58,6 +58,7 @@ static class InstructionListExtensions
                 {
                     continue;
                 }
+
                 var localI = i;
                 yield return x => operandInstructions[localI] = x;
             }

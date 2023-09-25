@@ -657,7 +657,9 @@ class MemberNullabilityCache
             var annotations = Path.ChangeExtension(moduleFileName, ".ExternalAnnotations.xml");
 
             if (!File.Exists(annotations))
+            {
                 return;
+            }
 
             try
             {
@@ -675,7 +677,9 @@ class MemberNullabilityCache
         public MemberNullability GetOrCreate(string key, Func<XElement, MemberNullability> createNew)
         {
             if (cache.TryGetValue(key, out var value))
+            {
                 return value;
+            }
 
             XElement externalAnnotation = null;
             externalAnnotations?.TryGetValue(key, out externalAnnotation);

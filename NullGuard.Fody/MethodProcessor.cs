@@ -58,8 +58,7 @@ public partial class ModuleWeaver
         if (method.IsAsyncStateMachine())
         {
             var returnType = method.ReturnType;
-            if (method.ReturnType is GenericInstanceType genericReturnType &&
-                genericReturnType.HasGenericArguments &&
+            if (method.ReturnType is GenericInstanceType {HasGenericArguments: true} genericReturnType &&
                 genericReturnType.Name.StartsWith("Task"))
             {
                 returnType = genericReturnType.GenericArguments[0];
@@ -131,10 +130,10 @@ public partial class ModuleWeaver
     void InjectMethodReturnGuard(ValidationFlags localValidationFlags, MethodDefinition method, MethodBody body)
     {
         var returnPoints = body.Instructions
-                .Select((o, ix) => new { o, ix })
-                .Where(_ => _.o.OpCode == OpCodes.Ret)
-                .Select(_ => _.ix)
-                .OrderByDescending(ix => ix);
+            .Select((o, ix) => new {o, ix})
+            .Where(_ => _.o.OpCode == OpCodes.Ret)
+            .Select(_ => _.ix)
+            .OrderByDescending(ix => ix);
 
         foreach (var ret in returnPoints)
         {
@@ -154,35 +153,40 @@ public partial class ModuleWeaver
                     // This is no longer the return instruction location, but it is where we want to jump to.
                     var returnInstruction = body.Instructions[ret];
 
-                    if (localValidationFlags.HasFlag(ValidationFlags.OutValues) &&
-                        parameter.ParameterType.IsRefType() &&
-                        parameter.ParameterType.IsByReference &&
-                        !parameter.IsIn &&
-                        !nullabilityAnalyzer.AllowsNullOutput(parameter, method))
+                    if (!localValidationFlags.HasFlag(ValidationFlags.OutValues) ||
+                        !parameter.ParameterType.IsRefType() ||
+                        !parameter.ParameterType.IsByReference ||
+                        parameter.IsIn ||
+                        nullabilityAnalyzer.AllowsNullOutput(parameter, method))
                     {
-                        var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
+                        continue;
+                    }
 
-                        var guardInstructions = new List<Instruction>();
+                    var errorMessage = $"[NullGuard] Out parameter '{parameter.Name}' is null.";
 
-                        if (isDebug)
-                        {
-                            LoadArgumentOntoStack(guardInstructions, parameter);
+                    var guardInstructions = new List<Instruction>();
 
-                            CallDebugAssertInstructions(guardInstructions, errorMessage);
-                        }
-
+                    if (isDebug)
+                    {
                         LoadArgumentOntoStack(guardInstructions, parameter);
 
-                        IfNull(guardInstructions, returnInstruction, i =>
+                        CallDebugAssertInstructions(guardInstructions, errorMessage);
+                    }
+
+                    LoadArgumentOntoStack(guardInstructions, parameter);
+
+                    IfNull(
+                        guardInstructions,
+                        returnInstruction,
+                        _ =>
                         {
-                            LoadInvalidOperationException(i, errorMessage);
+                            LoadInvalidOperationException(_, errorMessage);
 
                             // Throw the top item off the stack
-                            i.Add(Instruction.Create(OpCodes.Throw));
+                            _.Add(Instruction.Create(OpCodes.Throw));
                         });
 
-                        body.InsertAtMethodReturnPoint(ret, guardInstructions);
-                    }
+                    body.InsertAtMethodReturnPoint(ret, guardInstructions);
                 }
             }
         }
@@ -224,7 +228,10 @@ public partial class ModuleWeaver
         var setExceptionMethod = (MethodReference)setExceptionInstruction.Operand;
 
         var returnPoints = method.Body.Instructions
-            .Select((instruction, index) => new { returnType = GetReturnTypeFromSetResultMethod(instruction), index })
+            .Select((instruction, index) => new
+            {
+                returnType = GetReturnTypeFromSetResultMethod(instruction), index
+            })
             .Where(item => item.returnType != null)
             .OrderByDescending(item => item.index)
             .ToArray();
@@ -274,7 +281,8 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            if (instructions[i].Operand is not MethodReference newObjectMethodRef || instructions[i + 1].OpCode != OpCodes.Throw)
+            if (instructions[i].Operand is not MethodReference newObjectMethodRef ||
+                instructions[i + 1].OpCode != OpCodes.Throw)
             {
                 continue;
             }
@@ -303,14 +311,20 @@ public partial class ModuleWeaver
     static TypeReference GetReturnTypeFromSetResultMethod(Instruction instruction)
     {
         if (instruction.OpCode != OpCodes.Call)
+        {
             return null;
+        }
 
         if (instruction.Operand is not MethodReference methodReference)
+        {
             return null;
+        }
 
         if (methodReference.Name != "SetResult" ||
             methodReference.Parameters.Count != 1)
+        {
             return null;
+        }
 
         var declaringType = methodReference.DeclaringType;
 
@@ -330,8 +344,7 @@ public partial class ModuleWeaver
     static bool IsSetExceptionMethod(MethodReference methodReference)
     {
         return
-            methodReference != null &&
-            methodReference.Name == "SetException" &&
+            methodReference is {Name: "SetException"} &&
             methodReference.Parameters.Count == 1 &&
             methodReference.DeclaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder");
     }
