@@ -47,7 +47,7 @@ public class RewritingGenerics
     void GenericClassThrowsOnNullReferenceType(string className)
     {
         object[] nullValue = null;
-        var notNullValue = new object[0];
+        var notNullValue = Array.Empty<object>();
 
         var factoryName = className + "Factory";
         var factoryType = AssemblyWeaver.Assembly.GetType(factoryName);
@@ -76,14 +76,16 @@ public class RewritingGenerics
         exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethodReturnsParameter<Array>(notNullValue, nullValue)));
 
         // approvals don't work for [Theory], just do it inline...
-        var expected = @"[NullGuard] Cannot set the value of property 'T ClassName`1::NonNullProperty()' to null.|Parameter name: value
-[NullGuard] Return value of property 'T ClassName`1::NonNullProperty()' is null.
-[NullGuard] Return value of method 'T ClassName`1::NonNullMethod()' is null.
-[NullGuard] t is null.|Parameter name: t
-[NullGuard] u is null.|Parameter name: u
-[NullGuard] t is null.|Parameter name: t
-[NullGuard] Return value of method 'U ClassName`1::GenericMethod(T,U)' is null.
-[NullGuard] Return value of method 'U ClassName`1::GenericMethodReturnsParameter(T,U)' is null.";
+        var expected = """
+                       [NullGuard] Cannot set the value of property 'T ClassName`1::NonNullProperty()' to null.|Parameter name: value
+                       [NullGuard] Return value of property 'T ClassName`1::NonNullProperty()' is null.
+                       [NullGuard] Return value of method 'T ClassName`1::NonNullMethod()' is null.
+                       [NullGuard] t is null.|Parameter name: t
+                       [NullGuard] u is null.|Parameter name: u
+                       [NullGuard] t is null.|Parameter name: t
+                       [NullGuard] Return value of method 'U ClassName`1::GenericMethod(T,U)' is null.
+                       [NullGuard] Return value of method 'U ClassName`1::GenericMethodReturnsParameter(T,U)' is null.
+                       """;
 
         var messages = exceptions.Select(ex => Shared.NormalizeArgumentExceptionText(ex.Message).Replace(Environment.NewLine, "|"));
         var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");

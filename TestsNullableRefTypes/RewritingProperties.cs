@@ -23,8 +23,10 @@ public class RewritingProperties
     [Fact]
     public void PropertySetterAllowsNullArgumentForNestedNotNullGenericWithAllowNull()
     {
-        var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
-        sample.NotNullPropertyWithAllowNull = null;
+        var sample = new ClassWithGenericNestedClass.NestedNotNull<string>
+        {
+            NotNullPropertyWithAllowNull = null
+        };
     }
 
     [Fact]
@@ -56,15 +58,19 @@ public class RewritingProperties
     [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {
-        var sample = new ClassWithNullableContext1();
-        sample.NullProperty = null;
+        var sample = new ClassWithNullableContext1
+        {
+            NullProperty = null
+        };
     }
 
     [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext2()
     {
-        var sample = new ClassWithNullableContext2();
-        sample.NullProperty = null;
+        var sample = new ClassWithNullableContext2
+        {
+            NullProperty = null
+        };
     }
 
     [Fact]
@@ -139,15 +145,19 @@ public class RewritingProperties2
     [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {
-        var sample = new ClassWithNullableContext1();
-        sample.MixedNullProperty = null;
+        var sample = new ClassWithNullableContext1
+        {
+            MixedNullProperty = null
+        };
     }
 
     [Fact]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext2()
     {
-        var sample = new ClassWithNullableContext2();
-        sample.MixedNullProperty = null;
+        var sample = new ClassWithNullableContext2
+        {
+            MixedNullProperty = null
+        };
     }
 
     [Fact]

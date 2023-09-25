@@ -1,3 +1,6 @@
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable MemberCanBeMadeStatic.Local
+
 using NullGuard;
 
 [NullGuard(ValidationFlags.NonPublic | ValidationFlags.Arguments)]
@@ -7,10 +10,7 @@ public class ClassWithPrivateMethod
     {
         SomePrivateMethod(null);
     }
-
-    // ReSharper disable UnusedParameter.Local
     void SomePrivateMethod(string x)
-    // ReSharper restore UnusedParameter.Local
     {
     }
 

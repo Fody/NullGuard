@@ -1,5 +1,6 @@
 using System;
 using NullGuard;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 public class SimpleClass
 {
@@ -156,7 +157,7 @@ public class SimpleClass
         // The following, not-reachable, branch will jump directly to the RET statement (at least with Roslyn 1.0 with
         // enabled optimizations flag) which triggers the issue (the return value checks will be skipped).
         if ("".Length == 42)
-            throw new Exception("Not reachable");
+            throw new("Not reachable");
 
         return returnValue;
     }
@@ -168,7 +169,7 @@ public class SimpleClass
         outParam = null;
 
         if ("".Length == 42)
-            throw new Exception("Not reachable");
+            throw new("Not reachable");
     }
 
     public string GetterReturnValueChecksWithBranchToRetInstruction
@@ -180,7 +181,7 @@ public class SimpleClass
             string returnValue = null;
 
             if ("".Length == 42)
-                throw new Exception("Not reachable");
+                throw new("Not reachable");
 
             return returnValue;
         }

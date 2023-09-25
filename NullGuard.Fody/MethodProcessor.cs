@@ -24,7 +24,7 @@ public partial class ModuleWeaver
         }
         catch (Exception exception)
         {
-            throw new Exception($"An error occurred processing method '{method.FullName}'.", exception);
+            throw new($"An error occurred processing method '{method.FullName}'.", exception);
         }
     }
 
@@ -279,7 +279,7 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            if (!(instructions[i].Operand is MethodReference newObjectMethodRef) || instructions[i + 1].OpCode != OpCodes.Throw)
+            if (instructions[i].Operand is not MethodReference newObjectMethodRef || instructions[i + 1].OpCode != OpCodes.Throw)
             {
                 continue;
             }
@@ -310,7 +310,7 @@ public partial class ModuleWeaver
         if (instruction.OpCode != OpCodes.Call)
             return null;
 
-        if (!(instruction.Operand is MethodReference methodReference))
+        if (instruction.Operand is not MethodReference methodReference)
             return null;
 
         if (methodReference.Name != "SetResult" ||
@@ -320,13 +320,16 @@ public partial class ModuleWeaver
         var declaringType = methodReference.DeclaringType;
 
         if (!declaringType.FullName.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder"))
+        {
             return null;
-        if (!(declaringType is GenericInstanceType genericInstanceType))
+        }
+
+        if (declaringType is not GenericInstanceType genericInstanceType)
+        {
             return null;
+        }
 
-        var genericParameter = genericInstanceType.GenericArguments.FirstOrDefault();
-
-        return genericParameter;
+        return genericInstanceType.GenericArguments.FirstOrDefault();
     }
 
     static bool IsSetExceptionMethod(MethodReference methodReference)

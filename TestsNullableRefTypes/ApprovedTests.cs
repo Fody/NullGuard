@@ -1,8 +1,5 @@
-﻿using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DiffEngine;
-using ICSharpCode.Decompiler.Metadata;
-using TestsCommon;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
 using VerifyXunit;
@@ -61,8 +58,8 @@ public class ApprovedTests
         uniqueForRuntime = settings;
     }
 
-    private static TypeToDisassemble GetType<T>()
+    static TypeToDisassemble GetType<T>()
     {
-        return new TypeToDisassemble(new PEFile(typeof(T).Assembly.Location), typeof(T).Name);
+        return new(new(typeof(T).Assembly.Location), typeof(T).Name);
     }
 }

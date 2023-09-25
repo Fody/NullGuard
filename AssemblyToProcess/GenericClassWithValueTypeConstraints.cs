@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-public class GenericClassWithValueTypeConstraints<T> where T: struct 
+public class GenericClassWithValueTypeConstraints<T> where T: struct
 {
     public T NonNullProperty { get; set; }
 
@@ -19,7 +19,7 @@ public class GenericClassWithValueTypeConstraints<T> where T: struct
 
 public class GenericClassWithValueTypeConstraintsFactory
 {
-    public GenericClassWithValueTypeConstraints<int> Integer => new GenericClassWithValueTypeConstraints<int>();
+    public GenericClassWithValueTypeConstraints<int> Integer => new();
 
-    public GenericClassWithValueTypeConstraints<KeyValuePair<string, string>> Struct => new GenericClassWithValueTypeConstraints<KeyValuePair<string, string>>();
+    public GenericClassWithValueTypeConstraints<KeyValuePair<string, string>> Struct => new();
 }

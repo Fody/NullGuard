@@ -33,5 +33,5 @@ public class GenericClassWithReferenceTypeConstraints<T> where T: class
 
 public class GenericClassWithReferenceTypeConstraintsFactory
 {
-    public GenericClassWithReferenceTypeConstraints<object> Object => new GenericClassWithReferenceTypeConstraints<object>();
+    public GenericClassWithReferenceTypeConstraints<object> Object => new();
 }

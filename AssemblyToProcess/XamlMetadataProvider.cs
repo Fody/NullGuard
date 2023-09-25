@@ -1,6 +1,3 @@
 using Windows.UI.Xaml.Markup;
 
-public class XamlMetadataProvider : IXamlMetadataProvider
-{
-    
-}
+public class XamlMetadataProvider : IXamlMetadataProvider;

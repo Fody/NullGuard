@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 using DiffEngine;
@@ -17,10 +15,10 @@ public static class AssemblyWeaver
 
         var weavingTask = new ModuleWeaver
         {
-            Config = new XElement("NullGuard",
+            Config = new("NullGuard",
                 new XAttribute("IncludeDebugAssert", false),
                 new XAttribute("ExcludeRegex", "^ClassToExclude$")),
-            DefineConstants = new List<string> {"DEBUG"} // Always testing the debug weaver
+            DefineConstants = new() {"DEBUG"} // Always testing the debug weaver
         };
 
         TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",
@@ -32,7 +30,7 @@ public static class AssemblyWeaver
             });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;
-        PeFile = new PEFile(AfterAssemblyPath);
+        PeFile = new(AfterAssemblyPath);
     }
 
     public static PEFile PeFile;

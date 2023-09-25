@@ -139,7 +139,7 @@ public class RewritingMethods
     public void RequiresNonNullReturnForNonNullGenericConstraint()
     {
         var sample = new ClassWithNullableContext1();
-        var exception = Assert.Throws<InvalidOperationException>(() => { sample.NotNullGeneric<string>(""); });
+        var exception = Assert.Throws<InvalidOperationException>(() => { sample.NotNullGeneric(""); });
     }
 
     [Fact]

@@ -22,7 +22,7 @@
         public string SomeProperty { get; set; }
 
         // can be applied to a whole property
-        [AllowNull] 
+        [AllowNull]
         public string NullProperty { get; set; }
 
         // Or just the setter.

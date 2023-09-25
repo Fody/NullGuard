@@ -7,7 +7,7 @@ public class RewritingAsyncMethods
     [Fact]
     public async void RequiresNonNullConcreteTypeAsync()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(() => ClassWithAsyncMethods.GetNonNullAsync());
+        await Assert.ThrowsAsync<InvalidOperationException>(ClassWithAsyncMethods.GetNonNullAsync);
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public class RewritingAsyncMethods
     [Fact]
     public async void RequiresNonNullGenericTypeAsyncWithDelay()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(() => ClassWithAsyncMethods.GetNonNullAsyncWithDelay<string>());
+        await Assert.ThrowsAsync<InvalidOperationException>(ClassWithAsyncMethods.GetNonNullAsyncWithDelay<string>);
     }
 
     [Fact]

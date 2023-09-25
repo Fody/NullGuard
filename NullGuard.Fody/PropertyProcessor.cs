@@ -24,7 +24,7 @@ public partial class ModuleWeaver
         }
         catch (Exception exception)
         {
-            throw new Exception($"An error occurred processing property '{property.FullName}'.", exception);
+            throw new($"An error occurred processing property '{property.FullName}'.", exception);
         }
     }
 

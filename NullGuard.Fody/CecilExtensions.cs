@@ -43,8 +43,10 @@ static class CecilExtensions
 
     public static bool ImplicitAllowsNull(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == AllowNullAttributeTypeName ||
-                a.AttributeType.Name == CanBeNullAttributeTypeName);
+        return value.CustomAttributes.Any(a =>
+            a.AttributeType.Name is
+                AllowNullAttributeTypeName or
+                CanBeNullAttributeTypeName);
     }
 
     public static bool AllowsNullReturnValue(this MethodDefinition methodDefinition)
@@ -66,8 +68,7 @@ static class CecilExtensions
         var customAttributes = definition.CustomAttributes;
 
         var attributes = customAttributes
-            .Where(_ => _.AttributeType.Namespace == "NullGuard" ||
-                        _.AttributeType.Namespace == "NullGuard.CodeAnalysis")
+            .Where(_ => _.AttributeType.Namespace is "NullGuard" or "NullGuard.CodeAnalysis")
             .ToArray();
 
         foreach (var attribute in attributes)
@@ -119,7 +120,7 @@ static class CecilExtensions
         if (!elementType.IsGenericParameter)
             return false;
 
-        if (!(elementType is GenericParameter genericParameter))
+        if (elementType is not GenericParameter genericParameter)
             return false;
 
         if (genericParameter.HasNotNullableValueTypeConstraint)
@@ -133,7 +134,7 @@ static class CecilExtensions
 
     public static bool IsGeneratedCode(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute");
+        return value.CustomAttributes.Any(a => a.AttributeType.Name is "CompilerGeneratedAttribute" or "GeneratedCodeAttribute");
     }
 
     public static bool IsAsyncStateMachine(this ICustomAttributeProvider value)

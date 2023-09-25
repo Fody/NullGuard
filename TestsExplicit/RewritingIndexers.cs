@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TestsCommon;
 using VerifyXunit;
 using Xunit;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 [UsesVerify]
 public class RewritingIndexers
@@ -101,7 +102,6 @@ public class RewritingIndexers
         Assert.Equal(null, instance[allowNull: null, nullableInt: null]);
     }
 
-    // ReSharper disable once UnusedParameter.Local
     void IgnoreValue(object value)
     {
     }

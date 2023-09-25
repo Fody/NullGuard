@@ -1,7 +1,6 @@
 ﻿#if NETFRAMEWORK
 
 using VerifyXunit;
-using Fody;
 using Xunit;
 using System.Linq;
 using System.Threading.Tasks;
@@ -136,7 +135,7 @@ public class ApprovedTests
 
     private static TypeToDisassemble GetType(string typeName)
     {
-        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName);
+        return new(AssemblyWeaver.PeFile, typeName);
     }
 }
 

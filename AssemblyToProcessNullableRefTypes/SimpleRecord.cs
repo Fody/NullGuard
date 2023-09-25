@@ -1,4 +1,6 @@
 ﻿
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 public record SimpleRecord
 {
     private int _backingField;

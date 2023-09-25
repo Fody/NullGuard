@@ -41,11 +41,11 @@ public class GenericClass<T>
 
 public class GenericClassFactory
 {
-    public GenericClass<int> Integer => new GenericClass<int>();
+    public GenericClass<int> Integer => new();
 
-    public GenericClass<KeyValuePair<string, string>> Struct => new GenericClass<KeyValuePair<string, string>>();
+    public GenericClass<KeyValuePair<string, string>> Struct => new();
 
-    public GenericClass<object> Object => new GenericClass<object>();
+    public GenericClass<object> Object => new();
 
     public int GetThingAsync()
     {

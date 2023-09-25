@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 
 using NullGuard;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 [NullGuard(ValidationFlags.NonPublic | ValidationFlags.Arguments)]
 public class ClassWithPrivateMethod

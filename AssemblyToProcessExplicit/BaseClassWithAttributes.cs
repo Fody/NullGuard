@@ -24,10 +24,7 @@ public interface BaseInterfaceWithAttributes
     string NotNullProperty { get; set; }
 }
 
-public interface InheritedInterface : BaseInterfaceWithAttributes
-{
-
-}
+public interface InheritedInterface : BaseInterfaceWithAttributes;
 
 public interface InterfaceWithAttributes
 {

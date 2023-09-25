@@ -22,7 +22,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
     public ModuleWeaver()
     {
         ValidationFlags = ValidationFlags.AllPublic;
-        DefineConstants = new List<string>();
+        DefineConstants = new();
     }
 
     public override void Execute()
@@ -88,11 +88,6 @@ public partial class ModuleWeaver: BaseModuleWeaver
 
     void ReadConfig()
     {
-        if (Config == null)
-        {
-            return;
-        }
-
         ReadIncludeDebugAssert();
         ReadExcludeRegex();
         ReadMode();
@@ -102,7 +97,9 @@ public partial class ModuleWeaver: BaseModuleWeaver
     {
         var value = Config?.Attribute("IncludeDebugAssert")?.Value;
         if (value == null)
+        {
             return;
+        }
 
         try
         {
@@ -132,7 +129,7 @@ public partial class ModuleWeaver: BaseModuleWeaver
         var regex = attribute?.Value;
         if(!string.IsNullOrWhiteSpace(regex))
         {
-            ExcludeRegex = new Regex(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+            ExcludeRegex = new(regex, RegexOptions.Compiled | RegexOptions.CultureInvariant);
         }
     }
 

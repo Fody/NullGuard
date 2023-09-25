@@ -51,7 +51,7 @@ static class InstructionListExtensions
             }
 
             // For switch instructions, operand is an Instruction-Array:
-            if (!(instruction.Operand is Instruction[] operandInstructions))
+            if (instruction.Operand is not Instruction[] operandInstructions)
             {
                 continue;
             }

@@ -42,8 +42,8 @@ static class SymbolExtensions
             if (s?.Offset == 0)
             {
                 var entry = instructions[0];
-                sequencePoints[0] = new SequencePoint(entry, s.Document) { StartColumn = s.StartColumn, StartLine = s.StartLine, EndColumn = s.EndColumn, EndLine = s.EndLine };
-                scope.Start = new InstructionOffset(entry);
+                sequencePoints[0] = new(entry, s.Document) { StartColumn = s.StartColumn, StartLine = s.StartLine, EndColumn = s.EndColumn, EndLine = s.EndLine };
+                scope.Start = new(entry);
             }
         }
     }

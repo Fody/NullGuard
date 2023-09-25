@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using Fody;
-using TestsCommon;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
 
@@ -177,7 +175,7 @@ public class ApprovedTests
 
     public ApprovedTests()
     {
-        settings = new VerifySettings();
+        settings = new();
         settings.UniqueForRuntime();
         settings.UniqueForAssemblyConfiguration();
         settings.AddScrubber(v => v.Replace("InternalBase.", string.Empty));
@@ -188,6 +186,6 @@ public class ApprovedTests
 
     private static TypeToDisassemble GetType(string typeName)
     {
-        return new TypeToDisassemble(AssemblyWeaver.PeFile, typeName);
+        return new(AssemblyWeaver.PeFile, typeName);
     }
 }

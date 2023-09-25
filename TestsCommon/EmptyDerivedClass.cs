@@ -1,3 +1,1 @@
-﻿class EmptyDerivedClass<Q> : GenericBaseClass<int, Q>
-{
-}
+﻿class EmptyDerivedClass<Q> : GenericBaseClass<int, Q>;

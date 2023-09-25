@@ -9,7 +9,7 @@ using Mono.Cecil.Rocks;
 
 public class ExplicitModeAnalyzer : INullabilityAnalyzer
 {
-    readonly MemberNullabilityCache memberNullabilityCache = new MemberNullabilityCache();
+    readonly MemberNullabilityCache memberNullabilityCache = new();
 
     public void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError)
     {
@@ -361,14 +361,10 @@ public static class ExplicitModeExtensions
         var getMethod = property.GetMethod;
         var getMethodBase = getMethod?.FindBase();
 
-        if (getMethodBase != null)
-        {
-            var baseProperty = getMethodBase.DeclaringType.Resolve().Properties.FirstOrDefault(_ => _.GetMethod == getMethodBase);
-            if (baseProperty != null)
-                return baseProperty;
-        }
-
-        return null;
+        return getMethodBase?.DeclaringType
+            .Resolve()
+            .Properties
+            .FirstOrDefault(_ => _.GetMethod == getMethodBase);
     }
 
     static IEnumerable<MethodReference> EnumerateOverrides(this MethodDefinition method)
@@ -460,14 +456,9 @@ public static class ExplicitModeExtensions
     }
 }
 
-class MemberNullability
+class MemberNullability(MemberNullabilityCache memberNullabilityCache)
 {
-    protected MemberNullabilityCache MemberNullabilityCache { get; }
-
-    public MemberNullability(MemberNullabilityCache memberNullabilityCache)
-    {
-        MemberNullabilityCache = memberNullabilityCache;
-    }
+    protected MemberNullabilityCache MemberNullabilityCache { get; } = memberNullabilityCache;
 }
 
 class MethodNullability : MemberNullability
@@ -633,7 +624,7 @@ class PropertyNullability : MemberNullability
 
 class MemberNullabilityCache
 {
-    readonly Dictionary<string, AssemblyCache> cache = new Dictionary<string, AssemblyCache>();
+    readonly Dictionary<string, AssemblyCache> cache = new();
 
     public MethodNullability GetOrCreate(MethodDefinition method)
     {
@@ -654,7 +645,7 @@ class MemberNullabilityCache
 
         if (!cache.TryGetValue(assemblyName, out var assemblyCache))
         {
-            assemblyCache = new AssemblyCache(module.FileName);
+            assemblyCache = new(module.FileName);
             cache.Add(assemblyName, assemblyCache);
         }
 
@@ -663,7 +654,7 @@ class MemberNullabilityCache
 
     class AssemblyCache
     {
-        readonly Dictionary<string, MemberNullability> cache = new Dictionary<string, MemberNullability>();
+        readonly Dictionary<string, MemberNullability> cache = new();
         readonly Dictionary<string, XElement> externalAnnotations;
 
         public AssemblyCache(string moduleFileName)

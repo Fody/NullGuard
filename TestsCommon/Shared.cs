@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Text;
 using System.Text.RegularExpressions;
 using VerifyTests;
 
-namespace TestsCommon
+namespace TestsCommon;
+
+public static class Shared
 {
-    public static class Shared
+    static readonly Regex NormalizeArgumentExceptionTextRegex = new(@" \(Parameter '(\w+)'\)");
+
+    public static string NormalizedArgumentExceptionMessage(this Exception ex)
     {
-        private static readonly Regex NormalizeArgumentExceptionTextRegex = new(@" \(Parameter '(\w+)'\)");
+        return NormalizeArgumentExceptionText(ex.Message);
+    }
 
-        public static string NormalizedArgumentExceptionMessage(this Exception ex)
-        {
-            return NormalizeArgumentExceptionText(ex.Message);
-        }
+    public static string NormalizeArgumentExceptionText(string value)
+    {
+        return NormalizeArgumentExceptionTextRegex.Replace(value, "\r\nParameter name: $1");
+    }
 
-        public static string NormalizeArgumentExceptionText(string value)
-        {
-            return NormalizeArgumentExceptionTextRegex.Replace(value, "\r\nParameter name: $1");
-        }
-
-        public static VerifySettings With(this VerifySettings settings, Action<VerifySettings> action)
-        {
-            var clone = new VerifySettings(settings);
-            action(clone);
-            return clone;
-        }
+    public static VerifySettings With(this VerifySettings settings, Action<VerifySettings> action)
+    {
+        var clone = new VerifySettings(settings);
+        action(clone);
+        return clone;
     }
 }

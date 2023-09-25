@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Mono.Cecil;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 {
@@ -142,14 +143,14 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
     {
         return ContainsAttribute(customAttributeProvider, AllowNullAttributeTypeName) ? true :
                ContainsAttribute(customAttributeProvider, DisallowNullAttributeTypeName) ? false :
-               (bool?)null;
+               null;
     }
 
     static bool? GetItemPostconditionAllowsNull(ICustomAttributeProvider customAttributeProvider)
     {
         return ContainsAnyAttribute(customAttributeProvider, MaybeNullAttributeTypeName, MaybeNullWhenAttributeTypeName) ? true :
                ContainsAttribute(customAttributeProvider, NotNullAttributeTypeName) ? false :
-               (bool?)null;
+               null;
     }
 
     static bool? GetGenericTypeAllowsNull(TypeReference typeReference, bool? contextAllowsNull)
@@ -172,7 +173,7 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
 
     bool? GetReturnTypeAllowsNullTaskResult(MethodReturnType methodReturnType)
     {
-        return ContainsAttribute(methodReturnType, MaybeNullTaskResultAttributeTypeName) ? true : (bool?)null;
+        return ContainsAttribute(methodReturnType, MaybeNullTaskResultAttributeTypeName) ? true : null;
     }
 
     static bool? GetItemAllowsNull(ICustomAttributeProvider customAttributeProvider, bool? contextAllowsNull, int index = 0)

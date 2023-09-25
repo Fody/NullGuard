@@ -1,4 +1,3 @@
-namespace Windows.UI.Xaml.Markup
-{
-    public interface IXamlMetadataProvider{}
-}
+namespace Windows.UI.Xaml.Markup;
+
+public interface IXamlMetadataProvider;
