@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Mono.Cecil;
-
-public interface INullabilityAnalyzer
+﻿public interface INullabilityAnalyzer
 {
     void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError);
     bool AllowsNull(PropertyDefinition property);

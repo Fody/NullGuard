@@ -2,11 +2,8 @@
 // ReSharper disable AssignNullToNotNullAttribute
 #nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-using Mono.Cecil;
+
 // ReSharper disable MemberCanBeMadeStatic.Local
 
 public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
@@ -196,21 +193,13 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
                ?? GetContextAllowsNull(type.DeclaringType);
     }
 
-    static bool ContainsAttribute(ICustomAttributeProvider customAttributeProvider, string fullName)
-    {
-        if (!customAttributeProvider.HasCustomAttributes)
-            return false;
+    static bool ContainsAttribute(ICustomAttributeProvider attributeProvider, string fullName) =>
+        attributeProvider.HasCustomAttributes &&
+        attributeProvider.CustomAttributes.Any(_ => _.AttributeType.FullName == fullName);
 
-        return customAttributeProvider.CustomAttributes.Any(a => a.AttributeType.FullName == fullName);
-    }
-
-    static bool ContainsAnyAttribute(ICustomAttributeProvider customAttributeProvider, params string[] fullNames)
-    {
-        if (!customAttributeProvider.HasCustomAttributes)
-            return false;
-
-        return fullNames.Any(n => ContainsAttribute(customAttributeProvider, n));
-    }
+    static bool ContainsAnyAttribute(ICustomAttributeProvider attributeProvider, params string[] fullNames) =>
+        attributeProvider.HasCustomAttributes &&
+        fullNames.Any(_ => ContainsAttribute(attributeProvider, _));
 
     static bool? GetAllowsNull(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index = 0)
     {
@@ -225,24 +214,32 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
         };
     }
 
-    static Nullable GetNullableAnnotation(ICustomAttributeProvider customAttributeProvider, string attributeTypeName, int index)
+    static Nullable GetNullableAnnotation(ICustomAttributeProvider attributeProvider, string attributeName, int index)
     {
-        if (!customAttributeProvider.HasCustomAttributes)
+        if (!attributeProvider.HasCustomAttributes)
+        {
             return Nullable.Unknown;
+        }
 
-        var attribute = customAttributeProvider.CustomAttributes
-            .SingleOrDefault(a => a.AttributeType.FullName == attributeTypeName && a.ConstructorArguments.Count == 1);
+        var attribute = attributeProvider.CustomAttributes
+            .SingleOrDefault(_ => _.AttributeType.FullName == attributeName &&
+                                  _.ConstructorArguments.Count == 1);
 
-        return attribute != null ? GetConstructorArgumentValue(attribute.ConstructorArguments[0], index) : Nullable.Unknown;
+        if (attribute == null)
+        {
+            return Nullable.Unknown;
+        }
+
+        return GetConstructorArgumentValue(attribute.ConstructorArguments[0], index);
     }
 
-    static Nullable GetConstructorArgumentValue(CustomAttributeArgument arg, int index)
+    static Nullable GetConstructorArgumentValue(CustomAttributeArgument argument, int index)
     {
-        var value = arg.Type.FullName switch
+        var value = argument.Type.FullName switch
         {
-            "System.Byte" => (byte)arg.Value,
-            "System.Byte[]" => (byte)((CustomAttributeArgument[])arg.Value).Take(index + 1).Last().Value,
-            _ => throw new InvalidOperationException("unexpected type: " + arg.Type.FullName)
+            "System.Byte" => (byte)argument.Value,
+            "System.Byte[]" => (byte)((CustomAttributeArgument[])argument.Value).Take(index + 1).Last().Value,
+            _ => throw new InvalidOperationException("unexpected type: " + argument.Type.FullName)
         };
 
         return (Nullable)value;

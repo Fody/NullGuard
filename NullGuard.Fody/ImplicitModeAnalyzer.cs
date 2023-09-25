@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Mono.Cecil;
-
-public class ImplicitModeAnalyzer : INullabilityAnalyzer
+﻿public class ImplicitModeAnalyzer : INullabilityAnalyzer
 {
     public void CheckForBadAttributes(List<TypeDefinition> types, Action<string> logError)
     {

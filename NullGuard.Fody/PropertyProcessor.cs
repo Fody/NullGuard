@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using NullGuard;
 
@@ -20,6 +15,7 @@ public partial class ModuleWeaver
             {
                 return;
             }
+
             InnerProcess(property);
         }
         catch (Exception exception)
@@ -38,7 +34,7 @@ public partial class ModuleWeaver
         var attribute = property.DeclaringType.GetNullGuardAttribute();
         if (attribute != null)
         {
-            localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            localValidationFlags = (ValidationFlags) attribute.ConstructorArguments[0].Value;
         }
 
         if (!localValidationFlags.HasFlag(ValidationFlags.Properties))
@@ -58,8 +54,8 @@ public partial class ModuleWeaver
             getMethod.Body.SimplifyMacros();
 
             if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic)
-                || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
-                || getMethod.IsOverrideOrImplementationOfPublicMember())
+                 || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
+                 || getMethod.IsOverrideOrImplementationOfPublicMember())
                 && !nullabilityAnalyzer.AllowsGetMethodToReturnNull(property, getMethod))
             {
                 InjectPropertyGetterGuard(getMethod, property);
@@ -92,9 +88,9 @@ public partial class ModuleWeaver
     void InjectPropertyGetterGuard(MethodDefinition getMethod, PropertyReference property)
     {
         var returnPoints = getMethod.Body.Instructions
-            .Select((o, i) => new { o, i })
-            .Where(a => a.o.OpCode == OpCodes.Ret)
-            .Select(a => a.i)
+            .Select((o, i) => new {o, i})
+            .Where(_ => _.o.OpCode == OpCodes.Ret)
+            .Select(_ => _.i)
             .OrderByDescending(_ => _);
 
         foreach (var ret in returnPoints)
@@ -115,16 +111,19 @@ public partial class ModuleWeaver
 
             DuplicateReturnValue(guardInstructions, propertyType);
 
-            IfNull(guardInstructions, returnInstruction, i =>
-            {
-                // Clean up the stack since we're about to throw up.
-                i.Add(Instruction.Create(OpCodes.Pop));
+            IfNull(
+                guardInstructions,
+                returnInstruction,
+                _ =>
+                {
+                    // Clean up the stack since we're about to throw up.
+                    _.Add(Instruction.Create(OpCodes.Pop));
 
-                LoadInvalidOperationException(i, errorMessage);
+                    LoadInvalidOperationException(_, errorMessage);
 
-                // Throw the top item off the stack
-                i.Add(Instruction.Create(OpCodes.Throw));
-            });
+                    // Throw the top item off the stack
+                    _.Add(Instruction.Create(OpCodes.Throw));
+                });
 
             getMethod.Body.InsertAtMethodReturnPoint(ret, guardInstructions);
         }
@@ -134,10 +133,14 @@ public partial class ModuleWeaver
     {
         var valueParameter = setMethod.GetPropertySetterValueParameter();
         if (!valueParameter.MayNotBeNull())
+        {
             return;
+        }
 
         if (nullabilityAnalyzer.AllowsSetMethodToAcceptNull(property, setMethod, valueParameter))
+        {
             return;
+        }
 
         var guardInstructions = new List<Instruction>();
         var errorMessage = string.Format(CultureInfo.InvariantCulture, CannotSetTheValueOfPropertyToNull, property.FullName);
@@ -152,13 +155,16 @@ public partial class ModuleWeaver
 
         LoadArgumentOntoStack(guardInstructions, valueParameter);
 
-        IfNull(guardInstructions, entry, i =>
-        {
-            LoadArgumentNullException(i, valueParameter.Name, errorMessage);
+        IfNull(
+            guardInstructions,
+            entry,
+            _ =>
+            {
+                LoadArgumentNullException(_, valueParameter.Name, errorMessage);
 
-            // Throw the top item off the stack
-            i.Add(Instruction.Create(OpCodes.Throw));
-        });
+                // Throw the top item off the stack
+                _.Add(Instruction.Create(OpCodes.Throw));
+            });
 
         setMethod.Body.Instructions.Prepend(guardInstructions);
     }

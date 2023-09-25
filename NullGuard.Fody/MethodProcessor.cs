@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Mono.Collections.Generic;
 using NullGuard;
@@ -137,8 +132,8 @@ public partial class ModuleWeaver
     {
         var returnPoints = body.Instructions
                 .Select((o, ix) => new { o, ix })
-                .Where(a => a.o.OpCode == OpCodes.Ret)
-                .Select(a => a.ix)
+                .Where(_ => _.o.OpCode == OpCodes.Ret)
+                .Select(_ => _.ix)
                 .OrderByDescending(ix => ix);
 
         foreach (var ret in returnPoints)

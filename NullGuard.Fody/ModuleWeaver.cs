@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Xml;
 
 using Fody;
-using Mono.Cecil;
 using NullGuard;
 
 public partial class ModuleWeaver: BaseModuleWeaver

@@ -1,16 +1,15 @@
-﻿using System.Linq;
-
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-
-static class SymbolExtensions
+﻿static class SymbolExtensions
 {
     public static void UpdateDebugInfo(this MethodDefinition method)
     {
         var debugInfo = method?.DebugInformation;
 
-        if (debugInfo == null || !method.HasBody || !debugInfo.HasSequencePoints)
+        if (debugInfo == null ||
+            !method.HasBody ||
+            !debugInfo.HasSequencePoints)
+        {
             return;
+        }
 
         var methodBody = method.Body;
         var instructions = methodBody.Instructions;
@@ -42,7 +41,13 @@ static class SymbolExtensions
             if (s?.Offset == 0)
             {
                 var entry = instructions[0];
-                sequencePoints[0] = new(entry, s.Document) { StartColumn = s.StartColumn, StartLine = s.StartLine, EndColumn = s.EndColumn, EndLine = s.EndLine };
+                sequencePoints[0] = new(entry, s.Document)
+                {
+                    StartColumn = s.StartColumn,
+                    StartLine = s.StartLine,
+                    EndColumn = s.EndColumn,
+                    EndLine = s.EndLine
+                };
                 scope.Start = new(entry);
             }
         }

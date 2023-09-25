@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-
 public partial class ModuleWeaver
 {
     public void CallDebugAssertInstructions(List<Instruction> instructions, string message)
