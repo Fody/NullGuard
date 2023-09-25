@@ -160,7 +160,8 @@ public class NullableReferenceTypesModeAnalyzer : INullabilityAnalyzer
             typeReference = typeReference.GetElementType();
         }
 
-        if (typeReference is GenericParameter genericParameter && GetItemAllowsNull(genericParameter, contextAllowsNull) == true)
+        if (typeReference is GenericParameter genericParameter &&
+            GetItemAllowsNull(genericParameter, contextAllowsNull) == true)
         {
             return true;
         }

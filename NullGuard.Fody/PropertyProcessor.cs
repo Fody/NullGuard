@@ -53,10 +53,11 @@ public partial class ModuleWeaver
         {
             getMethod.Body.SimplifyMacros();
 
-            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic)
-                 || (getMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
-                 || getMethod.IsOverrideOrImplementationOfPublicMember())
-                && !nullabilityAnalyzer.AllowsGetMethodToReturnNull(property, getMethod))
+            if ((localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
+                 (getMethod.IsPublic &&
+                  property.DeclaringType.IsPublicOrNestedPublic()) ||
+                 getMethod.IsOverrideOrImplementationOfPublicMember()) &&
+                !nullabilityAnalyzer.AllowsGetMethodToReturnNull(property, getMethod))
             {
                 InjectPropertyGetterGuard(getMethod, property);
             }
@@ -72,9 +73,10 @@ public partial class ModuleWeaver
         {
             setBody.SimplifyMacros();
 
-            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic)
-                || (setMethod.IsPublic && property.DeclaringType.IsPublicOrNestedPublic())
-                || setMethod.IsOverrideOrImplementationOfPublicMember())
+            if (localValidationFlags.HasFlag(ValidationFlags.NonPublic) ||
+                (setMethod.IsPublic &&
+                 property.DeclaringType.IsPublicOrNestedPublic()) ||
+                setMethod.IsOverrideOrImplementationOfPublicMember())
             {
                 InjectPropertySetterGuard(setMethod, property);
             }

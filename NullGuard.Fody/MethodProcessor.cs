@@ -30,12 +30,13 @@ public partial class ModuleWeaver
         var attribute = method.DeclaringType.GetNullGuardAttribute();
         if (attribute != null)
         {
-            localValidationFlags = (ValidationFlags)attribute.ConstructorArguments[0].Value;
+            localValidationFlags = (ValidationFlags) attribute.ConstructorArguments[0].Value;
         }
 
-        if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic)
-            && !(method.IsPublic && method.DeclaringType.IsPublicOrNestedPublic()
-            || method.IsOverrideOrImplementationOfPublicMember()))
+        if (!localValidationFlags.HasFlag(ValidationFlags.NonPublic) &&
+            !(method.IsPublic &&
+              method.DeclaringType.IsPublicOrNestedPublic() ||
+              method.IsOverrideOrImplementationOfPublicMember()))
         {
             return;
         }
@@ -86,7 +87,8 @@ public partial class ModuleWeaver
                 continue;
             }
 
-            if (method.IsSetter && parameter.Equals(method.GetPropertySetterValueParameter()))
+            if (method.IsSetter &&
+                parameter.Equals(method.GetPropertySetterValueParameter()))
             {
                 continue;
             }
