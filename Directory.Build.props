@@ -4,5 +4,6 @@
     <LangVersion>preview</LangVersion>
     <Version>3.1.1</Version>
     <NoWarn>NU5118</NoWarn>
+    <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
   </PropertyGroup>
 </Project>
