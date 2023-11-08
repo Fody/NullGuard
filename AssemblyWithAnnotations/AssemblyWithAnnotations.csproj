@@ -10,6 +10,6 @@
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
   </ItemGroup>
 </Project>
