@@ -75,7 +75,7 @@
 
 	} // end of class ClassWithImplicitPublicInterface
 
-	.class interface nested private auto ansi abstract IPrivate
+	.class interface nested private auto ansi abstract beforefieldinit IPrivate
 	{
 		// Methods
 		.method public hidebysig newslot abstract virtual 

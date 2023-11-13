@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="FodyHelpers" Version="6.8.0" />
     <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
-    <PackageReference Include="xunit" Version="*" />
+    <PackageReference Include="xunit" Version="2.6.1" />
     <PackageReference Include="Verify.Xunit" Version="22.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />

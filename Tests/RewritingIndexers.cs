@@ -101,7 +101,7 @@ public class RewritingIndexers
     {
         var type = AssemblyWeaver.Assembly.GetType("Indexers");
         var instance = (dynamic) Activator.CreateInstance(type.GetNestedType("AllowedNulls"));
-        Assert.Equal(null, instance[allowNull: null, nullableInt: null]);
+        Assert.True(null == instance[allowNull: null, nullableInt: null]);
     }
 
     void IgnoreValue(object value)
