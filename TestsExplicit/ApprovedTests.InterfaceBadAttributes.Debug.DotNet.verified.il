@@ -1,4 +1,4 @@
-﻿.class interface private auto ansi abstract InterfaceBadAttributes
+﻿.class interface private auto ansi abstract beforefieldinit InterfaceBadAttributes
 {
 	// Methods
 	.method public hidebysig specialname newslot abstract virtual 

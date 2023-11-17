@@ -61,18 +61,18 @@ public class RewritingGenerics
         };
 
         sample.NonNullProperty = notNullValue;
-        Assert.Equal(notNullValue, sample.NonNullProperty);
+        Assert.True(notNullValue == sample.NonNullProperty);
 
         exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.NonNullMethod()));
         sample.CanBeNullProperty = notNullValue;
-        Assert.Equal(notNullValue, sample.NonNullMethod());
+        Assert.True(notNullValue == sample.NonNullMethod());
 
         exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, nullValue)));
         exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(notNullValue, nullValue)));
         exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, notNullValue)));
         exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethod<Array>(notNullValue, notNullValue)));
 
-        Assert.Equal(notNullValue, sample.GenericMethodReturnsParameter<Array>(notNullValue, notNullValue));
+        Assert.True(notNullValue == sample.GenericMethodReturnsParameter<Array>(notNullValue, notNullValue));
         exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethodReturnsParameter<Array>(notNullValue, nullValue)));
 
         // approvals don't work for [Theory], just do it inline...
