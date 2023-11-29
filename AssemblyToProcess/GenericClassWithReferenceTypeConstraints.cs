@@ -1,7 +1,6 @@
 // Simple guards should be added for generic types with reference type constraints
 
 using System.Collections;
-
 using NullGuard;
 
 public class GenericClassWithReferenceTypeConstraints<T> where T: class

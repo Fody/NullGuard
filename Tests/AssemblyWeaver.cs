@@ -18,15 +18,19 @@ public static class AssemblyWeaver
             Config = new("NullGuard",
                 new XAttribute("IncludeDebugAssert", false),
                 new XAttribute("ExcludeRegex", "^ClassToExclude$")),
-            DefineConstants = new() {"DEBUG"} // Always testing the debug weaver
+            // Always testing the debug weaver
+            DefineConstants = ["DEBUG"]
         };
 
         TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",
             ignoreCodes: new[]
             {
-                "0x80131854", // Unexpected type on the stack (related to 0x801318DE)
-                "0x801318DE", // Unmanaged pointers are not a verifiable type
-                "0x80131869", // Unable to resolve token.
+                // Unexpected type on the stack (related to 0x801318DE)
+                "0x80131854",
+                // Unmanaged pointers are not a verifiable type
+                "0x801318DE",
+                // Unable to resolve token.
+                "0x80131869",
             });
         Assembly = TestResult.Assembly;
         AfterAssemblyPath = TestResult.AssemblyPath;

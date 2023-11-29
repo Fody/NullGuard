@@ -1,5 +1,4 @@
 using System;
-
 using NullGuard;
 
 public class ClassWithExplicitInterface : IComparable<string>
