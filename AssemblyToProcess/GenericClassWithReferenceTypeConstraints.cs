@@ -2,6 +2,7 @@
 
 using System.Collections;
 using NullGuard;
+// ReSharper disable UnusedMember.Global
 
 public class GenericClassWithReferenceTypeConstraints<T> where T: class
 {

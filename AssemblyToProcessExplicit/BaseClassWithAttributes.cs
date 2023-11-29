@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 using NullGuard;
+// ReSharper disable UnusedMember.Global
 
 public abstract class BaseClassWithAttributes
 {

@@ -1,6 +1,7 @@
 using System;
 using NullGuard;
 // ReSharper disable MemberCanBeMadeStatic.Local
+// ReSharper disable UnusedMember.Global
 
 public class SimpleClass
 {

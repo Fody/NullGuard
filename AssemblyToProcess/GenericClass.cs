@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NullGuard;
+// ReSharper disable UnusedMember.Global
 
 public class GenericClass<T>
 {
