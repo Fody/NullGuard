@@ -7,7 +7,6 @@ using Xunit;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable MemberCanBeMadeStatic.Local
 
-[UsesVerify]
 public class RewritingIndexers
 {
     [Fact]

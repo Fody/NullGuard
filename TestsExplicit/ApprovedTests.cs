@@ -5,7 +5,6 @@ using Xunit;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
 
-[UsesVerify]
 public class ApprovedTests
 {
     [Fact]

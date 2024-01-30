@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using VerifyTests.ICSharpCode.Decompiler;
 
-[UsesVerify]
 public class ApprovedTests
 {
     [Fact]

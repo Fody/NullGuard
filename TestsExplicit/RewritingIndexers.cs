@@ -5,7 +5,6 @@ using VerifyXunit;
 using Xunit;
 // ReSharper disable MemberCanBeMadeStatic.Local
 
-[UsesVerify]
 public class RewritingIndexers
 {
     [Fact]

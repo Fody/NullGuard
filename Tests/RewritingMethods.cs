@@ -4,7 +4,6 @@ using Xunit;
 using System.Threading.Tasks;
 using TestsCommon;
 
-[UsesVerify]
 public class RewritingMethods
 {
     [Fact]

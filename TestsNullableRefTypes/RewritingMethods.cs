@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
 
-[UsesVerify]
 public class RewritingMethods
 {
     [Fact]

@@ -4,7 +4,6 @@ using TestsCommon;
 using VerifyXunit;
 using Xunit;
 
-[UsesVerify]
 public class RewritingMethods
 {
     [Fact]
