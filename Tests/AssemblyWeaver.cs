@@ -13,16 +13,17 @@ public static class AssemblyWeaver
         VerifyTests.VerifyICSharpCodeDecompiler.Initialize();
         DiffRunner.MaxInstancesToLaunch(100);
 
-        var weavingTask = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
-            Config = new("NullGuard",
+            Config = new(
+                "NullGuard",
                 new XAttribute("IncludeDebugAssert", false),
                 new XAttribute("ExcludeRegex", "^ClassToExclude$")),
             // Always testing the debug weaver
             DefineConstants = ["DEBUG"]
         };
 
-        TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",
+        TestResult = weaver.ExecuteTestRun("AssemblyToProcess.dll",
             ignoreCodes: new[]
             {
                 // Unexpected type on the stack (related to 0x801318DE)

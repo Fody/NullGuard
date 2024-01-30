@@ -11,7 +11,7 @@ public static class AssemblyWeaver
         VerifyTests.VerifyICSharpCodeDecompiler.Initialize();
         DiffRunner.MaxInstancesToLaunch(100);
 
-        var weavingTask = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             Config = new(
                 "NullGuard",
@@ -21,7 +21,7 @@ public static class AssemblyWeaver
             DefineConstants = ["DEBUG"]
         };
 
-        TestResult = weavingTask.ExecuteTestRun(
+        TestResult = weaver.ExecuteTestRun(
             assemblyPath: "AssemblyToProcessExplicit.dll",
             ignoreCodes: new[]
             {
