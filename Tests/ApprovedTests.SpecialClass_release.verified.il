@@ -225,10 +225,13 @@
 			)
 			.override method instance void [mscorlib]System.IDisposable::Dispose()
 			// Header size: 1
-			// Code size: 1 (0x1)
+			// Code size: 9 (0x9)
 			.maxstack 8
 
-			IL_0000: ret
+			IL_0000: ldarg.0
+			IL_0001: ldc.i4.s -2
+			IL_0003: stfld int32 SpecialClass/'<CountTo>d__0'::'<>1__state'
+			IL_0008: ret
 		} // end of method '<CountTo>d__0'::System.IDisposable.Dispose
 
 		// Properties
