@@ -1,59 +1,58 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using Xunit;
 
 public class RewritingAsyncMethods
 {
-    [Fact]
-    public async void RequiresNonNullConcreteTypeAsync()
+    [Test]
+    public async Task RequiresNonNullConcreteTypeAsync()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(ClassWithAsyncMethods.GetNonNullAsync);
+        await Assert.That(ClassWithAsyncMethods.GetNonNullAsync).Throws<InvalidOperationException>();
     }
 
-    [Fact]
-    public async void AllowsNullConcreteTypeAsync()
+    [Test]
+    public async Task AllowsNullConcreteTypeAsync()
     {
         var result = await ClassWithAsyncMethods.GetNullAsync();
-        Assert.Null(result);
+        await Assert.That((object)result).IsNull();
     }
 
-    [Fact]
-    public async void RequiresNonNullGenericTypeAsyncWithDelay()
+    [Test]
+    public async Task RequiresNonNullGenericTypeAsyncWithDelay()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(ClassWithAsyncMethods.GetNonNullAsyncWithDelay<string>);
+        await Assert.That(ClassWithAsyncMethods.GetNonNullAsyncWithDelay<string>).Throws<InvalidOperationException>();
     }
 
-    [Fact]
-    public async void AllowsMaybeNullGenericTypeAsync()
+    [Test]
+    public async Task AllowsMaybeNullGenericTypeAsync()
     {
         var result = await ClassWithAsyncMethods.GetMaybeNullAsync<string>();
-        Assert.Null(result);
+        await Assert.That((object)result).IsNull();
     }
 
-    [Fact]
-    public async void AllowsNullGenericTypeAsyncWithDelay()
+    [Test]
+    public async Task AllowsNullGenericTypeAsyncWithDelay()
     {
         var result = await ClassWithAsyncMethods.GetNullAsyncWithDelay<string>();
-        Assert.Null(result);
+        await Assert.That((object)result).IsNull();
     }
 
-    [Fact]
-    public async void AllowsNullGenericTypeAsyncWithDelay2()
+    [Test]
+    public async Task AllowsNullGenericTypeAsyncWithDelay2()
     {
         var result = await ClassWithAsyncMethods.GetNullAsyncWithDelay2<string>();
-        Assert.Null(result);
+        await Assert.That((object)result).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullTask()
+    [Test]
+    public async Task AllowsNullTask()
     {
         var result = ClassWithAsyncMethods.GetNullTask();
-        Assert.Null(result);
+        await Assert.That((object)result).IsNull();
     }
 
-    [Fact]
+    [Test]
     public async Task RequiresNonNullTask()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await ClassWithAsyncMethods.GetNonNullTask());
+        await Assert.That(async () => await ClassWithAsyncMethods.GetNonNullTask()).Throws<InvalidOperationException>();
     }
 }

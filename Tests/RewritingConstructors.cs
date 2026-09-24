@@ -1,37 +1,36 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using TestsCommon;
-using VerifyXunit;
-using Xunit;
+using VerifyTUnit;
 
 public class RewritingConstructors
 {
-    [Fact]
-    public Task RequiresNonNullArgument()
+    [Test]
+    public async Task RequiresNonNullArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
-        var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, null, ""));
-        return Verifier.Verify(exception.InnerException.NormalizedArgumentExceptionMessage());
+        var exception = Shared.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, null, ""));
+        await Verifier.Verify(exception.InnerException.NormalizedArgumentExceptionMessage());
     }
 
-    [Fact]
-    public Task RequiresNonNullOutArgument()
+    [Test]
+    public async Task RequiresNonNullOutArgument()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         var args = new object[1];
-        var exception = Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, args));
-        return Verifier.Verify(exception.InnerException.Message);
+        var exception = Shared.Throws<TargetInvocationException>(() => Activator.CreateInstance(type, args));
+        await Verifier.Verify(exception.InnerException.Message);
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullWhenAttributeApplied()
     {
         var type = AssemblyWeaver.Assembly.GetType("SimpleClass");
         Activator.CreateInstance(type, "", null);
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullWhenClassMatchExcludeRegex()
     {
         var type = AssemblyWeaver.Assembly.GetType("ClassToExclude");

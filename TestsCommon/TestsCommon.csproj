@@ -3,14 +3,18 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <DisableFody>true</DisableFody>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.8.0" />
-    <PackageReference Include="xunit" Version="2.7.1" />
-    <PackageReference Include="Verify.Xunit" Version="24.1.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FodyHelpers" />
+    <PackageReference Include="TUnit.Core" />
+    <PackageReference Include="TUnit.Assertions" />
+    <PackageReference Include="TUnit.Engine" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcessExplicit\AssemblyToProcessExplicit.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />
   </ItemGroup>

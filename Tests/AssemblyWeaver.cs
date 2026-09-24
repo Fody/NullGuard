@@ -42,5 +42,5 @@ public static class AssemblyWeaver
 
     public static string AfterAssemblyPath;
 
-    public static TestResult TestResult;
+    public static Fody.TestResult TestResult;
 }

@@ -1,173 +1,172 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
-using VerifyXunit;
-using Xunit;
+using VerifyTUnit;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
 
 public class ApprovedTests
 {
-    [Fact]
-    public Task ClassWithBadAttributes()
+    [Test]
+    public async Task ClassWithBadAttributes()
     {
-        return Verifier.Verify(GetType("ClassWithBadAttributes"), settings);
+        await Verifier.Verify(GetType("ClassWithBadAttributes"), settings);
     }
 
-    [Fact]
-    public Task ClassWithPrivateMethod()
+    [Test]
+    public async Task ClassWithPrivateMethod()
     {
-        return Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
+        await Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
     }
 
-    [Fact]
-    public Task ClassWithPrivateMethodNoAssert()
+    [Test]
+    public async Task ClassWithPrivateMethodNoAssert()
     {
-        return Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
+        await Verifier.Verify(GetType("ClassWithPrivateMethod"), settings);
     }
 
-    [Fact]
-    public Task GenericClass()
+    [Test]
+    public async Task GenericClass()
     {
-        return Verifier.Verify(GetType("GenericClass`1"), settings);
+        await Verifier.Verify(GetType("GenericClass`1"), settings);
     }
 
-    [Fact]
-    public Task Indexers()
+    [Test]
+    public async Task Indexers()
     {
-        return Verifier.Verify(GetType("Indexers"), settings);
+        await Verifier.Verify(GetType("Indexers"), settings);
     }
 
-    [Fact]
-    public Task InterfaceBadAttributes()
+    [Test]
+    public async Task InterfaceBadAttributes()
     {
-        return Verifier.Verify(GetType("InterfaceBadAttributes"), settings);
+        await Verifier.Verify(GetType("InterfaceBadAttributes"), settings);
     }
 
-    [Fact]
-    public Task SimpleClass()
+    [Test]
+    public async Task SimpleClass()
     {
-        return Verifier.Verify(GetType("SimpleClass"), settings);
+        await Verifier.Verify(GetType("SimpleClass"), settings);
     }
 
-    [Fact]
-    public Task SimpleClassNoAssert()
+    [Test]
+    public async Task SimpleClassNoAssert()
     {
-        return Verifier.Verify(GetType("SimpleClass"), settings);
+        await Verifier.Verify(GetType("SimpleClass"), settings);
     }
 
-    [Fact]
-    public Task SkipIXamlMetadataProvider()
+    [Test]
+    public async Task SkipIXamlMetadataProvider()
     {
-        return Verifier.Verify(GetType("XamlMetadataProvider"), settings);
+        await Verifier.Verify(GetType("XamlMetadataProvider"), settings);
     }
 #if DEBUG
-    [Fact]
-    public Task SpecialClass()
+    [Test]
+    public async Task SpecialClass()
     {
-        return Verifier.Verify(GetType("SpecialClass"), settings);
+        await Verifier.Verify(GetType("SpecialClass"), settings);
     }
 #endif
 
-    [Fact]
-    public Task PublicNestedInsideNonPublic()
+    [Test]
+    public async Task PublicNestedInsideNonPublic()
     {
-        return Verifier.Verify(GetType("NonPublicWithNested"), settings);
+        await Verifier.Verify(GetType("NonPublicWithNested"), settings);
     }
 
-    [Fact]
-    public Task UnsafeClass()
+    [Test]
+    public async Task UnsafeClass()
     {
-        return Verifier.Verify(GetType("UnsafeClass"), settings);
+        await Verifier.Verify(GetType("UnsafeClass"), settings);
     }
 
-    [Fact]
-    public Task DerivedClass()
+    [Test]
+    public async Task DerivedClass()
     {
-        return Verifier.Verify(GetType("InternalBase.DerivedClass"), settings);
+        await Verifier.Verify(GetType("InternalBase.DerivedClass"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterface()
+    [Test]
+    public async Task ImplementsInterface()
     {
-        return Verifier.Verify(GetType("InternalBase.ImplementsInterface"), settings);
+        await Verifier.Verify(GetType("InternalBase.ImplementsInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInheritedInterface()
+    [Test]
+    public async Task ImplementsInheritedInterface()
     {
-        return Verifier.Verify(GetType("InternalBase.ImplementsInheritedInterface"), settings);
+        await Verifier.Verify(GetType("InternalBase.ImplementsInheritedInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterfaceExplicit()
+    [Test]
+    public async Task ImplementsInterfaceExplicit()
     {
-        return Verifier.Verify(GetType("InternalBase.ImplementsInterfaceExplicit"), settings);
+        await Verifier.Verify(GetType("InternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
-    [Fact]
-    public Task DerivedClassAssemblyBase()
+    [Test]
+    public async Task DerivedClassAssemblyBase()
     {
-        return Verifier.Verify(GetType("AssemblyBase.DerivedClass"), settings);
+        await Verifier.Verify(GetType("AssemblyBase.DerivedClass"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterfaceAssemblyBase()
+    [Test]
+    public async Task ImplementsInterfaceAssemblyBase()
     {
-        return Verifier.Verify(GetType("AssemblyBase.ImplementsInterface"), settings);
+        await Verifier.Verify(GetType("AssemblyBase.ImplementsInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInheritedInterfaceAssemblyBase()
+    [Test]
+    public async Task ImplementsInheritedInterfaceAssemblyBase()
     {
-        return Verifier.Verify(GetType("AssemblyBase.ImplementsInheritedInterface"), settings);
+        await Verifier.Verify(GetType("AssemblyBase.ImplementsInheritedInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterfaceExplicitAssemblyBase()
+    [Test]
+    public async Task ImplementsInterfaceExplicitAssemblyBase()
     {
-        return Verifier.Verify(GetType("AssemblyBase.ImplementsInterfaceExplicit"), settings);
+        await Verifier.Verify(GetType("AssemblyBase.ImplementsInterfaceExplicit"), settings);
     }
 
-    [Fact]
-    public Task DerivedClassExternalBase()
+    [Test]
+    public async Task DerivedClassExternalBase()
     {
-        return Verifier.Verify(GetType("ExternalBase.DerivedClass"), settings);
+        await Verifier.Verify(GetType("ExternalBase.DerivedClass"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterfaceExternalBase()
+    [Test]
+    public async Task ImplementsInterfaceExternalBase()
     {
-        return Verifier.Verify(GetType("ExternalBase.ImplementsInterface"), settings);
+        await Verifier.Verify(GetType("ExternalBase.ImplementsInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInheritedInterfaceExternalBase()
+    [Test]
+    public async Task ImplementsInheritedInterfaceExternalBase()
     {
-        return Verifier.Verify(GetType("ExternalBase.ImplementsInheritedInterface"), settings);
+        await Verifier.Verify(GetType("ExternalBase.ImplementsInheritedInterface"), settings);
     }
 
-    [Fact]
-    public Task ImplementsInterfaceExplicitExternalBase()
+    [Test]
+    public async Task ImplementsInterfaceExplicitExternalBase()
     {
-        return Verifier.Verify(GetType("ExternalBase.ImplementsInterfaceExplicit"), settings);
+        await Verifier.Verify(GetType("ExternalBase.ImplementsInterfaceExplicit"), settings);
     }
 
-    [Fact]
-    public Task InfosList()
+    [Test]
+    public async Task InfosList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(_ => _.Text), settings);
+        await Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(_ => _.Text), settings);
     }
 
-    [Fact]
-    public Task WarnsList()
+    [Test]
+    public async Task WarnsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(_ => _.Text), settings);
+        await Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(_ => _.Text), settings);
     }
 
-    [Fact]
-    public Task ErrorsList()
+    [Test]
+    public async Task ErrorsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(_ => _.Text), settings);
+        await Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(_ => _.Text), settings);
     }
 
     VerifySettings settings;

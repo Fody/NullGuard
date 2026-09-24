@@ -1,26 +1,26 @@
-﻿using System;
-using Xunit;
+using TestsCommon;
+using System;
 
 public class RewritingProperties
 {
-    [Fact]
+    [Test]
     public void PropertySetterThrowForNestedGenericWithDisallowNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
-        Assert.Throws<ArgumentNullException>(() => sample.PossiblyNullPropertyWithDisallowNull = null);
+        Shared.Throws<ArgumentNullException>(() => sample.PossiblyNullPropertyWithDisallowNull = null);
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNullReturnForNestedGenericWithNotNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.PossiblyNullPropertyWithNotNull;
         });
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterAllowsNullArgumentForNestedNotNullGenericWithAllowNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>
@@ -29,33 +29,33 @@ public class RewritingProperties
         };
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNullReturnForNestedNotNullGenericWithAllowNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.NotNullPropertyWithAllowNull;
         });
     }
 
-    [Fact]
-    public void PropertyGetterAllowsNullReturnForNestedNotNullGenericWithMaybeNull()
+    [Test]
+    public async Task PropertyGetterAllowsNullReturnForNestedNotNullGenericWithMaybeNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
         var value = sample.NotNullPropertyWithMaybeNull;
-        Assert.Null(value);
+        await Assert.That(value).IsNull();
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterThrowsOnNullArgumentForNestedNotNullGenericWithMaybeNull()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
-        Assert.Throws<ArgumentNullException>(() => sample.NotNullPropertyWithMaybeNull = null);
+        Shared.Throws<ArgumentNullException>(() => sample.NotNullPropertyWithMaybeNull = null);
     }
 
 
-    [Fact]
+    [Test]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1
@@ -64,7 +64,7 @@ public class RewritingProperties
         };
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2
@@ -73,76 +73,76 @@ public class RewritingProperties
         };
     }
 
-    [Fact]
-    public void PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext1()
+    [Test]
+    public async Task PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Null(sample.NullProperty);
+        await Assert.That(sample.NullProperty).IsNull();
     }
 
-    [Fact]
-    public void PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext2()
+    [Test]
+    public async Task PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Null(sample.NullProperty);
+        await Assert.That(sample.NullProperty).IsNull();
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterThrowsOnNullArgumentForNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = null);
+        Shared.Throws<ArgumentNullException>(() => sample.NonNullProperty = null);
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterThrowsOnNullArgumentForNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = null);
+        Shared.Throws<ArgumentNullException>(() => sample.NonNullProperty = null);
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.NonNullProperty;
         });
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.NonNullProperty;
         });
     }
 
-    [Fact]
-    public void PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext1()
+    [Test]
+    public async Task PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
         const string value = "Test";
         sample.NonNullProperty = value;
-        Assert.Equal(value, sample.NonNullProperty);
+        await Assert.That(sample.NonNullProperty).IsEqualTo(value);
     }
 
-    [Fact]
-    public void PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext2()
+    [Test]
+    public async Task PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
         const string value = "Test";
         sample.NonNullProperty = value;
-        Assert.Equal(value, sample.NonNullProperty);
+        await Assert.That(sample.NonNullProperty).IsEqualTo(value);
     }
 }
 
 public class RewritingProperties2
 {
-    [Fact]
+    [Test]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1
@@ -151,7 +151,7 @@ public class RewritingProperties2
         };
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterAllowsNullArgumentForNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2
@@ -160,77 +160,77 @@ public class RewritingProperties2
         };
     }
 
-    [Fact]
-    public void PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext1()
+    [Test]
+    public async Task PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Null(sample.MixedNullProperty);
+        await Assert.That(sample.MixedNullProperty).IsNull();
     }
 
-    [Fact]
-    public void PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext2()
+    [Test]
+    public async Task PropertyGetterReturnsNullForNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Null(sample.MixedNullProperty);
+        await Assert.That(sample.MixedNullProperty).IsNull();
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterThrowsOnNullArgumentForNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Throws<ArgumentNullException>(() => sample.MixedNonNullProperty = null);
+        Shared.Throws<ArgumentNullException>(() => sample.MixedNonNullProperty = null);
     }
 
-    [Fact]
+    [Test]
     public void PropertySetterThrowsOnNullArgumentForNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Throws<ArgumentNullException>(() => sample.MixedNonNullProperty = null);
+        Shared.Throws<ArgumentNullException>(() => sample.MixedNonNullProperty = null);
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.MixedNonNullProperty;
         });
     }
 
-    [Fact]
+    [Test]
     public void PropertyGetterThrowsOnNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Throws<InvalidOperationException>(() =>
+        Shared.Throws<InvalidOperationException>(() =>
         {
             var dummy = sample.MixedNonNullProperty;
         });
     }
 
-    [Fact]
-    public void PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext1()
+    [Test]
+    public async Task PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
         var value = new Tuple<string, string>("a", "b");
         sample.MixedNonNullProperty = value;
-        Assert.Equal(value, sample.MixedNonNullProperty);
+        await Assert.That(sample.MixedNonNullProperty).IsEqualTo(value);
     }
 
-    [Fact]
-    public void PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext2()
+    [Test]
+    public async Task PropertyGetterReturnsValueForNonNullableTypeInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
         var value = new Tuple<string, string>("a", "b");
         sample.MixedNonNullProperty = value;
-        Assert.Equal(value, sample.MixedNonNullProperty);
+        await Assert.That(sample.MixedNonNullProperty).IsEqualTo(value);
     }
 
 
-    [Fact]
-    public void CorrectlyHandlesModreq()
+    [Test]
+    public async Task CorrectlyHandlesModreq()
     {
         var sample = new SimpleRecord { InitPropertyWithBackingField = 42 };
-        Assert.NotNull(sample);
+        await Assert.That(sample).IsNotNull();
     }
 }

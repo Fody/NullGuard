@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using TUnit.Assertions;
 using VerifyTests;
 
 namespace TestsCommon;
@@ -17,6 +18,21 @@ public static class Shared
     {
         return NormalizeArgumentExceptionTextRegex.Replace(value, "\r\nParameter name: $1");
     }
+
+#pragma warning disable TUnitAssertions0002 // the assertion is deliberately blocked on synchronously
+    // synchronous wrappers around TUnit's async Throws assertion, so they can be used with dynamic lambdas
+    public static TException Throws<TException>(Action action)
+        where TException : Exception
+    {
+        return Assert.That(action).Throws<TException>().GetAwaiter().GetResult()!;
+    }
+
+    public static TException Throws<TException>(Func<object> function)
+        where TException : Exception
+    {
+        return Assert.That(() => function()).Throws<TException>().GetAwaiter().GetResult()!;
+    }
+#pragma warning restore TUnitAssertions0002
 
     public static VerifySettings With(this VerifySettings settings, Action<VerifySettings> action)
     {

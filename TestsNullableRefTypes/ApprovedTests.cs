@@ -1,46 +1,45 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using DiffEngine;
 using VerifyTests;
 using VerifyTests.ICSharpCode.Decompiler;
-using VerifyXunit;
-using Xunit;
+using VerifyTUnit;
 
 public class ApprovedTests
 {
-    [Fact]
-    public Task ClassWithNullableContext1()
+    [Test]
+    public async Task ClassWithNullableContext1()
     {
-        return Verifier.Verify(GetType<ClassWithNullableContext1>(), uniqueForRuntime);
+        await Verifier.Verify(GetType<ClassWithNullableContext1>(), uniqueForRuntime);
     }
 
-    [Fact]
-    public Task ClassWithNullableContext2()
+    [Test]
+    public async Task ClassWithNullableContext2()
     {
-        return Verifier.Verify(GetType<ClassWithNullableContext2>(), uniqueForRuntime);
+        await Verifier.Verify(GetType<ClassWithNullableContext2>(), uniqueForRuntime);
     }
 
-    [Fact]
-    public Task ClassWithNullableReferenceMethod()
+    [Test]
+    public async Task ClassWithNullableReferenceMethod()
     {
-        return Verifier.Verify(GetType<ClassWithNullableReferenceMethod>());
+        await Verifier.Verify(GetType<ClassWithNullableReferenceMethod>());
     }
 
-    [Fact]
-    public Task ClassWithGenericNestedClass()
+    [Test]
+    public async Task ClassWithGenericNestedClass()
     {
-        return Verifier.Verify(GetType<ClassWithGenericNestedClass>(), uniqueForRuntime);
+        await Verifier.Verify(GetType<ClassWithGenericNestedClass>(), uniqueForRuntime);
     }
 
-    [Fact]
-    public Task ClassWithAsyncMethods()
+    [Test]
+    public async Task ClassWithAsyncMethods()
     {
-        return Verifier.Verify(GetType<ClassWithAsyncMethods>());
+        await Verifier.Verify(GetType<ClassWithAsyncMethods>());
     }
 
-    [Fact]
-    public Task ClassWithRefReturns()
+    [Test]
+    public async Task ClassWithRefReturns()
     {
-        return Verifier.Verify(GetType<ClassWithRefReturns>(), uniqueForRuntime);
+        await Verifier.Verify(GetType<ClassWithRefReturns>(), uniqueForRuntime);
     }
 
     static VerifySettings uniqueForRuntime;

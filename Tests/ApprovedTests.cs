@@ -1,135 +1,134 @@
-﻿#if NETFRAMEWORK
+#if NETFRAMEWORK
 
-using VerifyXunit;
-using Xunit;
+using VerifyTUnit;
 using System.Linq;
 using System.Threading.Tasks;
 using VerifyTests.ICSharpCode.Decompiler;
 
 public class ApprovedTests
 {
-    [Fact]
-    public Task ClassWithBadAttributes()
+    [Test]
+    public async Task ClassWithBadAttributes()
     {
-        return Verifier.Verify(GetType("ClassWithBadAttributes"));
+        await Verifier.Verify(GetType("ClassWithBadAttributes"));
     }
 
-    [Fact]
-    public Task ClassWithPrivateMethod()
+    [Test]
+    public async Task ClassWithPrivateMethod()
     {
-        return Verifier.Verify(GetType("ClassWithPrivateMethod"));
+        await Verifier.Verify(GetType("ClassWithPrivateMethod"));
     }
 
-    [Fact]
-    public Task ClassWithPrivateMethodNoAssert()
+    [Test]
+    public async Task ClassWithPrivateMethodNoAssert()
     {
-        return Verifier.Verify(GetType("ClassWithPrivateMethod"));
+        await Verifier.Verify(GetType("ClassWithPrivateMethod"));
     }
 
 #if DEBUG
-    [Fact]
-    public Task GenericClass()
+    [Test]
+    public async Task GenericClass()
     {
-        return Verifier.Verify(GetType("GenericClass`1"));
+        await Verifier.Verify(GetType("GenericClass`1"));
     }
 #endif
 
-    [Fact]
-    public Task GenericClassWithValueTypeConstraint()
+    [Test]
+    public async Task GenericClassWithValueTypeConstraint()
     {
-        return Verifier.Verify(GetType("GenericClassWithValueTypeConstraints`1"));
+        await Verifier.Verify(GetType("GenericClassWithValueTypeConstraints`1"));
     }
 
-    [Fact]
-    public Task GenericClassWithReferenceTypeConstraints()
+    [Test]
+    public async Task GenericClassWithReferenceTypeConstraints()
     {
-        return Verifier.Verify(GetType("GenericClassWithReferenceTypeConstraints`1"));
+        await Verifier.Verify(GetType("GenericClassWithReferenceTypeConstraints`1"));
     }
 
-    [Fact]
-    public Task Indexers()
+    [Test]
+    public async Task Indexers()
     {
-        return Verifier.Verify(GetType("Indexers"));
+        await Verifier.Verify(GetType("Indexers"));
     }
 
-    [Fact]
-    public Task InterfaceBadAttributes()
+    [Test]
+    public async Task InterfaceBadAttributes()
     {
-        return Verifier.Verify(GetType("InterfaceBadAttributes"));
+        await Verifier.Verify(GetType("InterfaceBadAttributes"));
     }
 
-    [Fact]
-    public Task SimpleClass()
+    [Test]
+    public async Task SimpleClass()
     {
-        return Verifier.Verify(GetType("SimpleClass"));
+        await Verifier.Verify(GetType("SimpleClass"));
     }
 
-    [Fact]
-    public Task SimpleClassNoAssert()
+    [Test]
+    public async Task SimpleClassNoAssert()
     {
-        return Verifier.Verify(GetType("SimpleClass"));
+        await Verifier.Verify(GetType("SimpleClass"));
     }
 
-    [Fact]
-    public Task SkipIXamlMetadataProvider()
+    [Test]
+    public async Task SkipIXamlMetadataProvider()
     {
-        return Verifier.Verify(GetType("XamlMetadataProvider"));
+        await Verifier.Verify(GetType("XamlMetadataProvider"));
     }
 
 #if (DEBUG)
-    [Fact]
-    public Task SpecialClass_debug()
+    [Test]
+    public async Task SpecialClass_debug()
     {
-        return Verifier.Verify(GetType("SpecialClass"));
+        await Verifier.Verify(GetType("SpecialClass"));
     }
 #else
-    [Fact]
-    public Task SpecialClass_release()
+    [Test]
+    public async Task SpecialClass_release()
     {
-        return Verifier.Verify(GetType("SpecialClass"));
+        await Verifier.Verify(GetType("SpecialClass"));
     }
 #endif
 
-    [Fact]
-    public Task PublicNestedInsideNonPublic()
+    [Test]
+    public async Task PublicNestedInsideNonPublic()
     {
-        return Verifier.Verify(GetType("NonPublicWithNested"));
+        await Verifier.Verify(GetType("NonPublicWithNested"));
     }
 
-    [Fact]
-    public Task UnsafeClass()
+    [Test]
+    public async Task UnsafeClass()
     {
-        return Verifier.Verify(GetType("UnsafeClass"));
+        await Verifier.Verify(GetType("UnsafeClass"));
     }
 
-    [Fact]
-    public Task ClassWithImplicitInterface()
+    [Test]
+    public async Task ClassWithImplicitInterface()
     {
-        return Verifier.Verify(GetType("ClassWithImplicitInterface"));
+        await Verifier.Verify(GetType("ClassWithImplicitInterface"));
     }
 
-    [Fact]
-    public Task ClassWithExplicitInterface()
+    [Test]
+    public async Task ClassWithExplicitInterface()
     {
-        return Verifier.Verify(GetType("ClassWithExplicitInterface"));
+        await Verifier.Verify(GetType("ClassWithExplicitInterface"));
     }
 
-    [Fact]
-    public Task InfosList()
+    [Test]
+    public async Task InfosList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
+        await Verifier.Verify(AssemblyWeaver.TestResult.Messages.Select(x=>x.Text));
     }
 
-    [Fact]
-    public Task WarnsList()
+    [Test]
+    public async Task WarnsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
+        await Verifier.Verify(AssemblyWeaver.TestResult.Warnings.Select(x=>x.Text));
     }
 
-    [Fact]
-    public Task ErrorsList()
+    [Test]
+    public async Task ErrorsList()
     {
-        return Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
+        await Verifier.Verify(AssemblyWeaver.TestResult.Errors.Select(x=>x.Text));
     }
 
     private static TypeToDisassemble GetType(string typeName)

@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using TestsCommon;
-using Xunit;
 
 public class RewritingGenerics
 {
-    [Theory]
-    [InlineData("GenericClassFactory")]
-    [InlineData("GenericClassWithValueTypeConstraintsFactory")]
-    void GenericClassDoesNotThrowOnIntegerValueType(string factoryName)
+    [Test]
+    [Arguments("GenericClassFactory")]
+    [Arguments("GenericClassWithValueTypeConstraintsFactory")]
+    public async Task GenericClassDoesNotThrowOnIntegerValueType(string factoryName)
     {
         var type = AssemblyWeaver.Assembly.GetType(factoryName);
         var factory = (dynamic)Activator.CreateInstance(type);
@@ -18,15 +17,15 @@ public class RewritingGenerics
 
         sample.NonNullProperty = 0;
 
-        Assert.Equal(0, sample.NonNullProperty);
-        Assert.Equal(0, sample.NonNullMethod());
-        Assert.Equal(0, sample.GenericMethod<int>(0, 0));
+        await Assert.That((object)sample.NonNullProperty).IsEqualTo(0);
+        await Assert.That((object)sample.NonNullMethod()).IsEqualTo(0);
+        await Assert.That((object)sample.GenericMethod<int>(0, 0)).IsEqualTo(0);
     }
 
-    [Theory]
-    [InlineData("GenericClassFactory")]
-    [InlineData("GenericClassWithValueTypeConstraintsFactory")]
-    void GenericClassDoesNotThrowOnStructValueType(string factoryName)
+    [Test]
+    [Arguments("GenericClassFactory")]
+    [Arguments("GenericClassWithValueTypeConstraintsFactory")]
+    public async Task GenericClassDoesNotThrowOnStructValueType(string factoryName)
     {
         var valueType = default(KeyValuePair<string, string>);
 
@@ -36,15 +35,15 @@ public class RewritingGenerics
 
         sample.NonNullProperty = valueType;
 
-        Assert.Equal(valueType, sample.NonNullProperty);
-        Assert.Equal(valueType, sample.NonNullMethod());
-        Assert.Equal(valueType, sample.GenericMethod<KeyValuePair<string, string>>(valueType, valueType));
+        await Assert.That((object)sample.NonNullProperty).IsEqualTo(valueType);
+        await Assert.That((object)sample.NonNullMethod()).IsEqualTo(valueType);
+        await Assert.That((object)sample.GenericMethod<KeyValuePair<string, string>>(valueType, valueType)).IsEqualTo(valueType);
     }
 
-    [Theory]
-    [InlineData("GenericClass")]
-    [InlineData("GenericClassWithReferenceTypeConstraints")]
-    void GenericClassThrowsOnNullReferenceType(string className)
+    [Test]
+    [Arguments("GenericClass")]
+    [Arguments("GenericClassWithReferenceTypeConstraints")]
+    public async Task GenericClassThrowsOnNullReferenceType(string className)
     {
         object[] nullValue = null;
         var notNullValue = Array.Empty<object>();
@@ -56,26 +55,26 @@ public class RewritingGenerics
 
         var exceptions = new List<Exception>
         {
-            Assert.Throws<ArgumentNullException>(() => sample.NonNullProperty = nullValue),
-            Assert.Throws<InvalidOperationException>(() => sample.NonNullProperty)
+            Shared.Throws<ArgumentNullException>(() => sample.NonNullProperty = nullValue),
+            Shared.Throws<InvalidOperationException>(() => sample.NonNullProperty)
         };
 
         sample.NonNullProperty = notNullValue;
-        Assert.True(notNullValue == sample.NonNullProperty);
+        await Assert.That((bool)(notNullValue == sample.NonNullProperty)).IsTrue();
 
-        exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.NonNullMethod()));
+        exceptions.Add(Shared.Throws<InvalidOperationException>(() => sample.NonNullMethod()));
         sample.CanBeNullProperty = notNullValue;
-        Assert.True(notNullValue == sample.NonNullMethod());
+        await Assert.That((bool)(notNullValue == sample.NonNullMethod())).IsTrue();
 
-        exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, nullValue)));
-        exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(notNullValue, nullValue)));
-        exceptions.Add(Assert.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, notNullValue)));
-        exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethod<Array>(notNullValue, notNullValue)));
+        exceptions.Add(Shared.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, nullValue)));
+        exceptions.Add(Shared.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(notNullValue, nullValue)));
+        exceptions.Add(Shared.Throws<ArgumentNullException>(() => sample.GenericMethod<Array>(nullValue, notNullValue)));
+        exceptions.Add(Shared.Throws<InvalidOperationException>(() => sample.GenericMethod<Array>(notNullValue, notNullValue)));
 
-        Assert.True(notNullValue == sample.GenericMethodReturnsParameter<Array>(notNullValue, notNullValue));
-        exceptions.Add(Assert.Throws<InvalidOperationException>(() => sample.GenericMethodReturnsParameter<Array>(notNullValue, nullValue)));
+        await Assert.That((bool)(notNullValue == sample.GenericMethodReturnsParameter<Array>(notNullValue, notNullValue))).IsTrue();
+        exceptions.Add(Shared.Throws<InvalidOperationException>(() => sample.GenericMethodReturnsParameter<Array>(notNullValue, nullValue)));
 
-        // approvals don't work for [Theory], just do it inline...
+        // approvals don't work for [Test], just do it inline...
         var expected = """
                        [NullGuard] Cannot set the value of property 'T ClassName`1::NonNullProperty()' to null.|Parameter name: value
                        [NullGuard] Return value of property 'T ClassName`1::NonNullProperty()' is null.
@@ -90,24 +89,24 @@ public class RewritingGenerics
         var messages = exceptions.Select(ex => Shared.NormalizeArgumentExceptionText(ex.Message).Replace(Environment.NewLine, "|"));
         var signature = string.Join(Environment.NewLine, messages).Replace(className, "ClassName");
 
-        Assert.Equal(expected.Replace("\r\n", "\n"), signature.Replace("\r\n", "\n"));
+        await Assert.That(signature.Replace("\r\n", "\n")).IsEqualTo(expected.Replace("\r\n", "\n"));
     }
 
-    [Fact]
-    void GenericClassWithAsyncValueTypeLambdaDoesNotThrow()
+    [Test]
+    public async Task GenericClassWithAsyncValueTypeLambdaDoesNotThrow()
     {
         var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassFactory");
         var factory = (dynamic)Activator.CreateInstance(factoryType);
 
         var result = factory.GetThingAsync();
-        Assert.Equal(0, result);
+        await Assert.That((object)result).IsEqualTo(0);
 
         result = factory.GetThingAsync2();
-        Assert.Equal(0, result);
+        await Assert.That((object)result).IsEqualTo(0);
     }
 
-    [Fact]
-    void GenericClassWithTypeConstraintDoesNotThrow()
+    [Test]
+    public void GenericClassWithTypeConstraintDoesNotThrow()
     {
         var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassWithReferenceTypeConstraintsFactory");
         var factory = (dynamic)Activator.CreateInstance(factoryType);
@@ -117,8 +116,8 @@ public class RewritingGenerics
         sample.GenericMethodVoid("test", ImmutableArray<string>.Empty);
     }
 
-    [Fact]
-    void GenericClassWithValueTypeConstraintDoesNotThrow()
+    [Test]
+    public void GenericClassWithValueTypeConstraintDoesNotThrow()
     {
         var factoryType = AssemblyWeaver.Assembly.GetType("GenericClassWithValueTypeConstraintsFactory");
         var factory = (dynamic)Activator.CreateInstance(factoryType);

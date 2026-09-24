@@ -2,15 +2,20 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <DisableFody>true</DisableFody>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.8.0" />
-    <PackageReference Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
-    <PackageReference Include="xunit" Version="2.7.1" />
-    <PackageReference Include="Verify.Xunit" Version="24.1.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FodyHelpers" />
+    <PackageReference Include="TUnit.Core" />
+    <PackageReference Include="TUnit.Assertions" />
+    <PackageReference Include="TUnit.Engine" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="Verify.ICSharpCode.Decompiler" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="Microsoft.CSharp" />
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />
     <ProjectReference Include="..\NetFrameworkSmokeTest\NetFrameworkSmokeTest.csproj" />
     <ProjectReference Include="..\NullGuard.Fody\NullGuard.Fody.csproj" />

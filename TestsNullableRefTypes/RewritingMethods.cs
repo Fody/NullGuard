@@ -1,243 +1,243 @@
+using TestsCommon;
 using System;
 using System.Threading.Tasks;
-using VerifyXunit;
-using Xunit;
+using VerifyTUnit;
 
 public class RewritingMethods
 {
-    [Fact]
-    public void HandlesMethodsWithManyParameters()
+    [Test]
+    public async Task HandlesMethodsWithManyParameters()
     {
         var sample = new ClassWithNullableContext1();
 
-        var exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", null, "", ""));
-        Assert.Equal("nonNullArg2", exception.ParamName);
+        var exception = Shared.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", null, "", ""));
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg2");
 
-        exception = Assert.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", "", "", null));
-        Assert.Equal("nonNullArg4", exception.ParamName);
+        exception = Shared.Throws<ArgumentNullException>(() => sample.MethodWithManyParameters("", "", "", null));
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg4");
 
         sample.MethodWithManyParameters(null, "", "", "");
         sample.MethodWithManyParameters("", "", null, "");
     }
 
-    [Fact]
-    public void AllowsNullRefReturnValueFromUnconstainedGeneric()
+    [Test]
+    public async Task AllowsNullRefReturnValueFromUnconstainedGeneric()
     {
         var sample = new ClassWithRefReturns.Generic<string>();
         var ret = sample.GetMaybeNullUnconstrainedRef();
-        Assert.Null(ret);
+        await Assert.That(ret).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullRefReturnValue()
+    [Test]
+    public async Task AllowsNullRefReturnValue()
     {
         var sample = new ClassWithRefReturns();
         var ret = sample.GetNullRef();
-        Assert.Null(ret);
+        await Assert.That(ret).IsNull();
     }
 
-    [Fact]
+    [Test]
     public void RequiresNonNullRefReturnValue()
     {
         var sample = new ClassWithRefReturns();
-        var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
+        var exception = Shared.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
 
-    [Fact]
+    [Test]
     public void RequiresNonNullRefReturnValueFromNonNullGeneric()
     {
         var sample = new ClassWithRefReturns.GenericNonNull<string>(null);
-        var exception = Assert.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
+        var exception = Shared.Throws<InvalidOperationException>(() => { sample.GetNonNullRef(); });
     }
 
-    [Fact]
+    [Test]
     public void AllowsNonNullRefReturnValueFromNonNullGeneric()
     {
         var sample = new ClassWithRefReturns.GenericNonNull<string>(string.Empty);
         sample.GetNonNullRef();
     }
 
-    [Fact]
-    public void AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
+    [Test]
+    public async Task AllowsNullOutputForNestedGenericMaybeNullOutArgumentWhenFalse()
     {
         var sample = new ClassWithGenericNestedClass.NestedNotNull<string>();
         var ret = sample.MaybeNullOutValueWhenFalse(out var result);
-        Assert.False(ret);
-        Assert.Null(result);
+        await Assert.That(ret).IsFalse();
+        await Assert.That(result).IsNull();
     }
 
-    [Fact]
-    public void RequiresNotNullForNestedGenericDisallowNullRefArgument()
+    [Test]
+    public async Task RequiresNotNullForNestedGenericDisallowNullRefArgument()
     {
         var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
-        var exception = Assert.Throws<ArgumentNullException>(() => {
+        var exception = Shared.Throws<ArgumentNullException>(() => {
             string value = null;
             sample.DisallowedNullAndNotNullRefValue(ref value);
         });
-        Assert.Equal("nonNullArg", exception.ParamName);
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg");
     }
 
-    [Fact]
+    [Test]
     public void RequiresNotNullForNestedGenericNotNullRefArgument()
     {
         var sample = new ClassWithGenericNestedClass.NestedUnconstrained<string>();
-        var exception = Assert.Throws<InvalidOperationException>(() => {
+        var exception = Shared.Throws<InvalidOperationException>(() => {
             var value = "";
             sample.DisallowedNullAndNotNullRefValue(ref value);
         });
     }
 
-    [Fact]
-    public void AllowsNullReturnValueForMaybeNullGenericReturnValue()
+    [Test]
+    public async Task AllowsNullReturnValueForMaybeNullGenericReturnValue()
     {
         var sample = new ClassWithNullableContext1();
         var result = sample.GenericMaybeNullReturnValue<string>();
-        Assert.Null(result);
+        await Assert.That(result).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullArgumentAndReturnValueForClassConstrainedGenericWithNullableParameter()
+    [Test]
+    public async Task AllowsNullArgumentAndReturnValueForClassConstrainedGenericWithNullableParameter()
     {
         var sample = new ClassWithNullableContext2();
         var result = sample.GenericClassWithNullableParam<string>(null);
-        Assert.Null(result);
+        await Assert.That(result).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullArgumentAndReturnValueForNullableClassConstrainedGeneric()
+    [Test]
+    public async Task AllowsNullArgumentAndReturnValueForNullableClassConstrainedGeneric()
     {
         var sample = new ClassWithNullableContext2();
         var result = sample.GenericNullableClassWithNotNullableParam<string>(null);
-        Assert.Null(result);
+        await Assert.That(result).IsNull();
     }
 
-    [Fact]
+    [Test]
     public void RequiresNonNullReturnForNotNullReturnValue()
     {
         var sample = new ClassWithNullableContext2();
-        var exception = Assert.Throws<InvalidOperationException>(() => { sample.GenericNotNullReturnValue<string>(); });
+        var exception = Shared.Throws<InvalidOperationException>(() => { sample.GenericNotNullReturnValue<string>(); });
     }
 
-    [Fact]
-    public void AllowsNullArgumentAndReturnValueForUnconstrainedGeneric()
+    [Test]
+    public async Task AllowsNullArgumentAndReturnValueForUnconstrainedGeneric()
     {
         var sample = new ClassWithNullableContext1();
         var result = sample.UnconstrainedGeneric<string>(null);
-        Assert.Null(result);
+        await Assert.That(result).IsNull();
     }
 
-    [Fact]
-    public void RequiresNonNullArgumentForNonNullGenericConstraint()
+    [Test]
+    public async Task RequiresNonNullArgumentForNonNullGenericConstraint()
     {
         var sample = new ClassWithNullableContext1();
-        var exception = Assert.Throws<ArgumentNullException>(() => { sample.NotNullGeneric<string>(null); });
-        Assert.Equal("nonNullArg", exception.ParamName);
+        var exception = Shared.Throws<ArgumentNullException>(() => { sample.NotNullGeneric<string>(null); });
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg");
     }
 
-    [Fact]
+    [Test]
     public void RequiresNonNullReturnForNonNullGenericConstraint()
     {
         var sample = new ClassWithNullableContext1();
-        var exception = Assert.Throws<InvalidOperationException>(() => { sample.NotNullGeneric(""); });
+        var exception = Shared.Throws<InvalidOperationException>(() => { sample.NotNullGeneric(""); });
     }
 
-    [Fact]
-    public void RequiresNonNullArgumentWhenNullableReferenceTypeNotUsedInClassWithNullableContext1()
+    [Test]
+    public async Task RequiresNonNullArgumentWhenNullableReferenceTypeNotUsedInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        var exception = Assert.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
-        Assert.Equal("nonNullArg", exception.ParamName);
+        var exception = Shared.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg");
     }
 
-    [Fact]
-    public void RequiresNonNullArgumentWhenNullableReferenceTypeNotUsedInClassWithNullableContext2()
+    [Test]
+    public async Task RequiresNonNullArgumentWhenNullableReferenceTypeNotUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        var exception = Assert.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
-        Assert.Equal("nonNullArg", exception.ParamName);
+        var exception = Shared.Throws<ArgumentNullException>(() => { sample.SomeMethod(null, ""); });
+        await Assert.That(exception.ParamName).IsEqualTo("nonNullArg");
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullWhenNullableReferenceTypeUsed()
     {
         var sample = new ClassWithNullableContext1();
         sample.SomeMethod("", null);
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullWhenNullableReferenceTypeUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
         sample.SomeMethod("", null);
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullWithoutAttributeWhenNullableReferenceTypeUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
         sample.MethodWillNullableArg(null);
     }
 
-    [Fact]
-    public Task RequiresNonNullMethodReturnValueWhenNullableReferenceTypeNotUsedInClassWithNullableContext1()
+    [Test]
+    public async Task RequiresNonNullMethodReturnValueWhenNullableReferenceTypeNotUsedInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        return Verifier.Verify(exception.Message);
+        var exception = Shared.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
+        await Verifier.Verify(exception.Message);
     }
 
-    [Fact]
-    public Task RequiresNonNullMethodReturnValueWhenNullableReferenceTypeNotUsedInClassWithNullableContext2()
+    [Test]
+    public async Task RequiresNonNullMethodReturnValueWhenNullableReferenceTypeNotUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        var exception = Assert.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
-        return Verifier.Verify(exception.Message);
+        var exception = Shared.Throws<InvalidOperationException>(() => sample.MethodWithReturnValue(true));
+        await Verifier.Verify(exception.Message);
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullReturnValueWhenNullableReferenceTypeUsedInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
         sample.MethodAllowsNullReturnValue();
     }
 
-    [Fact]
+    [Test]
     public void AllowsNullReturnValueWhenNullableReferenceTypeUsedInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
         sample.MethodAllowsNullReturnValue();
     }
 
-    [Fact]
-    public void AllowsNullReturnValueWhenNullableReferenceTypeUsedInClassWithNullableReferenceMethod()
+    [Test]
+    public async Task AllowsNullReturnValueWhenNullableReferenceTypeUsedInClassWithNullableReferenceMethod()
     {
         var sample = new ClassWithNullableReferenceMethod();
-        Assert.Null(sample.MethodAllowsNullReturnValue(""));
+        await Assert.That(sample.MethodAllowsNullReturnValue("")).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullReturnValueWhenNullableDisabledInClassWithNullableContext1()
+    [Test]
+    public async Task AllowsNullReturnValueWhenNullableDisabledInClassWithNullableContext1()
     {
         var sample = new ClassWithNullableContext1();
-        Assert.Null(sample.MethodWithNullableContext0());
+        await Assert.That(sample.MethodWithNullableContext0()).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullReturnValueWhenNullableDisabledInClassWithNullableContext2()
+    [Test]
+    public async Task AllowsNullReturnValueWhenNullableDisabledInClassWithNullableContext2()
     {
         var sample = new ClassWithNullableContext2();
-        Assert.Null(sample.MethodWithNullableContext0());
+        await Assert.That(sample.MethodWithNullableContext0()).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullReturnValueWhenStaticNullableReferenceTypeUsedInClassWithNullableContext1()
+    [Test]
+    public async Task AllowsNullReturnValueWhenStaticNullableReferenceTypeUsedInClassWithNullableContext1()
     {
-        Assert.Null(ClassWithNullableContext1.StaticMethodAllowsNullReturnValue(""));
+        await Assert.That(ClassWithNullableContext1.StaticMethodAllowsNullReturnValue("")).IsNull();
     }
 
-    [Fact]
-    public void AllowsNullReturnValueWhenStaticNullableReferenceTypeUsedInClassWithNullableContext2()
+    [Test]
+    public async Task AllowsNullReturnValueWhenStaticNullableReferenceTypeUsedInClassWithNullableContext2()
     {
-        Assert.Null(ClassWithNullableContext2.StaticMethodAllowsNullReturnValue(""));
+        await Assert.That(ClassWithNullableContext2.StaticMethodAllowsNullReturnValue("")).IsNull();
     }
 }
