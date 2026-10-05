@@ -14,6 +14,6 @@
     <PackageVersion Include="TUnit.Assertions" Version="1.72.16" />
     <PackageVersion Include="TUnit.Engine" Version="1.72.16" />
     <PackageVersion Include="Verify.ICSharpCode.Decompiler" Version="3.4.1" />
-    <PackageVersion Include="Verify.TUnit" Version="33.2.0" />
+    <PackageVersion Include="Verify.TUnit" Version="33.3.0" />
   </ItemGroup>
 </Project>
